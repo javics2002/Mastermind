@@ -81,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void clear(View view){
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
 
         Canvas canvas = new Canvas();
         canvas = surfaceHolder.lockCanvas();
