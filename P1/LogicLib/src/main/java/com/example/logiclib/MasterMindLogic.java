@@ -1,34 +1,49 @@
 package com.example.logiclib;
 
+import java.util.Random;
 import java.util.Scanner;
 
 public class MasterMindLogic {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);  // Create a Scanner object
         //System.out.println("Enter the length of the combination");
+        Random rand = new Random();
 
         int combLength = 5;  // Read user input
         int tryNumber = 5;
         int colorNumber = 5;
 
         Combination resultCombination = new Combination(combLength, colorNumber);
-        System.out.println("Solution:");
+        System.out.println("Solution: ");
         resultCombination.printCombination();
 
         Combination[] attempts = new Combination[tryNumber];
 
-        while (!scanner.hasNext())
-            scanner.nextInt();
+        for (int i = 0; i < tryNumber; i++)
+            attempts[i] = new Combination(combLength);
 
-        for(int i = 0; i< tryNumber; i++) {
-            System.out.println("Attempt " + i +  " :");
+        for (int i = 0; i < tryNumber; i++) {
+            //System.out.println("Attempt " + i +  " :");
 
-            for(int j = 0; j < combLength; j++){
-                attempts[i].setColor(j, scanner.nextInt());
+            for (int j = 0; j < combLength; j++) {
+                if(i == tryNumber - 1){
+                    attempts[i].setColor(j, resultCombination.getColor(j));
+                }
+                else{
+                    int randomNum = rand.nextInt(colorNumber + 1);
+                    attempts[i].setColor(j, randomNum);
+                }
             }
 
-            //if(resultCombination.equals(attempts[0]))
-            //System.out.println();
+            attempts[i].printCombination();
+            if (resultCombination.equals(attempts[i])) {
+                //System.out.println("Correcto");
+                resultCombination.printHint(attempts[i]);
+                break;
+            }
+            else {
+                resultCombination.printHint(attempts[i]);
+                //System.out.println("Incorrecto");
+            }
         }
 
 
