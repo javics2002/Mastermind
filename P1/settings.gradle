@@ -15,3 +15,5 @@ dependencyResolutionManagement {
 rootProject.name = "P1"
 include ':app'
 include ':LogicLib'
+include ':Desktop'
+include ':Interface'
