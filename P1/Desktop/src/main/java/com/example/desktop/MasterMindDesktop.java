@@ -35,15 +35,23 @@ import javax.tools.Tool;
 import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
+import java.io.File;
+
 
 public class MasterMindDesktop implements Engine {
     static int activePanel = 0;
     static Dimension windowSize = new Dimension();
+    static BasicButton botonEjemplo;
 
     public static void main(String[] args){
         JPanel activePanel = loadPanel(0);
 
         final JFrame frame = createFrame("MasterMind");
+
+
+         botonEjemplo= new BasicButton(50,50,30,30);
+
+        botonEjemplo.render();
     }
 
     static final JFrame createFrame(String frameTitle){
