@@ -35,7 +35,9 @@ import javax.tools.Tool;
 import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
-import java.io.File;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import com.example.aninterface.Input;
 
 
 public class MasterMindDesktop implements Engine {
@@ -49,9 +51,9 @@ public class MasterMindDesktop implements Engine {
         final JFrame frame = createFrame("MasterMind");
 
 
-         botonEjemplo= new BasicButton(50,50,30,30);
 
-        botonEjemplo.render();
+
+
     }
 
     static final JFrame createFrame(String frameTitle){
@@ -124,6 +126,12 @@ public class MasterMindDesktop implements Engine {
                     }
                 });
                 panel.add(playButton);
+                botonEjemplo= new BasicButton(0,0,30,30);
+               // botonEjemplo.setAlignmentX(Component.LEFT_ALIGNMENT);
+                //botonEjemplo.setAlignmentY(Component.CENTER_ALIGNMENT);
+                panel.add(botonEjemplo);
+                createMouseAdapter(panel);
+                panel.repaint();
                 break;
             default:
                 panel.setBackground(Color.ORANGE);
@@ -146,5 +154,32 @@ public class MasterMindDesktop implements Engine {
     @Override
     public Audio getAudio() {
         return null;
+    }
+    public void addVisualElement(Component component,JPanel activePanel) {
+        activePanel.add(component);
+    }
+
+    public static void  createMouseAdapter(JPanel activePanel){
+        MouseAdapter mouseAdapter = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                // Obtiene las coordenadas del clic del ratón
+                int x = e.getX();
+                int y = e.getY();
+
+                // Crea un objeto Input.TouchEvent usando las coordenadas y el tipo de evento CLICKED
+                Input.TouchEvent event = new Input.TouchEvent(x, y,0, Input.InputType.RELEASED);
+
+                // Llama al método para manejar el evento
+                botonEjemplo.handleEvent(event);
+            }
+        };
+
+        // Asigna el MouseAdapter al componente que deseas rastrear (por ejemplo, un JPanel)
+        activePanel.addMouseListener(mouseAdapter);
+    }
+    public void setActivePanel(int index)
+    {
+     activePanel=index;
     }
 }

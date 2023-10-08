@@ -42,8 +42,8 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import com.example.aninterface.Interface;
-
-public class BasicButton implements Interface {
+import javax.swing.JComponent;
+public class BasicButton extends JComponent implements Interface {
 
     private int x;
     private int y;
@@ -51,6 +51,9 @@ public class BasicButton implements Interface {
     private int h;
     static BufferedImage buttonImage;
     static Graphics2D graficos;
+
+    public  static  MasterMindDesktop mainClass; // Referencia a la clase principal
+
     BasicButton(int x, int y, int w, int h)
     {
         this.x = x;
@@ -58,35 +61,53 @@ public class BasicButton implements Interface {
         this.w = w;
         this.h = h;
 
+
         //Tratamos de leer el archivo imagen y si no lanzamos la excepcion
         try {
+
             buttonImage = ImageIO.read(new File("button.png"));
         } catch (IOException e) {
             e.printStackTrace();
 
         }
 
-        graficos=buttonImage.createGraphics();
 
     }
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(buttonImage, x, y, w, h, null);
 
+    }
     @Override
     public void render( ) {
         //Metodo de renderizado del boton
-        graficos.drawImage(buttonImage, x, y, w, h, null);
+       // graficos.drawImage(buttonImage, x, y, w, h, null);
 
     }
     @Override
     public void update() { }
-    @Override
-    public boolean handleEvent(Input.TouchEvent e)
-    {
-        PointerInfo pointerInfo = MouseInfo.getPointerInfo();
-        int x = pointerInfo.getLocation().x;
-        int y = pointerInfo.getLocation().y;
-        System.out.println("Coordenadas del ratón: (" + x + ", " + y + ")");
-        return true;
+
+    public boolean handleEvent(Input.TouchEvent e) {
+        int mouseX = e.x;
+        int mouseY = e.y;
+
+        int panelWidth = getParent().getWidth();
+        int panelHeight = getParent().getHeight();
+
+        int buttonX = (panelWidth - w) / 2; // Calcula la posición X centrada del botón
+        int buttonY = (panelHeight - h) / 2; // Calcula la posición Y centrada del botón
+
+        if (e.type == Input.InputType.PRESSED &&
+                mouseX >= buttonX && mouseX <= buttonX + this.w &&
+                mouseY >= buttonY && mouseY <= buttonY + this.h) {
+            System.out.println("Clic en el botón");
+            return true; // El evento fue manejado
+        }
+
+        return false; // El evento no fue manejado
     }
+
 
     /*//Ejemplos de limites
         int LimIzq= 20;
