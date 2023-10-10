@@ -7,6 +7,7 @@ public interface Graphics {
     Font newFont(String filename, int size, boolean isBold);
     void clear(int color);
     void translate(int x, int y);
+
     void scale(int x, int y);
     void save();
     void restore();
@@ -22,4 +23,5 @@ public interface Graphics {
     void drawText(String text, int x, int y);
     int getWidth();
     int getHeight();
+
 }

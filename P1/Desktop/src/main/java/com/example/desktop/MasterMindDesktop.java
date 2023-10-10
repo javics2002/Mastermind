@@ -46,13 +46,19 @@ public class MasterMindDesktop implements Engine {
     static BasicButton botonEjemplo;
 
     public static void main(String[] args){
-        JPanel activePanel = loadPanel(0);
+        //JPanel activePanel = loadPanel(0);
 
         final JFrame frame = createFrame("MasterMind");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setIgnoreRepaint(true);
+        frame.setVisible(true);
 
 
-
-
+        // Asi deberia de ser la Creación del motor de PC y la escena inicial
+       // EnginePC engine = new EnginePC(renderView, 400, 600);     //MOTOR
+       // TitleScene scene = new TitleScene(engine);      //PRIMERA ESCENA
+        //engine.setCurrentScene(scene);
+        //engine.resume();                                //COMIENZA LA EJECUCION
 
     }
 
