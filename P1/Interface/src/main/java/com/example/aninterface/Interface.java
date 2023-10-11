@@ -10,7 +10,9 @@ public interface Interface {
 
     void render();
     void update();
-    boolean handleEvent(Input.TouchEvent e);
+
+    //Esta comentado por que de momento no tenemos eventos
+    //boolean handleEvent(Input.TouchEvent e);
 
 
 }

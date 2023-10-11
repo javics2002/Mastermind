@@ -37,30 +37,48 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import com.example.aninterface.Input;
 
+import com.example.logiclib.InitialScene;
+import com.example.libenginepc.EnginePC;
 
 public class MasterMindDesktop  {
     static int activePanel = 0;
     static Dimension windowSize = new Dimension();
-    static BasicButton botonEjemplo;
 
     public static void main(String[] args){
         //JPanel activePanel = loadPanel(0);
 
-        final JFrame frame = createFrame("MasterMind");
+        //final JFrame frame = createFrame("MasterMind");
+        final JFrame frame= new JFrame("MasterMind");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setIgnoreRepaint(true);
         frame.setVisible(true);
 
 
+
+
+
         // Asi deberia de ser la Creación del motor de PC y la escena inicial
-       // EnginePC engine = new EnginePC(renderView, 400, 600);     //MOTOR
-       // TitleScene scene = new TitleScene(engine);      //PRIMERA ESCENA
-        //engine.setCurrentScene(scene);
-        //engine.resume();                                //COMIENZA LA EJECUCION
+        // NO PUEDO CREERME QUE HAYA LLEGADO HASTA AQUI CREANDO COSAS , SOY UN GNIO CHAVALES LLEVO 4 HORAS DESPIERTO HACIENDO ESTO
+         EnginePC engine = new EnginePC(frame, 900, 900);     //MOTOR
+         InitialScene scene = new InitialScene(engine);      //PRIMERA ESCENA
+        engine.setCurrentScene(scene);
+        engine.resume();                                //COMIENZA LA EJECUCION
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     static final JFrame createFrame(String frameTitle){
         final JFrame frame;
@@ -132,10 +150,9 @@ public class MasterMindDesktop  {
                     }
                 });
                 panel.add(playButton);
-                botonEjemplo= new BasicButton(0,0,30,30);
+
                // botonEjemplo.setAlignmentX(Component.LEFT_ALIGNMENT);
                 //botonEjemplo.setAlignmentY(Component.CENTER_ALIGNMENT);
-                panel.add(botonEjemplo);
                 createMouseAdapter(panel);
                 panel.repaint();
                 break;
@@ -163,8 +180,7 @@ public class MasterMindDesktop  {
                 // Crea un objeto Input.TouchEvent usando las coordenadas y el tipo de evento CLICKED
                 Input.TouchEvent event = new Input.TouchEvent(x, y,0, Input.InputType.RELEASED);
 
-                // Llama al método para manejar el evento
-                botonEjemplo.handleEvent(event);
+
             }
         };
 

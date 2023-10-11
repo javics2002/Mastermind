@@ -9,4 +9,6 @@ java {
 
 dependencies {
     implementation project(path: ':Interface')
+    implementation project(path: ':LibEnginePC')
+    implementation project(path: ':LogicLib')
 }

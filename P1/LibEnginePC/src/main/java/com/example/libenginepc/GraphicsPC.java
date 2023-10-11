@@ -129,9 +129,9 @@ public class GraphicsPC implements Graphics{
     // METODOS PARA DIBUJAR
     @Override
     public void drawImage(IntImage image, int x, int y, int w, int h) {       //DIBUJA LA IMAGEN CON POSICION Y TAMAÑO
-       // this.graphics2D.drawImage(((ImagePC) image).getImg(),
-          //      logicToRealX(x) - (scaleToReal(w)/2),logicToRealY(y) - (scaleToReal(h)/2) + borderTop,
-          //      (scaleToReal(w)),(scaleToReal(h)),null);
+        this.graphics2D.drawImage(((IntImagePC) image).getImg(),
+                logicToRealX(x) - (scaleToReal(w)/2),logicToRealY(y) - (scaleToReal(h)/2) + borderTop,
+              (scaleToReal(w)),(scaleToReal(h)),null);
     }
 
     // METODOS PARA CREAR RECURSOS
@@ -144,8 +144,8 @@ public class GraphicsPC implements Graphics{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //ImagePC imgPC = new ImagePC(img);
-        return null; //"/data/start.png"
+        IntImage imgPC = new IntImagePC(img);
+        return imgPC; //"/data/button.png"
     }
     @Override                                                    // ANCHO DE UNA CADENA DE TEXTO
     public int getWidthString(String text) {
