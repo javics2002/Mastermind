@@ -2,6 +2,6 @@ package com.example.aninterface;
 
 public interface Engine {
     Graphics getGraphics();
-    Input getInput();
-    Audio getAudio();
+    void setCurrentScene(State currentScene); // Establecer una escena
+    State getState();       // Obtener la escena actual
 }

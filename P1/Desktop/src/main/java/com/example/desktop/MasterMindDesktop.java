@@ -40,7 +40,7 @@ import java.awt.event.MouseEvent;
 import com.example.aninterface.Input;
 
 
-public class MasterMindDesktop implements Engine {
+public class MasterMindDesktop  {
     static int activePanel = 0;
     static Dimension windowSize = new Dimension();
     static BasicButton botonEjemplo;
@@ -147,20 +147,7 @@ public class MasterMindDesktop implements Engine {
         return panel;
     }
 
-    @Override
-    public com.example.aninterface.Graphics getGraphics() {
-        return null;
-    }
 
-    @Override
-    public Input getInput() {
-        return null;
-    }
-
-    @Override
-    public Audio getAudio() {
-        return null;
-    }
     public void addVisualElement(Component component,JPanel activePanel) {
         activePanel.add(component);
     }

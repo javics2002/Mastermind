@@ -1,6 +1,6 @@
 package com.example.aninterface;
 
-public interface Image {
+public interface IntImage {
     int getWidth();
     int getHeight();
 }
