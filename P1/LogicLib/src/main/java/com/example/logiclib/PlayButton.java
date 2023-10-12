@@ -16,9 +16,7 @@ public class PlayButton implements Interface {
     private int w;
     private int h;
 
-
-   PlayButton(String filename,Engine engine, int x, int y, int w, int h ){
-       //Construimos el boton a partir del motor , que nos da los graficos y se encarga de decirle al mismo que cree una nueva
+   PlayButton(String filename,Engine engine, int x, int y, int w, int h ) {
         this.engine = engine;
         this.gr = engine.getGraphics();
         this.img = this.gr.newImage(filename);
@@ -26,13 +24,11 @@ public class PlayButton implements Interface {
         this.y = y ;
         this.w = w;
         this.h = h;
-
     }
     @Override
     public void render() {
         this.gr.drawImage(this.img,x,y,w,h);
     }
-
     @Override
     public void update() { }
 }

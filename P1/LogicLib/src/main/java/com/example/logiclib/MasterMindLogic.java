@@ -45,15 +45,10 @@ public class MasterMindLogic {
                 //System.out.println("Incorrecto");
             }
         }
-
-
 //        Combination[] attempts = new Combination[1];
 //        attempts[0] = new Combination(combLength);
 //        for(int i = 0; i < combLength; i++){
 //            attempts[0].setColor(i, resultCombination.getColor(i));
 //        }
-
-
-
     }
 }

@@ -46,39 +46,19 @@ public class MasterMindDesktop  {
     static Dimension windowSize = new Dimension();
 
     public static void main(String[] args){
-        //JPanel activePanel = loadPanel(0);
+        // JPanel activePanel = loadPanel(0);
 
-        //final JFrame frame = createFrame("MasterMind");
+        // final JFrame frame = createFrame("MasterMind");
         final JFrame frame= new JFrame("MasterMind");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setIgnoreRepaint(true);
         frame.setVisible(true);
 
-
-
-
-
-        // Asi deberia de ser la Creación del motor de PC y la escena inicial
-        // NO PUEDO CREERME QUE HAYA LLEGADO HASTA AQUI CREANDO COSAS , SOY UN GNIO CHAVALES LLEVO 4 HORAS DESPIERTO HACIENDO ESTO
-         EnginePC engine = new EnginePC(frame, 900, 900);     //MOTOR
-         InitialScene scene = new InitialScene(engine);      //PRIMERA ESCENA
+        EnginePC engine = new EnginePC(frame, 900, 900);
+        InitialScene scene = new InitialScene(engine);
         engine.setCurrentScene(scene);
-        engine.resume();                                //COMIENZA LA EJECUCION
-
+        engine.resume();
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     static final JFrame createFrame(String frameTitle){
         final JFrame frame;
@@ -151,7 +131,7 @@ public class MasterMindDesktop  {
                 });
                 panel.add(playButton);
 
-               // botonEjemplo.setAlignmentX(Component.LEFT_ALIGNMENT);
+                // botonEjemplo.setAlignmentX(Component.LEFT_ALIGNMENT);
                 //botonEjemplo.setAlignmentY(Component.CENTER_ALIGNMENT);
                 createMouseAdapter(panel);
                 panel.repaint();
@@ -163,32 +143,26 @@ public class MasterMindDesktop  {
 
         return panel;
     }
-
-
-    public void addVisualElement(Component component,JPanel activePanel) {
+    public void addVisualElement(Component component, JPanel activePanel) {
         activePanel.add(component);
     }
 
-    public static void  createMouseAdapter(JPanel activePanel){
+    public static void createMouseAdapter(JPanel activePanel) {
         MouseAdapter mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Obtiene las coordenadas del clic del ratón
+                // Obtain the mouse coords
                 int x = e.getX();
                 int y = e.getY();
 
-                // Crea un objeto Input.TouchEvent usando las coordenadas y el tipo de evento CLICKED
+                // Creates an event using the mouse coords
                 Input.TouchEvent event = new Input.TouchEvent(x, y,0, Input.InputType.RELEASED);
-
-
             }
         };
 
-        // Asigna el MouseAdapter al componente que deseas rastrear (por ejemplo, un JPanel)
         activePanel.addMouseListener(mouseAdapter);
     }
-    public void setActivePanel(int index)
-    {
-     activePanel=index;
+    public void setActivePanel(int index) {
+        activePanel=index;
     }
 }
