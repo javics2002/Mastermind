@@ -36,19 +36,6 @@ public class GraphicsPC implements Graphics {
         this.myView = myView;
         this.myView.createBufferStrategy(2);
 
-        // Intentamos crear el buffer strategy con 2 buffers.
-//        int intentos = 100;
-//        while (intentos-- > 0) {
-//            try {
-//                this.myView.createBufferStrategy(2);
-//                break;
-//            } catch (Exception e) {
-//            }
-//        } // while pidiendo la creación de la buffeStrategy
-//        if (intentos == 0) {
-//            System.err.println("No pude crear la BufferStrategy");
-//            return;
-//        }
 
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
@@ -62,18 +49,20 @@ public class GraphicsPC implements Graphics {
         this.factorScale = Math.min(this.factorX, this.factorY);
 
         // TODO: BORDES?
-//        if(((float)getWidth()/(float)getHeight())<((float)2/(float)3))
-//        {
-//            this.window = (int)(this.logicWidth * this.factorX);
-//            int a = (int) ((getHeight() - this.window) / 2);
-//            this.borderHeight = a; //Bordes arriba y abajo
-//        }
-//        else {
-//            this.window = (int)(this.logicWidth*this.factorY);
-//            int a = (int) ((getWidth() - this.window) / 2);
-//            this.borderWidth = a; //Bordes Laterales
-//        }
-//        this.borderTop = this.myView.getInsets().top;            // TOMANDO EL INSET SUPERIOR
+        if(((float)getWidth()/(float)getHeight())<((float)2/(float)3))
+       {
+           this.window = (int)(this.logicWidth * this.factorX);
+           int a = (int) ((getHeight() - this.window) / 2);
+            this.borderHeight = a; //Bordes arriba y abajo
+        }
+        else {
+            this.window = (int)(this.logicWidth*this.factorY);
+           int a = (int) ((getWidth() - this.window) / 2);
+            this.borderWidth = a; //Bordes Laterales
+        }
+        this.borderTop = this.myView.getInsets().top;            // TOMANDO EL INSET SUPERIOR
+
+
 
     }
     @Override
