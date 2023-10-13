@@ -57,7 +57,7 @@ public class MasterMindDesktop  {
         frame.setVisible(true);
 
         //Construccion del motor y de la escena
-        EnginePC engine = new EnginePC(frame, 1000, 1000,500,500);
+        EnginePC engine = new EnginePC(frame, 1000, 1000,200,300);
         InitialScene scene = new InitialScene(engine);
         engine.setCurrentScene(scene); //Obtencion de la referencia de la escena actual pro parte del motor para hacer renderizado y update
         //Inicio de la ejecuccion con  resume
