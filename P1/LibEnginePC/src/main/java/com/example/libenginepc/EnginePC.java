@@ -13,10 +13,10 @@ public class EnginePC implements Runnable, Engine {
     private State currentScene;
     private GraphicsPC graphics;
 
-    public EnginePC(JFrame myView, int logicWidth, int logicHeight) {
+    public EnginePC(JFrame myView, int logicWidth, int logicHeight,int windowSX, int windowSY) {
         this.myView = myView;
         //this.input = new InputPC();
-        this.graphics = new GraphicsPC(this.myView, logicWidth, logicHeight);
+        this.graphics = new GraphicsPC(this.myView, logicWidth, logicHeight,windowSX,  windowSY);
     }
 
     protected void update(double deltaTime) {

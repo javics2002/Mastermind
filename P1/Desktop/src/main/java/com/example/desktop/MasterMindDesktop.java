@@ -49,14 +49,18 @@ public class MasterMindDesktop  {
         // JPanel activePanel = loadPanel(0);
 
         // final JFrame frame = createFrame("MasterMind");
+
+        //Creacion del Jframe
         final JFrame frame= new JFrame("MasterMind");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setIgnoreRepaint(true);
         frame.setVisible(true);
 
-        EnginePC engine = new EnginePC(frame, 900, 900);
+        //Construccion del motor y de la escena
+        EnginePC engine = new EnginePC(frame, 1000, 1000,500,500);
         InitialScene scene = new InitialScene(engine);
-        engine.setCurrentScene(scene);
+        engine.setCurrentScene(scene); //Obtencion de la referencia de la escena actual pro parte del motor para hacer renderizado y update
+        //Inicio de la ejecuccion con  resume
         engine.resume();
     }
 
