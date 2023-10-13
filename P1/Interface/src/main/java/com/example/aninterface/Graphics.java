@@ -40,8 +40,7 @@ public interface Graphics {
     int getWidthLogic();
     int getHeight();
     int getHeightLogic();
-    int getBorderTop();
-    int getWindow();
+
     int getWidthString(String text);
     int getHeightString(String text);
 

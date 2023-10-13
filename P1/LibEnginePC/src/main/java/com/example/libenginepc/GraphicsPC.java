@@ -27,10 +27,12 @@ public class GraphicsPC implements Graphics {
     private int borderWidth;
     private int borderHeight;
     private int borderTop;
-    private int window; // TODO: ?
+    private int borderBot;
     private float factorScale;
     private float factorX;
     private float factorY;
+
+    private float aspectR;
 
 
     //Creamos dos buffers para evitar el parapadeo (Uno dibuja el otro enseña)
@@ -50,6 +52,8 @@ public class GraphicsPC implements Graphics {
         //Le damos un tamaño logico a la ventana
         this.setResolution(this.windowSX, this.windowSY);
 
+        //De momento esta cableado
+        this.aspectR= (float)2/(float)3;
 
         this.factorY = (float)getHeight() / (float)this.logicHeight;
 
@@ -57,7 +61,7 @@ public class GraphicsPC implements Graphics {
         this.factorScale = Math.min(this.factorX, this.factorY);
 
 
-
+        this.borderTop=this.myView.getInsets().top; //Obtener el border top
 
 
 
@@ -75,11 +79,15 @@ public class GraphicsPC implements Graphics {
 
     // Frame Management
     public void show() {
-        this.bufferStrategy.show();
+        if (this.bufferStrategy != null) {
+            this.bufferStrategy.show();
+        }
+
     }
     public void prepareFrame() {
-        // Actualizacion de la resolucion a partir
+        // Actualizacion de la resolucion a partir del ancho y alto de la ventana que hemos dado en el constructor
         setResolution(getWidth(), getHeight());
+        //Obtener el graphics2D (se hace en cada iteracion)
         this.graphics2D = (Graphics2D)this.bufferStrategy.getDrawGraphics();
     }
     public void finishFrame() {
@@ -90,7 +98,7 @@ public class GraphicsPC implements Graphics {
     @Override
     public void drawImage(IntImage image, int x, int y, int w, int h) {
         this.graphics2D.drawImage(((IntImagePC) image).getImg(),
-                logicToRealX(x) - (scaleToReal(w)/2),logicToRealY(y) - (scaleToReal(h)/2) + borderTop,
+                logicToRealX(x) - (scaleToReal(w)/2)+ this.borderBot,logicToRealY(y) - (scaleToReal(h)/2) + borderTop,
                 scaleToReal(w),scaleToReal(h),null);
     }
 
@@ -118,24 +126,24 @@ public class GraphicsPC implements Graphics {
     @Override
     public void drawText(String text, int x, int y, int color, float tam) {
         this.graphics2D.setColor(new Color (color));
-        this.graphics2D.drawString(text, x - (getWidthString(text)/2), y - (getHeightString(text)/2) + borderTop);
+        this.graphics2D.drawString(text, x - (getWidthString(text)/2)+ this.borderBot, y - (getHeightString(text)/2) + this.borderTop);
     }
     @Override
     public void drawRect(int x, int y, int width, int height) {
-        this.graphics2D.drawRect(x,y + borderTop, width,height);
+        this.graphics2D.drawRect(x+ this.borderBot,y + this.borderTop, width,height);
     }
     @Override
     public void fillSquare(int cx, int cy, int side) {
-        this.graphics2D.fillRect(cx,cy,side,side);
+        this.graphics2D.fillRect(cx+ this.borderBot,cy + this.borderTop,side,side);
     }
 
     @Override
     public void fillRect(int x, int y, int w, int h) {
-        this.graphics2D.fillRect(x,y ,w,h);
+        this.graphics2D.fillRect(x+ this.borderBot,y + this.borderTop ,w,h);
     }
     @Override
     public void drawSquare(int cx, int cy, int side) {
-        this.graphics2D.drawRect(cx,cy ,side,side);
+        this.graphics2D.drawRect(cx+ this.borderBot,cy + this.borderTop ,side,side);
         this.graphics2D.setPaintMode();
     }
     @Override
@@ -172,18 +180,16 @@ public class GraphicsPC implements Graphics {
     public int getWidthLogic() {
         return this.logicWidth;
     }
-    @Override
-    public int getBorderTop() {
-        return this.borderTop;
-    }
-    @Override
-    public int getWindow() {
-        return window;
-    }
+
 
     // TODO: Investigar sobre bordes y resolucion
     @Override
     public void setResolution(int w, int h) {
         this.myView.setSize(w, h);
+        this.factorX = (float)w / (float)this.logicWidth;
+        this.factorY = (float)h / (float)this.logicHeight;
+        this.factorScale = Math.min(this.factorX, this.factorY);
+        this.borderTop=this.myView.getInsets().top; //Obtener el border top
+
     }
 }

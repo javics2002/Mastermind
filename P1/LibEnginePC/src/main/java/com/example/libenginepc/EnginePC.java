@@ -53,6 +53,7 @@ public class EnginePC implements Runnable, Engine {
             this.graphics.prepareFrame();
             this.render();
             this.graphics.show();
+
             this.graphics.finishFrame();
         }
 
@@ -62,7 +63,7 @@ public class EnginePC implements Runnable, Engine {
         this.graphics.clear(0xe7d6bd);
         this.currentScene.render(this.graphics);
 
-        // TODO: Bordes?
+
     }
 
     public void resume() {
