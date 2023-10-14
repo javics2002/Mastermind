@@ -1,5 +1,7 @@
 package com.example.libenginepc;
+import java.awt.FontFormatException;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.image.BufferStrategy;
 import java.awt.Color;
@@ -9,6 +11,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+
+import com.example.aninterface.Font;
 import com.example.aninterface.IntImage;
 import com.example.aninterface.Graphics;
 import javax.swing.border.LineBorder;
@@ -31,15 +35,14 @@ public class GraphicsPC implements Graphics {
     private float factorScale;
     private float factorX;
     private float factorY;
-
     private float aspectR;
 
+    private java.awt.Font activeFont;
 
     //Creamos dos buffers para evitar el parapadeo (Uno dibuja el otro enseña)
     GraphicsPC(JFrame myView, int logicWidth, int logicHeight,int windowSX, int windowSY) {
         this.myView = myView;
         this.myView.createBufferStrategy(2);
-
 
         this.bufferStrategy = this.myView.getBufferStrategy();
         this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
@@ -49,22 +52,14 @@ public class GraphicsPC implements Graphics {
         this.windowSX= windowSX;
         this.windowSY= windowSY;
 
-        //Le damos un tamaño logico a la ventana
         this.setResolution(this.windowSX, this.windowSY);
 
         //De momento esta cableado
         this.aspectR= (float)2/(float)3;
-
         this.factorY = (float)getHeight() / (float)this.logicHeight;
-
         this.factorX = (float)getWidth() / (float)this.logicWidth;
         this.factorScale = Math.min(this.factorX, this.factorY);
-
-
-        this.borderTop=this.myView.getInsets().top; //Obtener el border top
-
-
-
+        this.borderTop=this.myView.getInsets().top;
     }
     @Override
     public void setColor(int color) {
@@ -115,6 +110,25 @@ public class GraphicsPC implements Graphics {
         IntImage imgPC = new IntImagePC(img);
         return imgPC; // Example: "/data/button.png"
     }
+
+    // TODO: Programar comportamiento boolean
+    @Override
+    public Font newFont(String fileName, float size) {
+        java.awt.Font customFont = null;
+        try {
+            customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("data/Fonts/"+fileName)).deriveFont(size);
+        } catch (FontFormatException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        IntFontPC fontPC = new IntFontPC(customFont);
+        activeFont = customFont;
+
+        return fontPC;
+    }
+
     @Override
     public int getWidthString(String text) {
         return (int)this.graphics2D.getFont().getStringBounds(text, this.graphics2D.getFontRenderContext()).getWidth();
@@ -124,8 +138,10 @@ public class GraphicsPC implements Graphics {
         return (int)this.graphics2D.getFont().getStringBounds(text,this.graphics2D.getFontRenderContext()).getHeight();
     }
     @Override
-    public void drawText(String text, int x, int y, int color, float tam) {
+    public void drawText(String text, int x, int y, int color) {
         this.graphics2D.setColor(new Color (color));
+        this.graphics2D.setFont(this.activeFont);
+
         this.graphics2D.drawString(text, x - (getWidthString(text)/2)+ this.borderBot, y - (getHeightString(text)/2) + this.borderTop);
     }
     @Override
