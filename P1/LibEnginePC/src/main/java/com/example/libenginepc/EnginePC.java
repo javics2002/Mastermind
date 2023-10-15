@@ -52,12 +52,15 @@ public class EnginePC implements Runnable, Engine {
 
             this.update(elapsedTime);
             this.handleEvents();
-            // Render
-            this.graphics.prepareFrame();
-            this.render();
-            this.graphics.show();
-
-            this.graphics.finishFrame();
+            do{
+                //render
+                this.graphics.prepareFrame();
+                this.render();
+                this.graphics.show();
+                //terminar Frame
+                this.graphics.finishFrame();
+            }
+            while(!this.graphics.cambioBuffer());
         }
 
     }

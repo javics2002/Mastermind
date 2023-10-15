@@ -34,6 +34,7 @@ public class PlayButton implements Interface {
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
+
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
             // Change scene
             DifficultyScene scene = new DifficultyScene(engine);
@@ -44,7 +45,13 @@ public class PlayButton implements Interface {
         return false;
     }
 
-    public boolean inBounds(int mouseX, int mouseY) {
-        return (mouseX >= x && mouseY >= y && mouseX < x + w && mouseY < y + h);
+    public boolean inBounds(int mX, int mY) {
+
+        return (mX >= this.gr.logicToRealX(x) - (this.gr.scaleToReal(w)/2) && mX <= this.gr.scaleToReal(w) + this.gr.logicToRealX(x) - (this.gr.scaleToReal(w)/2)
+         && mY >= this.gr.logicToRealY(y) - (this.gr.scaleToReal(h)/2) + this.gr.getBorderTop() && mY <= this.gr.scaleToReal(h) + this.gr.logicToRealY(y) - (this.gr.scaleToReal(h)/2) + this.gr.getBorderTop());
+
+
+
     }
+
 }
