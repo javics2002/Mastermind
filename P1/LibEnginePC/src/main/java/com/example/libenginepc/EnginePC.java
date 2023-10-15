@@ -6,21 +6,31 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
 import com.example.aninterface.State;
 import com.example.aninterface.Graphics;
+import java.awt.event.*;
 public class EnginePC implements Runnable, Engine {
     private JFrame myView;           // Window
     private Thread renderThread;
     private boolean running;        // Boolean to know if the app is still running
     private State currentScene;
     private GraphicsPC graphics;
+    private InputPC input;
 
     public EnginePC(JFrame myView, int logicWidth, int logicHeight,int windowSX, int windowSY) {
         this.myView = myView;
-        //this.input = new InputPC();
         this.graphics = new GraphicsPC(this.myView, logicWidth, logicHeight,windowSX,  windowSY);
+        this.input = new InputPC();
+        myView.addMouseListener(this.input);
     }
 
     protected void update(double deltaTime) {
         this.currentScene.update(deltaTime);
+    }
+
+    protected void handleEvents() {
+        if (this.input.getTouchEvent().size() > 0){
+            this.currentScene.handleEvents(input.getTouchEvent().get(0));
+            this.input.clearEvents();
+        }
     }
 
     // Main loop
@@ -29,13 +39,6 @@ public class EnginePC implements Runnable, Engine {
         // Prevent anyone calling run() except for this class
         if (this.renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
-
-
-        // TODO: Testear si todo funciona bien, si lo hace, borrar este comentario aleatorio
-
-        //El problema que he tenido es que se da en nano segundos y lo he tenido que convertir a segundos
-        //Primero hacemos una comprobacion para obtener el tiempo del frame cuando empezamos
-        // while (this.running && this.myView.getWidth() == 0);
 
         long lastFrameTime = System.nanoTime();
 
@@ -48,7 +51,7 @@ public class EnginePC implements Runnable, Engine {
             double elapsedTime = (double) nanoElapsedTime / 1.0E9;
 
             this.update(elapsedTime);
-
+            this.handleEvents();
             // Render
             this.graphics.prepareFrame();
             this.render();
@@ -62,8 +65,6 @@ public class EnginePC implements Runnable, Engine {
     protected void render() {
         this.graphics.clear(0xe7d6bd);
         this.currentScene.render(this.graphics);
-
-
     }
 
     public void resume() {
@@ -98,6 +99,12 @@ public class EnginePC implements Runnable, Engine {
     public State getScene() {
         return this.currentScene;
     }
+
+    @Override
+    public Input getInput() {
+        return this.input;
+    }
+
     @Override
     public void setCurrentScene(State currentScene) {
         this.currentScene = currentScene;

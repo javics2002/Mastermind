@@ -7,12 +7,13 @@ public interface Input {
         public int x;
         public int y;
         public InputType type;
-        public TouchEvent(int x, int y, int index, InputType type) {
+        public TouchEvent(int x, int y, InputType type) {
             this.x = x;
             this.y = y;
             this.type = type;
         }
     }
     List<TouchEvent> getTouchEvent();
+    public void addTouchEvent();
     public void clearEvents();
 }

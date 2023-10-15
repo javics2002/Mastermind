@@ -1,8 +1,8 @@
 package com.example.logiclib;
 import com.example.aninterface.Engine;
+import com.example.aninterface.Input;
 import com.example.aninterface.State;
 import com.example.aninterface.Graphics;
-import com.example.aninterface.IntImage;
 import com.example.aninterface.Font;
 
 public class InitialScene implements State {
@@ -23,9 +23,14 @@ public class InitialScene implements State {
 
     @Override
     public void render(Graphics gr) {
-            this.bPlay.render();
-            this.titleText.render();
-        }
+        this.bPlay.render();
+        this.titleText.render();
+    }
+    @Override
+    public void handleEvents(Input.TouchEvent touchEvent) {
+        // Bucle con lista touchEvent, el boton recibe un unico touchevent
+        this.bPlay.handleEvents(touchEvent);
+    }
 }
 
 

@@ -6,8 +6,8 @@ import com.example.aninterface.Interface;
 import com.example.aninterface.State;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.IntImage;
-public class PlayButton implements Interface {
 
+public class PlayButton implements Interface {
     private IntImage img;
     private Engine engine;
     private Graphics gr;
@@ -31,4 +31,20 @@ public class PlayButton implements Interface {
     }
     @Override
     public void update() { }
+
+    @Override
+    public boolean handleEvents(Input.TouchEvent e) {
+        if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
+            // Change scene
+            DifficultyScene scene = new DifficultyScene(engine);
+            engine.setCurrentScene(scene);
+            // engine.resume();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean inBounds(int mouseX, int mouseY) {
+        return (mouseX >= x && mouseY >= y && mouseX < x + w && mouseY < y + h);
+    }
 }

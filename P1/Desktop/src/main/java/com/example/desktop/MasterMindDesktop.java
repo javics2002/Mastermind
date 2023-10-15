@@ -42,7 +42,6 @@ import com.example.logiclib.InitialScene;
 import com.example.libenginepc.EnginePC;
 
 public class MasterMindDesktop  {
-    static int activePanel = 0;
     static Dimension windowSize = new Dimension();
 
     public static void main(String[] args){
@@ -96,7 +95,7 @@ public class MasterMindDesktop  {
         frame.add(Box.createHorizontalStrut(bandWidth), BorderLayout.EAST);
         frame.add(Box.createVerticalStrut(bandHeight), BorderLayout.NORTH);
         frame.add(Box.createVerticalStrut(bandHeight), BorderLayout.SOUTH);
-        frame.add(loadPanel(activePanel), BorderLayout.CENTER);
+        // frame.add(loadPanel(activePanel), BorderLayout.CENTER);
 
         frame.revalidate();
         frame.repaint();
@@ -122,18 +121,7 @@ public class MasterMindDesktop  {
                 playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
                 playButton.setAlignmentY(Component.CENTER_ALIGNMENT);
                 //playButton.setIcon(new ImageIcon("C:\\Users\\Javier\\Desktop\\a.png"));
-                playButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        activePanel = 1;
-                        updateFrame((JFrame) SwingUtilities.getWindowAncestor((Component) e.getSource()));
-                    }
-                });
                 panel.add(playButton);
-
-                // botonEjemplo.setAlignmentX(Component.LEFT_ALIGNMENT);
-                //botonEjemplo.setAlignmentY(Component.CENTER_ALIGNMENT);
-                createMouseAdapter(panel);
                 panel.repaint();
                 break;
             default:
@@ -146,23 +134,7 @@ public class MasterMindDesktop  {
     public void addVisualElement(Component component, JPanel activePanel) {
         activePanel.add(component);
     }
-
-    public static void createMouseAdapter(JPanel activePanel) {
-        MouseAdapter mouseAdapter = new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // Obtain the mouse coords
-                int x = e.getX();
-                int y = e.getY();
-
-                // Creates an event using the mouse coords
-                Input.TouchEvent event = new Input.TouchEvent(x, y,0, Input.InputType.RELEASED);
-            }
-        };
-
-        activePanel.addMouseListener(mouseAdapter);
-    }
     public void setActivePanel(int index) {
-        activePanel=index;
+
     }
 }

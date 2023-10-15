@@ -2,6 +2,7 @@ package com.example.logiclib;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Font;
+import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 
 import java.awt.Color;
@@ -31,4 +32,9 @@ public class Text implements Interface {
     }
     @Override
     public void update() { }
+
+    @Override
+    public boolean handleEvents(Input.TouchEvent e) {
+        return false;
+    }
 }

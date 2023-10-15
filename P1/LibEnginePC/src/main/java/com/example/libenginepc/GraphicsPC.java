@@ -111,7 +111,6 @@ public class GraphicsPC implements Graphics {
         return imgPC; // Example: "/data/button.png"
     }
 
-    // TODO: Programar comportamiento boolean
     @Override
     public Font newFont(String fileName, float size) {
         java.awt.Font customFont = null;

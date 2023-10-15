@@ -4,4 +4,6 @@ public interface Engine {
     Graphics getGraphics();
     void setCurrentScene(State currentScene);
     State getScene();
+
+    Input getInput();
 }
