@@ -7,50 +7,33 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputPC implements Input, MouseListener {
-    private List<TouchEvent> _events;
+
+public class InputPC implements Input {
+   private InputHandlerMouse _handler;
 
     InputPC(){
-        _events = new ArrayList<TouchEvent>();
+        _handler = new InputHandlerMouse();
     }
-
+    public InputHandlerMouse getHandlerInput()
+    {
+        return _handler;
+    }
     @Override
     public List<TouchEvent> getTouchEvent() {
-        return _events;
+
+        return _handler.getMouseEvent();
     }
 
     @Override
     public void addTouchEvent() {
+
+        _handler.addMouseEvent();
     }
 
     @Override
     public void clearEvents() {
-        _events.clear();
-    }
-    @Override
-    public void mouseClicked(MouseEvent mouseEvent) {
-        // Create an event
-        TouchEvent event = new TouchEvent(mouseEvent.getX(), mouseEvent.getY(), InputType.PRESSED);
-        _events.add(event);
+        _handler.clearMouseEvents();
     }
 
-    @Override
-    public void mousePressed(MouseEvent mouseEvent) {
-        TouchEvent event = new TouchEvent(mouseEvent.getX(), mouseEvent.getY(), InputType.PRESSED);
-        _events.add(event);
-    }
 
-    @Override
-    public void mouseReleased(MouseEvent mouseEvent) {
-        TouchEvent event = new TouchEvent(mouseEvent.getX(), mouseEvent.getY(), InputType.RELEASED);
-        _events.add(event);
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent mouseEvent) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent mouseEvent) {
-    }
 }

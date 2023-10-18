@@ -19,7 +19,7 @@ public class EnginePC implements Runnable, Engine {
         this.myView = myView;
         this.graphics = new GraphicsPC(this.myView, logicWidth, logicHeight,windowSX,  windowSY);
         this.input = new InputPC();
-        myView.addMouseListener(this.input);
+        myView.addMouseListener(this.input.getHandlerInput());
     }
 
     protected void update(double deltaTime) {
