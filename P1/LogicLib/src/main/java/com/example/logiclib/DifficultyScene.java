@@ -6,11 +6,14 @@ import com.example.aninterface.Input;
 import com.example.aninterface.State;
 
 public class DifficultyScene implements State {
+    //private SetDifficultyButton easyDifficultyButton, mediumDifficultyButton,
+    //        difficultDifficultyButton, impossibleDifficultyButton;
+
     private Text titleText;
     public DifficultyScene(Engine engine) {
         Graphics gr = engine.getGraphics();
         gr.newFont("Comfortaa-Regular.ttf", 48f);
-        this.titleText = new Text("Segunda Escena", engine, gr.getWidthLogic() / 2, gr.getHeightLogic() / 4, 0);
+        titleText = new Text("Segunda Escena", engine, gr.getWidthLogic() / 2, gr.getHeightLogic() / 4, 0);
     }
 
     @Override

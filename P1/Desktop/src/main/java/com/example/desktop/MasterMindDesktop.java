@@ -38,6 +38,7 @@ import com.example.aninterface.Input;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import com.example.logiclib.GameScene;
 import com.example.logiclib.InitialScene;
 import com.example.libenginepc.EnginePC;
 
@@ -54,87 +55,9 @@ public class MasterMindDesktop  {
         frame.setVisible(true);
 
         EnginePC engine = new EnginePC(frame, 1000, 1000,500,500);
-        InitialScene scene = new InitialScene(engine);
+        GameScene scene = new GameScene(engine);
         engine.setCurrentScene(scene);
         engine.resume();
     }
 
-    static final JFrame createFrame(String frameTitle){
-        final JFrame frame;
-        frame = new JFrame(frameTitle);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        frame.setPreferredSize(Toolkit.getDefaultToolkit().getScreenSize());
-        frame.pack();
-        frame.setVisible(true);
-
-        frame.addComponentListener(new ComponentAdapter() {
-            public void componentResized(ComponentEvent componentEvent) {
-                windowSize = componentEvent.getComponent().getSize();
-                updateFrame(frame);
-            }
-        });
-
-        return frame;
-    }
-
-    private static void updateFrame(final JFrame frame) {
-        Dimension gameSize = new Dimension();
-
-        float aspectRatio = 2f / 3f;
-        if((float) windowSize.width / (float) windowSize.height < aspectRatio)
-            gameSize.setSize(windowSize.width, (int) (windowSize.width / aspectRatio));
-        else
-            gameSize.setSize((int) (windowSize.height * aspectRatio), windowSize.height);
-
-        int bandWidth = (windowSize.width - gameSize.width) / 2;
-        int bandHeight = (windowSize.height - gameSize.height) / 2;
-
-        frame.getContentPane().removeAll();
-        frame.add(Box.createHorizontalStrut(bandWidth), BorderLayout.WEST);
-        frame.add(Box.createHorizontalStrut(bandWidth), BorderLayout.EAST);
-        frame.add(Box.createVerticalStrut(bandHeight), BorderLayout.NORTH);
-        frame.add(Box.createVerticalStrut(bandHeight), BorderLayout.SOUTH);
-        // frame.add(loadPanel(activePanel), BorderLayout.CENTER);
-
-        frame.revalidate();
-        frame.repaint();
-    }
-
-    static JPanel loadPanel(int index){
-        final JPanel panel = new JPanel();
-        switch (index){
-            case 0: //Title panel
-                panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-                JLabel titleLabel = new JLabel("Master Mind");
-                titleLabel.setFont(new Font("DAGGERSQUARE", Font.PLAIN, 48));
-                titleLabel.setSize(200, 300);
-                titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-                titleLabel.setAlignmentY(Component.CENTER_ALIGNMENT);
-                titleLabel.setBorder(new EmptyBorder(200, 0, 100, 0));
-                panel.add(titleLabel);
-
-                JButton playButton = new JButton();
-                playButton.setText("Jugar");
-                playButton.setFont(new Font("DAGGERSQUARE", Font.PLAIN, 24));
-                playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-                playButton.setAlignmentY(Component.CENTER_ALIGNMENT);
-                //playButton.setIcon(new ImageIcon("C:\\Users\\Javier\\Desktop\\a.png"));
-                panel.add(playButton);
-                panel.repaint();
-                break;
-            default:
-                panel.setBackground(Color.ORANGE);
-                break;
-        }
-
-        return panel;
-    }
-    public void addVisualElement(Component component, JPanel activePanel) {
-        activePanel.add(component);
-    }
-    public void setActivePanel(int index) {
-
-    }
 }
