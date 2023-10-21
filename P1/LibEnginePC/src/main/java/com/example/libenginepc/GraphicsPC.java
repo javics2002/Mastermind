@@ -41,7 +41,7 @@ public class GraphicsPC implements Graphics {
 
     private java.awt.Font activeFont;
 
-    GraphicsPC(JFrame myView, int logicWidth, int logicHeight,int windowSX, int  windowSY) {
+    GraphicsPC(JFrame myView, int logicWidth, int logicHeight) {
         this.myView = myView;
         this.myView.createBufferStrategy(2);
 
@@ -109,6 +109,8 @@ public class GraphicsPC implements Graphics {
     public void setColor(int color) { this.graphics2D.setColor(new Color(color)); } // CAMBIA COLOR
     //METODOS PARA GESTION DE FRAME
     public void show() { this.bufferStrategy.show(); }           // MUESTRA EL BUFFER STRATEGY
+
+    @Override
     public void prepareFrame() {                                // ACTUALIZA LA NUEVA RESOLUCION EN CADA FRAME
         setResolution(getWidth(),getHeight());
         this.graphics2D = (Graphics2D)this.bufferStrategy.getDrawGraphics();
@@ -141,8 +143,8 @@ public class GraphicsPC implements Graphics {
 
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
-        int adjustedX = logicToRealX(x) - (getWidthString(text) / 2);
-        int adjustedY = logicToRealY(y) - (getHeightString(text) / 2) + this.borderTop;
+        int adjustedX = logicToRealX(x) - (getSWidth(text) / 2);
+        int adjustedY = logicToRealY(y) - (getSHeight(text) / 2) + this.borderTop;
 
         // Dibuja el texto con el tamaño de fuente ajustado
         this.graphics2D.drawString(text, adjustedX, adjustedY);
@@ -153,7 +155,7 @@ public class GraphicsPC implements Graphics {
                 logicToRealX(x) - (scaleToReal(w)/2),logicToRealY(y) - (scaleToReal(h)/2) + borderTop,
                 (scaleToReal(w)),(scaleToReal(h)),null);
     }
-    // METODOS PARA CREAR RECURSOS
+    // Creacion de obejtos  (Imagen Fuentes...)
     @Override
     public IntImage newImage(String filename) { //Creacion de imagen
         Image img = null;
@@ -167,11 +169,11 @@ public class GraphicsPC implements Graphics {
 
     }
     @Override                                                    // Getter ancho cadena
-    public int getWidthString(String text) {
+    public int getSWidth(String text) {
         return (int)this.graphics2D.getFont().getStringBounds(text,this.graphics2D.getFontRenderContext()).getWidth();
     }
     @Override //Getter alto cadena
-    public int getHeightString(String text) {
+    public int getSHeight(String text) {
         return (int)this.graphics2D.getFont().getStringBounds(text,this.graphics2D.getFontRenderContext()).getHeight();
     }
     //Para el dibujo de rectangulos y cosas que no son una imagen

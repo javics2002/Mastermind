@@ -54,7 +54,7 @@ public class MasterMindDesktop  {
         frame.setIgnoreRepaint(true);
         frame.setVisible(true);
 
-        EnginePC engine = new EnginePC(frame, 1000, 1000,500,500);
+        EnginePC engine = new EnginePC(frame,500,500);
         GameScene scene = new GameScene(engine);
         engine.setCurrentScene(scene);
         engine.resume();

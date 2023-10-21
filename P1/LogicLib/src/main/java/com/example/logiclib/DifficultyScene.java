@@ -25,8 +25,8 @@ public class DifficultyScene implements State {
     }
 
     @Override
-    public void handleEvents(Input.TouchEvent touchEvent) {
-
+    public void handleEvents(Input a) {
+        // a.getTouchEvent().get(0)
     }
 }
 

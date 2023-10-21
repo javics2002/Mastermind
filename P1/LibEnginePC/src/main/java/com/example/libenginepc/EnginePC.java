@@ -1,12 +1,9 @@
 package com.example.libenginepc;
-import java.awt.image.BufferStrategy;
 import javax.swing.JFrame;
-import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
 import com.example.aninterface.State;
 import com.example.aninterface.Graphics;
-import java.awt.event.*;
 public class EnginePC implements Runnable, Engine {
     private JFrame myView;           // Window
     private Thread renderThread;
@@ -15,9 +12,9 @@ public class EnginePC implements Runnable, Engine {
     private GraphicsPC graphics;
     private InputPC input;
 
-    public EnginePC(JFrame myView, int logicWidth, int logicHeight,int windowSX, int windowSY) {
+    public EnginePC(JFrame myView, int logicWidth, int logicHeight) {
         this.myView = myView;
-        this.graphics = new GraphicsPC(this.myView, logicWidth, logicHeight,windowSX,  windowSY);
+        this.graphics = new GraphicsPC(this.myView, logicWidth, logicHeight);
         this.input = new InputPC();
         myView.addMouseListener(this.input.getHandlerInput());
     }
@@ -28,7 +25,7 @@ public class EnginePC implements Runnable, Engine {
 
     protected void handleEvents() {
         if (this.input.getTouchEvent().size() > 0){
-            this.currentScene.handleEvents(input.getTouchEvent().get(0));
+            this.currentScene.handleEvents(input);
             this.input.clearEvents();
         }
     }
@@ -70,7 +67,10 @@ public class EnginePC implements Runnable, Engine {
         this.currentScene.render(this.graphics);
     }
 
+    @Override
+
     public void resume() {
+        //Si estabamos sin ejecutar ejecutamos de nuevo y creamos un hilo para la ejecuccion
         if (!this.running) {
             this.running = true;
             // Call run() in a new Thread
@@ -79,7 +79,9 @@ public class EnginePC implements Runnable, Engine {
         }
     }
 
-    // TODO: Preguntar a TONI que hacer con los join(), de momento dejo el try/catch
+    // TODO: Preguntar a TONI que hacer con los join(), de momento dejo el try/catchÇ
+
+    @Override
     public void pause() {
         if (this.running) {
             this.running = false;

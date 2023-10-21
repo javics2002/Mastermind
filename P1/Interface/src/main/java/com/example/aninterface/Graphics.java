@@ -5,7 +5,6 @@ import java.awt.Color;
 public interface Graphics {
 
     Font newFont(String fileName, float size);
-
     IntImage newImage(String path);
     // Dibujar una imagen
     void drawImage(IntImage image, int x, int y, int w, int h);
@@ -34,10 +33,12 @@ public interface Graphics {
     int getHeightLogic();
     int getBorderTop();
     int getWindow();
-    int getWidthString(String text);
-    int getHeightString(String text);
+    int getSWidth(String text);
+    int getSHeight(String text);
     //Setters
     void setResolution(int w, int h);
+
+    void prepareFrame();
 }
 
 
