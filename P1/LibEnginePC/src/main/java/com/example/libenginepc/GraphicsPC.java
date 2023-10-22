@@ -1,66 +1,50 @@
 package com.example.libenginepc;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
-import java.awt.GraphicsEnvironment;
-import java.awt.Image;
 import java.awt.image.BufferStrategy;
 import java.awt.Color;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 import com.example.aninterface.Font;
-import com.example.aninterface.IntImage;
+import com.example.aninterface.Image;
 import com.example.aninterface.Graphics;
-import javax.swing.border.LineBorder;
 
 public class GraphicsPC implements Graphics {
-    private JFrame myView;
-    private BufferStrategy bufferStrategy;
-    float Ratiox = 2f;
-    float RatioY=  3f;
-    private Graphics2D graphics2D;
-    private int logicWidth;
-    private int logicHeight;
-    private int windowSX;
-    private int windowSY;
+    private JFrame _frame;
+    private BufferStrategy _bufferStrategy;
+    private Graphics2D _graphics;
+    private int _logicWidth, _logicHeight;
+    private int _borderWidth, _borderHeight, _borderTop, _borderBottom;
+    private float _factorScale;
+    private float _factorX, _factorY;
+    private float _ratioX = 2f, _ratioY =  3f;
 
-    private int window;
-
-    private int borderWidth;
-    private int borderHeight;
-    private int borderTop;
-    private int borderBot;
-    private float factorScale;
-    private float factorX;
-    private float factorY;
-    private float aspectR;
-
-    private java.awt.Font activeFont;
+    private java.awt.Font _activeFont;
 
     GraphicsPC(JFrame myView, int logicWidth, int logicHeight) {
-        this.myView = myView;
-        this.myView.createBufferStrategy(2);
+        _frame = myView;
+        _frame.createBufferStrategy(2);
 
-        ;
         //Creamos el buffer y los graficos
-        this.bufferStrategy = this.myView.getBufferStrategy();
-        this.graphics2D = (Graphics2D) bufferStrategy.getDrawGraphics();
-        //Ahora vamos a darle valor tanto al factor de escala como  a los bordes(Bandas al rededor del juego)
+        _bufferStrategy = _frame.getBufferStrategy();
+        _graphics = (Graphics2D) _bufferStrategy.getDrawGraphics();
+
+        //Ahora vamos a darle valor tanto al factor de escala como  a los bordes (Bandas al rededor del juego)
         /* Explicacion de por que pelotas pongo un inset para obtener los bordes
          * Por ejemplo, supongamos que myView es un JFrame y tiene una barra de título de 30 píxeles de altura.
          * Si el contenedor myView tiene un inset superior de 30 píxeles debido a la barra de título, this.myView.getInsets().top devolverá 30.
          * Esto significa que hay un margen superior de 30 píxeles en el contenedor myView que no puede ser utilizado para colocar componentes.
          * */
-        this.logicWidth = logicWidth;
-        this.logicHeight = logicHeight;
+        _logicWidth = logicWidth;
+        _logicHeight = logicHeight;
 
 
-       //Establecemos el tamaño de mi view y creamos nuestro factor de escala
-        setResolution(this.logicWidth,this.logicHeight);
+        //Establecemos el tamaño de mi view y creamos nuestro factor de escala
+        setResolution(_logicWidth, _logicHeight);
         //Los tres componentes necesarios para poder ajustar son :
         //FactorScale // BorderWidth BorderHeight //  BorderTop
 
@@ -77,50 +61,58 @@ public class GraphicsPC implements Graphics {
         //|       cuenta el espacio del borde.      |
         //|                                         |
         //+-----------------------------------------+
-        this.borderTop = this.myView.getInsets().top;
+        _borderTop = _frame.getInsets().top;
+        _borderBottom = _frame.getInsets().bottom;
     }
 
-
     @Override
-    public void clear(int color) {                                       //LIMPIA PANTALLA CON COLOR
-        this.graphics2D.setColor(new Color(color));
-        this.graphics2D.fillRect(0,0, this.getWidth(), this.getHeight());
-        this.graphics2D.setPaintMode();
+    public void clear(int color) { //LIMPIA PANTALLA CON COLOR
+        _graphics.setColor(new Color(color));
+
+        _graphics.fillRect(0, 0, getWidth(), getHeight());
+
+        // TODO: Poner false para release
+        final boolean debug = true;
+        if(debug){
+            _graphics.setColor(Color.black);
+            _graphics.fillRect(0, 0, _borderWidth, getHeight());
+            _graphics.fillRect(0, 0, getWidth(), _borderHeight);
+            _graphics.fillRect(getWidth() - _borderWidth, 0, _borderWidth, getHeight());
+            _graphics.fillRect(0, getHeight() - _borderHeight, getWidth(), _borderHeight);
+        }
     }
 
     @Override
     public Font newFont(String fileName, float size) {
-        java.awt.Font customFont = null;
+        java.awt.Font customFont;
+
         try {
             customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("data/Fonts/"+fileName)).deriveFont(size);
-        } catch (FontFormatException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
+        } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }
 
-        IntFontPC fontPC = new IntFontPC(customFont);
-        activeFont = customFont;
+        FontPC fontPC = new FontPC(customFont);
+        _activeFont = customFont;
 
         return fontPC;
     }
 
     @Override
-    public void setColor(int color) { this.graphics2D.setColor(new Color(color)); } // CAMBIA COLOR
+    public void setColor(int color) { _graphics.setColor(new Color(color)); } // CAMBIA COLOR
+
     //METODOS PARA GESTION DE FRAME
-    public void show() { this.bufferStrategy.show(); }           // MUESTRA EL BUFFER STRATEGY
+    public void show() { _bufferStrategy.show(); }           // MUESTRA EL BUFFER STRATEGY
 
     @Override
     public void prepareFrame() {                                // ACTUALIZA LA NUEVA RESOLUCION EN CADA FRAME
         setResolution(getWidth(),getHeight());
-        this.graphics2D = (Graphics2D)this.bufferStrategy.getDrawGraphics();
+        _graphics = (Graphics2D)this._bufferStrategy.getDrawGraphics();
     }
+
     public void finishFrame() {
-        this.graphics2D.dispose();
+        _graphics.dispose();
     }    // LIBERA EL GRAPHICS
-
-
-
 
     // Para dibujar seguimos el siguiente esquema
     // Pos x = Pos x real - Ancho w real Centrado ( /2)
@@ -129,74 +121,70 @@ public class GraphicsPC implements Graphics {
     //Por que es directo a ventana (Aunque se sigue teniendo en cuenta border top)
 
     @Override
-    public void drawText(String text, int x, int y, int color) {
-        this.graphics2D.setColor(new Color (color));
-
-
-        // Tamaño de fuente base
-        int baseFontSize = 48;  // Puedes ajustar esto según tus necesidades
+    public void drawText(String text, Font font, int x, int y, int color) {
+        _graphics.setColor(new Color (color));
 
         // Calcula el tamaño de la fuente aplicando el factor de escala
-        System.out.println(baseFontSize*factorScale);
-        this.activeFont =this.activeFont.deriveFont(baseFontSize*factorScale);
-        this.graphics2D.setFont(this.activeFont);
-
+        _activeFont = _activeFont.deriveFont(font.getFontSize() * _factorScale);
+        _graphics.setFont(_activeFont);
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
-        int adjustedX = logicToRealX(x) - (getSWidth(text) / 2);
-        int adjustedY = logicToRealY(y) - (getSHeight(text) / 2) + this.borderTop;
+        int adjustedX = logicToRealX(x) - (getStringWidth(text) / 2);
+        int adjustedY = logicToRealY(y) - (getStringHeight(text) / 2) + _borderTop;
 
         // Dibuja el texto con el tamaño de fuente ajustado
-        this.graphics2D.drawString(text, adjustedX, adjustedY);
+        _graphics.drawString(text, adjustedX, adjustedY);
     }
+
     @Override
-    public void drawImage(IntImage image, int x, int y, int w, int h) {       //DIBUJA LA IMAGEN CON POSICION Y TAMAÑO
-        this.graphics2D.drawImage(((IntImagePC) image).getImg(),
-                logicToRealX(x) - (scaleToReal(w)/2),logicToRealY(y) - (scaleToReal(h)/2) + borderTop,
-                (scaleToReal(w)),(scaleToReal(h)),null);
+    public void drawImage(Image image, int x, int y, int w, int h) { //DIBUJA LA IMAGEN CON POSICION Y TAMAÑO
+        _graphics.drawImage(((ImagePC) image).getImage(),
+                logicToRealX(x) - (scaleToReal(w)/2), logicToRealY(y) - (scaleToReal(h)/2) + _borderTop,
+                scaleToReal(w), scaleToReal(h), null);
     }
+
     // Creacion de obejtos  (Imagen Fuentes...)
     @Override
-    public IntImage newImage(String filename) { //Creacion de imagen
-        Image img = null;
+    public Image newImage(String filename) { //Creacion de imagen
+        java.awt.Image image = null;
         try {
-            img = ImageIO.read(new File("data/"+filename));
+            image = ImageIO.read(new File("data/"+filename));
         } catch (IOException e) {
             e.printStackTrace();
         }
-        IntImage imgPC = new IntImagePC(img);
-        return imgPC; //"/data/button.png"
-
+        return new ImagePC(image);
     }
-    @Override                                                    // Getter ancho cadena
-    public int getSWidth(String text) {
-        return (int)this.graphics2D.getFont().getStringBounds(text,this.graphics2D.getFontRenderContext()).getWidth();
+
+    @Override // Getter ancho cadena
+    public int getStringWidth(String text) {
+        return (int)_graphics.getFont().getStringBounds(text, _graphics.getFontRenderContext()).getWidth();
     }
     @Override //Getter alto cadena
-    public int getSHeight(String text) {
-        return (int)this.graphics2D.getFont().getStringBounds(text,this.graphics2D.getFontRenderContext()).getHeight();
+    public int getStringHeight(String text) {
+        return (int)_graphics.getFont().getStringBounds(text, _graphics.getFontRenderContext()).getHeight();
     }
+
     //Para el dibujo de rectangulos y cosas que no son una imagen
     @Override //dibujar un rectangulo en x y con w h de atributos
     public void drawRect(int x, int y, int width, int height) {
-        this.graphics2D.drawRect(x,y + borderTop, width,height);
+        _graphics.drawRect(x,y + _borderTop, width,height);
     }
     @Override   // Dibujar un cuadrado (relleno) en cx y cy con side (ancho y alto) de atributors
     public void fillSquare(int cx, int cy, int side) {
-        this.graphics2D.fillRect(cx,cy + borderTop,side,side);
+        _graphics.fillRect(cx,cy + _borderTop,side,side);
     }
-    @Override//dibujar un rectangulo(relleno) en x y con w h de atributos                                               // DIBUJA RECTANGULO RELLENO
+    @Override//dibujar un rectangulo(relleno) en x y con w h de atributos
     public void fillRect(int x, int y, int w, int h) {      //RELLENAR RECTANGULO
-        this.graphics2D.fillRect(x,y + borderTop,w,h);
+        _graphics.fillRect(x,y + _borderTop,w,h);   // DIBUJA RECTANGULO RELLENO
     }
     @Override// Dibujar un cuadrado  en cx y cy con side (ancho y alto) de atributors
     public void drawSquare(int cx, int cy, int side) {      //DIBUJA CUADRADO
-        this.graphics2D.drawRect(cx,cy + borderTop,side,side);
-        this.graphics2D.setPaintMode();
+        _graphics.drawRect(cx,cy + _borderTop,side,side);
+        _graphics.setPaintMode();
     }
-    @Override    // Dibujar una lina en initx y inity hasta end y endY                                             //DIBUJA LINEA
-    public void drawLine(int initX, int initY, int endX, int endY) {
-        this.graphics2D.drawLine(initX,initY + borderTop,endX,endY + borderTop);
+    @Override    // Dibujar una lina en initx y inity hasta end y endY
+    public void drawLine(int initX, int initY, int endX, int endY) { //DIBUJA LINEA
+        _graphics.drawLine(initX,initY + _borderTop,endX,endY + _borderTop);
     }
 
     //CONVERSORES DE COORDENADAS
@@ -208,65 +196,55 @@ public class GraphicsPC implements Graphics {
     //La posicion real desde logica se usa para x e y en dibujo
     //La posicion real desde el escalado se usa para w y h en dibujo
     @Override //De posicion logica a  real
-    public int logicToRealX(int x) { return (int)(x*factorScale + borderWidth); }
+    public int logicToRealX(int x) { return (int)(x* _factorScale + _borderWidth); }
     @Override
     public int logicToRealY(int y) {        //CONVERSOR DE TAMAÑO LOGICO A REAL EN Y
-        return (int)(y*factorScale + borderHeight);
+        return (int)(y* _factorScale + _borderHeight);
     }
     @Override
     public int scaleToReal(int s) {
-        return (int)(s*(factorScale));
+        return (int)(s*(_factorScale));
     }
     //GETTERS
     @Override
-    public int getWidth() { return this.myView.getWidth();}      // ANCHO DE LA VENTANA
+    public int getWidth() { return _frame.getWidth();}      // ANCHO DE LA VENTANA
     @Override
     public int getHeight() {
-        return this.myView.getHeight();
+        return _frame.getHeight();
     }
     @Override
-    public int getHeightLogic() { return this.logicHeight; }     // ALTURA LOGICA
+    public int getHeightLogic() { return _logicHeight; }     // ALTURA LOGICA
     @Override
-    public int getWidthLogic() { return this.logicWidth; }       //ANCHO LOGICO
+    public int getWidthLogic() { return _logicWidth; }       //ANCHO LOGICO
     @Override
-    public int getBorderTop() {
-        return this.borderTop;
-    }
-    @Override
-    public int getWindow() {
-        return window;
+    public int get_borderTop() {
+        return _borderTop;
     }
     //SETTERS
     @Override
     public void setResolution(int w, int h) {                    // ACTUALIZA LA RESOLUCION
-        this.myView.setSize(w, h);
+        _frame.setSize(w, h);
 
         //Calculo factor escala -> ancho de la ventana / ancho logico del juego
-        this.factorX = (float) w / (float) this.logicWidth;
-        this.factorY = (float) h / (float) this.logicHeight;
+        _factorX = (float) w / (float) _logicWidth;
+        _factorY = (float) h / (float) _logicHeight;
 
-
-        this.factorScale = Math.min(this.factorX, this.factorY);
+        _factorScale = Math.min(_factorX, _factorY);
 
         //Comprobamos si en este caso el escalado de miView (ancho /alto) es menor que la relacion de aspecto que ponemos nosotros (2/3)
         //Por que si es menor añadimos un ancho de bordes por arriba y abajo (Height)
         //Si no se los añadimos por los lados( Width)
-        if (((float) getWidth() / (float) getHeight()) < (Ratiox/RatioY)){
+        if (((float) getWidth() / (float) getHeight()) < (_ratioX / _ratioY)){
             // Para calcular el tamaño de bordes restamos el ancho o alto de nuestro juego a
             // la dimensión correspondiente de la ventana y dividimos por 2 para centrar el juego.
-
-
-            int a = (int) ((getHeight() - (this.logicHeight * this.factorX)) / 2);
-            this.borderHeight = a;
-            this.borderWidth = 0;
+            _borderWidth = 0;
+            _borderHeight =  (int) ((getHeight() - (_logicHeight * _factorX)) / 2);
         } else  {
             // Para calcular el tamaño de bordes restamos el ancho o alto de nuestro juego a
             // la dimensión correspondiente de la ventana y dividimos por 2 para centrar el juego.
 
-            int a = (int) ((getWidth() - (this.logicWidth * this.factorY)) / 2);
-            this.borderWidth = a;
-            this.borderHeight = 0;
+            _borderWidth = (int) ((getWidth() - (_logicWidth * _factorY)) / 2);
+            _borderHeight = 0;
         }
     }
-
 }

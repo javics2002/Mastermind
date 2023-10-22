@@ -1,19 +1,20 @@
 package com.example.logiclib;
 
 import com.example.aninterface.Engine;
+import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
-import com.example.aninterface.State;
+import com.example.aninterface.Scene;
 
-public class DifficultyScene implements State {
+public class DifficultyScene implements Scene {
     //private SetDifficultyButton easyDifficultyButton, mediumDifficultyButton,
     //        difficultDifficultyButton, impossibleDifficultyButton;
 
     private Text titleText;
     public DifficultyScene(Engine engine) {
-        Graphics gr = engine.getGraphics();
-        gr.newFont("Comfortaa-Regular.ttf", 48f);
-        titleText = new Text("Segunda Escena", engine, gr.getWidthLogic() / 2, gr.getHeightLogic() / 4, 0);
+        Graphics gr = engine.get_graphics();
+        Font font = gr.newFont("Comfortaa-Regular.ttf", 48f);
+        titleText = new Text("Segunda Escena", font, engine, gr.getWidthLogic() / 2, gr.getHeightLogic() / 4, 0);
     }
 
     @Override

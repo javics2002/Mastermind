@@ -1,25 +1,27 @@
 package com.example.logiclib;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
-import com.example.aninterface.State;
+import com.example.aninterface.Scene;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Font;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.lang.model.type.ErrorType;
+public class InitialScene implements Scene {
+    private PlayButton _playButton;
+    private Font _titleFont;
+    private Text _titleText;
 
-public class InitialScene implements State {
-    private PlayButton bPlay;
-    private Font titleFont;
-    private Text titleText;
+    Engine _engine;
+
     public InitialScene(Engine engine) {
-        Graphics gr = engine.getGraphics();
+        _engine = engine;
+        Graphics graphics = engine.get_graphics();
 
-        this.bPlay = new PlayButton("button.png", engine, (int)(gr.getWidthLogic()*0.55), (gr.getHeightLogic() / 10)*5, 1200, 700);
-        this.titleFont = gr.newFont("Comfortaa-Regular.ttf", 48f);
+        _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
+        _titleText = new Text("Master Mind", _titleFont, engine,
+                graphics.getWidthLogic() / 2, graphics.getHeightLogic() / 4, 0);
 
-        this.titleText = new Text("Master Mind", engine, gr.getWidthLogic() / 2, gr.getHeightLogic() / 4, 0);
+        _playButton = new PlayButton("button.png", engine,
+                (int)(graphics.getWidthLogic()*0.55), (graphics.getHeightLogic() / 10)*5, 1200, 700);
     }
 
     @Override
@@ -27,21 +29,18 @@ public class InitialScene implements State {
 
     @Override
     public void render(Graphics gr) {
-        this.bPlay.render();
-        titleText.render();
+        _playButton.render();
+        _titleText.render();
     }
+
     @Override
     public void handleEvents(Input a) {
-
-
         // Bucle con lista touchEvent, el boton recibe un unico touchevent
-
-
-            if(a.getTouchEvent().size()>0)
-            {
-                Input.TouchEvent elemento = a.getTouchEvent().get(0);
-                this.bPlay.handleEvents( a.getTouchEvent().get(0));
-            }
+        if(a.getTouchEvent().size()>0)
+        {
+            Input.TouchEvent elemento = a.getTouchEvent().get(0);
+            this._playButton.handleEvents( a.getTouchEvent().get(0));
+        }
     }
 }
 
