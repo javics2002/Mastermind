@@ -22,8 +22,8 @@ public class GraphicsPC implements Graphics {
     private float _factorScale;
     private float _factorX, _factorY;
     private float _ratioX = 2f, _ratioY =  3f;
-
-    private float offsetScale=1.0f;
+    private int _titleBarHeight = 30;
+    private int _margin = 7;
 
     private java.awt.Font _activeFont;
 
@@ -78,12 +78,10 @@ public class GraphicsPC implements Graphics {
         if(debug){
             _graphics.setColor(Color.black);
 
-            int titleBarHeight = 30;
-            int margin = 7;
-            _graphics.fillRect(margin, 0, _borderWidth, getHeight());
-            _graphics.fillRect(0, titleBarHeight, getWidth(), _borderHeight);
-            _graphics.fillRect(getWidth() - _borderWidth - margin, 0, _borderWidth, getHeight());
-            _graphics.fillRect(0, getHeight() - _borderHeight - margin, getWidth(), _borderHeight);
+            _graphics.fillRect(_margin, 0, _borderWidth, getHeight());
+            _graphics.fillRect(0, _titleBarHeight, getWidth(), _borderHeight);
+            _graphics.fillRect(getWidth() - _borderWidth - _margin, 0, _borderWidth, getHeight());
+            _graphics.fillRect(0, getHeight() - _borderHeight - _margin, getWidth(), _borderHeight);
         }
     }
 
@@ -134,8 +132,8 @@ public class GraphicsPC implements Graphics {
         _graphics.setFont(_activeFont);
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
-        int adjustedX = (int)(logicToRealX(x) - (getStringWidth(text) / 2)/(offsetScale*offsetScale));
-        int adjustedY = (int)((logicToRealY(y) - (getStringHeight(text) / 2) + _borderTop)*(offsetScale*offsetScale));
+        int adjustedX = logicToRealX(x) - (getStringWidth(text) / 2);
+        int adjustedY = (logicToRealY(y) - (getStringHeight(text) / 2) + _borderTop);
 
         // Dibuja el texto con el tamaño de fuente ajustado
         _graphics.drawString(text, adjustedX, adjustedY);
@@ -207,15 +205,15 @@ public class GraphicsPC implements Graphics {
     //La posicion real desde el escalado se usa para w y h en dibujo
     @Override //De posicion logica a  real
     public int logicToRealX(int x) {
-        return (int)((x/(offsetScale*offsetScale))* _factorScale + _borderWidth);
+        return (int)(x * _factorScale + _borderWidth);
     }
     @Override
     public int logicToRealY(int y) {        //CONVERSOR DE TAMAÑO LOGICO A REAL EN Y
-        return (int)((y/(offsetScale*offsetScale))* _factorScale + _borderHeight);
+        return (int)(y * _factorScale + _borderHeight);
     }
     @Override
     public int scaleToReal(int s) {
-        return (int)((s/offsetScale)*_factorScale);
+        return (int)(s*_factorScale);
     }
     //GETTERS
     @Override
@@ -236,7 +234,6 @@ public class GraphicsPC implements Graphics {
     @Override
     public void setResolution(int w, int h) {                    // ACTUALIZA LA RESOLUCION
         _frame.setSize(w, h);
-        int titleBarHeight = 30;
 
         //Calculo factor escala -> ancho de la ventana / ancho logico del juego
         _factorX = (float) w / (float) _logicWidth;
@@ -247,7 +244,7 @@ public class GraphicsPC implements Graphics {
         //Comprobamos si en este caso el escalado de miView (ancho /alto) es menor que la relacion de aspecto que ponemos nosotros (2/3)
         //Por que si es menor añadimos un ancho de bordes por arriba y abajo (Height)
         //Si no se los añadimos por los lados( Width)
-        if (((float) getWidth() / ((float) getHeight() - titleBarHeight)) < (_ratioX / _ratioY)){
+        if (((float) getWidth() / ((float) getHeight() - _titleBarHeight)) < (_ratioX / _ratioY)){
             // Para calcular el tamaño de bordes restamos el ancho o alto de nuestro juego a
             // la dimensión correspondiente de la ventana y dividimos por 2 para centrar el juego.
             _borderWidth = 0;
@@ -259,7 +256,5 @@ public class GraphicsPC implements Graphics {
             _borderWidth = (int) ((getWidth() - (_logicWidth * _factorY)) / 2);
             _borderHeight = 0;
         }
-
-        System.out.print(_borderWidth + "   " + _borderHeight + "\n");
     }
 }

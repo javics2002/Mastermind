@@ -7,14 +7,33 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
 public class DifficultyScene implements Scene {
-    //private SetDifficultyButton easyDifficultyButton, mediumDifficultyButton,
-    //        difficultDifficultyButton, impossibleDifficultyButton;
+    private BackButton _backButton;
+    private DifficultyButton _easyDifficultyButton, _mediumDifficultyButton,
+            _difficultDifficultyButton, _impossibleDifficultyButton;
 
-    private Text titleText;
+    private Text _titleText;
+
     public DifficultyScene(Engine engine) {
-        Graphics gr = engine.get_graphics();
-        Font font = gr.newFont("Comfortaa-Regular.ttf", 48f);
-        titleText = new Text("Segunda Escena", font, engine, gr.getWidthLogic() / 2, gr.getHeightLogic() / 4, 0);
+        Graphics graphics = engine.get_graphics();
+        Font font = graphics.newFont("Comfortaa-Regular.ttf", 12f);
+
+        _backButton = new BackButton("UI/back.png", engine, 30,30,40, 40);
+        _titleText = new Text("¿En qué dificultad quieres jugar?", font, engine,
+                graphics.getWidthLogic() / 2, graphics.getHeightLogic() / 4, 0);
+
+        int padding = 20;
+        int startHeight = 300;
+        int buttonWidth = 331;
+        int buttonHeight = 88;
+        int centerWidth = (int)(graphics.getWidthLogic()*0.5);
+        _easyDifficultyButton = new DifficultyButton("facilButton.png", engine,
+                centerWidth, startHeight + (buttonHeight + padding) * 0, buttonWidth, buttonHeight);
+        _mediumDifficultyButton =  new DifficultyButton("medioButton.png", engine,
+                centerWidth, startHeight + (buttonHeight + padding) * 1, buttonWidth, buttonHeight);
+        _difficultDifficultyButton = new DifficultyButton("dificilButton.png", engine,
+                centerWidth, startHeight + (buttonHeight + padding) * 2, buttonWidth, buttonHeight);
+        _impossibleDifficultyButton = new DifficultyButton("imposibleButton.png", engine,
+                centerWidth, startHeight + (buttonHeight + padding) * 3, buttonWidth, buttonHeight);
     }
 
     @Override
@@ -22,7 +41,12 @@ public class DifficultyScene implements Scene {
 
     @Override
     public void render(Graphics gr) {
-            this.titleText.render();
+        _backButton.render();
+        _titleText.render();
+        _easyDifficultyButton.render();
+        _mediumDifficultyButton.render();
+        _difficultDifficultyButton.render();
+        _impossibleDifficultyButton.render();
     }
 
     @Override
