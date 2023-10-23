@@ -17,8 +17,8 @@ import java.io.InputStream;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Input;
-import com.example.aninterface.State;
-import com.example.aninterface.IntImage;
+import com.example.aninterface.Scene;
+import com.example.aninterface.Image;
 import com.example.aninterface.Graphics;
 
 
@@ -128,7 +128,7 @@ public class GraphicsAndroid implements Graphics {
     //Crear imagenes , fuentes..ETC
 
     @Override
-    public IntImage newImage(String imgName) {
+    public Image newImage(String imgName) {
         //Las imagenes en android son representadas con un bitmap
         //Con un stream abre la imagen por nombre
         Bitmap bitmap = null;
@@ -139,7 +139,7 @@ public class GraphicsAndroid implements Graphics {
             e.printStackTrace();
         }
         IntImageAndroid img = new IntImageAndroid(bitmap);
-        return img;
+        return (Image) img;
     }
 
     //No podemos hacer carpetas puesto que busca desde la carptea assets solo
@@ -165,13 +165,22 @@ public class GraphicsAndroid implements Graphics {
     //Solo aplicable a imagenes y a texto , en los square rect se usa sin conversion
     //Por que es directo a ventana (Aunque se sigue teniendo en cuenta border top)
     @Override
-    public void drawImage(IntImage image, int x, int y, int w, int h) {
+    public void drawImage(Image image, int x, int y, int w, int h) {
+
+        int x2=x;
+        int y2= y;
         IntImageAndroid a = (IntImageAndroid)image;
         float newW = (scaleToReal(w));
         float newH = (scaleToReal(h));
+        float b= logicToRealX(x) - (scaleToReal(w)/2);
+        float c= logicToRealX(y) - (scaleToReal(h)/2) + borderTop;
+
         Bitmap aux = getResizedBitmap(a.getImg(),newW ,newH);
         this.canvas.drawBitmap(aux,logicToRealX(x) - (scaleToReal(w)/2) ,
                 logicToRealX(y) - (scaleToReal(h)/2) + borderTop,this.paint);
+
+
+
     }
 
     @Override
@@ -208,14 +217,14 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
-    public void drawText(String text, int x, int y, int color) {
+    public void drawText(String text,Font f, int x, int y, int color) {
         color += 0xFF000000;
         this.paint.setColor(color);
 
 
         //Esto no deberia de estar cableado pero de momento se queda asi
         this.paint.setTextSize(baseFontSize*(factorScale*2));
-        this.canvas.drawText(text,x - (getSWidth(text)/2), y-(getSHeight(text)/2)+borderTop,this.paint);
+        this.canvas.drawText(text,x - (getStringWidth(text)/2), y-(getStringHeight(text)/2)+borderTop,this.paint);
     }
     // Para el cambio de tamaño a una imagen (bitmap)
     //Tenemos que aplicar un escalado al Objeto nuevo a crear
@@ -236,11 +245,11 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
-    public int logicToRealX(int x) { return (int)(x*(float)factorScale + borderWidth); }
+    public int logicToRealX(int x) { return (int)(x*factorScale + borderWidth); }
 
     @Override
     public int logicToRealY(int y) {            //CONVERSOR DE LOGICO A REAL EN Y
-        return (int)(y*(float)factorScale + borderHeight);
+        return (int)(y*factorScale + borderHeight);
     }
 
     @Override
@@ -258,22 +267,18 @@ public class GraphicsAndroid implements Graphics {
     public int getWidth() {     //ANCHO VENTANA
         return this.myView.getWidth();
     }
-    @Override
-    public int getWindow() {
-        return this.window;
-    }
 
 
 
     //Para ver el tamaño del string trazamos un rectangulo que cubra el texto  asi vemos su alto
     //Pra ver el ancho de una cadena simplmente pasamos la longitud de la cadena y el propio paint nos lo calcula
     @Override
-    public int getSWidth(String text) {
+    public int getStringWidth(String text) {
         return (int)this.paint.measureText(text,0,text.length());
     }
 
     @Override
-    public int getSHeight(String t) {
+    public int getStringHeight(String t) {
         Rect bordes = new Rect();
         this.paint.getTextBounds(t,0,t.length(), bordes);
         return bordes.height();
@@ -288,12 +293,9 @@ public class GraphicsAndroid implements Graphics {
     public int getHeightLogic() {       //ALTURA LOGICA
         return this.logicHeight;
     }
-    @Override
-    public int getBorderTop() {
-        return this.borderTop;
-    }
 
-
+   @Override
+   public int get_borderTop(){return this.borderTop;}
 
     //Set de la resolucion aunque creo que no es bueno llamarlo en android
     @Override

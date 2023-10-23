@@ -1,10 +1,10 @@
 package com.example.libengineandroid;
 import android.graphics.Bitmap;
 
-import com.example.aninterface.IntImage;
+import com.example.aninterface.Image;
 import android.graphics.Bitmap;
 
-public class IntImageAndroid implements IntImage{
+public class IntImageAndroid implements Image{
 
     //En vez de usar la clase de jave image usamos la clase Bitmap de los graficos de android
     private Bitmap img;

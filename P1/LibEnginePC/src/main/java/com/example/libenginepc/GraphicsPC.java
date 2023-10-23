@@ -23,6 +23,8 @@ public class GraphicsPC implements Graphics {
     private float _factorX, _factorY;
     private float _ratioX = 2f, _ratioY =  3f;
 
+    private float offsetScale=1.05f;
+
     private java.awt.Font _activeFont;
 
     GraphicsPC(JFrame myView, int logicWidth, int logicHeight) {
@@ -125,22 +127,27 @@ public class GraphicsPC implements Graphics {
         _graphics.setColor(new Color (color));
 
         // Calcula el tamaño de la fuente aplicando el factor de escala
-        _activeFont = _activeFont.deriveFont(font.getFontSize() * _factorScale);
+        _activeFont = _activeFont.deriveFont(font.getFontSize()*2*(_factorScale));
         _graphics.setFont(_activeFont);
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
-        int adjustedX = logicToRealX(x) - (getStringWidth(text) / 2);
-        int adjustedY = logicToRealY(y) - (getStringHeight(text) / 2) + _borderTop;
+        int adjustedX = (int)(logicToRealX(x) - (getStringWidth(text) / 2)/(offsetScale*offsetScale));
+        int adjustedY = (int)((logicToRealY(y) - (getStringHeight(text) / 2) + _borderTop)*(offsetScale*offsetScale));
 
         // Dibuja el texto con el tamaño de fuente ajustado
         _graphics.drawString(text, adjustedX, adjustedY);
     }
 
+
+    //Dibujamos la imagen en la posicion x e y con un taño w y h
+    //Se ha tenido que aplicar un offset en los metodos de escalado
     @Override
-    public void drawImage(Image image, int x, int y, int w, int h) { //DIBUJA LA IMAGEN CON POSICION Y TAMAÑO
+    public void drawImage(Image image, int x, int y, int w, int h) {
+        int newW = (int)(scaleToReal(w));
+        int newH = (int)(scaleToReal(h));
         _graphics.drawImage(((ImagePC) image).getImage(),
                 logicToRealX(x) - (scaleToReal(w)/2), logicToRealY(y) - (scaleToReal(h)/2) + _borderTop,
-                scaleToReal(w), scaleToReal(h), null);
+                newW, newH, null);
     }
 
     // Creacion de obejtos  (Imagen Fuentes...)
@@ -196,14 +203,18 @@ public class GraphicsPC implements Graphics {
     //La posicion real desde logica se usa para x e y en dibujo
     //La posicion real desde el escalado se usa para w y h en dibujo
     @Override //De posicion logica a  real
-    public int logicToRealX(int x) { return (int)(x* _factorScale + _borderWidth); }
+    public int logicToRealX(int x) {
+
+        return (int)((x/(offsetScale*offsetScale))* _factorScale + _borderWidth);
+    }
     @Override
     public int logicToRealY(int y) {        //CONVERSOR DE TAMAÑO LOGICO A REAL EN Y
-        return (int)(y* _factorScale + _borderHeight);
+        return (int)((y/(offsetScale*offsetScale))* _factorScale + _borderHeight);
     }
     @Override
     public int scaleToReal(int s) {
-        return (int)(s*(_factorScale));
+
+        return (int)((s/offsetScale)*_factorScale);
     }
     //GETTERS
     @Override

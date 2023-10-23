@@ -4,7 +4,7 @@ import android.view.View;
 
 import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
-import com.example.aninterface.State;
+import com.example.aninterface.Scene;
 import com.example.aninterface.Graphics;
 //Libreria para la gestion de recursos , es una prueba
 import android.content.res.AssetManager;
@@ -19,7 +19,7 @@ public class EngineAndroid implements Runnable,Engine {
     private Thread renderThread; // Hilo de render
     private boolean running;     // boolean to know if its running
 
-    private State currentScene; // Escena actual
+    private Scene currentScene; // Escena actual
     private InputAndroid input;        // Input
     private GraphicsAndroid graphics;  // Graficos
 
@@ -72,7 +72,7 @@ public class EngineAndroid implements Runnable,Engine {
     }
     protected void render() {
         //Clear del fondo (con el color tambien igual en el PC
-        this.getGraphics().clear(0xe7d6bd);
+        this.get_graphics().clear(0xe7d6bd);
         this.currentScene.render(this.graphics);
     }
 
@@ -117,22 +117,22 @@ public class EngineAndroid implements Runnable,Engine {
     }
 
     @Override
-    public Input getInput() {
+    public Input get_input () {
         return this.input;
     }
 
     @Override
-    public void setCurrentScene(State currentScene) {
+    public void setCurrentScene(Scene currentScene) {
         this.currentScene = currentScene;
     }
 
     @Override
-    public State getScene() {
+    public Scene getScene() {
         return this.currentScene;
 
     }
     @Override
-    public Graphics getGraphics() {
+    public Graphics get_graphics() {
         return this.graphics;
     }
 
