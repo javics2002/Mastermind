@@ -23,7 +23,7 @@ public class GraphicsPC implements Graphics {
     private float _factorX, _factorY;
     private float _ratioX = 2f, _ratioY =  3f;
 
-    private float offsetScale=1.05f;
+    private float offsetScale=1.0f;
 
     private java.awt.Font _activeFont;
 
@@ -77,10 +77,13 @@ public class GraphicsPC implements Graphics {
         final boolean debug = true;
         if(debug){
             _graphics.setColor(Color.black);
-            _graphics.fillRect(0, 0, _borderWidth, getHeight());
-            _graphics.fillRect(0, 0, getWidth(), _borderHeight);
-            _graphics.fillRect(getWidth() - _borderWidth, 0, _borderWidth, getHeight());
-            _graphics.fillRect(0, getHeight() - _borderHeight, getWidth(), _borderHeight);
+
+            int titleBarHeight = 30;
+            int margin = 7;
+            _graphics.fillRect(margin, 0, _borderWidth, getHeight());
+            _graphics.fillRect(0, titleBarHeight, getWidth(), _borderHeight);
+            _graphics.fillRect(getWidth() - _borderWidth - margin, 0, _borderWidth, getHeight());
+            _graphics.fillRect(0, getHeight() - _borderHeight - margin, getWidth(), _borderHeight);
         }
     }
 
@@ -204,7 +207,6 @@ public class GraphicsPC implements Graphics {
     //La posicion real desde el escalado se usa para w y h en dibujo
     @Override //De posicion logica a  real
     public int logicToRealX(int x) {
-
         return (int)((x/(offsetScale*offsetScale))* _factorScale + _borderWidth);
     }
     @Override
@@ -213,7 +215,6 @@ public class GraphicsPC implements Graphics {
     }
     @Override
     public int scaleToReal(int s) {
-
         return (int)((s/offsetScale)*_factorScale);
     }
     //GETTERS
@@ -235,6 +236,7 @@ public class GraphicsPC implements Graphics {
     @Override
     public void setResolution(int w, int h) {                    // ACTUALIZA LA RESOLUCION
         _frame.setSize(w, h);
+        int titleBarHeight = 30;
 
         //Calculo factor escala -> ancho de la ventana / ancho logico del juego
         _factorX = (float) w / (float) _logicWidth;
@@ -245,7 +247,7 @@ public class GraphicsPC implements Graphics {
         //Comprobamos si en este caso el escalado de miView (ancho /alto) es menor que la relacion de aspecto que ponemos nosotros (2/3)
         //Por que si es menor añadimos un ancho de bordes por arriba y abajo (Height)
         //Si no se los añadimos por los lados( Width)
-        if (((float) getWidth() / (float) getHeight()) < (_ratioX / _ratioY)){
+        if (((float) getWidth() / ((float) getHeight() - titleBarHeight)) < (_ratioX / _ratioY)){
             // Para calcular el tamaño de bordes restamos el ancho o alto de nuestro juego a
             // la dimensión correspondiente de la ventana y dividimos por 2 para centrar el juego.
             _borderWidth = 0;
@@ -257,5 +259,7 @@ public class GraphicsPC implements Graphics {
             _borderWidth = (int) ((getWidth() - (_logicWidth * _factorY)) / 2);
             _borderHeight = 0;
         }
+
+        System.out.print(_borderWidth + "   " + _borderHeight + "\n");
     }
 }
