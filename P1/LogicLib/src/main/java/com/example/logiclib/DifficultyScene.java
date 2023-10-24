@@ -21,19 +21,19 @@ public class DifficultyScene implements Scene {
         _titleText = new Text("¿En qué dificultad quieres jugar?", font, engine,
                 graphics.getWidthLogic() / 2, graphics.getHeightLogic() / 4, 0);
 
-        int padding = 20;
-        int startHeight = 300;
+        int padding = graphics.scaleToReal(20);
+        int startHeight = graphics.scaleToReal(300);
         int buttonWidth = 331;
         int buttonHeight = 88;
         int centerWidth = (int)(graphics.getWidthLogic()*0.5);
         _easyDifficultyButton = new DifficultyButton("facilButton.png", engine,
-                centerWidth, startHeight + (buttonHeight + padding) * 0, buttonWidth, buttonHeight);
+                centerWidth, startHeight + graphics.scaleToReal(buttonHeight + padding) * 0, buttonWidth, buttonHeight);
         _mediumDifficultyButton =  new DifficultyButton("medioButton.png", engine,
-                centerWidth, startHeight + (buttonHeight + padding) * 1, buttonWidth, buttonHeight);
+                centerWidth, startHeight + graphics.scaleToReal(buttonHeight + padding) * 1, buttonWidth, buttonHeight);
         _difficultDifficultyButton = new DifficultyButton("dificilButton.png", engine,
-                centerWidth, startHeight + (buttonHeight + padding) * 2, buttonWidth, buttonHeight);
+                centerWidth, startHeight +  graphics.scaleToReal(buttonHeight + padding) * 2, buttonWidth, buttonHeight);
         _impossibleDifficultyButton = new DifficultyButton("imposibleButton.png", engine,
-                centerWidth, startHeight + (buttonHeight + padding) * 3, buttonWidth, buttonHeight);
+                centerWidth, startHeight + graphics.scaleToReal(buttonHeight + padding) * 3, buttonWidth, buttonHeight);
     }
 
     @Override

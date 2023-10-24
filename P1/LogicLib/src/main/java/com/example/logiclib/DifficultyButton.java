@@ -29,7 +29,7 @@ public class DifficultyButton implements Interface {
     public boolean handleEvents(Input.TouchEvent e) {
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
             // Change scene
-            GameScene scene = new GameScene(_engine,5);
+            InitialScene scene = new InitialScene(_engine);
             _engine.setCurrentScene(scene);
             // engine.resume();
             return true;

@@ -43,6 +43,8 @@ public class EngineAndroid implements Runnable,Engine {
 
 
         while(this.running && this.myView.getWidth() == 0);
+
+        this.graphics.setDimensionsView(this.myView.getHeight(),this.myView.getWidth());
         long lastFrameTime = System.nanoTime();
 
         //Calculo de tiempo y bucle principal

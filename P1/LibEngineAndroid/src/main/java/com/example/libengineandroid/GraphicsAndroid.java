@@ -10,6 +10,9 @@ import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.graphics.Rect;
+import android.util.TypedValue;
+import android.view.Window;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +31,8 @@ public class GraphicsAndroid implements Graphics {
     private int window;
 
 
-
+   private int widthView;
+   private int heightView;
     // Tamaño  logico
     private int logicWidth;
     private int logicHeight;
@@ -42,7 +46,7 @@ public class GraphicsAndroid implements Graphics {
     private int borderTop;
 
     private float Ratio;
-   private float baseFontSize = 48f;  // Puedes ajustar esto según tus necesidades
+   private float activeFontSize = 48f;  //
 
 
     //Surfaces , Manager y uso de clase Paint para el color
@@ -60,13 +64,18 @@ public class GraphicsAndroid implements Graphics {
 
         this.logicWidth = logicWidth;
         this.logicHeight = logicHeight;
-        // Estableemos un ratio
-        Ratio=((float)2/(float)3);
+
+
+
 
         //Creamos los nuevos elementos y obtenemos el holder
         this.holder = this.myView.getHolder();
         this.paint = new Paint();
         this.canvas = new Canvas();
+
+
+
+
 
     }
 
@@ -91,8 +100,8 @@ public class GraphicsAndroid implements Graphics {
         //Calculo de bordes y de factor de escala
 
         //Calculo del factor de escala
-        this.factorX = (float)getWidth() / (float)this.logicWidth;
-        this.factorY = (float)getHeight() / (float)this.logicHeight;
+        this.factorX = (float)getWidth() / (float)this.getWidthLogic();
+        this.factorY = (float)getHeight() / (float)this.getHeightLogic();
         this.factorScale = Math.min(this.factorX, this.factorY);
 
 
@@ -150,7 +159,7 @@ public class GraphicsAndroid implements Graphics {
         Typeface tface = Typeface.createFromAsset(mgr, fileName);
         this.paint.setTypeface(tface);
         this.paint.setTextSize(size*(factorScale*2));
-
+        activeFontSize=size*2;
         //A parte creamos el objeto fuente y lo devolvemos
         IntFontAndroid fontA= new IntFontAndroid(tface);
         return fontA;
@@ -168,17 +177,17 @@ public class GraphicsAndroid implements Graphics {
     @Override
     public void drawImage(Image image, int x, int y, int w, int h) {
 
-        int x2=x;
-        int y2= y;
+
+
         IntImageAndroid a = (IntImageAndroid)image;
-        float newW = (scaleToReal(w));
-        float newH = (scaleToReal(h));
+        int newW = (int)(scaleToReal(w));
+        int newH = (int)(scaleToReal(h));
         float b= logicToRealX(x) - (scaleToReal(w)/2);
         float c= logicToRealX(y) - (scaleToReal(h)/2) + borderTop;
 
         Bitmap aux = getResizedBitmap(a.getImg(),newW ,newH);
         this.canvas.drawBitmap(aux,logicToRealX(x) - (scaleToReal(w)/2) ,
-                logicToRealX(y) - (scaleToReal(h)/2) + borderTop,this.paint);
+                logicToRealY(y) - (scaleToReal(h)/2) + borderTop,this.paint);
 
 
 
@@ -224,7 +233,7 @@ public class GraphicsAndroid implements Graphics {
 
 
         //Esto no deberia de estar cableado pero de momento se queda asi
-        this.paint.setTextSize(baseFontSize*(factorScale*2));
+        this.paint.setTextSize(activeFontSize*2);
         this.canvas.drawText(text,x - (getStringWidth(text)/2), y-(getStringHeight(text)/2)+borderTop,this.paint);
     }
     // Para el cambio de tamaño a una imagen (bitmap)
@@ -237,36 +246,39 @@ public class GraphicsAndroid implements Graphics {
     // lo que significa que se utilizará un método de interpolación rápido.
 
     public Bitmap getResizedBitmap(Bitmap bm, float newWidth, float newHeight) {
-        float sW = ((float) newWidth) / bm.getWidth();
-        float sH = ((float) newHeight) /  bm.getHeight();
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        float sW = ((float) newWidth) /width;
+        float sH = ((float) newHeight) / height;
         Matrix m = new Matrix();
         m.postScale(sW,  sH);
-        Bitmap bmresized = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(),  bm.getHeight(), m, false);
+        Bitmap bmresized = Bitmap.createBitmap(bm, 0, 0, width, height, m, false);
         return bmresized;
+
     }
 
-    @Override
-    public int logicToRealX(int x) { return (int)(x*factorScale + borderWidth); }
-
-    @Override
-    public int logicToRealY(int y) {            //CONVERSOR DE LOGICO A REAL EN Y
-        return (int)(y*factorScale + borderHeight);
+    @Override //De posicion logica a  real
+    public int logicToRealX(int x) {
+        return (int)(x * this.factorScale + borderWidth);
     }
-
     @Override
-    public int scaleToReal(int s) {     //CONVERSOR DE ESCALA A REAL
-        return (int)(s*(factorScale));
+    public int logicToRealY(int y) {        //CONVERSOR DE TAMAÑO LOGICO A REAL EN Y
+        return (int)(y * this.factorScale+ borderHeight);
     }
-
+    @Override
+    public int scaleToReal(int s) {
+        return (int)(s *2);
+    }
 
     // Con este metodo nos aseguramos que el surfaceView (obtenido a partir del holder) este disponible para usarse y renderizar
     public boolean isValid() { return this.holder.getSurface().isValid();}
 
     @Override
-    public int getHeight() {return this.myView.getHeight();
+    public int getHeight() {return heightView;
     }
     public int getWidth() {     //ANCHO VENTANA
-        return this.myView.getWidth();
+
+       return widthView;
     }
 
 
@@ -304,6 +316,12 @@ public class GraphicsAndroid implements Graphics {
         this.myView.getHolder().setFixedSize(w,h);
     }
 
+
+    public void setDimensionsView(int vH, int vW)
+    {
+        heightView=vH;
+        widthView=vW;
+    }
 
 
 }
