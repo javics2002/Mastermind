@@ -29,7 +29,7 @@ public class PlayButton implements Interface {
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
             // Change scene
             DifficultyScene scene = new DifficultyScene(_engine);
-            _engine.setCurrentScene(scene);
+            _engine.set_currentScene(scene);
             // engine.resume();
             return true;
         }

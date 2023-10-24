@@ -25,8 +25,6 @@ public class GraphicsPC implements Graphics {
     private int _titleBarHeight = 30;
     private int _margin = 7;
 
-    private java.awt.Font _activeFont;
-
     GraphicsPC(JFrame myView, int logicWidth, int logicHeight) {
         _frame = myView;
         _frame.createBufferStrategy(2);
@@ -43,7 +41,6 @@ public class GraphicsPC implements Graphics {
          * */
         _logicWidth = logicWidth;
         _logicHeight = logicHeight;
-
 
         //Establecemos el tamaño de mi view y creamos nuestro factor de escala
         setResolution(_logicWidth, _logicHeight);
@@ -88,10 +85,7 @@ public class GraphicsPC implements Graphics {
     @Override
     public Font newFont(String fileName, float size) {
         java.awt.Font customFont;
-         if(size==12f)
-         {
-             float x= 0+ size;
-         }
+
         try {
             customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("data/Fonts/"+fileName)).deriveFont(size);
         } catch (FontFormatException | IOException e) {
@@ -99,13 +93,13 @@ public class GraphicsPC implements Graphics {
         }
 
         FontPC fontPC = new FontPC(customFont);
-        _activeFont = customFont;
-        _activeFont.deriveFont(size);
         return fontPC;
     }
 
     @Override
-    public void setColor(int color) { _graphics.setColor(new Color(color)); } // CAMBIA COLOR
+    public void setColor(int color) {
+        _graphics.setColor(new Color(color));
+    } // CAMBIA COLOR
 
 
     //METODOS PARA GESTION DE FRAME
@@ -114,7 +108,7 @@ public class GraphicsPC implements Graphics {
     @Override
     public void prepareFrame() {                                // ACTUALIZA LA NUEVA RESOLUCION EN CADA FRAME
         setResolution(getWidth(),getHeight());
-        _graphics = (Graphics2D)this._bufferStrategy.getDrawGraphics();
+        _graphics = (Graphics2D) _bufferStrategy.getDrawGraphics();
     }
 
     public void finishFrame() {
@@ -131,21 +125,17 @@ public class GraphicsPC implements Graphics {
     public void drawText(String text, Font font, int x, int y, int color) {
         _graphics.setColor(new Color (color));
 
-        // Calcula el tamaño de la fuente aplicando el factor de escala
-
-
-
-        _activeFont = _activeFont.deriveFont(font.getFontSize()*2*(_factorScale));
-        _graphics.setFont(_activeFont);
+        // Calcula el tamaño de la fuente aplicando el factor de escala¡
+        //_activeFont = _activeFont.deriveFont(font.getFontSize() * _factorScale);
+        _graphics.setFont(((FontPC) font).getFont());
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
-        int adjustedX = logicToRealX(x) - (getStringWidth(text) / 2);
-        int adjustedY = (logicToRealY(y) - (getStringHeight(text) / 2) + _borderTop);
+        int adjustedX = logicToRealX(x) - (getStringWidth(text, font) / 2);
+        int adjustedY = (logicToRealY(y) - (getStringHeight(text, font) / 2) + _borderTop);
 
         // Dibuja el texto con el tamaño de fuente ajustado
         _graphics.drawString(text, adjustedX, adjustedY);
     }
-
 
     //Dibujamos la imagen en la posicion x e y con un taño w y h
     //Se ha tenido que aplicar un offset en los metodos de escalado
@@ -171,14 +161,12 @@ public class GraphicsPC implements Graphics {
     }
 
     @Override // Getter ancho cadena
-    public int getStringWidth(String text) {
-        return (int)_activeFont.getStringBounds(text, _graphics.getFontRenderContext()).getWidth();
+    public int getStringWidth(String text, Font font) {
+        return (int)((FontPC) font).getFont().getStringBounds(text, _graphics.getFontRenderContext()).getWidth();
     }
     @Override //Getter alto cadena
-    public int getStringHeight(String text) {
-
-
-        return (int)_activeFont.getStringBounds(text, _graphics.getFontRenderContext()).getHeight();
+    public int getStringHeight(String text, Font font) {
+        return (int)((FontPC) font).getFont().getStringBounds(text, _graphics.getFontRenderContext()).getHeight();
     }
 
     //Para el dibujo de rectangulos y cosas que no son una imagen
@@ -186,6 +174,7 @@ public class GraphicsPC implements Graphics {
     public void drawRect(int x, int y, int width, int height) {
         _graphics.drawRect(x,y + _borderTop, width,height);
     }
+
     @Override   // Dibujar un cuadrado (relleno) en cx y cy con side (ancho y alto) de atributors
     public void fillSquare(int cx, int cy, int side) {
         _graphics.fillRect(cx,cy + _borderTop,side,side);
@@ -194,11 +183,13 @@ public class GraphicsPC implements Graphics {
     public void fillRect(int x, int y, int w, int h) {      //RELLENAR RECTANGULO
         _graphics.fillRect(x,y + _borderTop,w,h);   // DIBUJA RECTANGULO RELLENO
     }
+
     @Override// Dibujar un cuadrado  en cx y cy con side (ancho y alto) de atributors
     public void drawSquare(int cx, int cy, int side) {      //DIBUJA CUADRADO
         _graphics.drawRect(cx,cy + _borderTop,side,side);
         _graphics.setPaintMode();
     }
+
     @Override    // Dibujar una lina en initx y inity hasta end y endY
     public void drawLine(int initX, int initY, int endX, int endY) { //DIBUJA LINEA
         _graphics.drawLine(initX,initY + _borderTop,endX,endY + _borderTop);

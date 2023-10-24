@@ -1,7 +1,6 @@
 package com.example.desktop;
 
 import java.awt.Dimension;
-import java.awt.Frame;
 
 import javax.swing.JFrame;
 
@@ -25,8 +24,9 @@ public class MasterMindDesktop  {
         frame.setVisible(true);
 
         EnginePC engine = new EnginePC(frame, WindowSize.width, WindowSize.height);
-        Scene scene = new GameScene(engine, 5, 3);
-        engine.setCurrentScene(scene);
+        Scene scene = new InitialScene(engine);
+        //Scene scene = new GameScene(engine, 5, 3);
+        engine.set_currentScene(scene);
         engine.resume();
     }
 }

@@ -30,8 +30,8 @@ public interface Graphics {
     int getHeight();
     int getHeightLogic();
     int get_borderTop();
-    int getStringWidth(String text);
-    int getStringHeight(String text);
+    int getStringWidth(String text, Font font);
+    int getStringHeight(String text, Font font);
 
     //Setters
     void setResolution(int w, int h);

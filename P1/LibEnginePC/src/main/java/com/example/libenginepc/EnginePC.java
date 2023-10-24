@@ -111,7 +111,7 @@ public class EnginePC implements Runnable, Engine {
     }
 
     @Override
-    public void setCurrentScene(Scene currentScene) {
-        _currentScene = currentScene;
+    public void set_currentScene(Scene _currentScene) {
+        this._currentScene = _currentScene;
     }
 }

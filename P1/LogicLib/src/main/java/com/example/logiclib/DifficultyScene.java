@@ -15,7 +15,7 @@ public class DifficultyScene implements Scene {
 
     public DifficultyScene(Engine engine) {
         Graphics graphics = engine.get_graphics();
-        Font font = graphics.newFont("Comfortaa-Regular.ttf", 12f);
+        Font font = graphics.newFont("Comfortaa-Regular.ttf", 24f);
 
         _backButton = new BackButton("UI/back.png", engine, 30,30,40, 40);
         _titleText = new Text("¿En qué dificultad quieres jugar?", font, engine,

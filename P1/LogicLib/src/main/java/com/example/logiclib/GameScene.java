@@ -26,13 +26,13 @@ public class GameScene implements Scene {
         String objectiveString = "Averigua el código";
         String attemptsString = "Te quedan " + GameAttributes.Instance().attemptsLeft + " intentos!!!!";
 
-        Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 12f);
+        Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 24f);
         _objectiveText = new Text(objectiveString, objetiveFont, engine,
-                graphics.getWidthLogic() / 2, (int) (topMargin + graphics.getStringHeight(objectiveString) / 2f), 0);
+                graphics.getWidthLogic() / 2, (int) (topMargin + graphics.getStringHeight(objectiveString, objetiveFont) / 2f), 0);
 
-        Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 10f);
+        Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 20f);
         _attemptsText = new Text(attemptsString, attemptsFont, engine,
-                graphics.getWidthLogic() / 2, (int)(topMargin + 2 * graphics.getStringHeight(objectiveString) + graphics.getStringHeight(attemptsString) / 2f), 0);
+                graphics.getWidthLogic() / 2, (int)(topMargin + 2 * graphics.getStringHeight(objectiveString, objetiveFont) + graphics.getStringHeight(attemptsString, attemptsFont) / 2f), 0);
 
         _quitButton = new QuitButton("UI/close.png", engine, 50, 40, 50, 50);
         _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine, graphics.getWidthLogic() - 50, 40, 50, 50);
