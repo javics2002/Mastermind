@@ -51,7 +51,18 @@ public class DifficultyScene implements Scene {
 
     @Override
     public void handleEvents(Input a) {
-        // a.getTouchEvent().get(0)
+        int numEvents=a.getTouchEvent().size();
+        if(numEvents>0)
+        {
+            this._easyDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+            this._backButton.handleEvents( a.getTouchEvent().get(0));
+            this._easyDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+            this._mediumDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+            this._difficultDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+            this._impossibleDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+
+
+        }
     }
 }
 

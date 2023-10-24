@@ -88,7 +88,10 @@ public class GraphicsPC implements Graphics {
     @Override
     public Font newFont(String fileName, float size) {
         java.awt.Font customFont;
-
+         if(size==12f)
+         {
+             float x= 0+ size;
+         }
         try {
             customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("data/Fonts/"+fileName)).deriveFont(size);
         } catch (FontFormatException | IOException e) {
@@ -97,12 +100,13 @@ public class GraphicsPC implements Graphics {
 
         FontPC fontPC = new FontPC(customFont);
         _activeFont = customFont;
-
+        _activeFont.deriveFont(size);
         return fontPC;
     }
 
     @Override
     public void setColor(int color) { _graphics.setColor(new Color(color)); } // CAMBIA COLOR
+
 
     //METODOS PARA GESTION DE FRAME
     public void show() { _bufferStrategy.show(); }           // MUESTRA EL BUFFER STRATEGY
@@ -128,6 +132,9 @@ public class GraphicsPC implements Graphics {
         _graphics.setColor(new Color (color));
 
         // Calcula el tamaño de la fuente aplicando el factor de escala
+
+
+
         _activeFont = _activeFont.deriveFont(font.getFontSize()*2*(_factorScale));
         _graphics.setFont(_activeFont);
 
@@ -165,11 +172,13 @@ public class GraphicsPC implements Graphics {
 
     @Override // Getter ancho cadena
     public int getStringWidth(String text) {
-        return (int)_graphics.getFont().getStringBounds(text, _graphics.getFontRenderContext()).getWidth();
+        return (int)_activeFont.getStringBounds(text, _graphics.getFontRenderContext()).getWidth();
     }
     @Override //Getter alto cadena
     public int getStringHeight(String text) {
-        return (int)_graphics.getFont().getStringBounds(text, _graphics.getFontRenderContext()).getHeight();
+
+
+        return (int)_activeFont.getStringBounds(text, _graphics.getFontRenderContext()).getHeight();
     }
 
     //Para el dibujo de rectangulos y cosas que no son una imagen

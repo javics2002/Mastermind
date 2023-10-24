@@ -135,6 +135,7 @@ public class GraphicsAndroid implements Graphics {
         try {
             InputStream inputS = this.mgr.open(imgName);
             bitmap = BitmapFactory.decodeStream(inputS);
+            inputS.close(); // Cierra el InputStream después de usarlo
         } catch (final IOException e) {
             e.printStackTrace();
         }

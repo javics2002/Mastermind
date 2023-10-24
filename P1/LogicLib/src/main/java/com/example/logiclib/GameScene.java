@@ -6,6 +6,7 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Font;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,15 +22,20 @@ public class GameScene implements Scene {
 
         int topMargin = 50;
 
-        Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 12f);
-        Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 10f);
+
+
+
 
         String objectiveString = "Averigua el código";
         String attemptsString = "Te quedan " + GameAttributes.Instance().attemptsLeft + " intentos!!!!";
 
-        _objectiveText = new Text(objectiveString, objetiveFont, engine,
-                graphics.getWidthLogic() / 2, (int) (topMargin + graphics.getStringHeight(objectiveString) / 2f), Color.black.getRGB());
 
+
+        Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 12f);
+        _objectiveText = new Text(objectiveString, objetiveFont, engine,
+                graphics.getWidthLogic() / 2, (int) (topMargin + graphics.getStringHeight(objectiveString) / 2f), Color.BLACK.getRGB());
+
+        Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 10f);
         _attemptsText = new Text(attemptsString, attemptsFont, engine,
                 graphics.getWidthLogic() / 2, (int)(topMargin + 2 * graphics.getStringHeight(objectiveString) + graphics.getStringHeight(attemptsString) / 2f), Color.black.getRGB());
 
@@ -53,6 +59,7 @@ public class GameScene implements Scene {
     public void render(Graphics gr) {
         _objectiveText.render();
         _attemptsText.render();
+
 
         _quitButton.render();
         _colorblindButton.render();

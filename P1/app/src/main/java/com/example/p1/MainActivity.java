@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.content.res.AssetManager;
 
 import com.example.libengineandroid.EngineAndroid;
+import com.example.logiclib.DifficultyScene;
 import com.example.logiclib.GameScene;
 import com.example.logiclib.InitialScene;
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(this.rView);
         this.manager = getAssets();
         this.engineAndroid = new EngineAndroid(this.rView, 1080,2400);
-        InitialScene scene = new InitialScene(engineAndroid);
+        DifficultyScene scene = new DifficultyScene(engineAndroid);
         engineAndroid.setCurrentScene(scene);
         engineAndroid.resume();
 

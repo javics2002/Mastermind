@@ -19,7 +19,7 @@ public class InitialScene implements Scene {
         _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 24f);
 
         _titleText = new Text("Master Mind", _titleFont, engine,
-                graphics.getWidthLogic() / 2, graphics.getHeightLogic() / 4, 0);
+              graphics.getWidthLogic() / 2, graphics.getHeightLogic() / 4, 0);
 
         _playButton = new PlayButton("playButton.png", engine,
                 (int)(graphics.getWidthLogic()*0.5), (int)(graphics.getHeightLogic() *.5f), 331, 88);
