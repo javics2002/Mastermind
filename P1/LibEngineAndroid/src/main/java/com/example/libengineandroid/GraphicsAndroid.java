@@ -26,13 +26,6 @@ import com.example.aninterface.Graphics;
 
 
 public class GraphicsAndroid implements Graphics {
-
-
-    private int window;
-
-
-   private int widthView;
-   private int heightView;
     // Tamaño  logico
     private int logicWidth;
     private int logicHeight;
@@ -45,8 +38,8 @@ public class GraphicsAndroid implements Graphics {
     private int borderHeight;
     private int borderTop;
 
-    private float Ratio;
-   private float activeFontSize = 48f;  //
+    private float Ratio = 2f / 3f;
+    private float activeFontSize = 48f;  //
 
 
     //Surfaces , Manager y uso de clase Paint para el color
@@ -82,8 +75,21 @@ public class GraphicsAndroid implements Graphics {
     //Limpieza de pantalla poniendolo todo de un color usando la variable canvas
     @Override
     public void clear(int color) {
-        color+= 0xFF000000;
+        color += 0xFF000000;
         this.canvas.drawColor(color);
+
+        // TODO: Poner false para release
+        final boolean debug = true;
+        if(debug){
+            setColor(0);
+
+            int _margin = 0;
+            int _titleBarHeight = 0;
+            fillRect(_margin, 0, borderWidth, getHeight());
+            fillRect(0, _titleBarHeight, getWidth(), borderHeight);
+            fillRect(getWidth() - borderWidth - _margin, 0, borderWidth, getHeight());
+            fillRect(0, getHeight() - borderHeight - _margin, getWidth(), borderHeight);
+        }
     }
 
     //El formato de android acepta por defecto un ARGB y nosotros queremos que aambas plataformas  tengan el color
@@ -125,6 +131,8 @@ public class GraphicsAndroid implements Graphics {
             this.borderWidth = var;
             this.borderHeight = 0;
         }
+
+        System.out.print(borderWidth + " " + borderHeight);
     }
 
     //USO DEL CANVAS , BLOQUEO Y DESBLOQUEO
@@ -274,11 +282,11 @@ public class GraphicsAndroid implements Graphics {
     public boolean isValid() { return this.holder.getSurface().isValid();}
 
     @Override
-    public int getHeight() {return heightView;
+    public void getHeight() {
+        return myView.getHeight();
     }
     public int getWidth() {     //ANCHO VENTANA
-
-       return widthView;
+       return myView.getWidth();
     }
 
 
@@ -315,13 +323,4 @@ public class GraphicsAndroid implements Graphics {
     public void setResolution(int w, int h) {
         this.myView.getHolder().setFixedSize(w,h);
     }
-
-
-    public void setDimensionsView(int vH, int vW)
-    {
-        heightView=vH;
-        widthView=vW;
-    }
-
-
 }

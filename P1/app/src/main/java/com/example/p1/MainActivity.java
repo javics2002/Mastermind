@@ -15,12 +15,11 @@ import android.view.Window;
 
 
 public class MainActivity extends AppCompatActivity {
-
     private SurfaceView rView;
     private AssetManager manager;
 
-
     private EngineAndroid engineAndroid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +34,6 @@ public class MainActivity extends AppCompatActivity {
         InitialScene scene = new InitialScene(engineAndroid);
         engineAndroid.setCurrentScene(scene);
         engineAndroid.resume();
-
-
-
-
-
-
     }
     @Override
     protected void onPause() {
