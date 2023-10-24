@@ -6,7 +6,7 @@ import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 
-public class ColorLayout implements Interface {
+public class HintSlot implements Interface {
     private Image _image;
     private Engine _engine;
     private Graphics _graphics;
@@ -15,7 +15,7 @@ public class ColorLayout implements Interface {
     private int _width;
     private int _height;
 
-    public ColorLayout(Engine engine, String filename, int positionX, int positionY, int width, int height){
+    public HintSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
         _engine = engine;
         _graphics = _engine.get_graphics();
         _image = _graphics.newImage(filename);

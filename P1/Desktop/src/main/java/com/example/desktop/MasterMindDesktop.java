@@ -25,7 +25,7 @@ public class MasterMindDesktop  {
         frame.setVisible(true);
 
         EnginePC engine = new EnginePC(frame, WindowSize.width, WindowSize.height);
-        Scene scene = new InitialScene(engine);
+        Scene scene = new GameScene(engine, 5, 3);
         engine.setCurrentScene(scene);
         engine.resume();
     }
