@@ -127,7 +127,7 @@ public class GraphicsPC implements Graphics {
 
         // Calcula el tamaño de la fuente aplicando el factor de escala¡
         //_activeFont = _activeFont.deriveFont(font.getFontSize() * _factorScale);
-        _graphics.setFont(((FontPC) font).getFont());
+        _graphics.setFont(((FontPC) font).getFont().deriveFont(font.getFontSize() * _factorScale));
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
         int adjustedX = logicToRealX(x) - (getStringWidth(text, font) / 2);
@@ -162,11 +162,11 @@ public class GraphicsPC implements Graphics {
 
     @Override // Getter ancho cadena
     public int getStringWidth(String text, Font font) {
-        return (int)((FontPC) font).getFont().getStringBounds(text, _graphics.getFontRenderContext()).getWidth();
+        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize() * _factorScale).getStringBounds(text, _graphics.getFontRenderContext()).getWidth();
     }
     @Override //Getter alto cadena
     public int getStringHeight(String text, Font font) {
-        return (int)((FontPC) font).getFont().getStringBounds(text, _graphics.getFontRenderContext()).getHeight();
+        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize() * _factorScale).getStringBounds(text, _graphics.getFontRenderContext()).getHeight();
     }
 
     //Para el dibujo de rectangulos y cosas que no son una imagen
@@ -205,16 +205,17 @@ public class GraphicsPC implements Graphics {
     //La posicion real desde el escalado se usa para w y h en dibujo
     @Override //De posicion logica a  real
     public int logicToRealX(int x) {
-        return (int)(x * _factorScale + _borderWidth);
+        return (int) (x * _factorScale + _borderWidth);
     }
     @Override
     public int logicToRealY(int y) {        //CONVERSOR DE TAMAÑO LOGICO A REAL EN Y
-        return (int)(y * _factorScale + _borderHeight);
+        return (int) (y * _factorScale + _borderHeight);
     }
     @Override
     public int scaleToReal(int s) {
-        return (int)(s*_factorScale);
+        return (int) (s * _factorScale);
     }
+
     //GETTERS
     @Override
     public int getWidth() { return _frame.getWidth();}      // ANCHO DE LA VENTANA

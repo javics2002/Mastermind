@@ -18,35 +18,38 @@ public class GameScene implements Scene {
     private List<CombinationLayout> _combinationLayouts;
     private List<ColorButton> _colorButtons;
 
-    public GameScene(Engine engine, int tryNumber, int combinationLength) {
+    public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors) {
         Graphics graphics = engine.get_graphics();
 
-        int topMargin = 50;
+        int topMargin = 60;
+        int lineSpacing = 20;
 
         String objectiveString = "Averigua el código";
         String attemptsString = "Te quedan " + GameAttributes.Instance().attemptsLeft + " intentos!!!!";
 
         Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 24f);
         _objectiveText = new Text(objectiveString, objetiveFont, engine,
-                graphics.getWidthLogic() / 2, (int) (topMargin + graphics.getStringHeight(objectiveString, objetiveFont) / 2f), 0);
+                graphics.getWidthLogic() / 2, topMargin, 0);
 
-        Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 20f);
+        Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 16f);
         _attemptsText = new Text(attemptsString, attemptsFont, engine,
-                graphics.getWidthLogic() / 2, (int)(topMargin + 2 * graphics.getStringHeight(objectiveString, objetiveFont) + graphics.getStringHeight(attemptsString, attemptsFont) / 2f), 0);
+                graphics.getWidthLogic() / 2, topMargin + lineSpacing, 0);
 
         _quitButton = new QuitButton("UI/close.png", engine, 50, 40, 50, 50);
-        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine, graphics.getWidthLogic() - 50, 40, 50, 50);
+        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine,
+                graphics.getWidthLogic() - 50, 40, 50, 50);
 
         int initialHeight = 100;
         int padding = 40;
         _combinationLayouts = new ArrayList<>();
         for(int i = 0; i < tryNumber; i++){
-            _combinationLayouts.add(new CombinationLayout(engine, i, combinationLength, graphics.getWidthLogic() / 2, initialHeight + i * padding));
+            _combinationLayouts.add(new CombinationLayout(engine, i, combinationLength,
+                    graphics.getWidthLogic() / 2, initialHeight + i * padding));
         }
 
         _colorButtons = new ArrayList<>();
         int scale = 32;
-        for(int i = 0; i < combinationLength; i++) {
+        for(int i = 0; i < numberOfColors; i++) {
             _colorButtons.add(new ColorButton("color" + (i + 1) + ".png", engine,
                     (int) (graphics.getWidthLogic() / 2 + (i - combinationLength / 2f) * scale + padding * i),
                     graphics.getHeightLogic() - 70 , scale, scale));
@@ -62,7 +65,6 @@ public class GameScene implements Scene {
     public void render(Graphics gr) {
         _objectiveText.render();
         _attemptsText.render();
-
 
         _quitButton.render();
         _colorblindButton.render();
