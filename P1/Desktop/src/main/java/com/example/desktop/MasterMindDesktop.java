@@ -25,7 +25,10 @@ public class MasterMindDesktop  {
 
         EnginePC engine = new EnginePC(frame, WindowSize.width, WindowSize.height);
         //Scene scene = new InitialScene(engine);
-        Scene scene = new GameScene(engine, 5, 3, 4);
+
+        //Estos son los valores maximos que permito
+        //Scene scene = new GameScene(engine, 14, 6, 10);
+        Scene scene = new GameScene(engine, 5, 6, 10);
         engine.set_currentScene(scene);
         engine.resume();
     }

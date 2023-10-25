@@ -7,6 +7,8 @@ import android.content.res.AssetManager;
 
 import com.example.libengineandroid.EngineAndroid;
 import com.example.logiclib.InitialScene;
+import com.example.logiclib.GameScene;
+import com.example.aninterface.Scene;
 
 public class MainActivity extends AppCompatActivity {
     private SurfaceView _surfaceView;
@@ -27,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
         int height = 720;
         _engineAndroid = new EngineAndroid(_surfaceView, (int) (height * aspectRatio), height);
 
-        InitialScene scene = new InitialScene(_engineAndroid);
+        //InitialScene scene = new InitialScene(_engineAndroid);
+        Scene scene = new GameScene(_engineAndroid, 5, 6, 10);
         _engineAndroid.set_currentScene(scene);
         _engineAndroid.resume();
     }

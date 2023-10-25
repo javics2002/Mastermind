@@ -48,9 +48,10 @@ public class GameScene implements Scene {
 
         _colorButtons = new ArrayList<>();
         int scale = 32;
+        padding = 15;
         for(int i = 0; i < numberOfColors; i++) {
             _colorButtons.add(new ColorButton("color" + (i + 1) + ".png", engine,
-                    (int) (graphics.getWidthLogic() / 2 + (i - combinationLength / 2f) * scale + padding * i),
+                    (int) (graphics.getWidthLogic() / 2 + (i - numberOfColors / 2f) * scale - padding / 2 + i * padding / 2),
                     graphics.getHeightLogic() - 70 , scale, scale));
         }
     
@@ -79,7 +80,7 @@ public class GameScene implements Scene {
         gr.setColor(Color.lightGray.getRGB());
         gr.fillRect(gr.logicToRealX(0), gr.logicToRealY(gr.getHeightLogic() - 100), gr.scaleToReal(gr.getWidthLogic()), gr.scaleToReal(100));
 
-        for(ColorButton colorButton : _colorButtons){
+        for(ColorButton colorButton : _colorButtons) {
             colorButton.render();
         }
     }
