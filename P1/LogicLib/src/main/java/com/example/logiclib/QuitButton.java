@@ -31,7 +31,7 @@ public class QuitButton implements Interface {
             // Change scene
             DifficultyScene scene = new DifficultyScene(_engine);
             _engine.set_currentScene(scene);
-            // engine.resume();
+
             return true;
         }
         return false;

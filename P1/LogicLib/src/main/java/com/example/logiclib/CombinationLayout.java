@@ -37,7 +37,7 @@ public class CombinationLayout implements Interface {
 
         _colors = new ArrayList<>();
         for(int i = 0; i < combinationLength; i++){
-            _colors.add(new ColorSlot(_engine, "colorEmpty.png", (int) (positionX + (i - combinationLength / 2f) * scale + padding * i), _positionY, scale, scale));
+            _colors.add(new ColorSlot(_engine, "color1.png", (int) (positionX + (i - combinationLength / 2f) * scale + padding * i), _positionY, scale, scale));
         }
 
         _hints = new ArrayList<>();
@@ -64,6 +64,7 @@ public class CombinationLayout implements Interface {
 
     }
 
+    public List<ColorSlot> getSlots(){return  _colors;}
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         return false;

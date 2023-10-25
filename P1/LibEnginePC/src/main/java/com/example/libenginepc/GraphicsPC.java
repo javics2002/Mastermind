@@ -153,6 +153,7 @@ public class GraphicsPC implements Graphics {
     public Image newImage(String filename) { //Creacion de imagen
         java.awt.Image image = null;
         try {
+
             image = ImageIO.read(new File("data/"+filename));
         } catch (IOException e) {
             e.printStackTrace();

@@ -29,7 +29,7 @@ public class BackButton implements Interface {
     public boolean handleEvents(Input.TouchEvent e) {
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
             // Change scene
-            DifficultyScene scene = new DifficultyScene(_engine);
+            InitialScene scene = new InitialScene(_engine);
             _engine.set_currentScene(scene);
             // engine.resume();
             return true;

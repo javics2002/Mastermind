@@ -54,12 +54,16 @@ public class GameScene implements Scene {
                     (int) (graphics.getWidthLogic() / 2 + (i - combinationLength / 2f) * scale + padding * i),
                     graphics.getHeightLogic() - 70 , scale, scale));
         }
+    
     }
+
 
     @Override
     public void update(double deltaTime) {
 
     }
+
+
 
     @Override
     public void render(Graphics gr) {
@@ -86,7 +90,13 @@ public class GameScene implements Scene {
         if(input.getTouchEvent().size()>0)
         {
             Input.TouchEvent elemento = input.getTouchEvent().get(0);
-            //this.bPlay.handleEvents(input.getTouchEvent().get(0));
+            this._colorblindButton.handleEvents(input.getTouchEvent().get(0));
+            this._quitButton.handleEvents(input.getTouchEvent().get(0));
+
         }
+    }
+
+    public List<CombinationLayout> get_combinationLayouts() {
+        return _combinationLayouts;
     }
 }
