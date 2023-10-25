@@ -36,8 +36,7 @@ public class GameScene implements Scene {
                 graphics.getWidthLogic() / 2, topMargin + lineSpacing, 0);
 
         _quitButton = new QuitButton("UI/close.png", engine, 50, 40, 50, 50);
-        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine,
-                graphics.getWidthLogic() - 50, 40, 50, 50);
+        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine, graphics.getWidthLogic() - 50, 40, 50, 50,this);
 
         int initialHeight = 100;
         int padding = 40;
