@@ -22,7 +22,7 @@ public class GraphicsPC implements Graphics {
     private float _factorScale;
     private float _factorX, _factorY;
     private float _ratioX = 2f, _ratioY =  3f;
-    private int _titleBarHeight = 30;
+    private int _titleBarHeight = 37;
     private int _margin = 7;
 
     GraphicsPC(JFrame myView, int logicWidth, int logicHeight) {
@@ -66,12 +66,16 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public void clear(int color) { //LIMPIA PANTALLA CON COLOR
-        _graphics.setColor(new Color(color));
+        _graphics.setColor(Color.black);
 
+        //insets para title height
         _graphics.fillRect(0, 0, getWidth(), getHeight());
 
+        _graphics.setColor(new Color(color));
+        _graphics.fillRect(logicToRealX(0), logicToRealY(0), scaleToReal(getWidthLogic()) , scaleToReal(getHeightLogic()) );
+
         // TODO: Poner false para release
-        final boolean debug = true;
+        final boolean debug = false;
         if(debug){
             _graphics.setColor(Color.black);
 
@@ -239,7 +243,7 @@ public class GraphicsPC implements Graphics {
 
         //Calculo factor escala -> ancho de la ventana / ancho logico del juego
         _factorX = (float) w / (float) _logicWidth;
-        _factorY = (float) h / (float) _logicHeight;
+        _factorY = (float) (h - _titleBarHeight) / (float) _logicHeight;
 
         _factorScale = Math.min(_factorX, _factorY);
 

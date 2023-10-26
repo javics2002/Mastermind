@@ -13,9 +13,10 @@ public class MasterMindDesktop  {
     static Dimension WindowSize = new Dimension();
 
     public static void main(String[] args) {
+        //Esto va dentro
         float aspectRatio = 2f / 3f;
         int height = 720;
-        int titleBarHeight = 30;
+        int titleBarHeight = 37;
         WindowSize = new Dimension((int) (height * aspectRatio), height + titleBarHeight);
 
         final JFrame frame= new JFrame("MasterMind");

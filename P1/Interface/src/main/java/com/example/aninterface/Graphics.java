@@ -1,13 +1,14 @@
 package com.example.aninterface;
 
 public interface Graphics {
+    //Todo a coordenadas de logica
     Font newFont(String fileName, float size);
     Image newImage(String path);
     // Dibujar una imagen
     void drawImage(Image image, int x, int y, int w, int h);
     // Cambiar el color con el que se pintan
     void setColor(int color);
-    // Limpiar la pantalla con un color
+    // Limpiar la pantalla con un color 
     void clear(int color);
     // Dibujar cuadrados y rectángulos rellenos
     void fillSquare(int cx, int cy, int side);

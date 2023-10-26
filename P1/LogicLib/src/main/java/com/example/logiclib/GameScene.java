@@ -78,7 +78,7 @@ public class GameScene implements Scene {
         }
 
         gr.setColor(Color.lightGray.getRGB());
-        gr.fillRect(gr.logicToRealX(0), gr.logicToRealY(gr.getHeightLogic() - 100), gr.scaleToReal(gr.getWidthLogic()), gr.scaleToReal(100));
+        //gr.fillRect(gr.logicToRealX(0), gr.logicToRealY(gr.getHeightLogic() - 100), gr.scaleToReal(gr.getWidthLogic()), gr.scaleToReal(100));
 
         for(ColorButton colorButton : _colorButtons) {
             colorButton.render();
