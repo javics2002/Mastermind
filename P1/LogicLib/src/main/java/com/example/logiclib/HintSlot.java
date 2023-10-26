@@ -17,7 +17,7 @@ public class HintSlot implements Interface {
 
     public HintSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
         _engine = engine;
-        _graphics = _engine.get_graphics();
+        _graphics = _engine.getGraphics();
         _image = _graphics.newImage(filename);
 
         _positionX = positionX;

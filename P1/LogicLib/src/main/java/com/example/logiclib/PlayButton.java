@@ -16,7 +16,7 @@ public class PlayButton implements Interface {
 
    PlayButton(String filename, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;
-        _graphics = engine.get_graphics();
+        _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
         _positionX = positionX;
         _positionY = positionY ;
@@ -29,7 +29,7 @@ public class PlayButton implements Interface {
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
             // Change scene
             DifficultyScene scene = new DifficultyScene(_engine);
-            _engine.set_currentScene(scene);
+            _engine.setCurrentScene(scene);
             // engine.resume();
             return true;
         }
@@ -46,9 +46,6 @@ public class PlayButton implements Interface {
     }
 
     public boolean inBounds(int mX, int mY) {
-        return (mX >= _graphics.logicToRealX(_positionX) - (_graphics.scaleToReal(_width)/2)
-                && mX <= _graphics.scaleToReal(_width) + _graphics.logicToRealX(_positionX) - (_graphics.scaleToReal(_width)/2)
-                && mY >= _graphics.logicToRealY(_positionY) - (_graphics.scaleToReal(_height)/2) + _graphics.get_borderTop()
-                && mY <= _graphics.scaleToReal(_height) + _graphics.logicToRealY(_positionY) - (_graphics.scaleToReal(_height)/2) + _graphics.get_borderTop());
+        return true;
     }
 }

@@ -26,7 +26,7 @@ public class ColorblindButton implements Interface {
 
     ColorblindButton(String filename, Engine engine, int positionX, int positionY, int width, int height ,GameScene g) {
         _engine = engine;
-        _graphics = engine.get_graphics();
+        _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
         _positionX = positionX;
         _positionY = positionY ;
@@ -112,9 +112,6 @@ public class ColorblindButton implements Interface {
     }
 
     public boolean inBounds(int mX, int mY) {
-        return (mX >= _graphics.logicToRealX(_positionX) - (_graphics.scaleToReal(_width)/2)
-                && mX <= _graphics.scaleToReal(_width) + _graphics.logicToRealX(_positionX) - (_graphics.scaleToReal(_width)/2)
-                && mY >= _graphics.logicToRealY(_positionY) - (_graphics.scaleToReal(_height)/2) + _graphics.get_borderTop()
-                && mY <= _graphics.scaleToReal(_height) + _graphics.logicToRealY(_positionY) - (_graphics.scaleToReal(_height)/2) + _graphics.get_borderTop());
+        return true;
     }
 }

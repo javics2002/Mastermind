@@ -14,7 +14,7 @@ public class DifficultyScene implements Scene {
     private Text _titleText;
 
     public DifficultyScene(Engine engine) {
-        Graphics graphics = engine.get_graphics();
+        Graphics graphics = engine.getGraphics();
         Font font = graphics.newFont("Comfortaa-Regular.ttf", 24f);
 
         _backButton = new BackButton("UI/back.png", engine, 30,30,40, 40);

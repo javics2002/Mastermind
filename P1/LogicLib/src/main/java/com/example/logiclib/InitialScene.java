@@ -14,7 +14,7 @@ public class InitialScene implements Scene {
 
     public InitialScene(Engine engine) {
         _engine = engine;
-        Graphics graphics = engine.get_graphics();
+        Graphics graphics = engine.getGraphics();
 
         _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
 

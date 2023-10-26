@@ -18,7 +18,7 @@ public class Text implements Interface {
 
     Text(String text, Font font, Engine engine, int posX, int posY, int color) {
         _engine = engine;
-        _graphics = engine.get_graphics();
+        _graphics = engine.getGraphics();
 
         _posX = posX;
         _posY = posY;

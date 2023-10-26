@@ -5,8 +5,6 @@ import com.example.aninterface.Scene;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Font;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +17,7 @@ public class GameScene implements Scene {
     private List<ColorButton> _colorButtons;
 
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors) {
-        Graphics graphics = engine.get_graphics();
+        Graphics graphics = engine.getGraphics();
 
         int topMargin = 60;
         int lineSpacing = 20;
@@ -77,7 +75,7 @@ public class GameScene implements Scene {
             combination.render();
         }
 
-        gr.setColor(Color.lightGray.getRGB());
+        gr.setColor(0xFFFFFFFF);
         //gr.fillRect(gr.logicToRealX(0), gr.logicToRealY(gr.getHeightLogic() - 100), gr.scaleToReal(gr.getWidthLogic()), gr.scaleToReal(100));
 
         for(ColorButton colorButton : _colorButtons) {

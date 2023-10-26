@@ -6,8 +6,6 @@ import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 
-import javax.print.DocFlavor;
-
 public class ColorSlot implements Interface {
     private Image _image;
     private Engine _engine;
@@ -21,7 +19,7 @@ public class ColorSlot implements Interface {
 
     public ColorSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
         _engine = engine;
-        _graphics = _engine.get_graphics();
+        _graphics = _engine.getGraphics();
         _image = _graphics.newImage(filename);
 
         _positionX = positionX;

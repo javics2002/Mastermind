@@ -3,7 +3,6 @@ package com.example.logiclib;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
-import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 
@@ -25,7 +24,7 @@ public class CombinationLayout implements Interface {
 
     public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY) {
         _engine = engine;
-        _graphics = _engine.get_graphics();
+        _graphics = _engine.getGraphics();
 
         _positionX = positionX;
         _positionY = positionY;
@@ -50,8 +49,8 @@ public class CombinationLayout implements Interface {
     public void render() {
         _graphics.setColor(0xFFf8f4ed);
 
-        _graphics.fillRect(_graphics.logicToRealX(padding), _graphics.logicToRealY(_positionY - scale / 2),
-                _graphics.scaleToReal(_graphics.getWidthLogic() - padding * 2), _graphics.scaleToReal((int) (scale * 1.2f)));
+        //_graphics.fillRect(_graphics.logicToRealX(padding), _graphics.logicToRealY(_positionY - scale / 2),
+        //        _graphics.scaleToReal(_graphics.getWidthLogic() - padding * 2), _graphics.scaleToReal((int) (scale * 1.2f)));
 
         _combinationNumber.render();
 

@@ -193,7 +193,7 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
-    public void drawRect(int x, int y, int width, int height) {
+    public void drawRect(int x, int y, int width, int height, int color) {
         Rect rect = new Rect(x,y+ _borderTop,x+width,y+height+ _borderTop);
         _paint.setStyle(Paint.Style.STROKE);
         _canvas.drawRect(rect, _paint);
@@ -291,7 +291,7 @@ public class GraphicsAndroid implements Graphics {
 
     //Set de la resolucion aunque creo que no es bueno llamarlo en android
     @Override
-    public void setResolution(int w, int h) {
+    public void setNewResolution(int w, int h) {
         _surfaceView.getHolder().setFixedSize(w,h);
     }
 }

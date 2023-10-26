@@ -64,7 +64,7 @@ public class EngineAndroid implements Runnable,Engine {
 
     protected void render() {
         //Clear del fondo (con el color tambien igual en el PC
-        get_graphics().clear(0xe7d6bd);
+        getGraphics().clear(0xe7d6bd);
         _currentScene.render(_graphics);
     }
 
@@ -107,12 +107,12 @@ public class EngineAndroid implements Runnable,Engine {
     }
 
     @Override
-    public Input get_input () {
+    public Input getInput() {
         return _input;
     }
 
     @Override
-    public void set_currentScene(Scene currentScene) {
+    public void setCurrentScene(Scene currentScene) {
         _currentScene = currentScene;
     }
 
@@ -122,7 +122,7 @@ public class EngineAndroid implements Runnable,Engine {
     }
 
     @Override
-    public Graphics get_graphics() {
+    public Graphics getGraphics() {
         return _graphics;
     }
 }

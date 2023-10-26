@@ -6,6 +6,8 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 import com.example.aninterface.Graphics;
 
+import java.awt.Dimension;
+
 public class EnginePC implements Runnable, Engine {
     private JFrame _frame;
     private Thread _renderThread;
@@ -14,9 +16,13 @@ public class EnginePC implements Runnable, Engine {
     private GraphicsPC _graphics;
     private InputPC _input;
 
-    public EnginePC(JFrame myView, int logicWidth, int logicHeight) {
+    private float _aspectRatio = 2f / 3f;
+    private int _logicHeight = 720;
+    private int _logicWidth = (int) (_logicHeight * _aspectRatio);
+
+    public EnginePC(JFrame myView) {
         _frame = myView;
-        _graphics = new GraphicsPC(myView, logicWidth, logicHeight);
+        _graphics = new GraphicsPC(myView, _logicWidth, _logicHeight);
         _input = new InputPC();
         _frame.addMouseListener(_input.getHandlerInput());
     }
@@ -37,10 +43,8 @@ public class EnginePC implements Runnable, Engine {
         _currentScene.render(_graphics);
     }
 
-    // Main loop
     @Override
     public void run() {
-        // Prevent anyone calling run() except for this class
         if (_renderThread != Thread.currentThread())
             throw new RuntimeException("run() should not be called directly");
 
@@ -52,33 +56,26 @@ public class EnginePC implements Runnable, Engine {
             lastFrameTime = currentTime;
 
             // Convert time from nanoseconds to seconds
-            double elapsedTime = (double) nanoElapsedTime / 1.0E9;
+            double deltaTime = (double) nanoElapsedTime / 1.0E9;
 
-            update(elapsedTime);
             handleEvents();
+            update(deltaTime);
 
-            //render
             _graphics.prepareFrame();
             render();
             _graphics.show();
-
-            //terminar Frame
             _graphics.finishFrame();
         }
     }
 
     @Override
     public void resume() {
-        //Si estabamos sin ejecutar ejecutamos de nuevo y creamos un hilo para la ejecuccion
         if (!_running) {
             _running = true;
-            // Call run() in a new Thread
             _renderThread = new Thread(this);
             _renderThread.start();
         }
     }
-
-    // TODO: Preguntar a TONI que hacer con los join(), de momento dejo el try/catch
 
     @Override
     public void pause() {
@@ -96,7 +93,7 @@ public class EnginePC implements Runnable, Engine {
     }
 
     @Override
-    public Graphics get_graphics() {
+    public Graphics getGraphics() {
         return _graphics;
     }
 
@@ -106,12 +103,12 @@ public class EnginePC implements Runnable, Engine {
     }
 
     @Override
-    public Input get_input() {
+    public Input getInput() {
         return _input;
     }
 
     @Override
-    public void set_currentScene(Scene _currentScene) {
-        this._currentScene = _currentScene;
+    public void setCurrentScene(Scene currentScene) {
+        _currentScene = currentScene;
     }
 }
