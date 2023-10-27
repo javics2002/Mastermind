@@ -18,11 +18,27 @@ public class InitialScene implements Scene {
 
         _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
 
-        _titleText = new Text("Master Mind", _titleFont, engine,
-              graphics.getWidthLogic() / 2, graphics.getHeightLogic() / 4, 0);
 
+
+
+        int topMargin = 60;
+        int lineSpacing = 20;
+        int padding =2;
+        String objectiveString = "MasterMind";
+
+
+
+
+
+        int a= graphics.getStringWidth(objectiveString,_titleFont);
+        System.out.print(a);
+        _titleText = new Text(objectiveString, _titleFont, engine,
+                (graphics.getWidthLogic()/2)-a/2 , topMargin*padding, 0);
+        padding=padding+2;
+        int button_Width=331;
+        int button_Height=88;
         _playButton = new PlayButton("playButton.png", engine,
-                (int)(graphics.getWidthLogic()*0.5), (int)(graphics.getHeightLogic() *.5f), 331, 88);
+                (int)(graphics.getWidthLogic()/2)-(button_Width/2), topMargin*padding, button_Width, button_Height);
     }
 
     @Override

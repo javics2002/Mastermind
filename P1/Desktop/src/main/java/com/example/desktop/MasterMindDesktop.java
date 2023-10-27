@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import com.example.aninterface.Scene;
 import com.example.logiclib.GameScene;
 import com.example.libenginepc.EnginePC;
+import com.example.logiclib.InitialScene;
 
 public class MasterMindDesktop  {
     static Dimension WindowSize = new Dimension();
@@ -19,7 +20,7 @@ public class MasterMindDesktop  {
 
         EnginePC engine = new EnginePC(frame);
 
-        Scene scene = new GameScene(engine, 5, 6, 10);
+        InitialScene scene = new InitialScene(engine);
         engine.setCurrentScene(scene);
         engine.resume();
     }

@@ -16,8 +16,15 @@ public interface Graphics {
     // Transformaciones
     int logicToRealX(int x);
     int logicToRealY(int y);
+    int scaleToReal(int realScale);
 
     //Getters
+
+    int getTopInset();
+    int getLatInsets();
+    int getRightInset();
+    int getLeftInset();
+    int getBotInset();
     int getWidth();
     int getWidthLogic();
     int getHeight();

@@ -19,22 +19,28 @@ public class GameScene implements Scene {
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors) {
         Graphics graphics = engine.getGraphics();
 
-        int topMargin = 60;
+
         int lineSpacing = 20;
 
         String objectiveString = "Averigua el código";
         String attemptsString = "Te quedan " + GameAttributes.Instance().attemptsLeft + " intentos!!!!";
 
+
         Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 24f);
+        int topMargin = objetiveFont.getFontSize();
+
         _objectiveText = new Text(objectiveString, objetiveFont, engine,
-                graphics.getWidthLogic() / 2, topMargin, 0);
+                (graphics.getWidthLogic()/2)-(graphics.getStringWidth(objectiveString,objetiveFont)/2), topMargin, 0);
 
         Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 16f);
         _attemptsText = new Text(attemptsString, attemptsFont, engine,
-                graphics.getWidthLogic() / 2, topMargin + lineSpacing, 0);
+                (graphics.getWidthLogic()/2)-(graphics.getStringWidth(objectiveString,objetiveFont)/2), topMargin + lineSpacing, 0);
 
-        _quitButton = new QuitButton("UI/close.png", engine, 50, 40, 50, 50);
-        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine, graphics.getWidthLogic() - 50, 40, 50, 50,this);
+        int quitButtonDimensions=50;
+
+        int offsetSize=quitButtonDimensions*2;
+        _quitButton = new QuitButton("UI/close.png", engine, quitButtonDimensions/offsetSize,quitButtonDimensions/offsetSize, quitButtonDimensions, quitButtonDimensions);
+        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine, graphics.getWidthLogic() - quitButtonDimensions, quitButtonDimensions/offsetSize, quitButtonDimensions, quitButtonDimensions,this);
 
         int initialHeight = 100;
         int padding = 40;

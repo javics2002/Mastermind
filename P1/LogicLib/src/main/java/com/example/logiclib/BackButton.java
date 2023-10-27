@@ -46,10 +46,12 @@ public class BackButton implements Interface {
     }
 
     public boolean inBounds(int mX, int mY) {
-        return true;
-        //return (mX >= _graphics.logicToRealX(_positionX) - (_graphics.scaleToReal(_width)/2)
-        //        && mX <= _graphics.scaleToReal(_width) + _graphics.logicToRealX(_positionX) - (_graphics.scaleToReal(_width)/2)
-        //        && mY >= _graphics.logicToRealY(_positionY) - (_graphics.scaleToReal(_height)/2) + _graphics.get_borderTop()
-        //        && mY <= _graphics.scaleToReal(_height) + _graphics.logicToRealY(_positionY) - (_graphics.scaleToReal(_height)/2) + _graphics.get_borderTop());
-    }//
+
+
+        return (mX >= (_graphics.logicToRealX(_positionX))
+                && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
+                && mY >= _graphics.logicToRealY(_positionY)
+                && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
+
+    }
 }

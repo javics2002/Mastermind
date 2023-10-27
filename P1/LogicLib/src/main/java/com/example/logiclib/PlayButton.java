@@ -46,6 +46,15 @@ public class PlayButton implements Interface {
     }
 
     public boolean inBounds(int mX, int mY) {
-        return true;
+
+
+
+            return (mX >= (_graphics.logicToRealX(_positionX))
+                && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
+                && mY >= _graphics.logicToRealY(_positionY)
+                && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
+
+
+
     }
 }

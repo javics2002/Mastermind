@@ -120,11 +120,11 @@ public class GraphicsPC implements Graphics {
 
     @Override // Getter ancho cadena
     public int getStringWidth(String text, Font font) {
-        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize() * _scaleFactor).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
+        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize()).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
     }
     @Override //Getter alto cadena
     public int getStringHeight(String text, Font font) {
-        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize() * _scaleFactor).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
+        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize()).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
     }
 
     //Para el dibujo de rectangulos y cosas que no son una imagen
@@ -143,11 +143,36 @@ public class GraphicsPC implements Graphics {
         return (int)(logicY * _scaleFactor + _topInset + _borderHeight);
     }
 
+
+    @Override
     public int scaleToReal(int realScale){
         return (int)(realScale * _scaleFactor);
     }
 
     //GETTERS
+    @Override
+    public int getTopInset(){ return _topInset;}
+
+    @Override
+    public int getLatInsets() {
+        return _rightInset+_leftInset;
+    }
+
+    @Override
+    public int getBotInset() {
+        return _bottomInset;
+    }
+    @Override
+    public int getRightInset()
+    {
+
+        return _rightInset;
+    }
+    @Override
+    public int getLeftInset()
+    {
+        return _leftInset;
+    }
     @Override
     public int getWidth() { return _frame.getWidth() - _leftInset - _rightInset; }
     @Override
@@ -177,4 +202,5 @@ public class GraphicsPC implements Graphics {
             _borderHeight = 0;
         }
     }
+
 }
