@@ -20,18 +20,13 @@ import com.example.aninterface.Graphics;
 
 
 public class GraphicsAndroid implements Graphics {
-    // Tamaño  logico
-    private int _logicWidth;
-    private int _logicHeight;
 
-    // Escalado
-    private float _factorScale;
-    private float _factorX;
-    private float _factorY;
+    private float _scaleFactor;
+    private int _logicWidth, _logicHeight;
+    private int _topInset, _bottomInset, _leftInset, _rightInset;
 
     // Medidas de bordes
-    private int _borderWidth, _borderHeight, _borderTop, _borderBottom;
-    private float _ratio = 2f / 3f;
+    private int _borderWidth, _borderHeight;
 
     //Surfaces , Manager y uso de clase Paint para el color
     private SurfaceView _surfaceView;
@@ -44,16 +39,18 @@ public class GraphicsAndroid implements Graphics {
         _surfaceView = myView;
         _assetManager = mgr;
 
-        //El borde empieza en 0
-        _borderTop = 0;
 
         _logicWidth = logicWidth;
         _logicHeight = logicHeight;
 
         //Creamos los nuevos elementos y obtenemos el holder
         _holder = _surfaceView.getHolder();
+
+
+
         _paint = new Paint();
         _canvas = new Canvas();
+        setNewResolution(_logicWidth, _logicHeight);
     }
 
     //Limpieza de pantalla poniendolo todo de un color usando la variable canvas
@@ -63,14 +60,15 @@ public class GraphicsAndroid implements Graphics {
         _canvas.drawColor(color);
 
         // TODO: Poner false para release
-        final boolean debug = true;
+        final boolean debug = false;
         if(debug){
             setColor(0);
 
-            fillRect(0, 0, _borderWidth, getHeight());
-            fillRect(0, 0, getWidth(), _borderHeight);
-            fillRect(getWidth() - _borderWidth, 0, _borderWidth, getHeight());
-            fillRect(0, getHeight() - _borderHeight, getWidth(), _borderHeight);
+            drawRect(0, 0, _logicWidth, _logicHeight, color);
+        }
+        else{
+           setColor(1);
+            drawRect(0, 0, _logicWidth, _logicHeight, color);
         }
     }
 
@@ -85,28 +83,7 @@ public class GraphicsAndroid implements Graphics {
 
     @Override
     public void prepareFrame() {
-        //Calculo de bordes y de factor de escala
-        //Calculo del factor de escala
-        _factorX = (float)getWidth() / (float)getWidthLogic();
-        _factorY = (float)getHeight() / (float)getHeightLogic();
-        _factorScale = Math.min(_factorX, _factorY);
-
-        //Comprobamos si en este caso el escalado de miView (ancho /alto) es menor que la relacion de aspecto que ponemos nosotros (2/3)
-        //Por que si es menor añadimos un ancho de bordes por arriba y abajo (Height)
-        //Si no se los añadimos por los lados( Width)
-        if (((float) getWidth() / (float) getHeight()) < _ratio){
-            // Para calcular el tamaño de bordes restamos el ancho o alto de nuestro juego a
-            // la dimensión correspondiente de la ventana y dividimos por 2 para centrar el juego.
-            int var = (int) ((getHeight() - (_logicHeight * _factorX)) / 2);
-            _borderHeight = var;
-            _borderWidth = 0;
-        } else  {
-            // Para calcular el tamaño de bordes restamos el ancho o alto de nuestro juego a
-            // la dimensión correspondiente de la ventana y dividimos por 2 para centrar el juego.
-            int var = (int) ((getWidth() - (_logicWidth * _factorY)) / 2);
-            _borderWidth = var;
-            _borderHeight = 0;
-        }
+        setNewResolution(getWidth(), getHeight());
     }
 
     //USO DEL CANVAS , BLOQUEO Y DESBLOQUEO
@@ -154,64 +131,42 @@ public class GraphicsAndroid implements Graphics {
     //Solo aplicable a imagenes y a texto , en los square rect se usa sin conversion
     //Por que es directo a ventana (Aunque se sigue teniendo en cuenta border top)
     @Override
-    public void drawImage(Image image, int x, int y, int w, int h) {
+    public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
         ImageAndroid a = (ImageAndroid)image;
-        int newW = (int)(scaleToReal(w));
-        int newH = (int)(scaleToReal(h));
-        float b= logicToRealX(x) - (scaleToReal(w)/2);
-        float c= logicToRealX(y) - (scaleToReal(h)/2) + _borderTop;
-
-        Bitmap aux = getResizedBitmap(a.getImg(),newW ,newH);
-        _canvas.drawBitmap(aux,logicToRealX(x) - (scaleToReal(w)/2) ,
-                logicToRealY(y) - (scaleToReal(h)/2) + _borderTop, _paint);
+        Bitmap aux = getResizedBitmap(a.getImg(),scaleToReal(logicWidth), scaleToReal(logicHeight));
+        _canvas.drawBitmap(aux, logicToRealX(logicX) ,
+                logicToRealY(logicY) , _paint);
     }
 
     @Override
-    public void fillSquare(int cx, int cy, int side) {
-        Rect rect = new Rect(cx,cy+ _borderTop,cx+side,cy+side+ _borderTop);
-        _paint.setStyle(Paint.Style.FILL);
-        _canvas.drawRect(rect, _paint);
-    }
+    public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color)  {
 
-    @Override
-    public void fillRect(int x, int y, int w, int h) {
-        Rect rect = new Rect(x,y+ _borderTop,x+w,y+h+ _borderTop);
-        _paint.setStyle(Paint.Style.FILL);
-        _canvas.drawRect(rect, _paint);
-    }
-
-    @Override
-    public void drawSquare(int cx, int cy, int side) {
-        Rect rect = new Rect(cx,cy+ _borderTop,cx+side,cy+side+ _borderTop);
+        Rect rect = new Rect( logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth), scaleToReal(logicHeight));
         _paint.setStyle(Paint.Style.STROKE);
         _canvas.drawRect(rect, _paint);
     }
-
     @Override
-    public void drawLine(int initX, int initY, int endX, int endY) {
-        _canvas.drawLine(initX,initY+ _borderTop,endX,endY+ _borderTop, _paint);
+    public int scaleToReal(int realScale){
+        return (int)(realScale * _scaleFactor);
     }
 
-    @Override
-    public void drawRect(int x, int y, int width, int height, int color) {
-        Rect rect = new Rect(x,y+ _borderTop,x+width,y+height+ _borderTop);
-        _paint.setStyle(Paint.Style.STROKE);
-        _canvas.drawRect(rect, _paint);
-    }
+
+
+
+
 
     @Override
-    public void drawText(String text, Font f, int x, int y, int color) {
+    public void drawText(String text, Font f, int logicX, int logicY, int color) {
         color += 0xFF000000;
         _paint.setColor(color);
 
         _paint.setTypeface(((FontAndroid) f).getFont());
-        _paint.setTextSize(f.getFontSize() * _factorScale);
+        _paint.setTextSize(f.getFontSize() * _scaleFactor);
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
-        int adjustedX = logicToRealX(x) - (getStringWidth(text, f) / 2);
-        int adjustedY = logicToRealY(y) - (getStringHeight(text, f) / 2);
 
-        _canvas.drawText(text, adjustedX, adjustedY, _paint);
+
+        _canvas.drawText(text, logicToRealX(logicX), logicToRealY(logicY), _paint);
     }
 
     // Para el cambio de tamaño a una imagen (bitmap)
@@ -233,18 +188,14 @@ public class GraphicsAndroid implements Graphics {
         return bmresized;
     }
 
-    @Override //De posicion logica a  real
-    public int logicToRealX(int x) {
-        return (int)(x * _factorScale + _borderWidth);
-    }
 
     @Override
-    public int logicToRealY(int y) {        //CONVERSOR DE TAMAÑO LOGICO A REAL EN Y
-        return (int)(y * _factorScale + _borderHeight);
+    public int logicToRealX(int logicX) {
+        return (int)(logicX * _scaleFactor + _leftInset + _borderWidth);
     }
     @Override
-    public int scaleToReal(int s) {
-        return (int)(s *2);
+    public int logicToRealY(int logicY) {
+        return (int)(logicY * _scaleFactor + _topInset + _borderHeight);
     }
 
     // Con este metodo nos aseguramos que el surfaceView (obtenido a partir del holder) este disponible para usarse y renderizar
@@ -275,23 +226,27 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
-    public int getWidthLogic() {        //ANCHO LOGICO
-        return this._logicWidth;
-    }
-
+    public int getHeightLogic() { return _logicHeight; }     // ALTURA LOGICA
     @Override
-    public int getHeightLogic() {       //ALTURA LOGICA
-        return this._logicHeight;
-    }
+    public int getWidthLogic() { return _logicWidth; }       //ANCHO LOGICO
 
-    @Override
-    public int get_borderTop() {
-        return _borderTop;
-    }
+
 
     //Set de la resolucion aunque creo que no es bueno llamarlo en android
     @Override
-    public void setNewResolution(int w, int h) {
-        _surfaceView.getHolder().setFixedSize(w,h);
+    public void setNewResolution(int newRealWidth, int newRealHeight) {
+        //_surfaceView.getHolder().setFixedSize(newRealWidth,newRealHeight);
+        float factorX = (float) getWidth() / _logicWidth;
+        float factorY = (float) getHeight() / _logicHeight;
+
+        _scaleFactor = Math.min(factorX, factorY);
+
+        if ((float) getWidth() / getHeight() < (float) _logicWidth / _logicHeight) {
+            _borderWidth = 0;
+            _borderHeight =  (int) ((getHeight() - (_logicHeight * factorX)) / 2);
+        } else  {
+            _borderWidth = (int) ((getWidth() - (_logicWidth * factorY)) / 2);
+            _borderHeight = 0;
+        }
     }
 }

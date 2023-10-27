@@ -19,12 +19,6 @@ public interface Graphics {
     int scaleToReal(int realScale);
 
     //Getters
-
-    int getTopInset();
-    int getLatInsets();
-    int getRightInset();
-    int getLeftInset();
-    int getBotInset();
     int getWidth();
     int getWidthLogic();
     int getHeight();
