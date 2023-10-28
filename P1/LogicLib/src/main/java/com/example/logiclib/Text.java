@@ -10,7 +10,6 @@ public class Text implements Interface {
     private int _color;
     private Engine _engine;
     private Graphics _graphics;
-
     private int _posX;
     private int _posY;
 
@@ -37,5 +36,9 @@ public class Text implements Interface {
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         return false;
+    }
+
+    public void setText(String newText){
+        _text = newText;
     }
 }

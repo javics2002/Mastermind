@@ -26,22 +26,22 @@ public class MasterMindLogic {
 
             for (int j = 0; j < combLength; j++) {
                 if(i == tryNumber - 1){
-                    attempts[i].setColor(j, resultCombination.getColor(j));
+                    // attempts[i].setColor(j, resultCombination.getColor(j));
                 }
                 else{
                     int randomNum = rand.nextInt(colorNumber + 1);
-                    attempts[i].setColor(j, randomNum);
+                    // attempts[i].setColor(j, randomNum);
                 }
             }
 
             attempts[i].printCombination();
             if (resultCombination.equals(attempts[i])) {
                 //System.out.println("Correcto");
-                resultCombination.printHint(attempts[i]);
+                // resultCombination.printHint(attempts[i]);
                 break;
             }
             else {
-                resultCombination.printHint(attempts[i]);
+                // resultCombination.printHint(attempts[i]);
                 //System.out.println("Incorrecto");
             }
         }

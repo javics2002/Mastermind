@@ -40,4 +40,8 @@ public class HintSlot implements Interface {
     public boolean handleEvents(Input.TouchEvent e) {
         return false;
     }
+
+    public void setImage(String filename) {
+        _image = _graphics.newImage(filename);
+    }
 }

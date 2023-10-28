@@ -10,7 +10,6 @@ import java.util.List;
 
 public class InputPC implements Input {
    private InputHandlerMouse _handler;
-
     InputPC(){
         _handler = new InputHandlerMouse();
     }
@@ -34,6 +33,4 @@ public class InputPC implements Input {
     public void clearEvents() {
         _handler.clearMouseEvents();
     }
-
-
 }

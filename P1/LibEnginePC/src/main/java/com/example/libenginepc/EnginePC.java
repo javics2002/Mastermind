@@ -15,7 +15,6 @@ public class EnginePC implements Runnable, Engine {
     private Scene _currentScene;
     private GraphicsPC _graphics;
     private InputPC _input;
-
     private float _aspectRatio = 2f / 3f;
     private int _logicHeight = 720;
     private int _logicWidth = (int) (_logicHeight * _aspectRatio);

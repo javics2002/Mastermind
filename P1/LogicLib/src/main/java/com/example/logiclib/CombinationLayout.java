@@ -11,14 +11,13 @@ import java.util.List;
 
 public class CombinationLayout implements Interface {
     private Text _combinationNumber;
+    private Combination _currentCombination;
     private List<ColorSlot> _colors;
     private List<HintSlot> _hints;
-
     private Engine _engine;
     private Graphics _graphics;
     private int _positionX;
     private int _positionY;
-
     private int scale = 30;
     private int padding = 5;
 
@@ -43,6 +42,8 @@ public class CombinationLayout implements Interface {
             _hints.add(new HintSlot(_engine, "colorEmpty.png",
                     (int) (_graphics.getWidthLogic() - 70 + (i - combinationLength / 2f) * scale / 2 + i * padding / 2), _positionY + padding / 2, scale / 2, scale / 2));
         }
+
+        _currentCombination = new Combination(combinationLength);
     }
 
     @Override
@@ -65,12 +66,51 @@ public class CombinationLayout implements Interface {
 
     @Override
     public void update() {
-
     }
 
-    public List<ColorSlot> getSlots(){return  _colors;}
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         return false;
+    }
+    public List<ColorSlot> getColors() {
+        return _colors;
+    }
+
+    public void setNextColor(int colorID, boolean isEyeOpen){
+        // Obtain next color
+        for (int i = 0; i < _colors.size(); i++){
+            if (!_colors.get(i).hasColor()) {
+                // Image
+                _colors.get(i).setColor(colorID, isEyeOpen);
+
+                // Combination
+                _currentCombination.setNextColor(colorID);
+                break;
+            }
+        }
+    }
+
+    public boolean isFull() {
+        for (int i = 0; i < _colors.size(); i++){
+            if (!_colors.get(i).hasColor()){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Combination getCurrentCombination() {
+        return _currentCombination;
+    }
+
+    public void setHints(Combination.HintEnum[] predictionHints) {
+        for (int i = 0; i < predictionHints.length; i++){
+            if (predictionHints[i] == Combination.HintEnum.BLACK){
+                _hints.get(i).setImage("hintBlack.png");
+            }
+            else if (predictionHints[i] == Combination.HintEnum.WHITE){
+                _hints.get(i).setImage("hintWhite.png");
+            }
+        }
     }
 }

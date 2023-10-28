@@ -13,36 +13,37 @@ public class DifficultyScene implements Scene {
 
     private Text _titleText;
 
+
+    private int _padding = 20;
+
     public DifficultyScene(Engine engine) {
         Graphics graphics = engine.getGraphics();
         Font font = graphics.newFont("Comfortaa-Regular.ttf", 24f);
 
+        // Dimensions
+        int buttonWidth = 330;
+        int buttonHeight = 90;
         int backbuttonWidth = 40;
         int backbuttonHeight = 40;
-        int padding = 20;
-        int topMargin = 60;
-        int startHeight = 300;
-        int buttonWidth = 331;
-        int buttonHeight = 88;
 
+        // Back button
+        _backButton = new BackButton("UI/back.png", engine, backbuttonWidth/2,backbuttonHeight/2, backbuttonWidth, backbuttonHeight);
 
-        _backButton = new BackButton("UI/back.png", engine, backbuttonWidth/2,backbuttonHeight/2,backbuttonWidth, backbuttonHeight);
-        String pregunta= "¿En qué dificultad quieres jugar?";
-        _titleText = new Text("¿En qué dificultad quieres jugar?", font, engine,
-                (graphics.getWidthLogic()/2)-(graphics.getStringWidth(pregunta,font)/2), graphics.getHeightLogic() / 4, 0);
+        // Title
+        String question = "¿En qué dificultad quieres jugar?";
+        _titleText = new Text(question, font, engine,
+                graphics.getWidthLogic()/2-graphics.getStringWidth(question, font)/2, graphics.getHeightLogic() / 4, 0);
 
-        padding = 4;
+        // Game buttons
         _easyDifficultyButton = new DifficultyButton("facilButton.png", engine,
-                (graphics.getWidthLogic()/2)-(buttonWidth/2), topMargin*padding, buttonWidth, buttonHeight);
-        padding = 6;
-        _mediumDifficultyButton = new DifficultyButton("medioButton.png", engine,
-                (graphics.getWidthLogic()/2)-(buttonWidth/2), topMargin*padding, buttonWidth, buttonHeight);
-        padding = 8;
-        _difficultDifficultyButton = new DifficultyButton("dificilButton.png", engine,
-                (graphics.getWidthLogic()/2)-(buttonWidth/2), topMargin*padding, buttonWidth, buttonHeight);
-        padding = 10;
-        _impossibleDifficultyButton = new DifficultyButton("imposibleButton.png", engine,
-                (graphics.getWidthLogic()/2)-(buttonWidth/2), topMargin*padding, buttonWidth, buttonHeight);
+                graphics.getWidthLogic()/2-buttonWidth/2, graphics.getHeightLogic() / 3, buttonWidth, buttonHeight);
+
+        //_mediumDifficultyButton = new DifficultyButton("medioButton.png", engine,
+                //graphics.getWidthLogic()/2-buttonWidth/2, topMargin*padding, buttonWidth, buttonHeight);
+        //_difficultDifficultyButton = new DifficultyButton("dificilButton.png", engine,
+                //graphics.getWidthLogic()/2-buttonWidth/2, topMargin*padding, buttonWidth, buttonHeight);
+        //_impossibleDifficultyButton = new DifficultyButton("imposibleButton.png", engine,
+                //graphics.getWidthLogic()/2-buttonWidth/2, topMargin*padding, buttonWidth, buttonHeight);
     }
 
     @Override
@@ -53,9 +54,9 @@ public class DifficultyScene implements Scene {
         _backButton.render();
         _titleText.render();
         _easyDifficultyButton.render();
-        _mediumDifficultyButton.render();
-        _difficultDifficultyButton.render();
-        _impossibleDifficultyButton.render();
+        //_mediumDifficultyButton.render();
+        //_difficultDifficultyButton.render();
+        //_impossibleDifficultyButton.render();
     }
 
     @Override
@@ -65,11 +66,9 @@ public class DifficultyScene implements Scene {
         {
             this._easyDifficultyButton.handleEvents( a.getTouchEvent().get(0));
             this._backButton.handleEvents( a.getTouchEvent().get(0));
-
-
-            this._mediumDifficultyButton.handleEvents( a.getTouchEvent().get(0));
-            this._difficultDifficultyButton.handleEvents( a.getTouchEvent().get(0));
-            this._impossibleDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+            //this._mediumDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+            //this._difficultDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+            //this._impossibleDifficultyButton.handleEvents( a.getTouchEvent().get(0));
         }
     }
 }

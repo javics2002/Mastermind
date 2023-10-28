@@ -26,19 +26,18 @@ public class ColorSlot implements Interface {
         _positionY = positionY;
         _width = width;
         _height = height;
-        _name=filename;
-        setColor(1);
+        _name = filename;
+        _hasColor = false;
     }
 
-
-
-    public void set_Image(String filename){
-
-        _name=filename;
+    public void setImage(String filename) {
+        _name = filename;
         _image = _graphics.newImage(filename);
     }
 
-    public String get_name(){return _name;}
+    public String getName(){
+        return _name;
+    }
     @Override
     public void render() {
         _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
@@ -48,16 +47,22 @@ public class ColorSlot implements Interface {
     public void update() {
 
     }
-
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         return false;
     }
 
-    public boolean hasColor(){return _hasColor;}
-    public void setColor(int color)
+    public boolean hasColor(){
+        return _hasColor;
+    }
+    public void setColor(int color, boolean isEyeOpen)
     {
          _hasColor=true;
-         set_Image("color"+color+".png");
+         if (isEyeOpen) {
+             setImage("color"+color+"CB.png");
+         }
+         else{
+             setImage("color"+color+".png");
+         }
     }
 }

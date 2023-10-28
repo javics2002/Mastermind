@@ -20,11 +20,7 @@ public class ColorblindButton implements Interface {
 
     private GameScene gScene;
 
-
-
-    private int open; //Dicta si el ojo esta abierto o cerrado
-
-    ColorblindButton(String filename, Engine engine, int positionX, int positionY, int width, int height ,GameScene g) {
+    ColorblindButton(String filename, Engine engine, int positionX, int positionY, int width, int height, GameScene g) {
         _engine = engine;
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
@@ -32,72 +28,51 @@ public class ColorblindButton implements Interface {
         _positionY = positionY ;
         _width = width;
         _height = height;
-         open = 0 ;
-         gScene= g;
-
+         gScene = g;
     }
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
-
-            if(open==0) //Si no estaba abierto se abre
+            List<CombinationLayout> combinationLayouts = gScene.getCombinationLayouts();
+            List<ColorButton> colorButtons = gScene.getColorButtons();
+            if(!GameAttributes.Instance()._isEyeOpen)
             {
-               open=1;
+                GameAttributes.Instance()._isEyeOpen = true;
                 _image = _graphics.newImage("UI/eyeOpened.png");
-                List<CombinationLayout>cL= gScene.get_combinationLayouts();
-                for(CombinationLayout c: cL) {
 
-                    if(c!=null) {
-                        for(ColorSlot cSL: c.getSlots()) {
-                            if(cSL!=null) {
-
-
-
-                                cSL.get_name();
-                                if(cSL.hasColor()){
-                                    String name = cSL.get_name().replace(".png", "CB.png");
-                                    cSL.set_Image(name);
-                                }
-
-                            }
+                for(CombinationLayout c: combinationLayouts) {
+                    for(ColorSlot cSL: c.getColors()) {
+                        if(cSL.hasColor()){
+                            String name = cSL.getName().replace(".png", "CB.png");
+                            cSL.setImage(name);
                         }
                     }
-
-
-
                 }
-
-
-
+                for (ColorButton colorButton : colorButtons){
+                    String colorButtonName = "color" + colorButton._colorID + ".png";
+                    colorButtonName = colorButtonName.replace(".png", "CB.png");
+                    colorButton.setImage(colorButtonName);
+                }
             }
-            else {//Si  esta abierto se cierra de nuevo
-               open =0;
+            else {
+                GameAttributes.Instance()._isEyeOpen = false;
                 _image = _graphics.newImage("UI/eyeClosed.png");
-                List<CombinationLayout>cL= gScene.get_combinationLayouts();
-                for(CombinationLayout c: cL) {
 
-                    if(c!=null) {
-                        for(ColorSlot cSL: c.getSlots()) {
-                            if(cSL!=null) {
-
-                                cSL.get_name();
-                                if(cSL.hasColor()){
-                                    String name = cSL.get_name().replace("CB.png", ".png");
-                                    cSL.set_Image(name);
-                                }
-                            }
+                for(CombinationLayout c: combinationLayouts) {
+                    for(ColorSlot cSL: c.getColors()) {
+                        if(cSL.hasColor()){
+                            String name = cSL.getName().replace("CB.png", ".png");
+                            cSL.setImage(name);
                         }
                     }
-
-
-
                 }
-
+                for (ColorButton colorButton : colorButtons){
+                    String colorButtonName = "color" + colorButton._colorID + "CB.png";
+                    colorButtonName = colorButtonName.replace("CB.png", ".png");
+                    colorButton.setImage(colorButtonName);
+                }
             }
-
-
-            // engine.resume();
             return true;
         }
         return false;

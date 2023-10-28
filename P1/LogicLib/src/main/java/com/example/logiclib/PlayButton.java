@@ -26,11 +26,10 @@ public class PlayButton implements Interface {
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
+        // Change scene to difficulty scene
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
-            // Change scene
             DifficultyScene scene = new DifficultyScene(_engine);
             _engine.setCurrentScene(scene);
-            // engine.resume();
             return true;
         }
         return false;
@@ -41,20 +40,13 @@ public class PlayButton implements Interface {
 
     @Override
     public void render() {
-
         _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
     }
 
     public boolean inBounds(int mX, int mY) {
-
-
-
             return (mX >= (_graphics.logicToRealX(_positionX))
                 && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
                 && mY >= _graphics.logicToRealY(_positionY)
                 && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
-
-
-
     }
 }

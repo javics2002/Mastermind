@@ -9,65 +9,114 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameScene implements Scene {
+    private Engine _engine;
+    private GameAttributes gameAttributes;
     private Text _objectiveText;
     private Text _attemptsText;
     private QuitButton _quitButton;
     private ColorblindButton _colorblindButton;
     private List<CombinationLayout> _combinationLayouts;
     private List<ColorButton> _colorButtons;
-
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors) {
-        Graphics graphics = engine.getGraphics();
+        _engine = engine;
+        Graphics graphics = _engine.getGraphics();
 
 
-        int lineSpacing = 20;
+        // Init GameAttributes
+        gameAttributes = GameAttributes.Instance();
+        gameAttributes._attemptsNumber = tryNumber;
+        gameAttributes._attemptsLeft = tryNumber;
+        gameAttributes._combinationLength = combinationLength;
+        gameAttributes._colorNumber = numberOfColors;
+        gameAttributes._activeLayout = 0;
+        gameAttributes._isEyeOpen = false;
+        gameAttributes._resultCombination = new Combination(combinationLength, numberOfColors);
 
-        String objectiveString = "Averigua el código";
-        String attemptsString = "Te quedan " + GameAttributes.Instance().attemptsLeft + " intentos!!!!";
+        gameAttributes._resultCombination.printCombination();
 
-
+        // Title Font
         Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 24f);
+
+        // Dimensions
+        int lineSpacing = 20;
         int topMargin = objetiveFont.getFontSize();
 
-        _objectiveText = new Text(objectiveString, objetiveFont, engine,
+        // Title
+        String objectiveString = "Averigua el código";
+        _objectiveText = new Text(objectiveString, objetiveFont, _engine,
                 (graphics.getWidthLogic()/2)-(graphics.getStringWidth(objectiveString,objetiveFont)/2), topMargin, 0);
 
+        // Attempts
+        String attemptsString = "Te quedan " + GameAttributes.Instance()._attemptsLeft + " intentos.";
         Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 16f);
-        _attemptsText = new Text(attemptsString, attemptsFont, engine,
+        _attemptsText = new Text(attemptsString, attemptsFont, _engine,
                 (graphics.getWidthLogic()/2)-(graphics.getStringWidth(objectiveString,objetiveFont)/2), topMargin + lineSpacing, 0);
 
+        // Quit button
         int quitButtonDimensions=50;
-
         int offsetSize=quitButtonDimensions*2;
-        _quitButton = new QuitButton("UI/close.png", engine, quitButtonDimensions/offsetSize,quitButtonDimensions/offsetSize, quitButtonDimensions, quitButtonDimensions);
-        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", engine, graphics.getWidthLogic() - quitButtonDimensions, quitButtonDimensions/offsetSize, quitButtonDimensions, quitButtonDimensions,this);
+        _quitButton = new QuitButton("UI/close.png", _engine, quitButtonDimensions/offsetSize,quitButtonDimensions/offsetSize, quitButtonDimensions, quitButtonDimensions);
 
+        // ColorBlind button
+        _colorblindButton = new ColorblindButton("UI/eyeClosed.png", _engine, graphics.getWidthLogic() - quitButtonDimensions, quitButtonDimensions/offsetSize, quitButtonDimensions, quitButtonDimensions,this);
+
+        // Combination
         int initialHeight = 100;
         int padding = 40;
         _combinationLayouts = new ArrayList<>();
         for(int i = 0; i < tryNumber; i++){
-            _combinationLayouts.add(new CombinationLayout(engine, i, combinationLength,
+            _combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
                     graphics.getWidthLogic() / 2, initialHeight + i * padding));
         }
 
+        // Color buttons
         _colorButtons = new ArrayList<>();
         int scale = 32;
         padding = 15;
         for(int i = 0; i < numberOfColors; i++) {
-            _colorButtons.add(new ColorButton("color" + (i + 1) + ".png", engine,
+            _colorButtons.add(new ColorButton("color" + (i + 1) + ".png", _engine,
                     (int) (graphics.getWidthLogic() / 2 + (i - numberOfColors / 2f) * scale - padding / 2 + i * padding / 2),
-                    graphics.getHeightLogic() - 70 , scale, scale));
+                    graphics.getHeightLogic() - 70 , scale, scale, i + 1));
         }
-    
+
+
     }
 
 
     @Override
     public void update(double deltaTime) {
+        updateTriesText();
 
+        // _combinationLayouts.get(gameAttributes._activeLayout).getCurrentCombination().printCombination();
+        CombinationLayout activeLayout = _combinationLayouts.get(gameAttributes._activeLayout);
+        if (activeLayout.isFull()){
+            if (activeLayout.getCurrentCombination().equals(gameAttributes._resultCombination)){ // USER WON
+                // Change scene TEMP
+                InitialScene scene = new InitialScene(_engine);
+                _engine.setCurrentScene(scene);
+
+                System.out.println("USER WON");
+                return;
+            }
+
+            // Hints
+            Combination.HintEnum[] hints = activeLayout.getCurrentCombination().getHint(gameAttributes._resultCombination);
+            activeLayout.setHints(hints);
+
+            // activeLayout
+
+            gameAttributes._attemptsLeft--;
+            gameAttributes._activeLayout++;
+
+            if (gameAttributes._attemptsLeft == 0) { // User LOST
+                // Change scene
+                InitialScene scene = new InitialScene(_engine);
+                _engine.setCurrentScene(scene);
+
+                System.out.println("USER LOST");
+            }
+        }
     }
-
-
 
     @Override
     public void render(Graphics gr) {
@@ -93,14 +142,33 @@ public class GameScene implements Scene {
     public void handleEvents(Input input) {
         if(input.getTouchEvent().size()>0)
         {
-            Input.TouchEvent elemento = input.getTouchEvent().get(0);
-            this._colorblindButton.handleEvents(input.getTouchEvent().get(0));
-            this._quitButton.handleEvents(input.getTouchEvent().get(0));
+            _colorblindButton.handleEvents(input.getTouchEvent().get(0));
+            _quitButton.handleEvents(input.getTouchEvent().get(0));
 
+            for(ColorButton colorButton : _colorButtons) {
+                if (colorButton.handleEvents(input.getTouchEvent().get(0))){
+                    _combinationLayouts.get(gameAttributes._activeLayout).setNextColor(colorButton._colorID, gameAttributes._isEyeOpen);
+                    _combinationLayouts.get(gameAttributes._activeLayout).getCurrentCombination().printCombination();
+                    break;
+                }
+            }
         }
     }
 
-    public List<CombinationLayout> get_combinationLayouts() {
+    public List<CombinationLayout> getCombinationLayouts() {
         return _combinationLayouts;
+    }
+
+    public List<ColorButton> getColorButtons() {
+        return _colorButtons;
+    }
+
+    private void updateTriesText() {
+        String attemptsString = "Te quedan " + gameAttributes._attemptsLeft + " intentos.";
+        if (gameAttributes._attemptsLeft == 1){
+            attemptsString = "Este es tu último intento!";
+        }
+
+        _attemptsText.setText(attemptsString);
     }
 }

@@ -9,6 +9,7 @@ public class InitialScene implements Scene {
     private PlayButton _playButton;
     private Font _titleFont;
     private Text _titleText;
+    private int _topMargin = 60;
 
     Engine _engine;
 
@@ -17,28 +18,15 @@ public class InitialScene implements Scene {
         Graphics graphics = engine.getGraphics();
 
         _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
+        String title = "MasterMind";
 
+        int titleWidth = graphics.getStringWidth(title, _titleFont);
+        _titleText = new Text(title, _titleFont, engine, graphics.getWidthLogic()/2 -titleWidth/2, _topMargin, 0);
 
-
-
-        int topMargin = 60;
-        int lineSpacing = 20;
-        int padding =2;
-        String objectiveString = "MasterMind";
-
-
-
-
-
-        int a= graphics.getStringWidth(objectiveString,_titleFont);
-        System.out.print(a);
-        _titleText = new Text(objectiveString, _titleFont, engine,
-                (graphics.getWidthLogic()/2)-a/2 , topMargin*padding, 0);
-        padding=padding+2;
-        int button_Width=331;
-        int button_Height=88;
+        int buttonWidth = 330;
+        int buttonHeight = 90;
         _playButton = new PlayButton("playButton.png", engine,
-                (int)(graphics.getWidthLogic()/2)-(button_Width/2), topMargin*padding, button_Width, button_Height);
+                graphics.getWidthLogic()/2 - buttonWidth/2, _topMargin * 2, buttonWidth, buttonHeight);
     }
 
     @Override
@@ -52,10 +40,8 @@ public class InitialScene implements Scene {
 
     @Override
     public void handleEvents(Input a) {
-        // Bucle con lista touchEvent, el boton recibe un unico touchevent
         if(a.getTouchEvent().size()>0)
         {
-            Input.TouchEvent elemento = a.getTouchEvent().get(0);
             this._playButton.handleEvents( a.getTouchEvent().get(0));
         }
     }

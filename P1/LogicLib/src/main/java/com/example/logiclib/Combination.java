@@ -6,8 +6,7 @@ import java.util.Random;
 public class Combination {
     private int length;
     private int[] numbers;
-
-    enum hint {EMPTY, WHITE, BLACK};
+    enum HintEnum {EMPTY, WHITE, BLACK};
 
     // CONSTRUCTORA ALEATORIA (Resultado)
     Combination(int _length, int _colorNumber){
@@ -16,8 +15,8 @@ public class Combination {
         Random rand = new Random();
 
         for (int i = 0; i < length; i++){
-            int randomNum = rand.nextInt(_colorNumber + 1);
-            numbers[i] = randomNum;
+            int randomNum = rand.nextInt(_colorNumber);
+            numbers[i] = randomNum + 1;
         }
     }
 
@@ -31,36 +30,29 @@ public class Combination {
         }
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public int[] getNumbers() {
-        return numbers;
-    }
-
-    public void setColor(int index, int color) {
-        numbers[index] = color;
-    }
-
-    public int getColor(int index) {
-        return numbers[index];
+    public void setNextColor(int colorID) {
+        for (int i = 0; i < numbers.length; i++){
+            if (numbers[i] == -1){
+                numbers[i] = colorID;
+                break;
+            }
+        }
     }
 
     public void printCombination() {
         for (int i = 0; i < length; i++){
             System.out.print(numbers[i] + " ");
         }
+        System.out.println();
     }
-
     public boolean equals(Combination otherComb) {
         return Arrays.equals(numbers, otherComb.numbers);
     }
 
-    public hint[] getHint(Combination otherComb){
-        hint[] hints = new hint[length];
+    public HintEnum[] getHint(Combination otherComb){
+        HintEnum[] hints = new HintEnum[length];
         for(int i = 0; i < length; i++)
-            hints[i] = hint.EMPTY;
+            hints[i] = HintEnum.EMPTY;
 
         int black = 0;
         int white = 0;
@@ -85,23 +77,11 @@ public class Combination {
         }
 
         for(int i = 0; i < black; i++)
-            hints[i] = hint.BLACK;
+            hints[i] = HintEnum.BLACK;
 
         for(int i = black; i < black + white; i++)
-            hints[i] = hint.WHITE;
+            hints[i] = HintEnum.WHITE;
 
         return hints;
-    }
-
-    public void printHint(Combination otherComb) {
-        hint[] hints = getHint(otherComb);
-        for (int i = 0; i < length; i++){
-            if(hints[i] == hint.BLACK)
-                System.out.print("b ");
-            else if(hints[i] == hint.WHITE)
-                System.out.print("w ");
-            else
-                System.out.print(". ");
-        }
     }
 }

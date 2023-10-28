@@ -26,7 +26,6 @@ public class GraphicsPC implements Graphics {
         _frame = myView;
         _frame.createBufferStrategy(2);
 
-        //Creamos el buffer y los graficos
         _bufferStrategy = _frame.getBufferStrategy();
         _graphics2D = (Graphics2D) _bufferStrategy.getDrawGraphics();
 
@@ -74,21 +73,19 @@ public class GraphicsPC implements Graphics {
     @Override
     public void setColor(int color) {
         _graphics2D.setColor(new Color(color));
-    } // CAMBIA COLOR
+    }
 
-
-    //METODOS PARA GESTION DE FRAME
-    public void show() { _bufferStrategy.show(); }           // MUESTRA EL BUFFER STRATEGY
+    public void show() { _bufferStrategy.show(); }
 
     @Override
-    public void prepareFrame() {                                // ACTUALIZA LA NUEVA RESOLUCION EN CADA FRAME
+    public void prepareFrame() {
         setNewResolution(getWidth(), getHeight());
         _graphics2D = (Graphics2D) _bufferStrategy.getDrawGraphics();
     }
 
     public void finishFrame() {
         _graphics2D.dispose();
-    }    // LIBERA EL GRAPHICS
+    }
 
     @Override
     public void drawText(String text, Font font, int logicX, int logicY, int color) {
@@ -105,12 +102,10 @@ public class GraphicsPC implements Graphics {
                 scaleToReal(logicWidth), scaleToReal(logicHeight), null);
     }
 
-    // Creacion de obejtos  (Imagen Fuentes...)
     @Override
-    public Image newImage(String filename) { //Creacion de imagen
+    public Image newImage(String filename) {
         java.awt.Image image = null;
         try {
-
             image = ImageIO.read(new File("data/"+filename));
         } catch (IOException e) {
             e.printStackTrace();
@@ -118,22 +113,19 @@ public class GraphicsPC implements Graphics {
         return new ImagePC(image);
     }
 
-    @Override // Getter ancho cadena
+    @Override
     public int getStringWidth(String text, Font font) {
         return (int)((FontPC) font).getFont().deriveFont(font.getFontSize()).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
     }
-    @Override //Getter alto cadena
+    @Override
     public int getStringHeight(String text, Font font) {
         return (int)((FontPC) font).getFont().deriveFont(font.getFontSize()).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
     }
-
-    //Para el dibujo de rectangulos y cosas que no son una imagen
-    @Override //dibujar un rectangulo en x y con w h de atributos
+    @Override
     public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
         _graphics2D.setColor(new Color(color));
         _graphics2D.fillRect(logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth), scaleToReal(logicHeight));
     }
-
     @Override
     public int logicToRealX(int logicX) {
         return (int)(logicX * _scaleFactor + _leftInset + _borderWidth);
@@ -143,35 +135,9 @@ public class GraphicsPC implements Graphics {
         return (int)(logicY * _scaleFactor + _topInset + _borderHeight);
     }
 
-
     @Override
     public int scaleToReal(int realScale){
         return (int)(realScale * _scaleFactor);
-    }
-
-    //GETTERS
-    @Override
-    public int getTopInset(){ return _topInset;}
-
-    @Override
-    public int getLatInsets() {
-        return _rightInset+_leftInset;
-    }
-
-    @Override
-    public int getBotInset() {
-        return _bottomInset;
-    }
-    @Override
-    public int getRightInset()
-    {
-
-        return _rightInset;
-    }
-    @Override
-    public int getLeftInset()
-    {
-        return _leftInset;
     }
     @Override
     public int getWidth() { return _frame.getWidth() - _leftInset - _rightInset; }
@@ -180,9 +146,9 @@ public class GraphicsPC implements Graphics {
         return _frame.getHeight() - _topInset - _bottomInset;
     }
     @Override
-    public int getHeightLogic() { return _logicHeight; }     // ALTURA LOGICA
+    public int getHeightLogic() { return _logicHeight; }
     @Override
-    public int getWidthLogic() { return _logicWidth; }       //ANCHO LOGICO
+    public int getWidthLogic() { return _logicWidth; }
 
     @Override
     public void setNewResolution(int newRealWidth, int newRealHeight) {
@@ -202,5 +168,4 @@ public class GraphicsPC implements Graphics {
             _borderHeight = 0;
         }
     }
-
 }
