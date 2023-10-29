@@ -226,9 +226,9 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
-    public int getHeightLogic() { return _logicHeight; }     // ALTURA LOGICA
+    public int getLogicHeight() { return _logicHeight; }     // ALTURA LOGICA
     @Override
-    public int getWidthLogic() { return _logicWidth; }       //ANCHO LOGICO
+    public int getLogicWidth() { return _logicWidth; }       //ANCHO LOGICO
 
 
 

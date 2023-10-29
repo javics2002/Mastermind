@@ -10,37 +10,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CombinationLayout implements Interface {
-    private Text _combinationNumber;
-    private Combination _currentCombination;
-    private List<ColorSlot> _colors;
-    private List<HintSlot> _hints;
-    private Engine _engine;
-    private Graphics _graphics;
-    private int _positionX;
-    private int _positionY;
-    private int scale = 30;
-    private int padding = 5;
+    private final Text _combinationNumber;
+    private final Combination _currentCombination;
+    private final List<ColorSlot> _colors;
+    private final List<HintSlot> _hints;
+    private final Graphics _graphics;
+    private final int _positionX, _positionY;
+    private final int _scale, _lateralMargin, _padding;
 
-    public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY) {
-        _engine = engine;
-        _graphics = _engine.getGraphics();
+    public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY, int scale) {
+        _graphics = engine.getGraphics();
 
         _positionX = positionX;
         _positionY = positionY;
 
-        Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 20f);
-        _combinationNumber = new Text(Integer.toString(number + 1), numberFont, _engine, 50, _positionY + 25, 0);
+        _scale = scale;
+        _lateralMargin = 5;
+        _padding = 6;
+
+        Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
+        int numberOffset = _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 5;
+        _combinationNumber = new Text(Integer.toString(number + 1), numberFont, engine,
+                _lateralMargin + 50 - _graphics.getStringWidth(Integer.toString(number + 1), numberFont) / 2,
+                _positionY + _scale / 2 - _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 2 + numberOffset,
+                0);
 
         _colors = new ArrayList<>();
         for(int i = 0; i < combinationLength; i++){
-            _colors.add(new ColorSlot(_engine, "colorEmpty.png",
-                    (int) (positionX + (i - combinationLength / 2f) * scale + padding * i), _positionY + padding / 2, scale, scale));
+            _colors.add(new ColorSlot(engine, "colorEmpty.png",
+                    (int) (_positionX + (i - combinationLength / 2f) * (_scale + _padding)),
+                    _positionY - _scale / 2, _scale, _scale));
         }
 
         _hints = new ArrayList<>();
         for(int i = 0; i < combinationLength; i++){
-            _hints.add(new HintSlot(_engine, "colorEmpty.png",
-                    (int) (_graphics.getWidthLogic() - 70 + (i - combinationLength / 2f) * scale / 2 + i * padding / 2), _positionY + padding / 2, scale / 2, scale / 2));
+            _hints.add(new HintSlot(engine, "colorEmpty.png",
+                    (int) (_graphics.getLogicWidth() - 50 - _lateralMargin + (i % ((combinationLength + 1) / 2)
+                            - combinationLength / 4f) * _scale / 2 + i % ((combinationLength + 1) / 2) * _lateralMargin / 2),
+                    (i < combinationLength / 2f ? _positionY - _scale / 2 : _positionY) + (int) (_scale * .2f / 4),
+                    (int) (_scale * .8f / 2), (int) (_scale * .8f / 2)));
         }
 
         _currentCombination = new Combination(combinationLength);
@@ -48,10 +56,8 @@ public class CombinationLayout implements Interface {
 
     @Override
     public void render() {
-        _graphics.setColor(0xFFf8f4ed);
-
-        //_graphics.fillRect(_graphics.logicToRealX(padding), _graphics.logicToRealY(_positionY - scale / 2),
-        //        _graphics.scaleToReal(_graphics.getWidthLogic() - padding * 2), _graphics.scaleToReal((int) (scale * 1.2f)));
+        _graphics.drawRect(_lateralMargin, (int) (_positionY - _scale * 1.2f / 2),
+                _graphics.getLogicWidth() - _lateralMargin * 2, (int) (_scale * 1.2f), 0xFFf8f4ed);
 
         _combinationNumber.render();
 
@@ -72,6 +78,7 @@ public class CombinationLayout implements Interface {
     public boolean handleEvents(Input.TouchEvent e) {
         return false;
     }
+
     public List<ColorSlot> getColors() {
         return _colors;
     }

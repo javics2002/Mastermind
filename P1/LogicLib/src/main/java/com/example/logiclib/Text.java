@@ -7,16 +7,13 @@ import com.example.aninterface.Interface;
 
 public class Text implements Interface {
     private String _text;
-    private int _color;
-    private Engine _engine;
-    private Graphics _graphics;
-    private int _posX;
-    private int _posY;
+    private final int _color;
+    private final Graphics _graphics;
+    private final int _posX, _posY;
 
     Font _font;
 
     Text(String text, Font font, Engine engine, int posX, int posY, int color) {
-        _engine = engine;
         _graphics = engine.getGraphics();
 
         _posX = posX;

@@ -9,7 +9,6 @@ public class InitialScene implements Scene {
     private PlayButton _playButton;
     private Font _titleFont;
     private Text _titleText;
-    private int _topMargin = 60;
 
     Engine _engine;
 
@@ -18,15 +17,16 @@ public class InitialScene implements Scene {
         Graphics graphics = engine.getGraphics();
 
         _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
-        String title = "MasterMind";
+        String title = "Master Mind";
 
         int titleWidth = graphics.getStringWidth(title, _titleFont);
-        _titleText = new Text(title, _titleFont, engine, graphics.getWidthLogic()/2 -titleWidth/2, _topMargin, 0);
+        _titleText = new Text(title, _titleFont, engine,
+                graphics.getLogicWidth() / 2 - titleWidth / 2, 200, 0);
 
         int buttonWidth = 330;
         int buttonHeight = 90;
         _playButton = new PlayButton("playButton.png", engine,
-                graphics.getWidthLogic()/2 - buttonWidth/2, _topMargin * 2, buttonWidth, buttonHeight);
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight);
     }
 
     @Override
