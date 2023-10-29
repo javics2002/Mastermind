@@ -16,6 +16,7 @@ public class ColorSlot implements Interface {
     private int _height;
     private String _name;
     private boolean _hasColor;
+    private int _colorID;
 
     public ColorSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
         _engine = engine;
@@ -28,6 +29,7 @@ public class ColorSlot implements Interface {
         _height = height;
         _name = filename;
         _hasColor = false;
+        _colorID = -1;
     }
 
     public void setImage(String filename) {
@@ -35,9 +37,6 @@ public class ColorSlot implements Interface {
         _image = _graphics.newImage(filename);
     }
 
-    public String getName(){
-        return _name;
-    }
     @Override
     public void render() {
         _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
@@ -45,7 +44,16 @@ public class ColorSlot implements Interface {
 
     @Override
     public void update() {
-
+        if (GameAttributes.Instance().isEyeOpen && _hasColor){
+            String colorButtonName = "color" + _colorID + ".png";
+            colorButtonName = colorButtonName.replace(".png", "CB.png");
+            setImage(colorButtonName);
+        }
+        else {
+            String colorSlotName = _name;
+            _name = colorSlotName.replace("CB.png", ".png");
+            setImage(_name);
+        }
     }
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
@@ -58,13 +66,14 @@ public class ColorSlot implements Interface {
     public void setColor(int color, boolean isEyeOpen)
     {
          _hasColor = true;
+         _colorID = color;
 
          // Si tenemos el modo daltónico activado, usamos su respectiva imagen.
          if (isEyeOpen) {
-             setImage("color"+color+"CB.png");
+             setImage("color"+_colorID+"CB.png");
          }
          else{
-             setImage("color"+color+".png");
+             setImage("color"+_colorID+".png");
          }
     }
 }

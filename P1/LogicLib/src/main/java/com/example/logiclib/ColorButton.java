@@ -36,7 +36,22 @@ public class ColorButton implements Interface {
     }
 
     @Override
-    public void update() { }
+    public void update() {
+        // Cuando el botón del OJO se pulsa, esta función se encarga de cambiar todos los colores
+        // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
+        // también se encarga de quitar los números para volver al modo normal.
+
+        if (GameAttributes.Instance().isEyeOpen){
+            String colorButtonName = "color" + _colorID + ".png";
+            colorButtonName = colorButtonName.replace(".png", "CB.png");
+            setImage(colorButtonName);
+        }
+        else {
+            String colorButtonName = "color" + _colorID + "CB.png";
+            colorButtonName = colorButtonName.replace("CB.png", ".png");
+            setImage(colorButtonName);
+        }
+    }
 
     @Override
     public void render() {

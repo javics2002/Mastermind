@@ -61,7 +61,7 @@ public class GameScene implements Scene {
         // ColorBlind button
         _colorblindButton = new ColorblindButton("UI/eyeClosed.png", _engine,
                 graphics.getLogicWidth() - buttonDimension - horizontalMargin, verticalMargin,
-                buttonDimension, buttonDimension, this);
+                buttonDimension, buttonDimension);
 
         // Combination
         int initialHeight = 100;
@@ -109,6 +109,15 @@ public class GameScene implements Scene {
                 Scene gameOverScene = new GameOverScene(_engine);
                 _engine.setCurrentScene(gameOverScene);
             }
+        }
+
+
+        for(CombinationLayout combination : _combinationLayouts) {
+            combination.update();
+        }
+
+        for(ColorButton colorButton : _colorButtons) {
+            colorButton.update();
         }
     }
 

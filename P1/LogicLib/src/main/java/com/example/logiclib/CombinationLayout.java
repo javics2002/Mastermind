@@ -44,7 +44,7 @@ public class CombinationLayout implements Interface {
 
         _hints = new ArrayList<>();
         for(int i = 0; i < combinationLength; i++){
-            _hints.add(new HintSlot(engine, "colorEmpty.png",
+            _hints.add(new HintSlot(engine, "hintGray.png",
                     (int) (_graphics.getLogicWidth() - 50 - _lateralMargin + (i % ((combinationLength + 1) / 2)
                             - combinationLength / 4f) * _scale / 2 + i % ((combinationLength + 1) / 2) * _lateralMargin / 2),
                     (i < combinationLength / 2f ? _positionY - _scale / 2 : _positionY) + (int) (_scale * .2f / 4),
@@ -72,6 +72,9 @@ public class CombinationLayout implements Interface {
 
     @Override
     public void update() {
+        for(ColorSlot color : _colors){
+            color.update();
+        }
     }
 
     @Override

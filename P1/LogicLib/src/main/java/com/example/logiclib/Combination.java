@@ -65,23 +65,53 @@ public class Combination {
 
         int black = 0;
         int white = 0;
+        int whitePosition = 0;
+        boolean addWhite = false;
 
         boolean[] found = new boolean[_length];
-        for(int i = 0; i < _length; i++)
-            found[i] = false;
+        boolean[] isWhite = new boolean[_length];
 
         for(int i = 0; i < _length; i++){
+            if (found[i])
+                continue;
             for (int j = 0; j < _length; j++){
-                if(!found[j] && _numbers[i] == otherComb._numbers[j]){
-                    found[j] = true;
-                    if(i == j){
-                        black += 1;
-                    }
-                    else {
-                        white += 1;
+                if (found[j] || _numbers[i] != otherComb._numbers[j])
+                    continue;
+
+                if (j < i) {
+                    if(!isWhite[j]){
+                        addWhite = true;
+                        whitePosition = j;
+                        isWhite[whitePosition] = true;
                     }
                 }
+                else if (i == j) {
+                    black++;
+                    found[j] = true;
 
+                    if(addWhite){
+                        addWhite = false;
+                        isWhite[whitePosition] = false;
+                    }
+                    break;
+                }
+                else { // j > i
+                    if (_numbers[j] == otherComb._numbers[j]){
+                        black++;
+                        found[j] = true;
+                    }
+                    else if (!addWhite) {
+                        addWhite = true;
+
+                        whitePosition = j;
+                        isWhite[whitePosition] = true;
+                    }
+                }
+            }
+            if (addWhite){
+                white++;
+                addWhite = false;
+                whitePosition = 0;
             }
         }
 

@@ -17,9 +17,8 @@ public class ColorblindButton implements Interface {
     private int _width;
     private int _height;
     private List<ColorSlot> colorSlot;
-    private GameScene _gameScene;
 
-    ColorblindButton(String filename, Engine engine, int positionX, int positionY, int width, int height, GameScene g) {
+    ColorblindButton(String filename, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
@@ -27,55 +26,12 @@ public class ColorblindButton implements Interface {
         _positionY = positionY ;
         _width = width;
         _height = height;
-        _gameScene = g;
     }
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
-        // Cuando el botón del OJO se pulsa, esta función se encarga de cambiar todos los colores
-        // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
-        // también se encarga de quitar los números para volver al modo normal.
-
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
-            List<CombinationLayout> combinationLayouts = _gameScene.getCombinationLayouts();
-            List<ColorButton> colorButtons = _gameScene.getColorButtons();
-            if(!GameAttributes.Instance().isEyeOpen)
-            {
-                GameAttributes.Instance().isEyeOpen = true;
-                _image = _graphics.newImage("UI/eyeOpened.png");
-
-                for(CombinationLayout c: combinationLayouts) {
-                    for(ColorSlot cSL: c.getColors()) {
-                        if(cSL.hasColor()){
-                            String name = cSL.getName().replace(".png", "CB.png");
-                            cSL.setImage(name);
-                        }
-                    }
-                }
-                for (ColorButton colorButton : colorButtons){
-                    String colorButtonName = "color" + colorButton._colorID + ".png";
-                    colorButtonName = colorButtonName.replace(".png", "CB.png");
-                    colorButton.setImage(colorButtonName);
-                }
-            }
-            else {
-                GameAttributes.Instance().isEyeOpen = false;
-                _image = _graphics.newImage("UI/eyeClosed.png");
-
-                for(CombinationLayout c: combinationLayouts) {
-                    for(ColorSlot cSL: c.getColors()) {
-                        if(cSL.hasColor()){
-                            String name = cSL.getName().replace("CB.png", ".png");
-                            cSL.setImage(name);
-                        }
-                    }
-                }
-                for (ColorButton colorButton : colorButtons){
-                    String colorButtonName = "color" + colorButton._colorID + "CB.png";
-                    colorButtonName = colorButtonName.replace("CB.png", ".png");
-                    colorButton.setImage(colorButtonName);
-                }
-            }
+            GameAttributes.Instance().isEyeOpen = !GameAttributes.Instance().isEyeOpen;
             return true;
         }
         return false;
