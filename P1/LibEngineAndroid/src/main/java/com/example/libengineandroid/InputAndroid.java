@@ -12,42 +12,29 @@ import android.view.View;
 import java.util.ArrayList;
 
 
-public class InputAndroid implements Input, View.OnTouchListener {
-    public ArrayList<TouchEvent> eventos;
-    MotionEvent event;
+public class InputAndroid implements Input{
+
+    private TouchHandlerAndroid _handler;
     InputAndroid() {
-        eventos = new ArrayList<Input.TouchEvent>();
+        _handler = new TouchHandlerAndroid();
     }
 
     @Override
     public ArrayList<TouchEvent> getTouchEvent() {
-        return eventos;
-    }       //COGE EL ARRAY DE EVENTOS
+        return _handler.getTouchEvent();
+    }
 
     @Override
     public void clearEvents() {
-        eventos.clear();
+        _handler.clearEvents();
     }
 
 
     @Override
     public void addTouchEvent() {
 
-        InputType tipo = null;
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
-            tipo = InputType.PRESSED;
-        else if (event.getAction() == MotionEvent.ACTION_UP)
-            tipo = InputType.RELEASED;
-        else if (event.getAction() == MotionEvent.ACTION_MOVE)
-            tipo = InputType.MOVE;
-        if (tipo != null)
-            eventos.add(new TouchEvent((int) event.getX(0), (int) event.getY(0), tipo));
+        _handler.addTouchEvent();
     }
+    public TouchHandlerAndroid getTouchHandler(){return _handler;};
 
-    @Override
-    public boolean onTouch(View v, MotionEvent e) { // AL TOCAR LA PANTALLA ENVIAR EL EVENTO
-        event= e;
-        addTouchEvent();
-        return true;
-    }
 }
