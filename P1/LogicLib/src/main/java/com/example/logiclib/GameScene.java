@@ -145,7 +145,6 @@ public class GameScene implements Scene {
             // Cuando detecta un click en un color, se coloca en el primer hueco posible.
             for(ColorButton colorButton : _colorButtons) {
                 if (colorButton.handleEvents(touchEvent)){
-                    System.out.print("Pasa X veces por aqui");
                     _combinationLayouts.get(gameAttributes._activeLayout).setNextColor(colorButton._colorID, gameAttributes._isEyeOpen);
                     _combinationLayouts.get(gameAttributes._activeLayout).getCurrentCombination().printCombination();
                     break;
