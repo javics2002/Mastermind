@@ -9,15 +9,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameScene implements Scene {
-    private Engine _engine;
-    private GameAttributes gameAttributes;
-    private Text _objectiveText, _attemptsText;
-    private QuitButton _quitButton;
-    private ColorblindButton _colorblindButton;
-    private List<CombinationLayout> _combinationLayouts;
-    private List<ColorButton> _colorButtons;
+    private final Engine _engine;
+    private final GameAttributes gameAttributes;
+    private final Text _objectiveText, _attemptsText;
+    private final QuitButton _quitButton;
+    private final ColorblindButton _colorblindButton;
+    private final List<CombinationLayout> _combinationLayouts;
+    private final List<ColorButton> _colorButtons;
 
-    private boolean eventHandled = false;
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
         _engine = engine;
         Graphics graphics = _engine.getGraphics();

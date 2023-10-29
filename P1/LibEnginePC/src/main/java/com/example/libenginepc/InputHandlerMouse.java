@@ -9,7 +9,7 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 public class InputHandlerMouse implements   MouseListener {
-    private List<Input.TouchEvent> _eventsMouse;
+    private final List<Input.TouchEvent> _eventsMouse;
     InputHandlerMouse(){
         _eventsMouse = new ArrayList<Input.TouchEvent>();
     }

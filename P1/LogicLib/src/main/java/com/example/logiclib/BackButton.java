@@ -7,13 +7,11 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 
 public class BackButton implements Interface {
-    private Image _image;
-    private Engine _engine;
-    private Graphics _graphics;
-    private int _positionX;
-    private int _positionY;
-    private int _width;
-    private int _height;
+    private final Image _image;
+    private final Engine _engine;
+    private final Graphics _graphics;
+    private final int _positionX, _positionY;
+    private final int _width, _height;
 
     BackButton(String filename, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;

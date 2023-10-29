@@ -22,17 +22,17 @@ import com.example.aninterface.Graphics;
 public class GraphicsAndroid implements Graphics {
 
     private float _scaleFactor;
-    private int _logicWidth, _logicHeight;
+    private final int _logicWidth, _logicHeight;
 
     // Medidas de bordes
     private int _borderWidth, _borderHeight;
 
     //Surfaces , Manager y uso de clase Paint para el color
-    private SurfaceView _surfaceView;
-    private Paint _paint;
+    private final SurfaceView _surfaceView;
+    private final Paint _paint;
     private Canvas _canvas;
-    private SurfaceHolder _holder;
-    private AssetManager _assetManager;
+    private final SurfaceHolder _holder;
+    private final AssetManager _assetManager;
 
     GraphicsAndroid(SurfaceView myView, AssetManager mgr, int logicWidth, int logicHeight) {
         _surfaceView = myView;
@@ -122,9 +122,9 @@ public class GraphicsAndroid implements Graphics {
     @Override
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
         ImageAndroid a = (ImageAndroid)image;
-        Bitmap aux = getResizedBitmap(a.getImg(),scaleToReal(logicWidth), scaleToReal(logicHeight));
-        if(aux!=null)_canvas.drawBitmap(aux, logicToRealX(logicX) ,
-                logicToRealY(logicY) , _paint);
+        Bitmap aux = getResizedBitmap(a.get_image(),scaleToReal(logicWidth), scaleToReal(logicHeight));
+        if(aux!=null)
+            _canvas.drawBitmap(aux, logicToRealX(logicX), logicToRealY(logicY) , _paint);
     }
 
     @Override

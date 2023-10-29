@@ -5,8 +5,7 @@ import com.example.aninterface.Input;
 import java.util.ArrayList;
 
 public class InputAndroid implements Input {
-
-    private TouchHandlerAndroid _handler; // Controlador de eventos táctiles
+    private final TouchHandlerAndroid _handler; // Controlador de eventos táctiles
 
     InputAndroid() {
         _handler = new TouchHandlerAndroid(); // Inicializa un controlador de eventos táctiles

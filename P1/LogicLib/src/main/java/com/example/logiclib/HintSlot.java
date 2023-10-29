@@ -8,16 +8,12 @@ import com.example.aninterface.Interface;
 
 public class HintSlot implements Interface {
     private Image _image;
-    private Engine _engine;
-    private Graphics _graphics;
-    private int _positionX;
-    private int _positionY;
-    private int _width;
-    private int _height;
+    private final Graphics _graphics;
+    private final int _positionX, _positionY;
+    private final int _width, _height;
 
     public HintSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
-        _engine = engine;
-        _graphics = _engine.getGraphics();
+        _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
 
         _positionX = positionX;

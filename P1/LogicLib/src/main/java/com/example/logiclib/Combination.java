@@ -4,8 +4,8 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class Combination {
-    private int _length;
-    private int[] _numbers;
+    private final int _length;
+    private final int[] _numbers;
     enum HintEnum {EMPTY, WHITE, BLACK};
 
     // CONSTRUCTORA ALEATORIA (Resultado)

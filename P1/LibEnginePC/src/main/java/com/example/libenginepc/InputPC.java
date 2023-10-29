@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InputPC implements Input {
-   private InputHandlerMouse _handler;
+   private final InputHandlerMouse _handler;
     InputPC(){
         _handler = new InputHandlerMouse();
     }

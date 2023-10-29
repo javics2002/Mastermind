@@ -7,13 +7,13 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 
 public class DifficultyButton implements Interface {
-    private Image _image;
-    private Engine _engine;
-    private Graphics _graphics;
-    private int _positionX, _positionY;
-    private int _width, _height;
-    private int _tryNumber, _combinationLength, _numberOfColors;
-    private boolean _repeatedColors;
+    private final Image _image;
+    private final Engine _engine;
+    private final Graphics _graphics;
+    private final int _positionX, _positionY;
+    private final int _width, _height;
+    private final int _tryNumber, _combinationLength, _numberOfColors;
+    private final boolean _repeatedColors;
 
     DifficultyButton(String filename, Engine engine, int positionX, int positionY, int width, int height,
                      int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
@@ -57,6 +57,5 @@ public class DifficultyButton implements Interface {
                 && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
                 && mY >= _graphics.logicToRealY(_positionY)
                 && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
-
     }
 }

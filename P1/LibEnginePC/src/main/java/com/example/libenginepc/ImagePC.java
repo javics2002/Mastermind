@@ -1,7 +1,7 @@
 package com.example.libenginepc;
 import com.example.aninterface.Image;
 public class ImagePC implements Image {
-    private java.awt.Image _image;
+    private final java.awt.Image _image;
     ImagePC(java.awt.Image image){
         _image = image;
     }
