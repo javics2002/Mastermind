@@ -151,6 +151,10 @@ public class GameScene implements Scene {
             _colorblindButton.handleEvents(touchEvent);
             _quitButton.handleEvents(touchEvent);
 
+            // Detectar click en colores ya colocados
+            // Sirve para borrarlos
+            _combinationLayouts.get(GameAttributes.Instance().activeLayout).handleEvents(touchEvent);
+
             // Cuando detecta un click en un color, se coloca en el primer hueco posible.
             for(ColorButton colorButton : _colorButtons) {
                 if (colorButton.handleEvents(touchEvent)){

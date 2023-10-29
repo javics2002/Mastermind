@@ -30,6 +30,10 @@ public class Combination {
         }
     }
 
+    public void deleteColor(int index){
+        _numbers[index] = -1;
+    }
+
     // Coloca el color en el primer hueco libre de la combinación
     public void setNextColor(int colorID) {
         for (int i = 0; i < _numbers.length; i++){

@@ -57,23 +57,37 @@ public class ColorSlot implements Interface {
     }
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
-        return false;
+        return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
     }
 
-    public boolean hasColor(){
-        return _hasColor;
-    }
     public void setColor(int color, boolean isEyeOpen)
     {
-         _hasColor = true;
-         _colorID = color;
+        _hasColor = true;
+        _colorID = color;
 
          // Si tenemos el modo daltónico activado, usamos su respectiva imagen.
          if (isEyeOpen) {
-             setImage("color"+_colorID+"CB.png");
+             setImage("color"+ _colorID +"CB.png");
          }
          else{
-             setImage("color"+_colorID+".png");
+             setImage("color"+ _colorID +".png");
          }
+    }
+
+    public void deleteColor(){
+        _colorID = -1;
+        _hasColor = false;
+        setImage("colorEmpty.png");
+    }
+
+    private boolean inBounds(int mX, int mY) {
+        return (mX >= (_graphics.logicToRealX(_positionX))
+                && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
+                && mY >= _graphics.logicToRealY(_positionY)
+                && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
+    }
+
+    public boolean hasColor() {
+        return _hasColor;
     }
 }

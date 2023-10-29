@@ -79,11 +79,16 @@ public class CombinationLayout implements Interface {
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
-        return false;
-    }
+        for (int i = 0; i < _colors.size(); i++){
+            ColorSlot color =  _colors.get(i);
 
-    public List<ColorSlot> getColors() {
-        return _colors;
+            if (color.handleEvents(e)){
+                _currentCombination.deleteColor(i);
+                color.deleteColor();
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setNextColor(int colorID, boolean isEyeOpen){

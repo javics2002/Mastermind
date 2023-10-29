@@ -29,10 +29,7 @@ public class ColorButton implements Interface {
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
-        if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
-            return true;
-        }
-        return false;
+        return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
     }
 
     @Override
