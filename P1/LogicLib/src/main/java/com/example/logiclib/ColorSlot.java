@@ -8,18 +8,14 @@ import com.example.aninterface.Interface;
 
 public class ColorSlot implements Interface {
     private Image _image;
-    private Engine _engine;
-    private Graphics _graphics;
-    private int _positionX;
-    private int _positionY;
-    private int _width;
-    private int _height;
+    private final Graphics _graphics;
+    private final int _positionX, _positionY;
+    private final int _width, _height;
     private String _name;
     private boolean _hasColor;
 
     public ColorSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
-        _engine = engine;
-        _graphics = _engine.getGraphics();
+        _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
 
         _positionX = positionX;
@@ -47,6 +43,7 @@ public class ColorSlot implements Interface {
     public void update() {
 
     }
+
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         return false;

@@ -6,9 +6,8 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Font;
 
 public class InitialScene implements Scene {
-    private PlayButton _playButton;
-    private Font _titleFont;
-    private Text _titleText;
+    private final PlayButton _playButton;
+    private final Text _titleText;
 
     Engine _engine;
 
@@ -16,7 +15,7 @@ public class InitialScene implements Scene {
         _engine = engine;
         Graphics graphics = engine.getGraphics();
 
-        _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
+        Font _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
         String title = "Master Mind";
 
         int titleWidth = graphics.getStringWidth(title, _titleFont);

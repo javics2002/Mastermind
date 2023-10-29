@@ -7,7 +7,6 @@ import com.example.aninterface.Input;
 import java.util.ArrayList;
 
 public class TouchHandlerAndroid implements View.OnTouchListener {
-
     public ArrayList<Input.TouchEvent> eventos; // Lista de eventos táctiles
     MotionEvent event; // Variable para mantener el evento actual
     int i = 0; // Una variable entera que no parece utilizarse

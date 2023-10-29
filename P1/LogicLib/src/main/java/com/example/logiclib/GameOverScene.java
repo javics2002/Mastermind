@@ -9,19 +9,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameOverScene implements Scene {
-    private Engine _engine;
-    private GameAttributes gameAttributes;
-    private Text _resultText, _attemptsText, _attemptsNumberText, _codeText;
-    private DifficultyButton _playAgainButton;
-    private PlayButton _chooseDifficultyButton;
+    private final Text _resultText, _attemptsText, _attemptsNumberText, _codeText;
+    private final DifficultyButton _playAgainButton;
+    private final PlayButton _chooseDifficultyButton;
     private final List<ColorSlot> _resultCombination;
 
     public GameOverScene(Engine engine) {
-        _engine = engine;
-        Graphics graphics = _engine.getGraphics();
+        Graphics graphics = engine.getGraphics();
 
         // Init GameAttributes
-        gameAttributes = GameAttributes.Instance();
+        GameAttributes gameAttributes = GameAttributes.Instance();
 
         //Create scene
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
@@ -43,13 +40,13 @@ public class GameOverScene implements Scene {
             attemptsNumberString = "";
         }
 
-        _resultText = new Text(resultString, resultFont, _engine,
+        _resultText = new Text(resultString, resultFont, engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(resultString, resultFont) / 2, 70, 0);
-        _attemptsText = new Text(attemptsString, attemptsFont, _engine,
+        _attemptsText = new Text(attemptsString, attemptsFont, engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsString, attemptsFont) / 2, 110, 0);
-        _attemptsNumberText = new Text(attemptsNumberString, attemptsNumberFont, _engine,
+        _attemptsNumberText = new Text(attemptsNumberString, attemptsNumberFont, engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsNumberString, attemptsNumberFont) / 2, 160, 0);
-        _codeText = new Text(codeString, codeFont, _engine,
+        _codeText = new Text(codeString, codeFont, engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(codeString, codeFont) / 2, 200, 0);
 
 
@@ -63,11 +60,11 @@ public class GameOverScene implements Scene {
                     250, scale, scale));
         }
 
-        _playAgainButton = new DifficultyButton("playAgain.png", _engine,
+        _playAgainButton = new DifficultyButton("playAgain.png", engine,
                 graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50,
                 gameAttributes.attemptsNumber, gameAttributes.combinationLength,
                 gameAttributes.colorNumber, gameAttributes.repeatedColors);
-        _chooseDifficultyButton = new PlayButton("chooseDifficulty.png", _engine,
+        _chooseDifficultyButton = new PlayButton("chooseDifficulty.png", engine,
                 graphics.getLogicWidth() / 2 - 400 / 2, 550, 400, 50);
     }
 

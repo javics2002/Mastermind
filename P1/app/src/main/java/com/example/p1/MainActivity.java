@@ -11,23 +11,20 @@ import com.example.aninterface.Scene;
 import com.example.logiclib.InitialScene;
 
 public class MainActivity extends AppCompatActivity {
-    private SurfaceView _surfaceView;
-    private AssetManager _assetManager;
     private EngineAndroid _engineAndroid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        _surfaceView = new SurfaceView(this);
-        _surfaceView.getLayoutParams();
+        SurfaceView surfaceView = new SurfaceView(this);
+        surfaceView.getLayoutParams();
 
-        setContentView(_surfaceView);
-        _assetManager = getAssets();
+        setContentView(surfaceView);
 
         float aspectRatio = 2f / 3f;
         int height = 720;
-        _engineAndroid = new EngineAndroid(_surfaceView, (int) (height * aspectRatio), height);
+        _engineAndroid = new EngineAndroid(surfaceView, (int) (height * aspectRatio), height);
 
         Scene firstScene = new InitialScene(_engineAndroid);
         _engineAndroid.setCurrentScene(firstScene);

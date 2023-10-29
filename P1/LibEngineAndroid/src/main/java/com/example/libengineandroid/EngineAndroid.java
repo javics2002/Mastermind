@@ -11,19 +11,19 @@ import android.content.res.AssetManager;
 // Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
 public class EngineAndroid implements Runnable, Engine {
     // Atributos
-    private SurfaceView _surfaceView; // Superficie de renderización
-    private AssetManager _assetManager; // Administrador de activos del juego
+    private final SurfaceView _surfaceView; // Superficie de renderización
     private Thread _renderThread; // Hilo de renderizado
     private boolean _running; // Indica si el motor está en ejecución
     private Scene _currentScene; // Escena actual
-    private InputAndroid _input; // Manejador de entrada
-    private GraphicsAndroid _graphics; // Motor de renderizado
+    private final InputAndroid _input; // Manejador de entrada
+    private final GraphicsAndroid _graphics; // Motor de renderizado
 
     // Constructor
     public EngineAndroid(SurfaceView myView, int logicWidth, int logicHeight) {
         _surfaceView = myView;
         _input = new InputAndroid();
-        _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
+        // Administrador de activos del juego
+        AssetManager _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
         myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler()); // Configura el manejador de eventos táctiles
         _graphics = new GraphicsAndroid(_surfaceView, _assetManager, logicWidth, logicHeight);
     }

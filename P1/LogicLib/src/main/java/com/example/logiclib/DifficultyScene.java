@@ -7,12 +7,12 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
 public class DifficultyScene implements Scene {
-    private BackButton _backButton;
-    private DifficultyButton _easyDifficultyButton, _mediumDifficultyButton,
+    private final BackButton _backButton;
+    private final DifficultyButton _easyDifficultyButton, _mediumDifficultyButton,
             _difficultDifficultyButton, _impossibleDifficultyButton;
 
-    private Text _titleText;
-    private int _padding = 20;
+    private final Text _titleText;
+    private final int _padding = 20;
 
     public DifficultyScene(Engine engine) {
         Graphics graphics = engine.getGraphics();

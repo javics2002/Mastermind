@@ -14,8 +14,8 @@ import com.example.aninterface.Image;
 import com.example.aninterface.Graphics;
 
 public class GraphicsPC implements Graphics {
-    private JFrame _frame;
-    private BufferStrategy _bufferStrategy;
+    private final JFrame _frame;
+    private final BufferStrategy _bufferStrategy;
     private Graphics2D _graphics2D;
 
     // Dimensiones lógicas de la aplicación.
@@ -23,12 +23,12 @@ public class GraphicsPC implements Graphics {
     // ocupa realmente (Ej. 482 x 983).
     // Los elementos siempre se colocan en la pantalla con dimensiones lógicas, y luego la propia aplicación
     // los convertirá a dimensiones reales a través de una función
-    private int _logicWidth, _logicHeight;
+    private final int _logicWidth, _logicHeight;
 
     // Insets de la aplicación. Son la cantidad de pixeles que tenemos que tener en cuenta para dibujar.
     // Por ejemplo, el topInset son 30px (la barra propia de Windows), y tenemos que tenerlo en cuenta para
     // dibujar los elementos correctamente.
-    private int _topInset, _bottomInset, _leftInset, _rightInset;
+    private final int _topInset, _bottomInset, _leftInset, _rightInset;
 
     // Tamaños de los bordes que se usan para redimensionar la pantalla.
     // En este caso, los bordes tienen el mismo color de la aplicación, así que no son perceptibles.
@@ -78,8 +78,7 @@ public class GraphicsPC implements Graphics {
             throw new RuntimeException(e);
         }
 
-        FontPC fontPC = new FontPC(customFont);
-        return fontPC;
+        return new FontPC(customFont);
     }
 
     @Override
@@ -128,11 +127,11 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public int getStringWidth(String text, Font font) {
-        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize()).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
+        return (int)((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
     }
     @Override
     public int getStringHeight(String text, Font font) {
-        return (int)((FontPC) font).getFont().deriveFont(font.getFontSize()).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
+        return (int)((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
     }
     @Override
     public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {

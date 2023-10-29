@@ -16,7 +16,8 @@ public class CombinationLayout implements Interface {
     private final List<HintSlot> _hints;
     private final Graphics _graphics;
     private final int _positionX, _positionY;
-    private final int _scale, _lateralMargin, _padding;
+    private final int _scale;
+    private final int _lateralMargin;
 
     public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY, int scale) {
         _graphics = engine.getGraphics();
@@ -26,7 +27,7 @@ public class CombinationLayout implements Interface {
 
         _scale = scale;
         _lateralMargin = 5;
-        _padding = 6;
+        int padding = 6;
 
         Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
         int numberOffset = _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 5;
@@ -38,7 +39,7 @@ public class CombinationLayout implements Interface {
         _colors = new ArrayList<>();
         for(int i = 0; i < combinationLength; i++){
             _colors.add(new ColorSlot(engine, "colorEmpty.png",
-                    (int) (_positionX + (i - combinationLength / 2f) * (_scale + _padding)),
+                    (int) (_positionX + (i - combinationLength / 2f) * (_scale + padding)),
                     _positionY - _scale / 2, _scale, _scale));
         }
 

@@ -9,21 +9,19 @@ import com.example.aninterface.Graphics;
 import java.awt.Dimension;
 
 public class EnginePC implements Runnable, Engine {
-    private JFrame _frame;
     private Thread _renderThread;
     private boolean _running;        // Boolean to know if the app is still running
     private Scene _currentScene;
-    private GraphicsPC _graphics;
-    private InputPC _input;
-    private float _aspectRatio = 2f / 3f;
-    private int _logicHeight = 720;
-    private int _logicWidth = (int) (_logicHeight * _aspectRatio);
+    private final GraphicsPC _graphics;
+    private final InputPC _input;
+    private final float _aspectRatio = 2f / 3f;
+    private final int _logicHeight = 720;
 
     public EnginePC(JFrame myView) {
-        _frame = myView;
+        int _logicWidth = (int) (_logicHeight * _aspectRatio);
         _graphics = new GraphicsPC(myView, _logicWidth, _logicHeight);
         _input = new InputPC();
-        _frame.addMouseListener(_input.getHandlerInput());
+        myView.addMouseListener(_input.getHandlerInput());
     }
 
     protected void handleEvents() {
