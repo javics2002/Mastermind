@@ -126,10 +126,6 @@ public class GraphicsAndroid implements Graphics {
     //Dibujo de lineas rectangulos , imagenes y fuente
 
     // Para dibujar seguimos el siguiente esquema
-    // Pos x = Pos x real - Ancho w real Centrado ( /2)
-    // Pos y = Pos y real - Alto h real Centrado (/2) + Margen myView ( bordertop)
-    //Solo aplicable a imagenes y a texto , en los square rect se usa sin conversion
-    //Por que es directo a ventana (Aunque se sigue teniendo en cuenta border top)
     @Override
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
         ImageAndroid a = (ImageAndroid)image;

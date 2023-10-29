@@ -7,18 +7,18 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class FontAndroid implements Font {
-    Typeface _font;
-    float _size;
+    Typeface _font; // La fuente de texto
+    float _size; // El tamaño de la fuente
 
     FontAndroid(Typeface font, float size) {
         _font = font;
         _size = size;
     }
 
-    // GETTERS
+    // Getter para obtener la fuente de texto
     public Typeface getFont() {
         return _font;
-    }          // OBTENER FUENTE
+    }
 
     @Override
     public int getFontSize() {

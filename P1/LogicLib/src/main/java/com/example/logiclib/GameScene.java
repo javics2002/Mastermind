@@ -17,6 +17,7 @@ public class GameScene implements Scene {
     private List<CombinationLayout> _combinationLayouts;
     private List<ColorButton> _colorButtons;
 
+    private boolean eventHandled = false;
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
         _engine = engine;
         Graphics graphics = _engine.getGraphics();
@@ -137,18 +138,20 @@ public class GameScene implements Scene {
     public void handleEvents(Input input) {
         if(input.getTouchEvent().size()>0)
         {
-            _colorblindButton.handleEvents(input.getTouchEvent().get(0));
-            _quitButton.handleEvents(input.getTouchEvent().get(0));
+            Input.TouchEvent touchEvent = input.getTouchEvent().get(0);
+            _colorblindButton.handleEvents(touchEvent);
+            _quitButton.handleEvents(touchEvent);
 
             // Cuando detecta un click en un color, se coloca en el primer hueco posible.
             for(ColorButton colorButton : _colorButtons) {
-                if (colorButton.handleEvents(input.getTouchEvent().get(0))){
+                if (colorButton.handleEvents(touchEvent)){
                     _combinationLayouts.get(gameAttributes.activeLayout).setNextColor(colorButton._colorID, gameAttributes.isEyeOpen);
                     _combinationLayouts.get(gameAttributes.activeLayout).getCurrentCombination().printCombination();
                     break;
                 }
             }
         }
+
     }
 
     public List<CombinationLayout> getCombinationLayouts() {

@@ -1,53 +1,33 @@
 package com.example.libengineandroid;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.example.aninterface.Input;
-
 import java.util.ArrayList;
 
+public class InputAndroid implements Input {
 
-import android.view.MotionEvent;
-import android.view.View;
-import java.util.ArrayList;
+    private TouchHandlerAndroid _handler; // Controlador de eventos táctiles
 
-
-public class InputAndroid implements Input, View.OnTouchListener {
-    public ArrayList<TouchEvent> eventos;
-    MotionEvent event;
     InputAndroid() {
-        eventos = new ArrayList<Input.TouchEvent>();
+        _handler = new TouchHandlerAndroid(); // Inicializa un controlador de eventos táctiles
     }
 
     @Override
     public ArrayList<TouchEvent> getTouchEvent() {
-        return eventos;
-    }       //COGE EL ARRAY DE EVENTOS
+        return _handler.getTouchEvent(); // Obtiene la lista de eventos táctiles del controlador
+    }
 
     @Override
     public void clearEvents() {
-        eventos.clear();
+        _handler.clearEvents(); // Limpia (borra) todos los eventos táctiles registrados en el controlador
     }
-
 
     @Override
     public void addTouchEvent() {
-
-        InputType tipo = null;
-        if (event.getAction() == MotionEvent.ACTION_DOWN)
-            tipo = InputType.PRESSED;
-        else if (event.getAction() == MotionEvent.ACTION_UP)
-            tipo = InputType.RELEASED;
-        else if (event.getAction() == MotionEvent.ACTION_MOVE)
-            tipo = InputType.MOVE;
-        if (tipo != null)
-            eventos.add(new TouchEvent((int) event.getX(0), (int) event.getY(0), tipo));
+        _handler.addTouchEvent(); // Agrega un evento táctil al controlador
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent e) { // AL TOCAR LA PANTALLA ENVIAR EL EVENTO
-        event= e;
-        addTouchEvent();
-        return true;
+    public TouchHandlerAndroid getTouchHandler() {
+        return _handler; // Obtiene el controlador de eventos táctiles
     }
 }
