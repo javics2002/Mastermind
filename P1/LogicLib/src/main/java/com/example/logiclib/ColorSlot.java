@@ -57,7 +57,9 @@ public class ColorSlot implements Interface {
     }
     public void setColor(int color, boolean isEyeOpen)
     {
-         _hasColor=true;
+         _hasColor = true;
+
+         // Si tenemos el modo daltónico activado, usamos su respectiva imagen.
          if (isEyeOpen) {
              setImage("color"+color+"CB.png");
          }

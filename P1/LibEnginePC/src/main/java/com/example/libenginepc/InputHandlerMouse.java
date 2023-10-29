@@ -26,19 +26,21 @@ public class InputHandlerMouse implements   MouseListener {
     }
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-        // Create an event
-        Input.TouchEvent event = new Input.TouchEvent(mouseEvent.getX(), mouseEvent.getY(), Input.InputType.PRESSED);
-        _eventsMouse.add(event);
+        // Creamos un evento cuando detectamos un click izquierdo del mouse y lo añadimos a la cola
+        if (mouseEvent.getButton() == 1){
+            Input.TouchEvent event = new Input.TouchEvent(mouseEvent.getX(), mouseEvent.getY(), Input.InputType.PRESSED);
+            _eventsMouse.add(event);
+        }
     }
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-        Input.TouchEvent event = new Input.TouchEvent(mouseEvent.getX(), mouseEvent.getY(), Input.InputType.PRESSED);
-        _eventsMouse.add(event);
+        // Input.TouchEvent event = new Input.TouchEvent(mouseEvent.getX(), mouseEvent.getY(), Input.InputType.PRESSED);
+        // _eventsMouse.add(event);
     }
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {
-        Input.TouchEvent event = new Input.TouchEvent(mouseEvent.getX(), mouseEvent.getY(), Input.InputType.RELEASED);
-        _eventsMouse.add(event);
+        //Input.TouchEvent event = new Input.TouchEvent(mouseEvent.getX(), mouseEvent.getY(), Input.InputType.RELEASED);
+        //_eventsMouse.add(event);
     }
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {

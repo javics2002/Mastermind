@@ -32,6 +32,7 @@ public class GameScene implements Scene {
         gameAttributes._isEyeOpen = false;
         gameAttributes._resultCombination = new Combination(combinationLength, numberOfColors);
 
+        // Print Temp
         gameAttributes._resultCombination.printCombination();
 
         // Title Font
@@ -78,8 +79,6 @@ public class GameScene implements Scene {
                     (int) (graphics.getWidthLogic() / 2 + (i - numberOfColors / 2f) * scale - padding / 2 + i * padding / 2),
                     graphics.getHeightLogic() - 70 , scale, scale, i + 1));
         }
-
-
     }
 
 
@@ -102,8 +101,6 @@ public class GameScene implements Scene {
             // Hints
             Combination.HintEnum[] hints = activeLayout.getCurrentCombination().getHint(gameAttributes._resultCombination);
             activeLayout.setHints(hints);
-
-            // activeLayout
 
             gameAttributes._attemptsLeft--;
             gameAttributes._activeLayout++;
@@ -130,9 +127,6 @@ public class GameScene implements Scene {
             combination.render();
         }
 
-        gr.setColor(0xFFFFFFFF);
-        //gr.fillRect(gr.logicToRealX(0), gr.logicToRealY(gr.getHeightLogic() - 100), gr.scaleToReal(gr.getWidthLogic()), gr.scaleToReal(100));
-
         for(ColorButton colorButton : _colorButtons) {
             colorButton.render();
         }
@@ -145,6 +139,7 @@ public class GameScene implements Scene {
             _colorblindButton.handleEvents(input.getTouchEvent().get(0));
             _quitButton.handleEvents(input.getTouchEvent().get(0));
 
+            // Cuando detecta un click en un color, se coloca en el primer hueco posible.
             for(ColorButton colorButton : _colorButtons) {
                 if (colorButton.handleEvents(input.getTouchEvent().get(0))){
                     _combinationLayouts.get(gameAttributes._activeLayout).setNextColor(colorButton._colorID, gameAttributes._isEyeOpen);

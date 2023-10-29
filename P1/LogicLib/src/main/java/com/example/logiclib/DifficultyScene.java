@@ -12,8 +12,6 @@ public class DifficultyScene implements Scene {
             _difficultDifficultyButton, _impossibleDifficultyButton;
 
     private Text _titleText;
-
-
     private int _padding = 20;
 
     public DifficultyScene(Engine engine) {

@@ -17,8 +17,21 @@ public class GraphicsPC implements Graphics {
     private JFrame _frame;
     private BufferStrategy _bufferStrategy;
     private Graphics2D _graphics2D;
+
+    // Dimensiones lógicas de la aplicación.
+    // La aplicación diferencia entre dimensiones lógicas (Ej. 480 x 720) y dimensiones reales (lo que la ventana
+    // ocupa realmente (Ej. 482 x 983).
+    // Los elementos siempre se colocan en la pantalla con dimensiones lógicas, y luego la propia aplicación
+    // los convertirá a dimensiones reales a través de una función
     private int _logicWidth, _logicHeight;
+
+    // Insets de la aplicación. Son la cantidad de pixeles que tenemos que tener en cuenta para dibujar.
+    // Por ejemplo, el topInset son 30px (la barra propia de Windows), y tenemos que tenerlo en cuenta para
+    // dibujar los elementos correctamente.
     private int _topInset, _bottomInset, _leftInset, _rightInset;
+
+    // Tamaños de los bordes que se usan para redimensionar la pantalla.
+    // En este caso, los bordes tienen el mismo color de la aplicación, así que no son perceptibles.
     private int _borderWidth, _borderHeight;
     private float _scaleFactor;
 
@@ -75,7 +88,9 @@ public class GraphicsPC implements Graphics {
         _graphics2D.setColor(new Color(color));
     }
 
-    public void show() { _bufferStrategy.show(); }
+    public void show() {
+        _bufferStrategy.show();
+    }
 
     @Override
     public void prepareFrame() {
@@ -97,8 +112,7 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
-        _graphics2D.drawImage(((ImagePC) image).getImage(),
-                logicToRealX(logicX), logicToRealY(logicY) ,
+        _graphics2D.drawImage(((ImagePC) image).getImage(), logicToRealX(logicX), logicToRealY(logicY),
                 scaleToReal(logicWidth), scaleToReal(logicHeight), null);
     }
 
@@ -126,6 +140,9 @@ public class GraphicsPC implements Graphics {
         _graphics2D.setColor(new Color(color));
         _graphics2D.fillRect(logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth), scaleToReal(logicHeight));
     }
+
+    // Funciones encargadas de convertir las dimensiones lógicas a dimensiones reales.
+    // Tienen en cuenta los insets para realizar el calculo.
     @Override
     public int logicToRealX(int logicX) {
         return (int)(logicX * _scaleFactor + _leftInset + _borderWidth);
@@ -135,16 +152,23 @@ public class GraphicsPC implements Graphics {
         return (int)(logicY * _scaleFactor + _topInset + _borderHeight);
     }
 
+    // Función que no tiene en cuenta los Insets al convertir de tamaño lógico a real, debido a que
+    // no podemos tener en cuenta el offset dos veces seguidas (Por ejemplo, al crear un rectángulo,
+    // se tiene en cuenta el offset en las coordenadas x,y, pero no en el ancho/alto del rectángulo)
     @Override
     public int scaleToReal(int realScale){
         return (int)(realScale * _scaleFactor);
     }
+
     @Override
-    public int getWidth() { return _frame.getWidth() - _leftInset - _rightInset; }
+    public int getWidth() {
+        return _frame.getWidth() - _leftInset - _rightInset;
+    }
     @Override
     public int getHeight() {
         return _frame.getHeight() - _topInset - _bottomInset;
     }
+
     @Override
     public int getHeightLogic() { return _logicHeight; }
     @Override
@@ -158,8 +182,12 @@ public class GraphicsPC implements Graphics {
         float factorX = (float) getWidth() / _logicWidth;
         float factorY = (float) getHeight() / _logicHeight;
 
+        // El factor de escala se escoje del valor mínimo de cualquiera de las dos
+        // dimensiones. Debido a que solo se reescala el mínimo factor.
         _scaleFactor = Math.min(factorX, factorY);
 
+        // Se asigna el tamaño de los bordes, dividido entre dos porque la aplicación
+        // estará en el centro, y tendrá los bordes a cada lado.
         if ((float) getWidth() / getHeight() < (float) _logicWidth / _logicHeight) {
             _borderWidth = 0;
             _borderHeight =  (int) ((getHeight() - (_logicHeight * factorX)) / 2);

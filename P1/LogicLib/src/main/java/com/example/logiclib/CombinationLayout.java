@@ -77,7 +77,7 @@ public class CombinationLayout implements Interface {
     }
 
     public void setNextColor(int colorID, boolean isEyeOpen){
-        // Obtain next color
+        // Coloca la imagen en el primer hueco del array
         for (int i = 0; i < _colors.size(); i++){
             if (!_colors.get(i).hasColor()) {
                 // Image
@@ -90,6 +90,7 @@ public class CombinationLayout implements Interface {
         }
     }
 
+    // Devuelve true si el array de colores está lleno (Cuando el jugador completa una combinación)
     public boolean isFull() {
         for (int i = 0; i < _colors.size(); i++){
             if (!_colors.get(i).hasColor()){
@@ -103,6 +104,7 @@ public class CombinationLayout implements Interface {
         return _currentCombination;
     }
 
+    // Usando el array de las pistas, coloca la respectiva imagen, ya sea la pista negra o blanca
     public void setHints(Combination.HintEnum[] predictionHints) {
         for (int i = 0; i < predictionHints.length; i++){
             if (predictionHints[i] == Combination.HintEnum.BLACK){

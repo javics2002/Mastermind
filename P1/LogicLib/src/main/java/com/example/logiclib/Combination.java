@@ -30,6 +30,7 @@ public class Combination {
         }
     }
 
+    // Coloca el color en el primer hueco libre de la combinación
     public void setNextColor(int colorID) {
         for (int i = 0; i < numbers.length; i++){
             if (numbers[i] == -1){
@@ -45,10 +46,18 @@ public class Combination {
         }
         System.out.println();
     }
+
+    // Comprueba si la combinación pasada a la función es igual que la combinación generada aleatoriamente
+    // Si es igual, devuelve true.
     public boolean equals(Combination otherComb) {
         return Arrays.equals(numbers, otherComb.numbers);
     }
 
+    // Se encarga de crear el array de pistas, recorre la combinación generada aleatoriamente con la pasada por
+    // la función, si un número se encuentra, y además se encuentra en la misma posición, la pista será "negra".
+    // Si un número se encuentra, pero no está en la misma posición, la pista será "blanca".
+    // En el array de las pistas, primero se colocarán el número de pistas negras, luego se colocarán las blancas, y por último
+    // se quedará vacío (si el jugador no ha acertado el numero y tampoco se encuentra en el array).
     public HintEnum[] getHint(Combination otherComb){
         HintEnum[] hints = new HintEnum[length];
         for(int i = 0; i < length; i++)

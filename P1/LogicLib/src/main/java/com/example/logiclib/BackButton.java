@@ -31,7 +31,6 @@ public class BackButton implements Interface {
             // Change scene
             InitialScene scene = new InitialScene(_engine);
             _engine.setCurrentScene(scene);
-            // engine.resume();
             return true;
         }
         return false;

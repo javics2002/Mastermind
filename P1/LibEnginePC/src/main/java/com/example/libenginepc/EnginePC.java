@@ -54,7 +54,7 @@ public class EnginePC implements Runnable, Engine {
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
 
-            // Convert time from nanoseconds to seconds
+            // Convertimos el tiempo de nanosegundos a segundos
             double deltaTime = (double) nanoElapsedTime / 1.0E9;
 
             handleEvents();
@@ -67,6 +67,9 @@ public class EnginePC implements Runnable, Engine {
         }
     }
 
+    /*
+     Inicia un proceso en un hilo separado si la aplicación no está en curso.
+    */
     @Override
     public void resume() {
         if (!_running) {
@@ -76,17 +79,18 @@ public class EnginePC implements Runnable, Engine {
         }
     }
 
+    /*
+      Pausa el hilo de la aplicación. Es obligatorio hacer el join() dentro de un catch.
+    */
     @Override
     public void pause() {
         if (_running) {
             _running = false;
-
             try {
                 _renderThread.join();
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-
             _renderThread = null;
         }
     }

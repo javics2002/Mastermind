@@ -17,8 +17,7 @@ public class ColorblindButton implements Interface {
     private int _width;
     private int _height;
     private List<ColorSlot> colorSlot;
-
-    private GameScene gScene;
+    private GameScene _gameScene;
 
     ColorblindButton(String filename, Engine engine, int positionX, int positionY, int width, int height, GameScene g) {
         _engine = engine;
@@ -28,14 +27,18 @@ public class ColorblindButton implements Interface {
         _positionY = positionY ;
         _width = width;
         _height = height;
-         gScene = g;
+        _gameScene = g;
     }
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
+        // Cuando el botón del OJO se pulsa, esta función se encarga de cambiar todos los colores
+        // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
+        // también se encarga de quitar los números para volver al modo normal.
+
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
-            List<CombinationLayout> combinationLayouts = gScene.getCombinationLayouts();
-            List<ColorButton> colorButtons = gScene.getColorButtons();
+            List<CombinationLayout> combinationLayouts = _gameScene.getCombinationLayouts();
+            List<ColorButton> colorButtons = _gameScene.getColorButtons();
             if(!GameAttributes.Instance()._isEyeOpen)
             {
                 GameAttributes.Instance()._isEyeOpen = true;

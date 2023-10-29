@@ -46,8 +46,6 @@ public class InputAndroid implements Input, View.OnTouchListener {
 
     @Override
     public boolean onTouch(View v, MotionEvent e) { // AL TOCAR LA PANTALLA ENVIAR EL EVENTO
-
-
         event= e;
         addTouchEvent();
         return true;

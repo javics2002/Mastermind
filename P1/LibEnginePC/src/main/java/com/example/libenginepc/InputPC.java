@@ -7,7 +7,6 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class InputPC implements Input {
    private InputHandlerMouse _handler;
     InputPC(){
@@ -19,13 +18,11 @@ public class InputPC implements Input {
     }
     @Override
     public List<TouchEvent> getTouchEvent() {
-
         return _handler.getMouseEvent();
     }
 
     @Override
     public void addTouchEvent() {
-
         _handler.addMouseEvent();
     }
 
