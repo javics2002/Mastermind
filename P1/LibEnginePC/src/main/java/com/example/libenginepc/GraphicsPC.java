@@ -55,7 +55,6 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public void clear(int color) {
-        // TODO: Poner false para release
         final boolean debug = false;
         if(debug){
             _graphics2D.setColor(Color.black);
@@ -104,7 +103,7 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public void drawText(String text, Font font, int logicX, int logicY, int color) {
-        _graphics2D.setColor(new Color (color));
+        setColor(color);
         _graphics2D.setFont(((FontPC) font).getFont().deriveFont(font.getFontSize() * _scaleFactor));
 
         _graphics2D.drawString(text, logicToRealX(logicX), logicToRealY(logicY));
@@ -137,7 +136,7 @@ public class GraphicsPC implements Graphics {
     }
     @Override
     public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
-        _graphics2D.setColor(new Color(color));
+        setColor(color);
         _graphics2D.fillRect(logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth), scaleToReal(logicHeight));
     }
 
@@ -170,9 +169,9 @@ public class GraphicsPC implements Graphics {
     }
 
     @Override
-    public int getHeightLogic() { return _logicHeight; }
+    public int getLogicHeight() { return _logicHeight; }
     @Override
-    public int getWidthLogic() { return _logicWidth; }
+    public int getLogicWidth() { return _logicWidth; }
 
     @Override
     public void setNewResolution(int newRealWidth, int newRealHeight) {

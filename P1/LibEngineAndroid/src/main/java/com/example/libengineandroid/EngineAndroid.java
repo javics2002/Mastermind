@@ -8,21 +8,19 @@ import com.example.aninterface.Scene;
 import com.example.aninterface.Graphics;
 //Libreria para la gestion de recursos , es una prueba
 import android.content.res.AssetManager;
-
-//Como el motor de pc tiene los mismos atributos mismos metodos
-//A parte este motor tambien hereda de runnable y de la interfaz del Engine
-public class EngineAndroid implements Runnable,Engine {
-    private SurfaceView _surfaceView; //Lo complementario al JFrame
-    private AssetManager _assetManager;
-
-    private Thread _renderThread; // Hilo de render
-    private boolean _running;     // boolean to know if its running
-
+// Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
+public class EngineAndroid implements Runnable, Engine {
+    // Atributos
+    private SurfaceView _surfaceView; // Superficie de renderización
+    private AssetManager _assetManager; // Administrador de activos del juego
+    private Thread _renderThread; // Hilo de renderizado
+    private boolean _running; // Indica si el motor está en ejecución
     private Scene _currentScene; // Escena actual
-    private InputAndroid _input;        // Input
-    private GraphicsAndroid _graphics;  // Graficos
+    private InputAndroid _input; // Manejador de entrada
+    private GraphicsAndroid _graphics; // Motor de renderizado
 
-    public EngineAndroid(SurfaceView myView, int logicWidth, int logicHeight){
+    // Constructor
+    public EngineAndroid(SurfaceView myView, int logicWidth, int logicHeight) {
         _surfaceView = myView;
         _input = new InputAndroid();
         //El propio sufaceview puede obtener el contexto y devolver asi los assets
@@ -34,26 +32,25 @@ public class EngineAndroid implements Runnable,Engine {
 
     @Override
     public void run() {
-        while(_running && _surfaceView.getWidth() == 0);
+        // Espera a que el motor esté en ejecución y el ancho de la superficie sea válido
+        while (_running && _surfaceView.getWidth() == 0);
 
         long lastFrameTime = System.nanoTime();
 
-        //Calculo de tiempo y bucle principal
-        while(_running) {
+        // Bucle principal del motor
+        while (_running) {
             long currTime = System.nanoTime();
             long nanoElTime = currTime - lastFrameTime;
             lastFrameTime = currTime;
 
-            //inputs
+            // Procesa eventos de entrada
             handleEvents();
 
-            //update
+            // Actualiza la lógica del juego
             double elapsedTime = (double) nanoElTime / 1.0E9;
             update(elapsedTime);
-            // Pintamos el frame cuando los graficos puedan
-            //Siempre pasamos por el proceso de
-            //Bloquear el hilo
-            //Preparar lo que vamos a
+
+            // Renderiza el frame cuando los gráficos estén listos
             while (!_graphics.isValid());
             _graphics.lockCanvas();
             _graphics.prepareFrame();
@@ -62,18 +59,20 @@ public class EngineAndroid implements Runnable,Engine {
         }
     }
 
+    // Método para renderizar la escena actual
     protected void render() {
-        //Clear del fondo (con el color tambien igual en el PC
+        // Limpia el fondo con un color específico
         getGraphics().clear(0xe7d6bd);
         _currentScene.render(_graphics);
     }
 
+    // Método para pausar la ejecución del motor
     public void pause() {
         if (_running) {
             _running = false;
             while (true) {
                 try {
-                    //A diferencia de en PC no llamamos a start simplemente hacemos un join
+                    // Detiene el hilo de renderizado
                     _renderThread.join();
                     _renderThread = null;
                     break;
@@ -85,7 +84,7 @@ public class EngineAndroid implements Runnable,Engine {
 
     @Override
     public void resume() {
-        //Si estabamos sin ejecutar ejecutamos de nuevo y creamos un hilo para la ejecuccion( Igual que en PC)
+        // Si no se estaba ejecutando, inicia la ejecución del motor en un nuevo hilo de renderizado
         if (!_running) {
             _running = true;
             _renderThread = new Thread(this);
@@ -93,16 +92,13 @@ public class EngineAndroid implements Runnable,Engine {
         }
     }
 
+    // Maneja eventos de entrada
     protected void handleEvents() {
         _currentScene.handleEvents(_input);
         _input.clearEvents();
     }
 
-    //Limpieza de los eventos del Input
-    protected void clearInputs() {
-        _input.clearEvents();
-    }
-
+    // Actualiza la lógica del juego
     protected void update(double deltaTime) {
         _currentScene.update(deltaTime);
     }
