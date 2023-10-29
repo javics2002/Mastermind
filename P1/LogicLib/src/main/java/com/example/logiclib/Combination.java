@@ -1,6 +1,8 @@
 package com.example.logiclib;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 public class Combination {
@@ -14,9 +16,25 @@ public class Combination {
         _numbers = new int[_length];
         Random rand = new Random();
 
-        for (int i = 0; i < _length; i++){
-            int randomNum = rand.nextInt(colorNumber);
-            _numbers[i] = randomNum + 1;
+        if (!repeatColors){
+            List<Integer> noRepeatedNumbers = new ArrayList<>();
+            for(int i = 0; i < colorNumber; i++){
+                noRepeatedNumbers.add(i + 1);
+            }
+
+            for (int i = 0; i < _length; i++){
+                int randomNum = rand.nextInt(colorNumber - i);
+                _numbers[i] = noRepeatedNumbers.get(randomNum);
+                noRepeatedNumbers.remove(randomNum);
+            }
+
+            //_numbers[_length - 1] = noRepeatedNumbers.get(0);
+        }
+        else{
+            for (int i = 0; i < _length; i++){
+                int randomNum = rand.nextInt(colorNumber);
+                _numbers[i] = randomNum + 1;
+            }
         }
     }
 

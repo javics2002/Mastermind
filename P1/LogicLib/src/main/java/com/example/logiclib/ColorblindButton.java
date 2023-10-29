@@ -13,10 +13,8 @@ public class ColorblindButton implements Interface {
     private final Graphics _graphics;
     private final int _positionX, _positionY;
     private final int _width, _height;
-    private List<ColorSlot> colorSlot;
 
     ColorblindButton(String filename, Engine engine, int positionX, int positionY, int width, int height) {
-        _engine = engine;
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
         _positionX = positionX;

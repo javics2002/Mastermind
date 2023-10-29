@@ -31,7 +31,7 @@ public class GameOverScene implements Scene {
             //Has ganado
             resultString = "ENHORABUENA!!";
             attemptsString = "Has averiguado el código en";
-            attemptsNumberString = Integer.toString(gameAttributes.activeLayout) + " intentos";
+            attemptsNumberString = Integer.toString(gameAttributes.activeLayout + 1) + " intentos";
         }
         else{
             //Has perdido
