@@ -117,6 +117,8 @@ public class GraphicsAndroid implements Graphics {
     }
 
     //Dibujo de lineas rectangulos , imagenes y fuente
+
+    // Para dibujar seguimos el siguiente esquema
     @Override
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
         ImageAndroid a = (ImageAndroid)image;

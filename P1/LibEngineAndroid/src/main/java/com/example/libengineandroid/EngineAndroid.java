@@ -23,10 +23,8 @@ public class EngineAndroid implements Runnable, Engine {
     public EngineAndroid(SurfaceView myView, int logicWidth, int logicHeight) {
         _surfaceView = myView;
         _input = new InputAndroid();
-        //El propio sufaceview puede obtener el contexto y devolver asi los assets
-        _assetManager = myView.getContext().getAssets();
-        //EN LUGAR DE RECIBIR EL THIS.INPUT DEBERIA DE LLAMAR AL TOUCHHANDLER QUE LO DEVUELVA EL INPUIT PARA ASOCIARSELO
-        myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler());
+        _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
+        myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler()); // Configura el manejador de eventos táctiles
         _graphics = new GraphicsAndroid(_surfaceView, _assetManager, logicWidth, logicHeight);
     }
 

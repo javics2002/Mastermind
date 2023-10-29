@@ -27,7 +27,6 @@ public class InputAndroid implements Input {
         _handler.addTouchEvent(); // Agrega un evento táctil al controlador
     }
 
-
     public TouchHandlerAndroid getTouchHandler() {
         return _handler; // Obtiene el controlador de eventos táctiles
     }
