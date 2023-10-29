@@ -123,7 +123,7 @@ public class GraphicsAndroid implements Graphics {
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
         ImageAndroid a = (ImageAndroid)image;
         Bitmap aux = getResizedBitmap(a.getImg(),scaleToReal(logicWidth), scaleToReal(logicHeight));
-        _canvas.drawBitmap(aux, logicToRealX(logicX) ,
+        if(aux!=null)_canvas.drawBitmap(aux, logicToRealX(logicX) ,
                 logicToRealY(logicY) , _paint);
     }
 
@@ -156,14 +156,19 @@ public class GraphicsAndroid implements Graphics {
     // El último parámetro false indica que no se debe filtrar la imagen durante la escala
     // lo que significa que se utilizará un método de interpolación rápido.
     public Bitmap getResizedBitmap(Bitmap bm, float newWidth, float newHeight) {
-        int width = bm.getWidth();
-        int height = bm.getHeight();
-        float sW = ((float) newWidth) /width;
-        float sH = ((float) newHeight) / height;
-        Matrix m = new Matrix();
-        m.postScale(sW,  sH);
-        Bitmap bmresized = Bitmap.createBitmap(bm, 0, 0, width, height, m, false);
-        return bmresized;
+
+        if(bm!=null) {
+            int width = bm.getWidth();
+            int height = bm.getHeight();
+            float sW = ((float) newWidth) / width;
+            float sH = ((float) newHeight) / height;
+            Matrix m = new Matrix();
+            m.postScale(sW, sH);
+            Bitmap bmresized = Bitmap.createBitmap(bm, 0, 0, width, height, m, false);
+            return bmresized;
+        }
+         return null;
+
     }
 
 
