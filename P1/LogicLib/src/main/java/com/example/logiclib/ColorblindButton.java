@@ -39,9 +39,9 @@ public class ColorblindButton implements Interface {
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
             List<CombinationLayout> combinationLayouts = _gameScene.getCombinationLayouts();
             List<ColorButton> colorButtons = _gameScene.getColorButtons();
-            if(!GameAttributes.Instance()._isEyeOpen)
+            if(!GameAttributes.Instance().isEyeOpen)
             {
-                GameAttributes.Instance()._isEyeOpen = true;
+                GameAttributes.Instance().isEyeOpen = true;
                 _image = _graphics.newImage("UI/eyeOpened.png");
 
                 for(CombinationLayout c: combinationLayouts) {
@@ -59,7 +59,7 @@ public class ColorblindButton implements Interface {
                 }
             }
             else {
-                GameAttributes.Instance()._isEyeOpen = false;
+                GameAttributes.Instance().isEyeOpen = false;
                 _image = _graphics.newImage("UI/eyeClosed.png");
 
                 for(CombinationLayout c: combinationLayouts) {

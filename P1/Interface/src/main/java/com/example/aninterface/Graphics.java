@@ -12,9 +12,9 @@ public interface Graphics {
     int logicToRealY(int y);
     int scaleToReal(int realScale);
     int getWidth();
-    int getWidthLogic();
+    int getLogicWidth();
     int getHeight();
-    int getHeightLogic();
+    int getLogicHeight();
     int getStringWidth(String text, Font font);
     int getStringHeight(String text, Font font);
     void setNewResolution(int w, int h);

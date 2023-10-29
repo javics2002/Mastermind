@@ -170,9 +170,9 @@ public class GraphicsPC implements Graphics {
     }
 
     @Override
-    public int getHeightLogic() { return _logicHeight; }
+    public int getLogicHeight() { return _logicHeight; }
     @Override
-    public int getWidthLogic() { return _logicWidth; }
+    public int getLogicWidth() { return _logicWidth; }
 
     @Override
     public void setNewResolution(int newRealWidth, int newRealHeight) {
