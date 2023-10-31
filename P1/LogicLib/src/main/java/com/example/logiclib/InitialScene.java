@@ -26,6 +26,7 @@ public class InitialScene implements Scene {
         int buttonHeight = 90;
         _playButton = new PlayButton("playButton.png", engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight);
+        _engine.getAudio().newSound("click.wav", false);
     }
 
     @Override

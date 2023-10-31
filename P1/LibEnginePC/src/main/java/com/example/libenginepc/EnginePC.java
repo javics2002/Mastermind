@@ -1,6 +1,8 @@
 package com.example.libenginepc;
 
 import javax.swing.JFrame;
+
+import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
@@ -14,13 +16,17 @@ public class EnginePC implements Runnable, Engine {
     private Scene _currentScene;
     private final GraphicsPC _graphics;
     private final InputPC _input;
+    private AudioPC _audio;
+
     private final float _aspectRatio = 2f / 3f;
     private final int _logicHeight = 720;
+
 
     public EnginePC(JFrame myView) {
         int _logicWidth = (int) (_logicHeight * _aspectRatio);
         _graphics = new GraphicsPC(myView, _logicWidth, _logicHeight);
         _input = new InputPC();
+        _audio = new AudioPC();
         myView.addMouseListener(_input.getHandlerInput());
     }
 
@@ -39,6 +45,8 @@ public class EnginePC implements Runnable, Engine {
         _graphics.clear(0xe7d6bd);
         _currentScene.render(_graphics);
     }
+
+
 
     @Override
     public void run() {
@@ -106,6 +114,10 @@ public class EnginePC implements Runnable, Engine {
     @Override
     public Input getInput() {
         return _input;
+    }
+
+    public Audio getAudio() {
+        return _audio;
     }
 
     @Override

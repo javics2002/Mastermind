@@ -1,9 +1,12 @@
 package com.example.logiclib;
+import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Image;
+import com.example.aninterface.Sound;
+import com.example.aninterface.Audio;
 
 public class PlayButton implements Interface {
     private final Image _image;
@@ -11,6 +14,8 @@ public class PlayButton implements Interface {
     private final Graphics _graphics;
     private final int _positionX, _positionY;
     private final int _width, _height;
+
+    private final Audio _audio;
 
    PlayButton(String filename, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;
@@ -20,12 +25,14 @@ public class PlayButton implements Interface {
         _positionY = positionY ;
         _width = width;
         _height = height;
+       _audio = _engine.getAudio();
     }
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         // Change scene to difficulty scene
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
+            _audio.playSound("click");
             DifficultyScene scene = new DifficultyScene(_engine);
             _engine.setCurrentScene(scene);
             return true;

@@ -2,9 +2,6 @@ package com.example.libenginepc;
 
 import com.example.aninterface.Input;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.util.ArrayList;
 import java.util.List;
 
 public class InputPC implements Input {
