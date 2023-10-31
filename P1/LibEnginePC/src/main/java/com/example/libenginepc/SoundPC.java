@@ -1,9 +1,12 @@
 package com.example.libenginepc;
 import com.example.aninterface.Sound;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 public class SoundPC implements Sound {
 
     private Clip _clip;
+    private FloatControl _volumeControl;
+
     SoundPC(Clip clip){
         this._clip = clip;
     }
@@ -16,5 +19,16 @@ public class SoundPC implements Sound {
     public void stop() {
         if(this._clip.isRunning())
             this._clip.stop();
+    }
+    // Método para aumentar el volumen en una cantidad específica (en decibeles)
+    public void increaseVolume(float increaseAmount) {
+        float currentVolume =  _volumeControl.getValue();
+        _volumeControl.setValue(currentVolume + increaseAmount);
+    }
+
+    // Método para disminuir el volumen en una cantidad específica (en decibeles)
+    public void decreaseVolume(float decreaseAmount) {
+        float currentVolume = _volumeControl.getValue();
+        _volumeControl.setValue(currentVolume - decreaseAmount);
     }
 }
