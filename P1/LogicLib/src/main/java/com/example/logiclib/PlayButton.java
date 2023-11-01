@@ -26,12 +26,16 @@ public class PlayButton implements Interface {
         _width = width;
         _height = height;
        _audio = _engine.getAudio();
+
+
+
     }
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         // Change scene to difficulty scene
         if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
+            _audio.decreaseVolume(20,"click");
             _audio.playSound("click");
             DifficultyScene scene = new DifficultyScene(_engine);
             _engine.setCurrentScene(scene);

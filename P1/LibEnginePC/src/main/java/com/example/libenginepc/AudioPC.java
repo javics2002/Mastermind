@@ -56,4 +56,14 @@ public class AudioPC implements Audio {
     public boolean isLoaded(String id) {
         return sounds.containsKey(id);
     }
+
+    public void increaseVolume(float increaseAmount,String id) {
+        sounds.get(id+".wav").increaseVolume((increaseAmount));
+    }
+
+    // Método para disminuir el volumen en una cantidad específica (en decibeles)
+    public void decreaseVolume(float decreaseAmount,String id) {
+        sounds.get(id+".wav").decreaseVolume((decreaseAmount));
+    }
+
 }

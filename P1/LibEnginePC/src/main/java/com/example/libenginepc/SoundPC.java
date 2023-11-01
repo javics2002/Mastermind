@@ -9,6 +9,10 @@ public class SoundPC implements Sound {
 
     SoundPC(Clip clip){
         this._clip = clip;
+        // Inicializar _volumeControl si el clip tiene uno
+        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
+            _volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        }
     }
 
     public Clip getClip(){return this._clip;}
