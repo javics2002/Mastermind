@@ -1,9 +1,10 @@
 package com.example.logiclib;
+
 import com.example.aninterface.Engine;
+import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
-import com.example.aninterface.Graphics;
-import com.example.aninterface.Font;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public class GameScene implements Scene {
         int initialHeight = 100;
         int verticalPadding = 15, scale = 40;
         _combinationLayouts = new ArrayList<>();
-        for(int i = 0; i < tryNumber; i++){
+        for (int i = 0; i < tryNumber; i++) {
             _combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
                     graphics.getLogicWidth() / 2, initialHeight + (verticalPadding + scale) * i, scale));
         }
@@ -74,7 +75,7 @@ public class GameScene implements Scene {
         // Color buttons
         int horizontalPadding = 6;
         _colorButtons = new ArrayList<>();
-        for(int i = 0; i < numberOfColors; i++) {
+        for (int i = 0; i < numberOfColors; i++) {
             _colorButtons.add(new ColorButton("color" + (i + 1) + ".png", _engine,
                     (int) (graphics.getLogicWidth() / 2 + (i - numberOfColors / 2f) * (scale + horizontalPadding)),
                     graphics.getLogicHeight() - 60, scale, scale, i + 1));
@@ -88,8 +89,8 @@ public class GameScene implements Scene {
 
         // _combinationLayouts.get(gameAttributes._activeLayout).getCurrentCombination().printCombination();
         CombinationLayout activeLayout = _combinationLayouts.get(gameAttributes.activeLayout);
-        if (activeLayout.isFull()){
-            if (activeLayout.getCurrentCombination().equals(gameAttributes.resultCombination)){
+        if (activeLayout.isFull()) {
+            if (activeLayout.getCurrentCombination().equals(gameAttributes.resultCombination)) {
                 // USER WON
                 Scene gameOverScene = new GameOverScene(_engine);
                 _engine.setCurrentScene(gameOverScene);
@@ -111,11 +112,11 @@ public class GameScene implements Scene {
         }
 
 
-        for(CombinationLayout combination : _combinationLayouts) {
+        for (CombinationLayout combination : _combinationLayouts) {
             combination.update();
         }
 
-        for(ColorButton colorButton : _colorButtons) {
+        for (ColorButton colorButton : _colorButtons) {
             colorButton.update();
         }
     }
@@ -129,7 +130,7 @@ public class GameScene implements Scene {
         _quitButton.render();
         _colorblindButton.render();
 
-        for(CombinationLayout combination : _combinationLayouts) {
+        for (CombinationLayout combination : _combinationLayouts) {
             combination.render();
         }
 
@@ -137,15 +138,14 @@ public class GameScene implements Scene {
         graphics.drawRect(0, graphics.getLogicHeight() - colorButtonBackgroundHeight,
                 graphics.getLogicWidth(), colorButtonBackgroundHeight, 0xFFFAFAFA);
 
-        for(ColorButton colorButton : _colorButtons) {
+        for (ColorButton colorButton : _colorButtons) {
             colorButton.render();
         }
     }
 
     @Override
     public void handleEvents(Input input) {
-        if(input.getTouchEvent().size()>0)
-        {
+        if (input.getTouchEvent().size() > 0) {
             Input.TouchEvent touchEvent = input.getTouchEvent().get(0);
             _colorblindButton.handleEvents(touchEvent);
             _quitButton.handleEvents(touchEvent);
@@ -155,8 +155,8 @@ public class GameScene implements Scene {
             _combinationLayouts.get(GameAttributes.Instance().activeLayout).handleEvents(touchEvent);
 
             // Cuando detecta un click en un color, se coloca en el primer hueco posible.
-            for(ColorButton colorButton : _colorButtons) {
-                if (colorButton.handleEvents(touchEvent)){
+            for (ColorButton colorButton : _colorButtons) {
+                if (colorButton.handleEvents(touchEvent)) {
                     _combinationLayouts.get(gameAttributes.activeLayout).setNextColor(colorButton._colorID, gameAttributes.isEyeOpen);
                     _combinationLayouts.get(gameAttributes.activeLayout).getCurrentCombination().printCombination();
                     break;
@@ -176,7 +176,7 @@ public class GameScene implements Scene {
 
     private void updateTriesText() {
         String attemptsString = "Te quedan " + gameAttributes.attemptsLeft + " intentos.";
-        if (gameAttributes.attemptsLeft == 1){
+        if (gameAttributes.attemptsLeft == 1) {
             attemptsString = "Este es tu último intento!";
         }
 

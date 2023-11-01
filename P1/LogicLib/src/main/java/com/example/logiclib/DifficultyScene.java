@@ -20,7 +20,7 @@ public class DifficultyScene implements Scene {
         // Back button
         int backbuttonScale = 40;
         _backButton = new BackButton("UI/back.png", engine,
-                backbuttonScale / 2,backbuttonScale /2,
+                backbuttonScale / 2, backbuttonScale / 2,
                 backbuttonScale, backbuttonScale);
 
         // Title
@@ -49,7 +49,8 @@ public class DifficultyScene implements Scene {
     }
 
     @Override
-    public void update(double deltaTime) {}
+    public void update(double deltaTime) {
+    }
 
     @Override
     public void render(Graphics gr) {
@@ -63,14 +64,13 @@ public class DifficultyScene implements Scene {
 
     @Override
     public void handleEvents(Input a) {
-        int numEvents=a.getTouchEvent().size();
-        if(numEvents>0)
-        {
-            _backButton.handleEvents( a.getTouchEvent().get(0));
-            _easyDifficultyButton.handleEvents( a.getTouchEvent().get(0));
-            _mediumDifficultyButton.handleEvents( a.getTouchEvent().get(0));
-            _difficultDifficultyButton.handleEvents( a.getTouchEvent().get(0));
-            _impossibleDifficultyButton.handleEvents( a.getTouchEvent().get(0));
+        int numEvents = a.getTouchEvent().size();
+        if (numEvents > 0) {
+            _backButton.handleEvents(a.getTouchEvent().get(0));
+            _easyDifficultyButton.handleEvents(a.getTouchEvent().get(0));
+            _mediumDifficultyButton.handleEvents(a.getTouchEvent().get(0));
+            _difficultDifficultyButton.handleEvents(a.getTouchEvent().get(0));
+            _impossibleDifficultyButton.handleEvents(a.getTouchEvent().get(0));
         }
     }
 }

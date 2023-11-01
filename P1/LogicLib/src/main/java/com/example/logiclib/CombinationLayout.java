@@ -37,14 +37,14 @@ public class CombinationLayout implements Interface {
                 0);
 
         _colors = new ArrayList<>();
-        for(int i = 0; i < combinationLength; i++){
+        for (int i = 0; i < combinationLength; i++) {
             _colors.add(new ColorSlot(engine, "colorEmpty.png",
                     (int) (_positionX + (i - combinationLength / 2f) * (_scale + padding)),
                     _positionY - _scale / 2, _scale, _scale));
         }
 
         _hints = new ArrayList<>();
-        for(int i = 0; i < combinationLength; i++){
+        for (int i = 0; i < combinationLength; i++) {
             _hints.add(new HintSlot(engine, "hintGray.png",
                     (int) (_graphics.getLogicWidth() - 50 - _lateralMargin + (i % ((combinationLength + 1) / 2)
                             - combinationLength / 4f) * _scale / 2 + i % ((combinationLength + 1) / 2) * _lateralMargin / 2),
@@ -62,28 +62,28 @@ public class CombinationLayout implements Interface {
 
         _combinationNumber.render();
 
-        for(ColorSlot color : _colors){
+        for (ColorSlot color : _colors) {
             color.render();
         }
 
-        for(HintSlot hint : _hints){
+        for (HintSlot hint : _hints) {
             hint.render();
         }
     }
 
     @Override
     public void update() {
-        for(ColorSlot color : _colors){
+        for (ColorSlot color : _colors) {
             color.update();
         }
     }
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
-        for (int i = 0; i < _colors.size(); i++){
-            ColorSlot color =  _colors.get(i);
+        for (int i = 0; i < _colors.size(); i++) {
+            ColorSlot color = _colors.get(i);
 
-            if (color.handleEvents(e)){
+            if (color.handleEvents(e)) {
                 _currentCombination.deleteColor(i);
                 color.deleteColor();
                 return true;
@@ -92,9 +92,9 @@ public class CombinationLayout implements Interface {
         return false;
     }
 
-    public void setNextColor(int colorID, boolean isEyeOpen){
+    public void setNextColor(int colorID, boolean isEyeOpen) {
         // Coloca la imagen en el primer hueco del array
-        for (int i = 0; i < _colors.size(); i++){
+        for (int i = 0; i < _colors.size(); i++) {
             if (!_colors.get(i).hasColor()) {
                 // Image
                 _colors.get(i).setColor(colorID, isEyeOpen);
@@ -108,8 +108,8 @@ public class CombinationLayout implements Interface {
 
     // Devuelve true si el array de colores está lleno (Cuando el jugador completa una combinación)
     public boolean isFull() {
-        for (int i = 0; i < _colors.size(); i++){
-            if (!_colors.get(i).hasColor()){
+        for (int i = 0; i < _colors.size(); i++) {
+            if (!_colors.get(i).hasColor()) {
                 return false;
             }
         }
@@ -122,11 +122,10 @@ public class CombinationLayout implements Interface {
 
     // Usando el array de las pistas, coloca la respectiva imagen, ya sea la pista negra o blanca
     public void setHints(Combination.HintEnum[] predictionHints) {
-        for (int i = 0; i < predictionHints.length; i++){
-            if (predictionHints[i] == Combination.HintEnum.BLACK){
+        for (int i = 0; i < predictionHints.length; i++) {
+            if (predictionHints[i] == Combination.HintEnum.BLACK) {
                 _hints.get(i).setImage("hintBlack.png");
-            }
-            else if (predictionHints[i] == Combination.HintEnum.WHITE){
+            } else if (predictionHints[i] == Combination.HintEnum.WHITE) {
                 _hints.get(i).setImage("hintWhite.png");
             }
         }

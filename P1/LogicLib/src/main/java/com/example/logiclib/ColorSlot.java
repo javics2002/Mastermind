@@ -15,7 +15,7 @@ public class ColorSlot implements Interface {
     private boolean _hasColor;
     private int _colorID;
 
-    public ColorSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
+    public ColorSlot(Engine engine, String filename, int positionX, int positionY, int width, int height) {
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
 
@@ -40,12 +40,11 @@ public class ColorSlot implements Interface {
 
     @Override
     public void update() {
-        if (GameAttributes.Instance().isEyeOpen && _hasColor){
+        if (GameAttributes.Instance().isEyeOpen && _hasColor) {
             String colorButtonName = "color" + _colorID + ".png";
             colorButtonName = colorButtonName.replace(".png", "CB.png");
             setImage(colorButtonName);
-        }
-        else {
+        } else {
             String colorSlotName = _name;
             _name = colorSlotName.replace("CB.png", ".png");
             setImage(_name);
@@ -57,21 +56,19 @@ public class ColorSlot implements Interface {
         return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
     }
 
-    public void setColor(int color, boolean isEyeOpen)
-    {
+    public void setColor(int color, boolean isEyeOpen) {
         _hasColor = true;
         _colorID = color;
 
-         // Si tenemos el modo daltónico activado, usamos su respectiva imagen.
-         if (isEyeOpen) {
-             setImage("color"+ _colorID +"CB.png");
-         }
-         else{
-             setImage("color"+ _colorID +".png");
-         }
+        // Si tenemos el modo daltónico activado, usamos su respectiva imagen.
+        if (isEyeOpen) {
+            setImage("color" + _colorID + "CB.png");
+        } else {
+            setImage("color" + _colorID + ".png");
+        }
     }
 
-    public void deleteColor(){
+    public void deleteColor() {
         _colorID = -1;
         _hasColor = false;
         setImage("colorEmpty.png");
@@ -79,9 +76,9 @@ public class ColorSlot implements Interface {
 
     private boolean inBounds(int mX, int mY) {
         return (mX >= (_graphics.logicToRealX(_positionX))
-                && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
+                && mX <= _graphics.logicToRealX(_positionX) + _graphics.scaleToReal(_width)
                 && mY >= _graphics.logicToRealY(_positionY)
-                && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
+                && mY <= _graphics.logicToRealY(_positionY) + _graphics.scaleToReal(_height));
     }
 
     public boolean hasColor() {

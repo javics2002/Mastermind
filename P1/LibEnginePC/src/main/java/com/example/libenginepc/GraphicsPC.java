@@ -1,17 +1,18 @@
 package com.example.libenginepc;
+
+import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
+import com.example.aninterface.Image;
+
+import java.awt.Color;
 import java.awt.FontFormatException;
 import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-
-import com.example.aninterface.Font;
-import com.example.aninterface.Image;
-import com.example.aninterface.Graphics;
 
 public class GraphicsPC implements Graphics {
     private final JFrame _frame;
@@ -56,13 +57,12 @@ public class GraphicsPC implements Graphics {
     @Override
     public void clear(int color) {
         final boolean debug = false;
-        if(debug){
+        if (debug) {
             _graphics2D.setColor(Color.black);
             _graphics2D.fillRect(0, 0, _frame.getWidth(), _frame.getHeight());
 
             drawRect(0, 0, _logicWidth, _logicHeight, color);
-        }
-        else{
+        } else {
             _graphics2D.setColor(new Color(color));
             _graphics2D.fillRect(0, 0, _frame.getWidth(), _frame.getHeight());
         }
@@ -73,7 +73,7 @@ public class GraphicsPC implements Graphics {
         java.awt.Font customFont;
 
         try {
-            customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("data/Fonts/"+fileName)).deriveFont(size);
+            customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new File("data/Fonts/" + fileName)).deriveFont(size);
         } catch (FontFormatException | IOException e) {
             throw new RuntimeException(e);
         }
@@ -118,7 +118,7 @@ public class GraphicsPC implements Graphics {
     public Image newImage(String filename) {
         java.awt.Image image = null;
         try {
-            image = ImageIO.read(new File("data/"+filename));
+            image = ImageIO.read(new File("data/" + filename));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -127,12 +127,14 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public int getStringWidth(String text, Font font) {
-        return (int)((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
+        return (int) ((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
     }
+
     @Override
     public int getStringHeight(String text, Font font) {
-        return (int)((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
+        return (int) ((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
     }
+
     @Override
     public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
         setColor(color);
@@ -143,34 +145,41 @@ public class GraphicsPC implements Graphics {
     // Tienen en cuenta los insets para realizar el calculo.
     @Override
     public int logicToRealX(int logicX) {
-        return (int)(logicX * _scaleFactor + _leftInset + _borderWidth);
+        return (int) (logicX * _scaleFactor + _leftInset + _borderWidth);
     }
+
     @Override
     public int logicToRealY(int logicY) {
-        return (int)(logicY * _scaleFactor + _topInset + _borderHeight);
+        return (int) (logicY * _scaleFactor + _topInset + _borderHeight);
     }
 
     // Función que no tiene en cuenta los Insets al convertir de tamaño lógico a real, debido a que
     // no podemos tener en cuenta el offset dos veces seguidas (Por ejemplo, al crear un rectángulo,
     // se tiene en cuenta el offset en las coordenadas x,y, pero no en el ancho/alto del rectángulo)
     @Override
-    public int scaleToReal(int realScale){
-        return (int)(realScale * _scaleFactor);
+    public int scaleToReal(int realScale) {
+        return (int) (realScale * _scaleFactor);
     }
 
     @Override
     public int getWidth() {
         return _frame.getWidth() - _leftInset - _rightInset;
     }
+
     @Override
     public int getHeight() {
         return _frame.getHeight() - _topInset - _bottomInset;
     }
 
     @Override
-    public int getLogicHeight() { return _logicHeight; }
+    public int getLogicHeight() {
+        return _logicHeight;
+    }
+
     @Override
-    public int getLogicWidth() { return _logicWidth; }
+    public int getLogicWidth() {
+        return _logicWidth;
+    }
 
     @Override
     public void setNewResolution(int newRealWidth, int newRealHeight) {
@@ -188,8 +197,8 @@ public class GraphicsPC implements Graphics {
         // estará en el centro, y tendrá los bordes a cada lado.
         if ((float) getWidth() / getHeight() < (float) _logicWidth / _logicHeight) {
             _borderWidth = 0;
-            _borderHeight =  (int) ((getHeight() - (_logicHeight * factorX)) / 2);
-        } else  {
+            _borderHeight = (int) ((getHeight() - (_logicHeight * factorX)) / 2);
+        } else {
             _borderWidth = (int) ((getWidth() - (_logicWidth * factorY)) / 2);
             _borderHeight = 0;
         }

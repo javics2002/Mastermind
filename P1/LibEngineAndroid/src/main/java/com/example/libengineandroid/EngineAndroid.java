@@ -1,13 +1,14 @@
 package com.example.libengineandroid;
+
+import android.content.res.AssetManager;
 import android.view.SurfaceView;
 import android.view.View;
 
 import com.example.aninterface.Engine;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
-import com.example.aninterface.Graphics;
-//Libreria para la gestion de recursos , es una prueba
-import android.content.res.AssetManager;
+
 // Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
 public class EngineAndroid implements Runnable, Engine {
     // Atributos
@@ -31,7 +32,7 @@ public class EngineAndroid implements Runnable, Engine {
     @Override
     public void run() {
         // Espera a que el motor esté en ejecución y el ancho de la superficie sea válido
-        while (_running && _surfaceView.getWidth() == 0);
+        while (_running && _surfaceView.getWidth() == 0) ;
 
         long lastFrameTime = System.nanoTime();
 
@@ -49,7 +50,7 @@ public class EngineAndroid implements Runnable, Engine {
             update(elapsedTime);
 
             // Renderiza el frame cuando los gráficos estén listos
-            while (!_graphics.isValid());
+            while (!_graphics.isValid()) ;
             _graphics.lockCanvas();
             _graphics.prepareFrame();
             render();

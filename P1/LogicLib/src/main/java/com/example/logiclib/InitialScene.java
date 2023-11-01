@@ -1,9 +1,10 @@
 package com.example.logiclib;
+
 import com.example.aninterface.Engine;
+import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
-import com.example.aninterface.Graphics;
-import com.example.aninterface.Font;
 
 public class InitialScene implements Scene {
     private final PlayButton _playButton;
@@ -26,11 +27,11 @@ public class InitialScene implements Scene {
         int buttonHeight = 90;
         _playButton = new PlayButton("playButton.png", engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight);
-        _engine.getAudio().newSound("click.wav", false);
     }
 
     @Override
-    public void update(double deltaTime) {}
+    public void update(double deltaTime) {
+    }
 
     @Override
     public void render(Graphics gr) {
@@ -40,9 +41,8 @@ public class InitialScene implements Scene {
 
     @Override
     public void handleEvents(Input a) {
-        if(a.getTouchEvent().size()>0)
-        {
-            this._playButton.handleEvents( a.getTouchEvent().get(0));
+        if (a.getTouchEvent().size() > 0) {
+            this._playButton.handleEvents(a.getTouchEvent().get(0));
         }
     }
 }

@@ -9,10 +9,10 @@ public class GameAttributes {
     public boolean isEyeOpen;
     public Combination resultCombination;
 
-    private GameAttributes(){
+    private GameAttributes() {
     }
 
-    public static GameAttributes Instance(){
+    public static GameAttributes Instance() {
         if (_Instance == null)
             _Instance = new GameAttributes();
 

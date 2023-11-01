@@ -1,13 +1,12 @@
 package com.example.p1;
 
-import androidx.appcompat.app.AppCompatActivity;
-import android.view.SurfaceView;
 import android.os.Bundle;
-import android.content.res.AssetManager;
+import android.view.SurfaceView;
 
-import com.example.libengineandroid.EngineAndroid;
-import com.example.logiclib.GameScene;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.aninterface.Scene;
+import com.example.libengineandroid.EngineAndroid;
 import com.example.logiclib.InitialScene;
 
 public class MainActivity extends AppCompatActivity {

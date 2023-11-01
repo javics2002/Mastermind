@@ -1,7 +1,8 @@
 package com.example.logiclib;
+
 import com.example.aninterface.Engine;
-import com.example.aninterface.Graphics;
 import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Interface;
 
@@ -23,19 +24,22 @@ public class Text implements Interface {
         _text = text;
         _font = font;
     }
+
     @Override
     public void render() {
         _graphics.drawText(_text, _font, _posX, _posY, _color);
     }
+
     @Override
-    public void update() { }
+    public void update() {
+    }
 
     @Override
     public boolean handleEvents(Input.TouchEvent e) {
         return false;
     }
 
-    public void setText(String newText){
+    public void setText(String newText) {
         _text = newText;
     }
 }

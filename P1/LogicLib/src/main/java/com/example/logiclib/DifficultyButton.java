@@ -1,31 +1,15 @@
 package com.example.logiclib;
 
 import com.example.aninterface.Engine;
-import com.example.aninterface.Graphics;
-import com.example.aninterface.Image;
-import com.example.aninterface.Input;
-import com.example.aninterface.Interface;
+import com.example.aninterface.Scene;
 
-public class DifficultyButton implements Interface {
-    private final Image _image;
-    private final Engine _engine;
-    private final Graphics _graphics;
-    private final int _positionX, _positionY;
-    private final int _width, _height;
+public class DifficultyButton extends Button {
     private final int _tryNumber, _combinationLength, _numberOfColors;
     private final boolean _repeatedColors;
 
     DifficultyButton(String filename, Engine engine, int positionX, int positionY, int width, int height,
                      int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
-        _engine = engine;
-        _graphics = engine.getGraphics();
-        _image = _graphics.newImage(filename);
-
-        _positionX = positionX;
-        _positionY = positionY ;
-
-        _width = width;
-        _height = height;
+        super(filename, engine, positionX, positionY, width, height);
 
         _tryNumber = tryNumber;
         _combinationLength = combinationLength;
@@ -34,28 +18,8 @@ public class DifficultyButton implements Interface {
     }
 
     @Override
-    public boolean handleEvents(Input.TouchEvent e) {
-        if (e.type == Input.InputType.PRESSED && inBounds(e.x, e.y)) {
-            // Change scene
-            GameScene scene = new GameScene(_engine, _tryNumber, _combinationLength, _numberOfColors, _repeatedColors);
-            _engine.setCurrentScene(scene);
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public void update() { }
-
-    @Override
-    public void render() {
-        _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
-    }
-
-    public boolean inBounds(int mX, int mY) {
-        return (mX >= (_graphics.logicToRealX(_positionX))
-                && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
-                && mY >= _graphics.logicToRealY(_positionY)
-                && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
+    void callback() {
+        Scene scene = new GameScene(_engine, _tryNumber, _combinationLength, _numberOfColors, _repeatedColors);
+        _engine.setCurrentScene(scene);
     }
 }

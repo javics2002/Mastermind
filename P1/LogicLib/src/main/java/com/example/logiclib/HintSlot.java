@@ -12,7 +12,7 @@ public class HintSlot implements Interface {
     private final int _positionX, _positionY;
     private final int _width, _height;
 
-    public HintSlot(Engine engine, String filename, int positionX, int positionY, int width, int height){
+    public HintSlot(Engine engine, String filename, int positionX, int positionY, int width, int height) {
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
 

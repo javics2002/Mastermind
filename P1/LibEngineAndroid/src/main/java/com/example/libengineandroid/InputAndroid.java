@@ -1,7 +1,7 @@
 package com.example.libengineandroid;
-import android.view.MotionEvent;
-import android.view.View;
+
 import com.example.aninterface.Input;
+
 import java.util.ArrayList;
 
 public class InputAndroid implements Input {

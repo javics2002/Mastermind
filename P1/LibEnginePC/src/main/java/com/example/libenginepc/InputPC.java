@@ -5,14 +5,16 @@ import com.example.aninterface.Input;
 import java.util.List;
 
 public class InputPC implements Input {
-   private final InputHandlerMouse _handler;
-    InputPC(){
+    private final InputHandlerMouse _handler;
+
+    InputPC() {
         _handler = new InputHandlerMouse();
     }
-    public InputHandlerMouse getHandlerInput()
-    {
+
+    public InputHandlerMouse getHandlerInput() {
         return _handler;
     }
+
     @Override
     public List<TouchEvent> getTouchEvent() {
         return _handler.getMouseEvent();

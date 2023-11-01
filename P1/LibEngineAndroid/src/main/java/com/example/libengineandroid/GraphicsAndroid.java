@@ -11,12 +11,12 @@ import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
+import com.example.aninterface.Image;
+
 import java.io.IOException;
 import java.io.InputStream;
-
-import com.example.aninterface.Font;
-import com.example.aninterface.Image;
-import com.example.aninterface.Graphics;
 
 
 public class GraphicsAndroid implements Graphics {
@@ -55,12 +55,11 @@ public class GraphicsAndroid implements Graphics {
     @Override
     public void clear(int color) {
         final boolean debug = false;
-        if(debug){
+        if (debug) {
             _canvas.drawColor(0);
 
             drawRect(0, 0, _logicWidth, _logicHeight, color);
-        }
-        else{
+        } else {
             setColor(color);
             _canvas.drawColor(_paint.getColor());
         }
@@ -81,11 +80,11 @@ public class GraphicsAndroid implements Graphics {
     }
 
     //USO DEL CANVAS, BLOQUEO Y DESBLOQUEO
-    public void lockCanvas(){
+    public void lockCanvas() {
         _canvas = _surfaceView.getHolder().lockCanvas();
     }
 
-    public void unlockCanvas(){
+    public void unlockCanvas() {
         _surfaceView.getHolder().unlockCanvasAndPost(_canvas);
     }
 
@@ -108,7 +107,7 @@ public class GraphicsAndroid implements Graphics {
 
     //No podemos hacer carpetas puesto que busca desde la carptea assets solo
     @Override
-    public Font newFont(String fileName, float size){
+    public Font newFont(String fileName, float size) {
         //Con el elemento typeface podemos ajustar el tipo de fuente y decirselo al elemento paint para que adquiera esas caracteriticas
         Typeface tface = Typeface.createFromAsset(_assetManager, fileName);
 
@@ -121,14 +120,14 @@ public class GraphicsAndroid implements Graphics {
     // Para dibujar seguimos el siguiente esquema
     @Override
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
-        ImageAndroid a = (ImageAndroid)image;
-        Bitmap aux = getResizedBitmap(a.get_image(),scaleToReal(logicWidth), scaleToReal(logicHeight));
-        if(aux!=null)
-            _canvas.drawBitmap(aux, logicToRealX(logicX), logicToRealY(logicY) , _paint);
+        ImageAndroid a = (ImageAndroid) image;
+        Bitmap aux = getResizedBitmap(a.get_image(), scaleToReal(logicWidth), scaleToReal(logicHeight));
+        if (aux != null)
+            _canvas.drawBitmap(aux, logicToRealX(logicX), logicToRealY(logicY), _paint);
     }
 
     @Override
-    public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color)  {
+    public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
         Rect rect = new Rect(logicToRealX(logicX), logicToRealY(logicY),
                 logicToRealX(logicX + logicWidth), logicToRealY(logicY + logicHeight));
 
@@ -157,7 +156,7 @@ public class GraphicsAndroid implements Graphics {
     // lo que significa que se utilizará un método de interpolación rápido.
     public Bitmap getResizedBitmap(Bitmap bm, float newWidth, float newHeight) {
 
-        if(bm!=null) {
+        if (bm != null) {
             int width = bm.getWidth();
             int height = bm.getHeight();
             float sW = ((float) newWidth) / width;
@@ -167,7 +166,7 @@ public class GraphicsAndroid implements Graphics {
             Bitmap bmresized = Bitmap.createBitmap(bm, 0, 0, width, height, m, false);
             return bmresized;
         }
-         return null;
+        return null;
 
     }
 
@@ -183,12 +182,14 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
-    public int scaleToReal(int realScale){
+    public int scaleToReal(int realScale) {
         return (int) (realScale * _scaleFactor);
     }
 
     // Con este metodo nos aseguramos que el surfaceView (obtenido a partir del holder) este disponible para usarse y renderizar
-    public boolean isValid() { return _holder.getSurface().isValid();}
+    public boolean isValid() {
+        return _holder.getSurface().isValid();
+    }
 
     //Para ver el tamaño del string trazamos un rectangulo que cubra el texto  asi vemos su alto
     //Pra ver el ancho de una cadena simplmente pasamos la longitud de la cadena y el propio paint nos lo calcula
@@ -204,7 +205,7 @@ public class GraphicsAndroid implements Graphics {
         Rect bordes = new Rect();
         _paint.setTextSize(font.getFontSize());
         _paint.setTypeface(((FontAndroid) font).getFont());
-        _paint.getTextBounds(text,0, text.length(), bordes);
+        _paint.getTextBounds(text, 0, text.length(), bordes);
         return bordes.height();
     }
 
@@ -212,14 +213,21 @@ public class GraphicsAndroid implements Graphics {
     public int getWidth() {     //ANCHO VENTANA
         return _surfaceView.getWidth();
     }
+
     @Override
     public int getHeight() {
         return _surfaceView.getHeight();
     }
+
     @Override
-    public int getLogicHeight() { return _logicHeight; }     // ALTURA LOGICA
+    public int getLogicHeight() {
+        return _logicHeight;
+    }     // ALTURA LOGICA
+
     @Override
-    public int getLogicWidth() { return _logicWidth; }       //ANCHO LOGICO
+    public int getLogicWidth() {
+        return _logicWidth;
+    }       //ANCHO LOGICO
 
     @Override
     public void setNewResolution(int newRealWidth, int newRealHeight) {
@@ -235,8 +243,7 @@ public class GraphicsAndroid implements Graphics {
         if ((float) getWidth() / getHeight() < (float) _logicWidth / _logicHeight) {
             _borderWidth = 0;
             _borderHeight = (int) ((getHeight() - (_logicHeight * factorX)) / 2);
-        }
-        else {
+        } else {
             _borderWidth = (int) ((getWidth() - (_logicWidth * factorY)) / 2);
             _borderHeight = 0;
         }

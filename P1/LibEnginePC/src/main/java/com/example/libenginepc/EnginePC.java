@@ -1,14 +1,12 @@
 package com.example.libenginepc;
 
-import javax.swing.JFrame;
-
 import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
-import com.example.aninterface.Graphics;
 
-import java.awt.Dimension;
+import javax.swing.JFrame;
 
 public class EnginePC implements Runnable, Engine {
     private Thread _renderThread;
@@ -31,7 +29,7 @@ public class EnginePC implements Runnable, Engine {
     }
 
     protected void handleEvents() {
-        if (_input.getTouchEvent().size() > 0){
+        if (_input.getTouchEvent().size() > 0) {
             _currentScene.handleEvents(_input);
             _input.clearEvents();
         }
@@ -47,7 +45,6 @@ public class EnginePC implements Runnable, Engine {
     }
 
 
-
     @Override
     public void run() {
         if (_renderThread != Thread.currentThread())
@@ -56,7 +53,7 @@ public class EnginePC implements Runnable, Engine {
         long lastFrameTime = System.nanoTime();
 
         while (_currentScene != null) {
-            long currentTime =  System.nanoTime();
+            long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
 

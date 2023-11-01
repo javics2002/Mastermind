@@ -1,9 +1,10 @@
 package com.example.logiclib;
+
 import com.example.aninterface.Engine;
+import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
-import com.example.aninterface.Graphics;
-import com.example.aninterface.Font;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,13 +28,12 @@ public class GameOverScene implements Scene {
                 codeFont = graphics.newFont("Comfortaa-Regular.ttf", 18f);
         String resultString, attemptsString, attemptsNumberString, codeString = "Código:";
 
-        if(gameAttributes.attemptsLeft != 0) {
+        if (gameAttributes.attemptsLeft != 0) {
             //Has ganado
             resultString = "ENHORABUENA!!";
             attemptsString = "Has averiguado el código en";
             attemptsNumberString = Integer.toString(gameAttributes.activeLayout + 1) + " intentos";
-        }
-        else{
+        } else {
             //Has perdido
             resultString = "GAME OVER";
             attemptsString = "Te has quedado sin intentos";
@@ -49,11 +49,10 @@ public class GameOverScene implements Scene {
         _codeText = new Text(codeString, codeFont, engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(codeString, codeFont) / 2, 200, 0);
 
-
         int scale = 40;
         int padding = 6;
         _resultCombination = new ArrayList<>();
-        for(int i = 0; i < gameAttributes.combinationLength; i++){
+        for (int i = 0; i < gameAttributes.combinationLength; i++) {
             _resultCombination.add(new ColorSlot(engine, "color" + gameAttributes.resultCombination.getColors()[i]
                     + (gameAttributes.isEyeOpen ? "CB" : "") + ".png",
                     (int) ((graphics.getLogicWidth() / 2) + (i - gameAttributes.combinationLength / 2f) * (scale + padding)),
@@ -69,9 +68,7 @@ public class GameOverScene implements Scene {
     }
 
     @Override
-    public void update(double deltaTime) {
-
-    }
+    public void update(double deltaTime) {}
 
     @Override
     public void render(Graphics gr) {
@@ -80,7 +77,7 @@ public class GameOverScene implements Scene {
         _attemptsNumberText.render();
         _codeText.render();
 
-        for(ColorSlot colorSlot : _resultCombination) {
+        for (ColorSlot colorSlot : _resultCombination) {
             colorSlot.render();
         }
 
@@ -90,8 +87,7 @@ public class GameOverScene implements Scene {
 
     @Override
     public void handleEvents(Input input) {
-        if(input.getTouchEvent().size()>0)
-        {
+        if (input.getTouchEvent().size() > 0) {
             _playAgainButton.handleEvents(input.getTouchEvent().get(0));
             _chooseDifficultyButton.handleEvents(input.getTouchEvent().get(0));
         }

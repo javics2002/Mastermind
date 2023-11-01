@@ -1,19 +1,24 @@
 package com.example.aninterface;
+
 import java.util.List;
 
 public interface Input {
-    public static enum InputType { PRESSED, RELEASED, MOVE }
-    public static class TouchEvent {
-        public int x;
-        public int y;
+    enum InputType {PRESSED, RELEASED, MOVE}
+
+    class TouchEvent {
+        public int x, y;
         public InputType type;
-        public TouchEvent(int x, int y, InputType type) {
-            this.x = x;
-            this.y = y;
-            this.type = type;
+
+        public TouchEvent(int x_, int y_, InputType type_) {
+            x = x_;
+            y = y_;
+            type = type_;
         }
     }
+
     List<TouchEvent> getTouchEvent();
+
     public void addTouchEvent();
+
     public void clearEvents();
 }

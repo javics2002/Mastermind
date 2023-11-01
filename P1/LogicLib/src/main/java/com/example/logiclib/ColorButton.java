@@ -17,7 +17,7 @@ public class ColorButton implements Interface {
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
         _positionX = positionX;
-        _positionY = positionY ;
+        _positionY = positionY;
         _width = width;
         _height = height;
         _colorID = colorID;
@@ -34,12 +34,11 @@ public class ColorButton implements Interface {
         // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
         // también se encarga de quitar los números para volver al modo normal.
 
-        if (GameAttributes.Instance().isEyeOpen){
+        if (GameAttributes.Instance().isEyeOpen) {
             String colorButtonName = "color" + _colorID + ".png";
             colorButtonName = colorButtonName.replace(".png", "CB.png");
             setImage(colorButtonName);
-        }
-        else {
+        } else {
             String colorButtonName = "color" + _colorID + "CB.png";
             colorButtonName = colorButtonName.replace("CB.png", ".png");
             setImage(colorButtonName);
@@ -57,8 +56,8 @@ public class ColorButton implements Interface {
 
     public boolean inBounds(int mX, int mY) {
         return (mX >= (_graphics.logicToRealX(_positionX))
-                && mX <=  _graphics.logicToRealX(_positionX)+ _graphics.scaleToReal(_width)
+                && mX <= _graphics.logicToRealX(_positionX) + _graphics.scaleToReal(_width)
                 && mY >= _graphics.logicToRealY(_positionY)
-                && mY <= _graphics.logicToRealY(_positionY)+ _graphics.scaleToReal(_height));
+                && mY <= _graphics.logicToRealY(_positionY) + _graphics.scaleToReal(_height));
     }
 }
