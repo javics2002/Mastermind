@@ -4,6 +4,7 @@ import android.content.res.AssetManager;
 import android.view.SurfaceView;
 import android.view.View;
 
+import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
@@ -18,6 +19,7 @@ public class EngineAndroid implements Runnable, Engine {
     private Scene _currentScene; // Escena actual
     private final InputAndroid _input; // Manejador de entrada
     private final GraphicsAndroid _graphics; // Motor de renderizado
+    private final AudioAndroid _audio;
 
     // Constructor
     public EngineAndroid(SurfaceView myView, int logicWidth, int logicHeight) {
@@ -27,6 +29,7 @@ public class EngineAndroid implements Runnable, Engine {
         AssetManager _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
         myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler()); // Configura el manejador de eventos táctiles
         _graphics = new GraphicsAndroid(_surfaceView, _assetManager, logicWidth, logicHeight);
+        _audio = new AudioAndroid(myView.getContext());
     }
 
     @Override
@@ -75,7 +78,8 @@ public class EngineAndroid implements Runnable, Engine {
                     _renderThread.join();
                     _renderThread = null;
                     break;
-                } catch (InterruptedException ie) {
+                }
+                catch (InterruptedException ignored) {
                 }
             }
         }
@@ -120,5 +124,10 @@ public class EngineAndroid implements Runnable, Engine {
     @Override
     public Graphics getGraphics() {
         return _graphics;
+    }
+
+    @Override
+    public Audio getAudio() {
+        return _audio;
     }
 }

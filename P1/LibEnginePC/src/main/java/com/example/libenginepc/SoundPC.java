@@ -6,7 +6,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 
 public class SoundPC implements Sound {
-    private Clip _clip;
+    private final Clip _clip;
     private FloatControl _volumeControl;
 
     SoundPC(Clip clip) {
