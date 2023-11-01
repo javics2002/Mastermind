@@ -15,7 +15,7 @@ public class ImageAndroid implements Image {
     }
 
     // Método para obtener el objeto Bitmap que representa la imagen.
-    public Bitmap get_image() {
+    public Bitmap getImage() {
         return _image;
     }
 

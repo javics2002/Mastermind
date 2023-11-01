@@ -4,10 +4,10 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Image;
 import com.example.aninterface.Input;
-import com.example.aninterface.Interface;
+import com.example.aninterface.GameObject;
 import com.example.aninterface.Sound;
 
-public abstract class Button implements Interface {
+public abstract class Button implements GameObject {
     protected final Image _image;
     protected final Engine _engine;
     protected final Graphics _graphics;

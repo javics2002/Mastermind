@@ -4,9 +4,9 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Image;
 import com.example.aninterface.Input;
-import com.example.aninterface.Interface;
+import com.example.aninterface.GameObject;
 
-public class ColorButton implements Interface {
+public class ColorButton implements GameObject {
     private Image _image;
     private final Graphics _graphics;
     private final int _positionX, _positionY;

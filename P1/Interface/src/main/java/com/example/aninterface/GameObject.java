@@ -1,6 +1,6 @@
 package com.example.aninterface;
 
-public interface Interface {
+public interface GameObject {
     void render();
 
     void update();

@@ -13,7 +13,7 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 
 public class AudioPC implements Audio {
-    HashMap<String, SoundPC> sounds = new HashMap<>(); //Clave para identificar NombreSonido
+    HashMap<String, SoundPC> _sounds = new HashMap<>(); //Clave para identificar NombreSonido
 
     @Override
     public Sound loadSound(String file, boolean loop) {     //NUEVO SONIDO
@@ -44,7 +44,7 @@ public class AudioPC implements Audio {
         }
 
         SoundPC sound = new SoundPC(clip);
-        sounds.put(file, sound);
+        _sounds.put(file, sound);
         return sound;
     }
 
@@ -53,11 +53,11 @@ public class AudioPC implements Audio {
         if (!isLoaded(file))
             return null;
 
-        return sounds.get(file);
+        return _sounds.get(file);
     }
 
     @Override
     public boolean isLoaded(String file) {
-        return sounds.containsKey(file);
+        return _sounds.containsKey(file);
     }
 }

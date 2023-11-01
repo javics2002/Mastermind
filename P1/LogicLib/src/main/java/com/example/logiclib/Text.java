@@ -4,9 +4,9 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
-import com.example.aninterface.Interface;
+import com.example.aninterface.GameObject;
 
-public class Text implements Interface {
+public class Text implements GameObject {
     private String _text;
     private final int _color;
     private final Graphics _graphics;

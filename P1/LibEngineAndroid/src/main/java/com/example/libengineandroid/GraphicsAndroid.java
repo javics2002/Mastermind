@@ -121,7 +121,7 @@ public class GraphicsAndroid implements Graphics {
     @Override
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
         ImageAndroid a = (ImageAndroid) image;
-        Bitmap aux = getResizedBitmap(a.get_image(), scaleToReal(logicWidth), scaleToReal(logicHeight));
+        Bitmap aux = getResizedBitmap(a.getImage(), scaleToReal(logicWidth), scaleToReal(logicHeight));
         if (aux != null)
             _canvas.drawBitmap(aux, logicToRealX(logicX), logicToRealY(logicY), _paint);
     }
