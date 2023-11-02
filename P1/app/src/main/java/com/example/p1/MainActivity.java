@@ -21,9 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(surfaceView);
 
-        float aspectRatio = 2f / 3f;
-        int height = 720;
-        _engineAndroid = new EngineAndroid(surfaceView, (int) (height * aspectRatio), height);
+        _engineAndroid = new EngineAndroid(surfaceView);
 
         Scene firstScene = new InitialScene(_engineAndroid);
         _engineAndroid.setCurrentScene(firstScene);
