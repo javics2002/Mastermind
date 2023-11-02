@@ -113,7 +113,15 @@ public class GraphicsPC implements Graphics {
         _graphics2D.drawImage(((ImagePC) image).getImage(), logicToRealX(logicX), logicToRealY(logicY),
                 scaleToReal(logicWidth), scaleToReal(logicHeight), null);
     }
+    @Override
+    public void drawCircle(int logicX, int logicY, int radius, int color) {
+        setColor(color);
+        int realX = logicToRealX(logicX);
+        int realY = logicToRealY(logicY);
+        int realRadius = scaleToReal(radius);
 
+        _graphics2D.fillOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
+    }
     @Override
     public Image newImage(String filename) {
         java.awt.Image image = null;

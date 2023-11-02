@@ -17,6 +17,7 @@ public class MasterMindDesktop {
 
         Scene firstScene = new InitialScene(engine);
         engine.setCurrentScene(firstScene);
+
         engine.resume();
     }
 }

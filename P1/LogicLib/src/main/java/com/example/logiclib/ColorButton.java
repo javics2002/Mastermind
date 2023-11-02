@@ -47,6 +47,7 @@ public class ColorButton implements GameObject {
 
     @Override
     public void render() {
+        //_graphics.drawCircle(_positionX+25, _positionY+15, 17, 0xFF0000);
         _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
     }
 
