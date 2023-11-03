@@ -33,10 +33,7 @@ public class ColorSlot implements GameObject {
         _colorID = -1;
     }
 
-    public void setImage(String filename) {
-        _name = filename;
-        _image = _graphics.newImage(filename);
-    }
+
 
     @Override
     public void render() {
@@ -76,10 +73,6 @@ public class ColorSlot implements GameObject {
 
     }
 
-    public void deleteColor() {
-        _colorID = -1;
-        _hasColor = false;
-    }
 
     private boolean inBounds(int mX, int mY) {
         return (mX >= (_graphics.logicToRealX(_positionX))

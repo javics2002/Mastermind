@@ -14,8 +14,9 @@ public abstract class Button implements GameObject {
     protected final int _positionX, _positionY;
     protected final int _width, _height;
     protected final Sound _clickSound;
+    protected final ButtonCallback _callback;
 
-    Button(String filename, Engine engine, int positionX, int positionY, int width, int height) {
+    Button(String filename, Engine engine, int positionX, int positionY, int width, int height,ButtonCallback callback) {
         _engine = engine;
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
@@ -23,6 +24,7 @@ public abstract class Button implements GameObject {
         _positionY = positionY;
         _width = width;
         _height = height;
+        _callback=callback;
 
         _clickSound = _engine.getAudio().loadSound("click.wav", false);
         _clickSound.setVolume(.5f);
@@ -32,7 +34,7 @@ public abstract class Button implements GameObject {
     public boolean handleEvents(Input.TouchEvent event) {
         if (event.type == Input.InputType.PRESSED && inBounds(event.x, event.y)) {
             _clickSound.play();
-            callback();
+            _callback.onButtonClicked();
 
             return true;
         }
@@ -56,5 +58,5 @@ public abstract class Button implements GameObject {
                 && mouseY <= _graphics.logicToRealY(_positionY) + _graphics.scaleToReal(_height));
     }
 
-    abstract void callback();
+
 }
