@@ -19,8 +19,11 @@ public class CombinationLayout implements GameObject {
     private final int _scale;
     private final int _lateralMargin;
 
-    public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY, int scale) {
+    private  GameAttributes _gameAttributes;
+
+    public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY, int scale, GameAttributes gameAttributes) {
         _graphics = engine.getGraphics();
+        _gameAttributes = gameAttributes;
 
         _positionX = positionX;
         _positionY = positionY;
@@ -30,23 +33,21 @@ public class CombinationLayout implements GameObject {
         int padding = 6;
 
         Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
-        int numberOffset = _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 5;
         _combinationNumber = new Text(Integer.toString(number + 1), numberFont, engine,
                 _lateralMargin + 50 - _graphics.getStringWidth(Integer.toString(number + 1), numberFont) / 2,
-                _positionY + _scale / 2 - _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 2 + numberOffset,
+                _positionY + _scale / 2 - _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 2 ,
                 0);
 
         _colors = new ArrayList<>();
         for (int i = 0; i < combinationLength; i++) {
-            _colors.add(new ColorSlot(engine, "colorEmpty.png",
+            _colors.add(new ColorSlot(engine,
                     (int) (_positionX + (i - combinationLength / 2f) * (_scale + padding)),
-                    _positionY - _scale / 2, _scale, _scale));
+                    _positionY - _scale / 2, _scale, _scale, _gameAttributes));
         }
 
         _hints = new ArrayList<>();
         for (int i = 0; i < combinationLength; i++) {
-            _hints.add(new HintSlot(engine, "hintGray.png",
-                    (int) (_graphics.getLogicWidth() - 50 - _lateralMargin + (i % ((combinationLength + 1) / 2)
+            _hints.add(new HintSlot(engine, (int) (_graphics.getLogicWidth() - 50 - _lateralMargin + (i % ((combinationLength + 1) / 2)
                             - combinationLength / 4f) * _scale / 2 + i % ((combinationLength + 1) / 2) * _lateralMargin / 2),
                     (i < combinationLength / 2f ? _positionY - _scale / 2 : _positionY) + (int) (_scale * .2f / 4),
                     (int) (_scale * .8f / 2), (int) (_scale * .8f / 2)));
@@ -57,8 +58,11 @@ public class CombinationLayout implements GameObject {
 
     @Override
     public void render() {
-        _graphics.drawRect(_lateralMargin, (int) (_positionY - _scale * 1.2f / 2),
-                _graphics.getLogicWidth() - _lateralMargin * 2, (int) (_scale * 1.2f), 0xFFf8f4ed);
+        _graphics.drawRoundedRect(_lateralMargin, (int) (_positionY - _scale * 1.2f / 2),
+                _graphics.getLogicWidth() - _lateralMargin * 2, (int) (_scale * 1.2f), 0xFFf8f4ed, 20, 20);
+
+        _graphics.drawRect(_lateralMargin + 80, _positionY - _scale/2, 2, _scale, 0);
+        _graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, _positionY - _scale/2, 2, _scale, 0);
 
         _combinationNumber.render();
 
@@ -85,7 +89,7 @@ public class CombinationLayout implements GameObject {
 
             if (color.handleEvents(e)) {
                 _currentCombination.deleteColor(i);
-                //color.deleteColor();
+                color.deleteColor();
                 return true;
             }
         }
@@ -124,9 +128,9 @@ public class CombinationLayout implements GameObject {
     public void setHints(Combination.HintEnum[] predictionHints) {
         for (int i = 0; i < predictionHints.length; i++) {
             if (predictionHints[i] == Combination.HintEnum.BLACK) {
-                _hints.get(i).setImage("hintBlack.png");
+                _hints.get(i).setColor(Colors.ColorName.BLACK);
             } else if (predictionHints[i] == Combination.HintEnum.WHITE) {
-                _hints.get(i).setImage("hintWhite.png");
+                _hints.get(i).setColor(Colors.ColorName.WHITE);
             }
         }
     }

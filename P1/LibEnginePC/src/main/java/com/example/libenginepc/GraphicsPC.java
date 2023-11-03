@@ -10,6 +10,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferStrategy;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
@@ -36,6 +37,8 @@ public class GraphicsPC implements Graphics {
     private int _borderWidth, _borderHeight;
     private float _scaleFactor;
 
+    private HashMap<String, Image> images;
+
     GraphicsPC(JFrame myView, int logicWidth, int logicHeight) {
         _frame = myView;
         _frame.createBufferStrategy(2);
@@ -50,6 +53,8 @@ public class GraphicsPC implements Graphics {
         _bottomInset = _frame.getInsets().bottom;
         _leftInset = _frame.getInsets().left;
         _rightInset = _frame.getInsets().right;
+
+        images = new HashMap<>();
 
         setNewResolution(_logicWidth, _logicHeight);
     }
@@ -123,30 +128,43 @@ public class GraphicsPC implements Graphics {
         _graphics2D.fillOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
     }
     @Override
-    public Image newImage(String filename) {
-        java.awt.Image image = null;
+    public Image loadImage(String filename) {
+        if (images.containsKey(filename)){
+            return images.get(filename);
+        }
         try {
-            image = ImageIO.read(new File("data/" + filename));
+            java.awt.Image image = ImageIO.read(new File("data/" + filename));
+            images.put(filename, new ImagePC(image));
         } catch (IOException e) {
             e.printStackTrace();
+            return null;
         }
-        return new ImagePC(image);
+
+        return images.get(filename);
     }
 
     @Override
     public int getStringWidth(String text, Font font) {
-        return (int) ((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getWidth();
+        return (int) _graphics2D.getFontMetrics(((FontPC) font).getFont()).getStringBounds(text, _graphics2D).getWidth();
     }
 
     @Override
     public int getStringHeight(String text, Font font) {
-        return (int) ((FontPC) font).getFont().deriveFont(java.awt.Font.PLAIN).getStringBounds(text, _graphics2D.getFontRenderContext()).getHeight();
+        return (int) _graphics2D.getFontMetrics(((FontPC)font).getFont()).getAscent() -
+                _graphics2D.getFontMetrics(((FontPC)font).getFont()).getDescent();
     }
 
     @Override
     public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
         setColor(color);
         _graphics2D.fillRect(logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth), scaleToReal(logicHeight));
+    }
+
+    @Override
+    public void drawRoundedRect(int logicX, int logicY, int logicWidth, int logicHeight, int color, int arcWidth, int arcHeight) {
+        setColor(color);
+        _graphics2D.fillRoundRect(logicToRealX(logicX), logicToRealY(logicY),
+                scaleToReal(logicWidth), scaleToReal(logicHeight), scaleToReal(arcWidth), scaleToReal(arcHeight));
     }
 
     // Funciones encargadas de convertir las dimensiones lógicas a dimensiones reales.

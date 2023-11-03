@@ -11,15 +11,19 @@ import java.util.List;
 
 public class GameOverScene implements Scene {
     private final Text _resultText, _attemptsText, _attemptsNumberText, _codeText;
-    private final DifficultyButton _playAgainButton;
-    private final PlayButton _chooseDifficultyButton;
+    private final Button _playAgainButton;
+    private final Button _chooseDifficultyButton;
     private final List<ColorSlot> _resultCombination;
 
-    public GameOverScene(Engine engine) {
-        Graphics graphics = engine.getGraphics();
+    Engine _engine;
+    GameAttributes _gameAttributes;
+
+    public GameOverScene(Engine engine, GameAttributes gameAttributes) {
+        _engine = engine;
+        Graphics graphics = _engine.getGraphics();
 
         // Init GameAttributes
-        GameAttributes gameAttributes = GameAttributes.Instance();
+        _gameAttributes = gameAttributes;
 
         //Create scene
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
@@ -28,11 +32,11 @@ public class GameOverScene implements Scene {
                 codeFont = graphics.newFont("Comfortaa-Regular.ttf", 18f);
         String resultString, attemptsString, attemptsNumberString, codeString = "Código:";
 
-        if (gameAttributes.attemptsLeft != 0) {
+        if (_gameAttributes.attemptsLeft != 0) {
             //Has ganado
             resultString = "ENHORABUENA!!";
             attemptsString = "Has averiguado el código en";
-            attemptsNumberString = Integer.toString(gameAttributes.activeLayout + 1) + " intentos";
+            attemptsNumberString = Integer.toString(_gameAttributes.activeLayout + 1) + " intentos";
         } else {
             //Has perdido
             resultString = "GAME OVER";
@@ -40,32 +44,44 @@ public class GameOverScene implements Scene {
             attemptsNumberString = "";
         }
 
-        _resultText = new Text(resultString, resultFont, engine,
+        _resultText = new Text(resultString, resultFont, _engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(resultString, resultFont) / 2, 70, 0);
-        _attemptsText = new Text(attemptsString, attemptsFont, engine,
+        _attemptsText = new Text(attemptsString, attemptsFont, _engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsString, attemptsFont) / 2, 110, 0);
-        _attemptsNumberText = new Text(attemptsNumberString, attemptsNumberFont, engine,
+        _attemptsNumberText = new Text(attemptsNumberString, attemptsNumberFont, _engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsNumberString, attemptsNumberFont) / 2, 160, 0);
-        _codeText = new Text(codeString, codeFont, engine,
+        _codeText = new Text(codeString, codeFont, _engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(codeString, codeFont) / 2, 200, 0);
 
         int scale = 40;
         int padding = 6;
         _resultCombination = new ArrayList<>();
-        for (int i = 0; i < gameAttributes.combinationLength; i++) {
-            ColorSlot cSlotX=  new ColorSlot(engine, "",
-                    (int) ((graphics.getLogicWidth() / 2) + (i - gameAttributes.combinationLength / 2f) * (scale + padding)),
-                    250, scale, scale);
+        for (int i = 0; i < _gameAttributes.combinationLength; i++) {
+            ColorSlot cSlotX = new ColorSlot(_engine,
+                    (int) ((graphics.getLogicWidth() / 2) + (i - _gameAttributes.combinationLength / 2f) * (scale + padding)),
+                    250, scale, scale, _gameAttributes);
             _resultCombination.add(cSlotX);
-            cSlotX.setColor(gameAttributes.resultCombination.getColors()[i] , gameAttributes.isEyeOpen);
+            cSlotX.setColor(_gameAttributes.resultCombination.getColors()[i] , _gameAttributes.isEyeOpen);
         }
 
-        _playAgainButton = new DifficultyButton("playAgain.png", engine,
-                graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50,
-                gameAttributes.attemptsNumber, gameAttributes.combinationLength,
-                gameAttributes.colorNumber, gameAttributes.repeatedColors);
-        _chooseDifficultyButton = new PlayButton("chooseDifficulty.png", engine,
-                graphics.getLogicWidth() / 2 - 400 / 2, 550, 400, 50);
+        Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+        _playAgainButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Volver a jugar", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50){
+            @Override
+            public void callback() {
+                Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,  _gameAttributes.combinationLength,
+                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors);
+                _engine.setCurrentScene(scene);
+            }
+        };
+        _chooseDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Elegir dificultad", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - 400 / 2, 550, 400, 50) {
+            @Override
+            public void callback() {
+                Scene scene = new DifficultyScene(_engine);
+                _engine.setCurrentScene(scene);
+            }
+        };
     }
 
     @Override

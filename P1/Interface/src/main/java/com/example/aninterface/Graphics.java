@@ -3,7 +3,7 @@ package com.example.aninterface;
 public interface Graphics {
     Font newFont(String fileName, float size);
 
-    Image newImage(String path);
+    Image loadImage(String path);
 
     void drawImage(Image image, int x, int y, int w, int h);
 
@@ -12,6 +12,7 @@ public interface Graphics {
     void clear(int color);
 
     void drawRect(int x, int y, int width, int height, int color);
+    void drawRoundedRect(int x, int y, int width, int height, int color, int arcWidth, int arcHeight);
 
     void drawText(String text, Font font, int x, int y, int color);
     void drawCircle(int logicX, int logicY, int radius, int color);

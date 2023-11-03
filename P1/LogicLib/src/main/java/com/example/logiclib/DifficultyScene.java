@@ -7,26 +7,36 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
 public class DifficultyScene implements Scene {
-    private final BackButton _backButton;
-    private final DifficultyButton _easyDifficultyButton, _mediumDifficultyButton,
+    private final Button _backButton;
+    private final Button _easyDifficultyButton, _mediumDifficultyButton,
             _difficultDifficultyButton, _impossibleDifficultyButton;
 
     private final Text _titleText;
     private final int _padding = 20;
 
+    Engine _engine;
+
     public DifficultyScene(Engine engine) {
-        Graphics graphics = engine.getGraphics();
+        _engine = engine;
+
+        Graphics graphics = _engine.getGraphics();
 
         // Back button
         int backbuttonScale = 40;
-        _backButton = new BackButton("UI/back.png", engine,
+        _backButton = new Button("UI/back.png", _engine,
                 backbuttonScale / 2, backbuttonScale / 2,
-                backbuttonScale, backbuttonScale);
+                backbuttonScale, backbuttonScale) {
+            @Override
+            public void callback() {
+                Scene scene = new InitialScene(_engine);
+                _engine.setCurrentScene(scene);
+            }
+        };
 
         // Title
         Font font = graphics.newFont("Comfortaa-Regular.ttf", 24f);
         String question = "¿En qué dificultad quieres jugar?";
-        _titleText = new Text(question, font, engine,
+        _titleText = new Text(question, font, _engine,
                 graphics.getLogicWidth() / 2 - graphics.getStringWidth(question, font) / 2, graphics.getLogicHeight() / 4, 0);
 
         // Game buttons
@@ -34,18 +44,45 @@ public class DifficultyScene implements Scene {
         int gameButtonsHeight = 90;
         int startingGameButtonsHeight = graphics.getLogicHeight() / 3;
         int padding = 20;
-        _easyDifficultyButton = new DifficultyButton("facilButton.png", engine,
+
+        Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+
+        _easyDifficultyButton = new Button(Colors.ColorName.BACKGROUNDGREEN, "Fácil", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight,
-                gameButtonsWidth, gameButtonsHeight, 6, 4, 4, false);
-        _mediumDifficultyButton = new DifficultyButton("medioButton.png", engine,
+                gameButtonsWidth, gameButtonsHeight) {
+            @Override
+            public void callback() {
+                Scene scene = new GameScene(_engine, 6, 4, 4, false);
+                _engine.setCurrentScene(scene);
+            }
+        };
+        _mediumDifficultyButton = new Button(Colors.ColorName.BACKGROUNDYELLOW, "Medio", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight + gameButtonsHeight + padding,
-                gameButtonsWidth, gameButtonsHeight, 8, 4, 6, false);
-        _difficultDifficultyButton = new DifficultyButton("dificilButton.png", engine,
+                gameButtonsWidth, gameButtonsHeight) {
+            @Override
+            public void callback() {
+                Scene scene = new GameScene(_engine,  8, 4, 6, false);
+                _engine.setCurrentScene(scene);
+            }
+        };
+        _difficultDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Difícil", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight + (gameButtonsHeight + padding) * 2,
-                gameButtonsWidth, gameButtonsHeight, 10, 5, 8, true);
-        _impossibleDifficultyButton = new DifficultyButton("imposibleButton.png", engine,
+                gameButtonsWidth, gameButtonsHeight) {
+            @Override
+            public void callback() {
+                Scene scene = new GameScene(_engine, 10, 5, 8, true);
+                _engine.setCurrentScene(scene);
+            }
+        };
+        _impossibleDifficultyButton = new Button(Colors.ColorName.BACKGROUNDRED, "Imposible", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight + (gameButtonsHeight + padding) * 3,
-                gameButtonsWidth, gameButtonsHeight, 10, 6, 9, true);
+                gameButtonsWidth, gameButtonsHeight) {
+            @Override
+            public void callback() {
+                Scene scene = new GameScene(_engine, 10, 6, 9, true);
+                _engine.setCurrentScene(scene);
+            }
+        };
     }
 
     @Override

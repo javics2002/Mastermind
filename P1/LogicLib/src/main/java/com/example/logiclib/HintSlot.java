@@ -11,20 +11,23 @@ public class HintSlot implements GameObject {
     private final Graphics _graphics;
     private final int _positionX, _positionY;
     private final int _width, _height;
+    private Colors.ColorName _colorName;
 
-    public HintSlot(Engine engine, String filename, int positionX, int positionY, int width, int height) {
+    public HintSlot(Engine engine, int positionX, int positionY, int width, int height) {
         _graphics = engine.getGraphics();
-        _image = _graphics.newImage(filename);
 
         _positionX = positionX;
         _positionY = positionY;
         _width = width;
         _height = height;
+
+        _colorName = Colors.ColorName.LIGHTGRAY;
     }
 
     @Override
     public void render() {
-        _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
+        _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
+                _width / 2,  Colors.colorValues.get(_colorName));
     }
 
     @Override
@@ -37,7 +40,7 @@ public class HintSlot implements GameObject {
         return false;
     }
 
-    public void setImage(String filename) {
-        _image = _graphics.newImage(filename);
+    public void setColor(Colors.ColorName colorName) {
+        _colorName = colorName;
     }
 }

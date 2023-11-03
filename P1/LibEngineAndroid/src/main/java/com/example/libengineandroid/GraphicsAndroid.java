@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -17,6 +18,7 @@ import com.example.aninterface.Image;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 
 public class GraphicsAndroid implements Graphics {
@@ -34,10 +36,11 @@ public class GraphicsAndroid implements Graphics {
     private final SurfaceHolder _holder;
     private final AssetManager _assetManager;
 
+    private HashMap<String, Image> images;
+
     GraphicsAndroid(SurfaceView myView, AssetManager mgr, int logicWidth, int logicHeight) {
         _surfaceView = myView;
         _assetManager = mgr;
-
 
         _logicWidth = logicWidth;
         _logicHeight = logicHeight;
@@ -47,6 +50,8 @@ public class GraphicsAndroid implements Graphics {
 
         _paint = new Paint();
         _canvas = new Canvas();
+
+        images = new HashMap<>();
 
         setNewResolution(_logicWidth, _logicHeight);
     }
@@ -90,7 +95,10 @@ public class GraphicsAndroid implements Graphics {
 
     //Crear imagenes , fuentes..ETC
     @Override
-    public Image newImage(String imgName) {
+    public Image loadImage(String imgName) {
+        if (images.containsKey(imgName)){
+            return images.get(imgName);
+        }
         //Las imagenes en android son representadas con un bitmap
         //Con un stream abre la imagen por nombre
         Bitmap bitmap = null;
@@ -100,9 +108,12 @@ public class GraphicsAndroid implements Graphics {
             inputS.close(); // Cierra el InputStream después de usarlo
         } catch (final IOException e) {
             e.printStackTrace();
+            return null;
         }
         ImageAndroid img = new ImageAndroid(bitmap);
-        return (Image) img;
+        images.put(imgName, img);
+
+        return images.get(imgName);
     }
 
     //No podemos hacer carpetas puesto que busca desde la carptea assets solo
@@ -134,6 +145,16 @@ public class GraphicsAndroid implements Graphics {
         setColor(color);
         _canvas.drawRect(rect, _paint);
     }
+
+    @Override
+    public void drawRoundedRect(int logicX, int logicY, int logicWidth, int logicHeight, int color, int arcWidth, int arcHeight) {
+        RectF rect = new RectF(logicToRealX(logicX), logicToRealY(logicY),
+                logicToRealX(logicX + logicWidth), logicToRealY(logicY + logicHeight));
+
+        setColor(color);
+        _canvas.drawRoundRect(rect, arcWidth, arcHeight, _paint);
+    }
+
     public void drawCircle(int logicX, int logicY, int radius, int color) {
         int realX = logicToRealX(logicX);
         int realY = logicToRealY(logicY);
