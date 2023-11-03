@@ -21,7 +21,7 @@ public class ColorButton implements GameObject {
 
     ColorButton(String filename, Engine engine, int positionX, int positionY, int width, int height, int colorID) {
         _graphics = engine.getGraphics();
-        _image = _graphics.newImage(filename);
+
         _positionX = positionX;
         _positionY = positionY;
         _width = width;
@@ -66,9 +66,7 @@ public class ColorButton implements GameObject {
         }
     }
 
-    public void setImage(String filename) {
-        _image = _graphics.newImage(filename);
-    }
+
 
     public boolean inBounds(int mX, int mY) {
         return (mX >= (_graphics.logicToRealX(_positionX))

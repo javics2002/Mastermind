@@ -134,6 +134,14 @@ public class GraphicsAndroid implements Graphics {
         setColor(color);
         _canvas.drawRect(rect, _paint);
     }
+    public void drawCircle(int logicX, int logicY, int radius, int color) {
+        int realX = logicToRealX(logicX);
+        int realY = logicToRealY(logicY);
+        int realRadius = scaleToReal(radius);
+
+        setColor(color);
+        _canvas.drawCircle(realX, realY, realRadius, _paint);
+    }
 
     @Override
     public void drawText(String text, Font font, int logicX, int logicY, int color) {
