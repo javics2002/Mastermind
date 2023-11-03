@@ -1,6 +1,7 @@
 package com.example.logiclib;
 
 import com.example.aninterface.Engine;
+import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Image;
 import com.example.aninterface.Input;
@@ -13,6 +14,11 @@ public class ColorButton implements GameObject {
     private final int _width, _height;
     public int _colorID;
 
+
+
+    private Font _colorNum;
+    private Text _numberText;
+
     ColorButton(String filename, Engine engine, int positionX, int positionY, int width, int height, int colorID) {
         _graphics = engine.getGraphics();
         _image = _graphics.newImage(filename);
@@ -21,6 +27,14 @@ public class ColorButton implements GameObject {
         _width = width;
         _height = height;
         _colorID = colorID;
+        String num = String.valueOf(_colorID);
+        _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
+
+
+        int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, _colorNum)/ 2;
+        int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, _colorNum) / 4;
+        _numberText = new Text(num, _colorNum, engine,textX, textY,0);
+
     }
 
     @Override
@@ -30,25 +44,26 @@ public class ColorButton implements GameObject {
 
     @Override
     public void update() {
-        // Cuando el botón del OJO se pulsa, esta función se encarga de cambiar todos los colores
-        // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
-        // también se encarga de quitar los números para volver al modo normal.
 
-        if (GameAttributes.Instance().isEyeOpen) {
-            String colorButtonName = "color" + _colorID + ".png";
-            colorButtonName = colorButtonName.replace(".png", "CB.png");
-            setImage(colorButtonName);
-        } else {
-            String colorButtonName = "color" + _colorID + "CB.png";
-            colorButtonName = colorButtonName.replace("CB.png", ".png");
-            setImage(colorButtonName);
-        }
+
     }
 
     @Override
     public void render() {
-        //_graphics.drawCircle(_positionX+25, _positionY+15, 17, 0xFF0000);
-        _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
+
+
+
+
+        // Cuando el botón del OJO se pulsa, este condicional se encarga de cambiar todos los colores
+        // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
+        // también se encarga de quitar los números para volver al modo normal.
+        if (GameAttributes.Instance().isEyeOpen) {
+            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, colors[_colorID-1]);
+            _numberText.render();
+        }
+        else {
+            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, colors[_colorID-1]);
+        }
     }
 
     public void setImage(String filename) {

@@ -53,10 +53,11 @@ public class GameOverScene implements Scene {
         int padding = 6;
         _resultCombination = new ArrayList<>();
         for (int i = 0; i < gameAttributes.combinationLength; i++) {
-            _resultCombination.add(new ColorSlot(engine, "color" + gameAttributes.resultCombination.getColors()[i]
-                    + (gameAttributes.isEyeOpen ? "CB" : "") + ".png",
+            ColorSlot cSlotX=  new ColorSlot(engine, "",
                     (int) ((graphics.getLogicWidth() / 2) + (i - gameAttributes.combinationLength / 2f) * (scale + padding)),
-                    250, scale, scale));
+                    250, scale, scale);
+            _resultCombination.add(cSlotX);
+            cSlotX.setColor(gameAttributes.resultCombination.getColors()[i] , gameAttributes.isEyeOpen);
         }
 
         _playAgainButton = new DifficultyButton("playAgain.png", engine,

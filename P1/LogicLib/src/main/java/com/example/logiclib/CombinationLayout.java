@@ -85,7 +85,7 @@ public class CombinationLayout implements GameObject {
 
             if (color.handleEvents(e)) {
                 _currentCombination.deleteColor(i);
-                color.deleteColor();
+                //color.deleteColor();
                 return true;
             }
         }

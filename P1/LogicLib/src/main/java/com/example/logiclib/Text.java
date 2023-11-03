@@ -10,7 +10,7 @@ public class Text implements GameObject {
     private String _text;
     private final int _color;
     private final Graphics _graphics;
-    private final int _posX, _posY;
+    private  int _posX, _posY;
 
     Font _font;
 
@@ -41,5 +41,9 @@ public class Text implements GameObject {
 
     public void setText(String newText) {
         _text = newText;
+    }
+    public void setPos(int posX, int posY) {
+        _posX =posX;
+        _posY= posY;
     }
 }

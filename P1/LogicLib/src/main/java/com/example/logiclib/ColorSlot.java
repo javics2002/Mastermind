@@ -1,6 +1,7 @@
 package com.example.logiclib;
 
 import com.example.aninterface.Engine;
+import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Image;
 import com.example.aninterface.Input;
@@ -14,10 +15,12 @@ public class ColorSlot implements GameObject {
     private String _name;
     private boolean _hasColor;
     private int _colorID;
+    private Font _colorNum;
+    private Text _numberText;
 
     public ColorSlot(Engine engine, String filename, int positionX, int positionY, int width, int height) {
         _graphics = engine.getGraphics();
-        _image = _graphics.newImage(filename);
+         if(filename!="")_image = _graphics.newImage(filename);
 
         _positionX = positionX;
         _positionY = positionY;
@@ -25,6 +28,8 @@ public class ColorSlot implements GameObject {
         _height = height;
         _name = filename;
         _hasColor = false;
+        _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
+        _numberText = new Text("", _colorNum, engine,0, 0,0);
         _colorID = -1;
     }
 
@@ -35,20 +40,23 @@ public class ColorSlot implements GameObject {
 
     @Override
     public void render() {
-        _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
+
+
+        if (hasColor()&&GameAttributes.Instance().isEyeOpen) {
+            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, colors[_colorID-1]);
+            _numberText.render();
+        }
+        else if(hasColor()){
+            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, colors[_colorID-1]);
+        }
+        else {
+            _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
+        }
     }
 
     @Override
     public void update() {
-        if (GameAttributes.Instance().isEyeOpen && _hasColor) {
-            String colorButtonName = "color" + _colorID + ".png";
-            colorButtonName = colorButtonName.replace(".png", "CB.png");
-            setImage(colorButtonName);
-        } else {
-            String colorSlotName = _name;
-            _name = colorSlotName.replace("CB.png", ".png");
-            setImage(_name);
-        }
+
     }
 
     @Override
@@ -59,19 +67,18 @@ public class ColorSlot implements GameObject {
     public void setColor(int color, boolean isEyeOpen) {
         _hasColor = true;
         _colorID = color;
+        String num = String.valueOf(_colorID);
+        int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, _colorNum)/ 2;
+        int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, _colorNum) / 4;
 
-        // Si tenemos el modo daltónico activado, usamos su respectiva imagen.
-        if (isEyeOpen) {
-            setImage("color" + _colorID + "CB.png");
-        } else {
-            setImage("color" + _colorID + ".png");
-        }
+        _numberText.setText(num);
+        _numberText.setPos(textX,textY);
+
     }
 
     public void deleteColor() {
         _colorID = -1;
         _hasColor = false;
-        setImage("colorEmpty.png");
     }
 
     private boolean inBounds(int mX, int mY) {
@@ -85,3 +92,6 @@ public class ColorSlot implements GameObject {
         return _hasColor;
     }
 }
+
+
+
