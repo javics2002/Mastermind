@@ -42,8 +42,8 @@ public class InitialScene implements Scene {
             }
         };
 
-        adButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Jugar", buttonFont, _engine,
-                graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight) {
+        adButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Anuncio", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 4, buttonWidth, buttonHeight) {
             @Override
             public void callback() {
                 //rewardedAd.show();
@@ -65,6 +65,7 @@ public class InitialScene implements Scene {
     public void handleEvents(Input a) {
         if (a.getTouchEvent().size() > 0) {
             this._playButton.handleEvents(a.getTouchEvent().get(0));
+            this.adButton.handleEvents(a.getTouchEvent().get(0));
         }
     }
 }
