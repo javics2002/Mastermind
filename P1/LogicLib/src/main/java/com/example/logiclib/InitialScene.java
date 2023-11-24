@@ -6,10 +6,16 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
+
 public class InitialScene implements Scene {
     private final Button _playButton;
+    private final Button adButton;
     private final Text _titleText;
     Engine _engine;
+
+
+   // private AndroidRewardedAd rewardedAd;
+    //private OnUserEarnedRewardListener rewardEarnedCallback;
 
     public InitialScene(Engine engine) {
         _engine = engine;
@@ -33,6 +39,14 @@ public class InitialScene implements Scene {
             public void callback() {
                 Scene scene = new DifficultyScene(_engine);
                 _engine.setCurrentScene(scene);
+            }
+        };
+
+        adButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Jugar", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight) {
+            @Override
+            public void callback() {
+                //rewardedAd.show();
             }
         };
     }

@@ -1,5 +1,6 @@
 package com.example.libengineandroid;
 
+import android.app.Activity;
 import android.content.res.AssetManager;
 import android.view.SurfaceView;
 import android.view.View;
@@ -20,14 +21,18 @@ public class EngineAndroid implements Runnable, Engine {
     private final InputAndroid _input; // Manejador de entrada
     private final GraphicsAndroid _graphics; // Motor de renderizado
     private final AudioAndroid _audio;
+    private Activity activity;
+
+
 
     // Constructor
-    public EngineAndroid(SurfaceView myView) {
+    public EngineAndroid(SurfaceView myView,Activity actividad) {
         float aspectRatio = 2f / 3f;
         int height = 720;
-
+        this.activity = actividad;
         _surfaceView = myView;
         _input = new InputAndroid();
+
         // Administrador de activos del juego
         AssetManager _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
         myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler()); // Configura el manejador de eventos táctiles
@@ -133,4 +138,5 @@ public class EngineAndroid implements Runnable, Engine {
     public Audio getAudio() {
         return _audio;
     }
+    public Activity getActivity(){ return activity;}
 }

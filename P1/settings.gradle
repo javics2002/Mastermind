@@ -14,8 +14,8 @@ dependencyResolutionManagement {
 }
 rootProject.name = "P1"
 include ':app'
-include ':LogicLib'
+include ':LogicLib', ':LibEngineAndroid'
 include ':Desktop'
 include ':Interface'
 include ':LibEnginePC'
-include ':LibEngineAndroid'
+
