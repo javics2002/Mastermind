@@ -25,6 +25,19 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import com.google.common.util.concurrent.ListenableFuture;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private EngineAndroid _engineAndroid;
@@ -74,6 +87,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         createAdRequest();
         createSensor();
+        createNotificationsChannel();
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+        if (bundle!=null && bundle.getBoolean("reward")) {
+            //GameManager.getInstance().addCoins(10);
+
+        }
 
     }
 
@@ -84,6 +105,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
        // shakeSound =
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        WorkManager.getInstance(this).cancelAllWork();
+    }
+
     @Override
     protected void onPause() {
         super.onPause();
@@ -123,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onStop() {
         super.onStop();
+        createOneTimeNotification();
+        createPeriodicNotification();
 
 
     }
@@ -161,6 +191,33 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
+    }
+
+    private void createOneTimeNotification() {
+        WorkRequest workRequest =
+                new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                        // Additional configuration
+                        .setInitialDelay(30, TimeUnit.SECONDS)
+                        .build();
+
+        WorkManager.getInstance(this).enqueue(workRequest);
+    }
+
+    private void createPeriodicNotification() {
+        PeriodicWorkRequest workRequestPeriodic =
+                new PeriodicWorkRequest.Builder(NotificationWorker.class,
+                        15, TimeUnit.MINUTES,
+                        5, TimeUnit.MINUTES)
+                        .build();
+
+        WorkManager.getInstance(this).enqueue(workRequestPeriodic);
+    }
+
+    private void createNotificationsChannel() {
+        NotificationChannel channel = new NotificationChannel("game_channel" , "GameChannel", NotificationManager.IMPORTANCE_DEFAULT) ;
+
+        NotificationManager notificationManager = getSystemService(NotificationManager. class);
+        notificationManager.createNotificationChannel(channel) ;
     }
 }
 
