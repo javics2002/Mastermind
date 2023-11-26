@@ -2,14 +2,19 @@ package com.example.libengineandroid;
 
 import android.app.Activity;
 import android.content.res.AssetManager;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.rewarded.RewardItem;
 
 // Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
 public class EngineAndroid implements Runnable, Engine {
@@ -24,6 +29,9 @@ public class EngineAndroid implements Runnable, Engine {
     private Activity activity;
 
 
+    private AndroidRewardedAd rewardedAd;
+    private OnUserEarnedRewardListener rewardEarnedCallback;
+
 
     // Constructor
     public EngineAndroid(SurfaceView myView,Activity actividad) {
@@ -33,7 +41,12 @@ public class EngineAndroid implements Runnable, Engine {
         _surfaceView = myView;
         _input = new InputAndroid();
 
-        // Administrador de activos del juego
+
+
+
+
+        //Cracion del anuncio recompensado
+        createRewardedAd();
         AssetManager _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
         myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler()); // Configura el manejador de eventos táctiles
         _graphics = new GraphicsAndroid(_surfaceView, _assetManager, (int) (height * aspectRatio), height);
@@ -112,6 +125,19 @@ public class EngineAndroid implements Runnable, Engine {
     // Actualiza la lógica del juego
     protected void update(double deltaTime) {
         _currentScene.update(deltaTime);
+    }
+
+    @Override
+    public  void showAd(){rewardedAd.show();}
+    private void createRewardedAd() {
+        rewardEarnedCallback = new OnUserEarnedRewardListener() {
+            @Override
+            public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+                Log.d("TAG", "TE HAS GANADO UN ANUNCIO");
+            }
+        };
+
+        rewardedAd = new AndroidRewardedAd(this, rewardEarnedCallback);
     }
 
     @Override

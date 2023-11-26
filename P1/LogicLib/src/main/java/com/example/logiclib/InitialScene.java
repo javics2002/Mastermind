@@ -14,8 +14,7 @@ public class InitialScene implements Scene {
     Engine _engine;
 
 
-   // private AndroidRewardedAd rewardedAd;
-    //private OnUserEarnedRewardListener rewardEarnedCallback;
+
 
     public InitialScene(Engine engine) {
         _engine = engine;
@@ -43,10 +42,10 @@ public class InitialScene implements Scene {
         };
 
         adButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Anuncio", buttonFont, _engine,
-                graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 4, buttonWidth, buttonHeight) {
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight()/1.25), buttonWidth, buttonHeight) {
             @Override
             public void callback() {
-                //rewardedAd.show();
+                _engine.showAd();
             }
         };
     }
@@ -59,6 +58,7 @@ public class InitialScene implements Scene {
     public void render(Graphics gr) {
         _playButton.render();
         _titleText.render();
+        adButton.render();
     }
 
     @Override

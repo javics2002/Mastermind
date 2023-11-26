@@ -14,4 +14,6 @@ public interface Engine {
     void pause();
 
     Audio getAudio();
+
+    void showAd();
 }
