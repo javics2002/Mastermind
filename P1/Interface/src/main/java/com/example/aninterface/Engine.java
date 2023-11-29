@@ -16,4 +16,6 @@ public interface Engine {
     Audio getAudio();
 
     void showAd();
+
+    void shareScreenshot(int width, int height);
 }

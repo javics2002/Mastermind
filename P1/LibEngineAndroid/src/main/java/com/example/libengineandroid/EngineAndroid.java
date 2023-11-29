@@ -1,12 +1,21 @@
 package com.example.libengineandroid;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Build;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
+import android.view.PixelCopy;
 import android.view.SurfaceView;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 
 import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
@@ -15,6 +24,10 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 // Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
 public class EngineAndroid implements Runnable, Engine {
@@ -28,7 +41,6 @@ public class EngineAndroid implements Runnable, Engine {
     private final AudioAndroid _audio;
     private Activity activity;
 
-
     private AndroidRewardedAd rewardedAd;
     private OnUserEarnedRewardListener rewardEarnedCallback;
 
@@ -40,10 +52,6 @@ public class EngineAndroid implements Runnable, Engine {
         this.activity = actividad;
         _surfaceView = myView;
         _input = new InputAndroid();
-
-
-
-
 
         //Cracion del anuncio recompensado
         createRewardedAd();
@@ -128,7 +136,9 @@ public class EngineAndroid implements Runnable, Engine {
     }
 
     @Override
-    public  void showAd(){rewardedAd.show();}
+    public  void showAd(){
+        rewardedAd.show();
+    }
     private void createRewardedAd() {
         rewardEarnedCallback = new OnUserEarnedRewardListener() {
             @Override
@@ -138,6 +148,61 @@ public class EngineAndroid implements Runnable, Engine {
         };
 
         rewardedAd = new AndroidRewardedAd(this, rewardEarnedCallback);
+    }
+
+    @Override
+    public void shareScreenshot(int width, int height) {
+        // Create bitmap
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+
+        // Create thread
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            HandlerThread handlerThread = new HandlerThread("PixelCopier");
+            handlerThread.start();
+            PixelCopy.request(_surfaceView, bitmap, new PixelCopy.OnPixelCopyFinishedListener() {
+                @Override
+                public void onPixelCopyFinished(int copyResult) {
+                    if (copyResult == PixelCopy.SUCCESS) {
+                        // generar Bitmap a partir de otro dadas unas coordenadas y un tamaño
+                        Bitmap finalBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
+
+                        File file = saveBitmapToFile(activity, finalBitmap);
+                        Uri fileUri = FileProvider.getUriForFile(activity, "com.mydomain.fileprovider", file);
+                        //activity.grantUriPermission(activity.getPackageName(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                        Intent intent = new Intent(android.content.Intent.ACTION_SEND);
+                        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        intent.putExtra(Intent.EXTRA_TEXT, "¡Mira esta imagen!");
+                        intent.setType("image/png");
+
+                        activity.startActivity(Intent.createChooser(intent, "Share"));
+                    }
+                    handlerThread.quitSafely();
+                }
+            }, new Handler(handlerThread.getLooper()));
+        }
+    }
+
+    private File saveBitmapToFile(Context context, Bitmap bitmap) {
+        // Crear un archivo en el directorio de almacenamiento externo
+        File file = null;
+
+        try {
+            File imagesFolder = new File(context.getCacheDir(), "images");
+            imagesFolder.mkdirs();
+            file = new File(imagesFolder, "shared_image.png");
+
+            FileOutputStream stream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, stream);
+            stream.flush();
+            stream.close();
+
+        } catch (IOException e) {
+            System.out.println("IOException while trying to write file for sharing: " + e.getMessage());
+        }
+
+        return file;
     }
 
     @Override

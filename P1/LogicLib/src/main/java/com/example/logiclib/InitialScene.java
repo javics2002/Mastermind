@@ -10,16 +10,14 @@ import com.example.aninterface.Scene;
 public class InitialScene implements Scene {
     private final Button _playButton;
     private final Button adButton;
+    private final Button shareButton;
     private final Text _titleText;
     Engine _engine;
-
-
-
 
     public InitialScene(Engine engine) {
         _engine = engine;
 
-        Graphics graphics = _engine.getGraphics();
+        final Graphics graphics = _engine.getGraphics();
 
         Font _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
         String title = "Master Mind";
@@ -48,6 +46,14 @@ public class InitialScene implements Scene {
                 _engine.showAd();
             }
         };
+
+        shareButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Compartir :d", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight() - 100), buttonWidth, buttonHeight) {
+            @Override
+            public void callback() {
+                _engine.shareScreenshot(graphics.getWidth(), graphics.getHeight());
+            }
+        };
     }
 
     @Override
@@ -58,14 +64,16 @@ public class InitialScene implements Scene {
     public void render(Graphics gr) {
         _playButton.render();
         _titleText.render();
-        adButton.render();
+        //adButton.render();
+        shareButton.render();
     }
 
     @Override
     public void handleEvents(Input a) {
         if (a.getTouchEvent().size() > 0) {
             this._playButton.handleEvents(a.getTouchEvent().get(0));
-            this.adButton.handleEvents(a.getTouchEvent().get(0));
+            //this.adButton.handleEvents(a.getTouchEvent().get(0));
+            this.shareButton.handleEvents(a.getTouchEvent().get(0));
         }
     }
 }

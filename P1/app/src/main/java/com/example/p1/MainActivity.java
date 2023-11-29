@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         SurfaceView sf = new SurfaceView(this);
 
-
         _engineAndroid = new EngineAndroid(sf,this);
 
         Scene firstScene = new InitialScene(_engineAndroid);
