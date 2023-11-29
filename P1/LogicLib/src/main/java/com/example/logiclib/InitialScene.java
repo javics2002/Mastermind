@@ -8,9 +8,9 @@ import com.example.aninterface.Scene;
 
 
 public class InitialScene implements Scene {
-    private final Button _playButton;
-    private final Button adButton;
-    private final Button shareButton;
+    private final Button _quickGameButton, _worldsButton;
+    private final Button _adButton;
+    private final Button _shareButton;
     private final Text _titleText;
     Engine _engine;
 
@@ -26,28 +26,41 @@ public class InitialScene implements Scene {
         _titleText = new Text(title, _titleFont, _engine,
                 graphics.getLogicWidth() / 2 - titleWidth / 2, 200, 0);
 
-        int buttonWidth = 330;
-        int buttonHeight = 90;
+        final int buttonWidth = 330;
+        final int buttonHeight = 90;
+        final int quickGameButtonPositionY = graphics.getLogicHeight() / 2;
+        final int paddingY = 30;
 
         Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
-        _playButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Jugar", buttonFont, _engine,
-                graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight) {
+        _quickGameButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Partida rápida", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY, buttonWidth, buttonHeight) {
             @Override
             public void callback() {
-                Scene scene = new DifficultyScene(_engine);
+                Scene scene = new GameScene(_engine,  8, 4, 6, false);
                 _engine.setCurrentScene(scene);
             }
         };
 
-        adButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Anuncio", buttonFont, _engine,
-                graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight()/1.25), buttonWidth, buttonHeight) {
+        _worldsButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Explorar mundos", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY + buttonHeight + paddingY,
+                buttonWidth, buttonHeight) {
+            @Override
+            public void callback() {
+                Scene scene = new WorldScene(_engine, 1);
+                _engine.setCurrentScene(scene);
+            }
+        };
+
+        _adButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Anuncio", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY + 2 * (buttonHeight + paddingY),
+                buttonWidth, buttonHeight) {
             @Override
             public void callback() {
                 _engine.showAd();
             }
         };
 
-        shareButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Compartir :d", buttonFont, _engine,
+        _shareButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Compartir :d", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight() - 100), buttonWidth, buttonHeight) {
             @Override
             public void callback() {
@@ -62,18 +75,19 @@ public class InitialScene implements Scene {
 
     @Override
     public void render(Graphics gr) {
-        _playButton.render();
         _titleText.render();
-        //adButton.render();
-        shareButton.render();
+        _quickGameButton.render();
+        _worldsButton.render();
+        _shareButton.render();
     }
 
     @Override
     public void handleEvents(Input a) {
         if (a.getTouchEvent().size() > 0) {
-            this._playButton.handleEvents(a.getTouchEvent().get(0));
+            _quickGameButton.handleEvents(a.getTouchEvent().get(0));
+            _worldsButton.handleEvents(a.getTouchEvent().get(0));
             //this.adButton.handleEvents(a.getTouchEvent().get(0));
-            this.shareButton.handleEvents(a.getTouchEvent().get(0));
+            _shareButton.handleEvents(a.getTouchEvent().get(0));
         }
     }
 }
