@@ -1,6 +1,0 @@
-{
-    "codeSize": 4, //tamaño del código a adivinar
-    "codeOpt": 5, //posibles opciones con las que adivinar
-    "repeat": false, //si se pueden repetir los códigos
-    "attempts": 8 // el número de intentos para adivinar el código
-}

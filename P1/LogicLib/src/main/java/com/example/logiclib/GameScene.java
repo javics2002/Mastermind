@@ -17,7 +17,8 @@ public class GameScene implements Scene {
     private final List<CombinationLayout> _combinationLayouts;
     private final List<ColorButton> _colorButtons;
 
-    public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
+    public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors,
+                     boolean repeatedColors, final Scene returnScene) {
         _engine = engine;
         Graphics graphics = _engine.getGraphics();
 
@@ -32,6 +33,7 @@ public class GameScene implements Scene {
         _gameAttributes.activeLayout = 0;
         _gameAttributes.isEyeOpen = false;
         _gameAttributes.resultCombination = new Combination(combinationLength, numberOfColors, repeatedColors);
+        _gameAttributes.returnScene = returnScene;
 
         // Title
         int verticalMargin = 5;
@@ -56,8 +58,7 @@ public class GameScene implements Scene {
                 horizontalMargin, verticalMargin, buttonDimension, buttonDimension) {
             @Override
             public void callback() {
-                Scene scene = new DifficultyScene(_engine);
-                _engine.setCurrentScene(scene);
+                _engine.setCurrentScene(returnScene);
             }
         };
 

@@ -12,7 +12,7 @@ import java.util.List;
 public class GameOverScene implements Scene {
     private final Text _resultText, _attemptsText, _attemptsNumberText, _codeText;
     private final Button _playAgainButton;
-    private final Button _chooseDifficultyButton;
+    //private final Button _chooseDifficultyButton;
     private final List<ColorSlot> _resultCombination;
 
     Engine _engine;
@@ -70,18 +70,18 @@ public class GameOverScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,  _gameAttributes.combinationLength,
-                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors);
+                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene);
                 _engine.setCurrentScene(scene);
             }
         };
-        _chooseDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Elegir dificultad", buttonFont, _engine,
+        /*_chooseDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Elegir dificultad", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - 400 / 2, 550, 400, 50) {
             @Override
             public void callback() {
                 Scene scene = new DifficultyScene(_engine);
                 _engine.setCurrentScene(scene);
             }
-        };
+        };*/
     }
 
     @Override
@@ -99,14 +99,14 @@ public class GameOverScene implements Scene {
         }
 
         _playAgainButton.render();
-        _chooseDifficultyButton.render();
+        //_chooseDifficultyButton.render();
     }
 
     @Override
     public void handleEvents(Input input) {
         if (input.getTouchEvent().size() > 0) {
             _playAgainButton.handleEvents(input.getTouchEvent().get(0));
-            _chooseDifficultyButton.handleEvents(input.getTouchEvent().get(0));
+            //_chooseDifficultyButton.handleEvents(input.getTouchEvent().get(0));
         }
     }
 }

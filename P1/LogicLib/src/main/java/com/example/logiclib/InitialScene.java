@@ -31,12 +31,15 @@ public class InitialScene implements Scene {
         final int quickGameButtonPositionY = graphics.getLogicHeight() / 2;
         final int paddingY = 30;
 
+        final Scene returnScene = this;
+
         Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
         _quickGameButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Partida rápida", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY, buttonWidth, buttonHeight) {
             @Override
             public void callback() {
-                Scene scene = new GameScene(_engine,  8, 4, 6, false);
+                Scene scene = new GameScene(_engine,  8, 4, 6,
+                        false, returnScene);
                 _engine.setCurrentScene(scene);
             }
         };

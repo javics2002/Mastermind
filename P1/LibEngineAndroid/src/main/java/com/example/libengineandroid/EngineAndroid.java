@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.PixelCopy;
 import android.view.SurfaceView;
@@ -26,9 +25,14 @@ import com.example.aninterface.Scene;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 
+import com.google.gson.Gson;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 // Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
 public class EngineAndroid implements Runnable, Engine {
@@ -42,8 +46,9 @@ public class EngineAndroid implements Runnable, Engine {
     private final AudioAndroid _audio;
     private Activity activity;
 
-    private AndroidRewardedAd rewardedAd;
-    private OnUserEarnedRewardListener rewardEarnedCallback;
+    private AndroidRewardedAd _rewardedAd;
+    private OnUserEarnedRewardListener _rewardEarnedCallback;
+    private final Gson _gson;
 
 
     // Constructor
@@ -60,6 +65,8 @@ public class EngineAndroid implements Runnable, Engine {
         myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler()); // Configura el manejador de eventos táctiles
         _graphics = new GraphicsAndroid(_surfaceView, _assetManager, (int) (height * aspectRatio), height);
         _audio = new AudioAndroid(myView.getContext());
+
+        _gson= new Gson();
     }
 
     @Override
@@ -138,17 +145,17 @@ public class EngineAndroid implements Runnable, Engine {
 
     @Override
     public  void showAd(){
-        rewardedAd.show();
+        _rewardedAd.show();
     }
     private void createRewardedAd() {
-        rewardEarnedCallback = new OnUserEarnedRewardListener() {
+        _rewardEarnedCallback = new OnUserEarnedRewardListener() {
             @Override
             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
                 Log.d("TAG", "TE HAS GANADO UN ANUNCIO");
             }
         };
 
-        rewardedAd = new AndroidRewardedAd(this, rewardEarnedCallback);
+        _rewardedAd = new AndroidRewardedAd(this, _rewardEarnedCallback);
     }
 
     @Override
@@ -166,14 +173,14 @@ public class EngineAndroid implements Runnable, Engine {
                     if (copyResult == PixelCopy.SUCCESS) {
                         // generar Bitmap a partir de otro dadas unas coordenadas y un tamaño
                         Bitmap finalBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
-                        String bitmapPath = MediaStore.Images.Media.insertImage(activity.getContentResolver(), finalBitmap, "palette", "share palette");
-                        Uri test = Uri.parse(bitmapPath);
 
-                        //Uri fileUri = FileProvider.getUriForFile(activity, "com.mydomain.fileprovider", file);
+                        File file = saveBitmapToFile(activity, finalBitmap);
+                        Uri fileUri = FileProvider.getUriForFile(activity, "com.mydomain.fileprovider", file);
+                        //activity.grantUriPermission(activity.getPackageName(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
                         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-
-                        intent.putExtra(Intent.EXTRA_STREAM, test);
+                        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         intent.putExtra(Intent.EXTRA_TEXT, "¡Mira esta imagen!");
                         intent.setType("image/png");
 
@@ -207,6 +214,68 @@ public class EngineAndroid implements Runnable, Engine {
     }
 
     @Override
+    public <T> T jsonToObject(String fileName, Class<T> classOfT) {
+        AssetManager assetManager = _surfaceView.getContext().getAssets();
+
+        try {
+            // Abre un InputStream para el archivo JSON
+            InputStream inputStream = assetManager.open(fileName);
+
+            // Convierte el InputStream a una cadena JSON
+            String jsonString = convertInputStreamToString(inputStream);
+
+            // Parsea la cadena JSON a un objeto Java usando Gson
+
+            T jsonObject = _gson.fromJson(jsonString, classOfT);
+
+            // Cierra el InputStream cuando hayas terminado
+            inputStream.close();
+
+            return jsonObject;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    @Override
+    public String objectToJson(Object object) {
+        return _gson.toJson(object);
+    }
+
+    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        while ((line = bufferedReader.readLine()) != null) {
+            stringBuilder.append(line).append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    @Override
+    public int filesInFolder(String folderPath) {
+        try {
+            AssetManager assetManager = _surfaceView.getContext().getAssets();
+            String[] files = assetManager.list(folderPath);
+
+            // Comprueba si la lista de archivos es nula o vacía
+            if (files == null || files.length == 0)
+                return 0;
+
+            // Cuenta el número de archivos con la extensión específica
+            int fileCount = 0;
+            for (String file : files)
+                fileCount++;
+
+            return fileCount;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
+
+    @Override
     public Input getInput() {
         return _input;
     }
@@ -231,19 +300,4 @@ public class EngineAndroid implements Runnable, Engine {
         return _audio;
     }
     public Activity getActivity(){ return activity;}
-
-    @Override
-    public int filesInFolder(String folderPath) {
-        return 0;
-    }
-
-    @Override
-    public String objectToJson(Object object){
-        return "";
-    }
-
-    @Override
-    public <T> T jsonToObject(String fileName, Class<T> classOfT) {
-        return null;
-    }
 }
