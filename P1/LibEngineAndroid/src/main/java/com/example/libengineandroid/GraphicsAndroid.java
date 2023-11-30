@@ -103,7 +103,7 @@ public class GraphicsAndroid implements Graphics {
         //Con un stream abre la imagen por nombre
         Bitmap bitmap = null;
         try {
-            InputStream inputS = this._assetManager.open(imgName);
+            InputStream inputS = _assetManager.open("Sprites/" + imgName);
             bitmap = BitmapFactory.decodeStream(inputS);
             inputS.close(); // Cierra el InputStream después de usarlo
         } catch (final IOException e) {
@@ -120,7 +120,7 @@ public class GraphicsAndroid implements Graphics {
     @Override
     public Font newFont(String fileName, float size) {
         //Con el elemento typeface podemos ajustar el tipo de fuente y decirselo al elemento paint para que adquiera esas caracteriticas
-        Typeface tface = Typeface.createFromAsset(_assetManager, fileName);
+        Typeface tface = Typeface.createFromAsset(_assetManager, "Fonts/" + fileName);
 
         //A parte creamos el objeto fuente y lo devolvemos
         return new FontAndroid(tface, size);

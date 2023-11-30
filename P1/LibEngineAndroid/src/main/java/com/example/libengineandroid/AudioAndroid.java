@@ -32,7 +32,7 @@ public class AudioAndroid implements Audio {
             return getSound(file);
 
         try {
-            AssetFileDescriptor assetFileDescriptor = _context.getAssets().openFd(file);
+            AssetFileDescriptor assetFileDescriptor = _context.getAssets().openFd("Music/" + file);
 
             SoundAndroid sound = new SoundAndroid(_soundPool.load(assetFileDescriptor, 1), loop, _soundPool);
             _soundMap.put(file, sound);

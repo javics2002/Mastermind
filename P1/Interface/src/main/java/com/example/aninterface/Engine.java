@@ -18,4 +18,10 @@ public interface Engine {
     void showAd();
 
     void shareScreenshot(int width, int height);
+
+    <T> T jsonToObject(String fileName, Class<T> classOfT);
+
+    String objectToJson(Object object);
+
+    int filesInFolder(String folderPath);
 }

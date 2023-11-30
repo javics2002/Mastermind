@@ -45,11 +45,17 @@ public class WorldScene implements Scene {
 
         Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
 
-        //TODO cambiar 10 por numero de niveles que haya en la carpeta
-        _levelButtons = new Button[10];
+        String worldPath = "Levels/world" + Integer.toString(worldId);
+        _levelButtons = new Button[_engine.filesInFolder(worldPath)];
+
         for(int i = 0; i < 10; i++){
             int row = i / levelsPerRow;
             int column = i % levelsPerRow;
+
+            String levelNumber = i >= 9 ? Integer.toString(i + 1) : "0" + Integer.toString(i + 1);
+
+            Level level = _engine.jsonToObject(worldPath
+                    + "/level" + Integer.toString(worldId) + "_" + levelNumber, Level.class);
             _levelButtons[i] = new Button(Colors.ColorName.BACKGROUNDGREEN, Integer.toString(i + 1), buttonFont, _engine,
                     padding + column * (gameButtonsSize + padding),
                     startingGameButtonsHeight + row * (gameButtonsSize + padding),
