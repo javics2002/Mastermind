@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.PixelCopy;
 import android.view.SurfaceView;
@@ -165,14 +166,14 @@ public class EngineAndroid implements Runnable, Engine {
                     if (copyResult == PixelCopy.SUCCESS) {
                         // generar Bitmap a partir de otro dadas unas coordenadas y un tamaño
                         Bitmap finalBitmap = Bitmap.createBitmap(bitmap, 0, 0, width, height);
+                        String bitmapPath = MediaStore.Images.Media.insertImage(activity.getContentResolver(), finalBitmap, "palette", "share palette");
+                        Uri test = Uri.parse(bitmapPath);
 
-                        File file = saveBitmapToFile(activity, finalBitmap);
-                        Uri fileUri = FileProvider.getUriForFile(activity, "com.mydomain.fileprovider", file);
-                        //activity.grantUriPermission(activity.getPackageName(), fileUri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                        //Uri fileUri = FileProvider.getUriForFile(activity, "com.mydomain.fileprovider", file);
 
                         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
-                        intent.putExtra(Intent.EXTRA_STREAM, fileUri);
-                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                        intent.putExtra(Intent.EXTRA_STREAM, test);
                         intent.putExtra(Intent.EXTRA_TEXT, "¡Mira esta imagen!");
                         intent.setType("image/png");
 
@@ -230,4 +231,19 @@ public class EngineAndroid implements Runnable, Engine {
         return _audio;
     }
     public Activity getActivity(){ return activity;}
+
+    @Override
+    public int filesInFolder(String folderPath) {
+        return 0;
+    }
+
+    @Override
+    public String objectToJson(Object object){
+        return "";
+    }
+
+    @Override
+    public <T> T jsonToObject(String fileName, Class<T> classOfT) {
+        return null;
+    }
 }
