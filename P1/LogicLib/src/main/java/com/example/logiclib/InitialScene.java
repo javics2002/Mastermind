@@ -9,7 +9,7 @@ import com.example.aninterface.Scene;
 
 public class InitialScene implements Scene {
     private final Button _quickGameButton, _worldsButton;
-    private final Button _adButton;
+
     private final Button _shareButton;
     private final Text _titleText;
     Engine _engine;
@@ -54,14 +54,7 @@ public class InitialScene implements Scene {
             }
         };
 
-        _adButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Anuncio", buttonFont, _engine,
-                graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY + 2 * (buttonHeight + paddingY),
-                buttonWidth, buttonHeight) {
-            @Override
-            public void callback() {
-                _engine.showAd();
-            }
-        };
+
 
         _shareButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Compartir :d", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight() - 100), buttonWidth, buttonHeight) {
@@ -82,6 +75,7 @@ public class InitialScene implements Scene {
         _quickGameButton.render();
         _worldsButton.render();
         _shareButton.render();
+
     }
 
     @Override
@@ -89,7 +83,7 @@ public class InitialScene implements Scene {
         if (a.getTouchEvent().size() > 0) {
             _quickGameButton.handleEvents(a.getTouchEvent().get(0));
             _worldsButton.handleEvents(a.getTouchEvent().get(0));
-            //this.adButton.handleEvents(a.getTouchEvent().get(0));
+
             _shareButton.handleEvents(a.getTouchEvent().get(0));
         }
     }

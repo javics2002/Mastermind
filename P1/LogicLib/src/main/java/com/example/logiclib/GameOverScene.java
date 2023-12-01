@@ -15,6 +15,7 @@ public class GameOverScene implements Scene {
     //private final Button _chooseDifficultyButton;
     private final List<ColorSlot> _resultCombination;
 
+    private final Button _adButton;
     Engine _engine;
     GameAttributes _gameAttributes;
 
@@ -82,6 +83,19 @@ public class GameOverScene implements Scene {
                 _engine.setCurrentScene(scene);
             }
         };*/
+        final int buttonWidth = 430;
+        final int buttonHeight = 90;
+        final int posY = graphics.getLogicHeight() / 2;
+        final int paddingY = 30;
+
+        _adButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Consigue mas Intentos", buttonFont, _engine,
+                graphics.getLogicWidth() / 2 - buttonWidth / 2, posY + 2 * (buttonHeight + paddingY),
+                buttonWidth, buttonHeight) {
+            @Override
+            public void callback() {
+                _engine.showAd();
+            }
+        };
     }
 
     @Override
@@ -93,6 +107,7 @@ public class GameOverScene implements Scene {
         _attemptsText.render();
         _attemptsNumberText.render();
         _codeText.render();
+        _adButton.render();
 
         for (ColorSlot colorSlot : _resultCombination) {
             colorSlot.render();
@@ -107,6 +122,7 @@ public class GameOverScene implements Scene {
         if (input.getTouchEvent().size() > 0) {
             _playAgainButton.handleEvents(input.getTouchEvent().get(0));
             //_chooseDifficultyButton.handleEvents(input.getTouchEvent().get(0));
+            _adButton.handleEvents(input.getTouchEvent().get(0));
         }
     }
 }
