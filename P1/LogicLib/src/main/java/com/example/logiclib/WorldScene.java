@@ -15,6 +15,8 @@ public class WorldScene implements Scene {
 
     Engine _engine;
 
+    final int numLevels;
+
     public WorldScene(Engine engine, final int worldId) {
         _engine = engine;
 
@@ -76,10 +78,11 @@ public class WorldScene implements Scene {
 
         String worldPath = "Levels/world" + Integer.toString(worldId);
         final int levels = _engine.filesInFolder(worldPath);
+        numLevels=levels;
         _levelButtons = new Button[levels];
         final Scene returnScene = this;
 
-        for(int i = 0; i < levels; i++){
+        for(int i = 0; i < numLevels; i++){
             int row = i / levelsPerRow;
             int column = i % levelsPerRow;
 
@@ -105,6 +108,7 @@ public class WorldScene implements Scene {
     public void update(double deltaTime) {
     }
 
+
     @Override
     public void render(Graphics gr) {
         _backButton.render();
@@ -112,7 +116,7 @@ public class WorldScene implements Scene {
         _prevWorldButton.render();
         _nextWorldButton.render();
 
-        for(int i =0; i < 10; i ++){
+        for(int i =0; i <numLevels; i ++){
             _levelButtons[i].render();
         }
     }
@@ -125,7 +129,7 @@ public class WorldScene implements Scene {
             _prevWorldButton.handleEvents(a.getTouchEvent().get(0));
             _nextWorldButton.handleEvents(a.getTouchEvent().get(0));
 
-            for(int i =0; i < 10; i ++){
+            for(int i =0; i <numLevels ; i ++){
                 _levelButtons[i].handleEvents(a.getTouchEvent().get(0));
             }
         }
