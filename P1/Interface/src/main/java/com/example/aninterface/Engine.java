@@ -1,5 +1,7 @@
 package com.example.aninterface;
 
+import java.io.File;
+
 public interface Engine {
     Graphics getGraphics();
 
@@ -24,4 +26,6 @@ public interface Engine {
     String objectToJson(Object object);
 
     int filesInFolder(String folderPath);
+
+    IFile getSaveData();
 }

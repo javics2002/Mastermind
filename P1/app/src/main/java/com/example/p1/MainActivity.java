@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.aninterface.Scene;
 import com.example.libengineandroid.EngineAndroid;
 import com.example.logiclib.Button;
+import com.example.logiclib.GameData;
 import com.example.logiclib.InitialScene;
 //Auncios
 import com.google.android.gms.ads.AdSize;
@@ -37,6 +38,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import com.google.common.util.concurrent.ListenableFuture;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
@@ -63,6 +71,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         _engineAndroid.setCurrentScene(firstScene);
         _engineAndroid.resume();
 
+        // Init Game Data
+        GameData.Init(_engineAndroid);
 
         //Anuncios Inicializado
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -97,6 +107,47 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     }
 
+    private void saveGameData() {
+        String fileName = "GameData.json";
+        FileOutputStream file = null; // obtain file in data/data...
+        try {
+            file = _engineAndroid.getActivity().openFileOutput(fileName,
+                    _engineAndroid.getActivity().MODE_PRIVATE);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Crear un gson
+        JsonObject json = new JsonObject();
+        Gson gson = new Gson();
+
+        JsonArray worlds = new JsonArray();
+
+        // Para cada mundo, añadir una propiedad al json y guardarlo
+        int worldsNumber = _engineAndroid.filesInFolder("Levels");
+        for (int i = 0; i < worldsNumber; i++){
+            JsonObject worldSave = new JsonObject();
+            String worldNameTest = "Mundo1";
+            worldSave.addProperty(worldNameTest, 69);
+            worlds.add(worldSave);
+        }
+        json.add("Mundos", worlds);
+
+        // Dinero
+        int money = GameData.Instance().getMoney();
+        json.addProperty("Dinero", money);
+
+        // Convertir el objeto
+        String jsonString = gson.toJson(json);
+
+        try {
+            file.write(jsonString.getBytes());
+            file.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void createSensor() {
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -107,7 +158,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onStart() {
         super.onStart();
-
         WorkManager.getInstance(this).cancelAllWork();
     }
 
@@ -115,6 +165,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onPause() {
         super.onPause();
         senSensorManager.unregisterListener(this);
+        saveGameData();
         _engineAndroid.pause();
     }
 
@@ -123,8 +174,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onResume();
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         _engineAndroid.resume();
-
-
     }
     protected void createAdRequest()
     {
@@ -152,14 +201,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onStop();
         createOneTimeNotification();
         createPeriodicNotification();
-
-
     }
 
     protected void onDestroy() {
         super.onDestroy();
-
-
     }
     @Override
     public void onSensorChanged(SensorEvent event) {

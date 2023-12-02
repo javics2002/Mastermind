@@ -22,6 +22,7 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
+import com.example.aninterface.IFile;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 
@@ -29,6 +30,8 @@ import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -45,7 +48,6 @@ public class EngineAndroid implements Runnable, Engine {
     private final GraphicsAndroid _graphics; // Motor de renderizado
     private final AudioAndroid _audio;
     private Activity activity;
-
     private AndroidRewardedAd _rewardedAd;
     private OnUserEarnedRewardListener _rewardEarnedCallback;
     private final Gson _gson;
@@ -300,4 +302,36 @@ public class EngineAndroid implements Runnable, Engine {
         return _audio;
     }
     public Activity getActivity(){ return activity;}
+
+    @Override
+    public IFile getSaveData() {
+        try {
+            String saveName = "GameData.json";
+            FileInputStream fileInputStream = activity.openFileInput(saveName);
+
+            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
+            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+            StringBuilder stringBuilder = new StringBuilder();
+
+            String line;
+            try {
+                while ((line = bufferedReader.readLine()) != null){
+                    stringBuilder.append(line);
+                }
+
+                inputStreamReader.close();
+                bufferedReader.close();
+            }
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // Create File and return it
+            FileAndroid saveFile = new FileAndroid(stringBuilder.toString());
+            return saveFile;
+        } catch (FileNotFoundException e) {
+            return null;
+            //throw new RuntimeException(e);
+        }
+    }
 }
