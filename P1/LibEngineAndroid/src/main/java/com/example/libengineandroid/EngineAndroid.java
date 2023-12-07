@@ -23,6 +23,7 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 import com.example.aninterface.IFile;
+import com.example.logiclib.Colors;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 
@@ -103,7 +104,7 @@ public class EngineAndroid implements Runnable, Engine {
     // Método para renderizar la escena actual
     protected void render() {
         // Limpia el fondo con un color específico
-        getGraphics().clear(0xe7d6bd);
+        getGraphics().clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
         _currentScene.render(_graphics);
     }
 

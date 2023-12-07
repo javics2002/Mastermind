@@ -6,7 +6,7 @@ public class WorldData {
     // TODO: En esta clase se deberían guardar la información de cada mundo:
     // los niveles, el ultimo nivel desbloqueado, el nombre del mundo...
     private String _worldName;
-    private ArrayList<LevelData> _levels;
+    private ArrayList<Level> _levels;
     private int _lastLevelUnlocked;
     private int _levelNumber;
 
@@ -14,10 +14,14 @@ public class WorldData {
         _worldName = worldName;
         _levelNumber = levelNumber;
 
-        //_levels  = new ArrayList<>();
-        //for (int i = 0; i < _levelNumber; i++){
+        _levels  = new ArrayList<>();
+        for (int i = 0; i < _levelNumber; i++){
             //_levels.add();
-        //}
+        }
+    }
+
+    public WorldData() {
+        _lastLevelUnlocked = 0;
     }
 
     public String getWorldName() {
@@ -25,6 +29,9 @@ public class WorldData {
     }
     public int getLastLevelUnlocked() {
         return _lastLevelUnlocked;
+    }
+    public void completeLevel(){
+        _lastLevelUnlocked++;
     }
 
     public int getLevelNumber() {

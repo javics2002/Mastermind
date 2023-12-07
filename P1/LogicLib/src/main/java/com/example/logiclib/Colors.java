@@ -2,7 +2,11 @@ package com.example.logiclib;
 import java.util.HashMap;
 
 public class Colors {
-    public enum ColorName { RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, MAGENTA, PINK, PURPLE, DARKGRAY, LIGHTGRAY, WHITE, BLACK, BACKGROUNDRED, BACKGROUNDORANGE, BACKGROUNDYELLOW, BACKGROUNDGREEN, BACKGROUNDBLUE}
+    public enum ColorName {
+        RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, MAGENTA, PINK, PURPLE, DARKGRAY,
+        LIGHTGRAY, WHITE, BLACK, BACKGROUNDRED, BACKGROUNDORANGE, BACKGROUNDYELLOW, BACKGROUNDGREEN, BACKGROUNDBLUE,
+        LEVELCOMPLETED, LEVELUNCOMPLETED, BACKGROUND
+    }
     public static HashMap<ColorName, Integer> colorValues;
     static{
         colorValues = new HashMap<>();
@@ -24,6 +28,9 @@ public class Colors {
         colorValues.put(ColorName.BACKGROUNDYELLOW, 0xFFEBD753);
         colorValues.put(ColorName.BACKGROUNDGREEN, 0xFF5DEB53);
         colorValues.put(ColorName.BACKGROUNDBLUE, 0xFF53D4EB);
+        colorValues.put(ColorName.LEVELCOMPLETED, 0x8853D4EB);
+        colorValues.put(ColorName.LEVELUNCOMPLETED, 0xFF53D4EB);
+        colorValues.put(ColorName.BACKGROUND, 0xFFE7D6BD);
 
     }
     public static int getColor(int colorID){

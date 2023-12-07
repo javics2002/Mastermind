@@ -9,16 +9,16 @@ import com.example.aninterface.Sound;
 import com.example.aninterface.Font;
 
 public class Button implements GameObject {
-    private Image _image;
-    private final Engine _engine;
-    private final Graphics _graphics;
-    private final int _positionX, _positionY;
-    private final int _width, _height;
-    private final Sound _clickSound;
-    private int _backgroundColor;
-    private int _arc;
-    private String _text;
-    private Font _font;
+    protected Image _image;
+    protected final Engine _engine;
+    protected final Graphics _graphics;
+    protected final int _positionX, _positionY;
+    protected final int _width, _height;
+    protected final Sound _clickSound;
+    protected int _backgroundColor;
+    protected int _arc;
+    protected final String _text;
+    protected Font _font;
 
     Button(Colors.ColorName backgroundColor, String text, Font font, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;
@@ -39,6 +39,27 @@ public class Button implements GameObject {
         _clickSound = _engine.getAudio().loadSound("click.wav", false);
         _clickSound.setVolume(.5f);
     }
+    Button(String filename, Colors.ColorName backgroundColor, String text, Font font, Engine engine,
+           int positionX, int positionY, int width, int height) {
+        _engine = engine;
+        _graphics = engine.getGraphics();
+
+        _image = _graphics.loadImage(filename);
+        _positionX = positionX;
+        _positionY = positionY;
+        _width = width;
+        _height = height;
+
+        _backgroundColor = Colors.colorValues.get(backgroundColor);
+        _arc = 20;
+
+        _text = text;
+        _font = font;
+
+        _clickSound = _engine.getAudio().loadSound("click.wav", false);
+        _clickSound.setVolume(.5f);
+    }
+
     Button(String filename, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;
         _graphics = engine.getGraphics();
@@ -48,6 +69,8 @@ public class Button implements GameObject {
         _positionY = positionY;
         _width = width;
         _height = height;
+
+        _text = "";
 
         _clickSound = _engine.getAudio().loadSound("click.wav", false);
         _clickSound.setVolume(.5f);

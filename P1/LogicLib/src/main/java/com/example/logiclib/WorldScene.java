@@ -9,13 +9,12 @@ import com.example.aninterface.Scene;
 public class WorldScene implements Scene {
     private final Button _backButton;
     private final Button _prevWorldButton, _nextWorldButton;
-    private Button _levelButtons[];
-
+    private final Button _unlockNextLevelButton; //Hack
+    private Level _levelButtons[];
     private final Text _titleText;
-
+    final int _numLevels;
+    private WorldData _worldData;
     Engine _engine;
-
-    final int numLevels;
 
     public WorldScene(Engine engine, final int worldId) {
         _engine = engine;
@@ -69,6 +68,13 @@ public class WorldScene implements Scene {
             }
         };
 
+        // Read saved data (progress)
+        _worldData = _engine.jsonToObject("RayitoPonLaRutaDeGuardadoAqui", WorldData.class);
+        if(_worldData == null){
+            _worldData = new WorldData();
+        }
+        final int lastLevelUnlocked = _worldData.getLastLevelUnlocked();
+
         // Game buttons
         final int levelsPerRow = 3;
         final int gameButtonsSize = (graphics.getLogicWidth() - (levelsPerRow + 1) * padding) / levelsPerRow;
@@ -77,20 +83,20 @@ public class WorldScene implements Scene {
         Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
 
         String worldPath = "Levels/world" + Integer.toString(worldId);
-        final int levels = _engine.filesInFolder(worldPath);
-        numLevels=levels;
-        _levelButtons = new Button[levels];
+        _numLevels = _engine.filesInFolder(worldPath);
+        _levelButtons = new Level[_numLevels];
         final Scene returnScene = this;
 
-        for(int i = 0; i < numLevels; i++){
+        for(int i = 0; i < _numLevels; i++){
             int row = i / levelsPerRow;
             int column = i % levelsPerRow;
 
             String levelNumber = i >= 9 ? Integer.toString(i + 1) : "0" + Integer.toString(i + 1);
 
-            final Level level = _engine.jsonToObject(worldPath + "/level" + Integer.toString(worldId)
-                    + "_" + levelNumber + ".json", Level.class);
-            _levelButtons[i] = new Button(Colors.ColorName.BACKGROUNDGREEN, Integer.toString(i + 1), buttonFont, _engine,
+            final LevelData level = _engine.jsonToObject(worldPath + "/level" + Integer.toString(worldId)
+                    + "_" + levelNumber + ".json", LevelData.class);
+            _levelButtons[i] = new Level(i > lastLevelUnlocked, i < lastLevelUnlocked,
+                    Integer.toString(i + 1), buttonFont, _engine,
                     padding + column * (gameButtonsSize + padding),
                     startingGameButtonsHeight + row * (gameButtonsSize + padding),
                     gameButtonsSize, gameButtonsSize) {
@@ -102,12 +108,26 @@ public class WorldScene implements Scene {
                 }
             };
         }
+
+        _unlockNextLevelButton = new Button("UI/nerd.png", _engine,
+                graphics.getLogicWidth() - padding - backbuttonScale, barHeight - backbuttonScale / 2,
+                backbuttonScale, backbuttonScale) {
+            @Override
+            public void callback() {
+                if(_worldData.getLastLevelUnlocked() >= _numLevels)
+                    return;
+
+                _levelButtons[_worldData.getLastLevelUnlocked()].completeLevel();
+                _worldData.completeLevel();
+                if(_worldData.getLastLevelUnlocked() < _numLevels)
+                    _levelButtons[_worldData.getLastLevelUnlocked()].unlockLevel();
+            }
+        };
     }
 
     @Override
     public void update(double deltaTime) {
     }
-
 
     @Override
     public void render(Graphics gr) {
@@ -115,8 +135,9 @@ public class WorldScene implements Scene {
         _titleText.render();
         _prevWorldButton.render();
         _nextWorldButton.render();
+        _unlockNextLevelButton.render();
 
-        for(int i =0; i <numLevels; i ++){
+        for(int i = 0; i < _numLevels; i ++){
             _levelButtons[i].render();
         }
     }
@@ -128,8 +149,9 @@ public class WorldScene implements Scene {
             _backButton.handleEvents(a.getTouchEvent().get(0));
             _prevWorldButton.handleEvents(a.getTouchEvent().get(0));
             _nextWorldButton.handleEvents(a.getTouchEvent().get(0));
+            _unlockNextLevelButton.handleEvents(a.getTouchEvent().get(0));
 
-            for(int i =0; i <numLevels ; i ++){
+            for(int i = 0; i < _numLevels; i ++){
                 _levelButtons[i].handleEvents(a.getTouchEvent().get(0));
             }
         }
