@@ -46,4 +46,19 @@ public class Text implements GameObject {
         _posX = posX;
         _posY = posY;
     }
+
+    public String getText(){
+        return _text;
+    }
+    public Font getFont(){
+        return _font;
+    }
+
+    public int getPosX(){
+        return _posX;
+    }
+
+    public int getPosY(){
+        return _posY;
+    }
 }

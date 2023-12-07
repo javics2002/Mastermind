@@ -9,7 +9,7 @@ import com.example.aninterface.GameObject;
 public class HintSlot implements GameObject {
     private Image _image;
     private final Graphics _graphics;
-    private final int _positionX, _positionY;
+    private int _positionX, _positionY;
     private final int _width, _height;
     private Colors.ColorName _colorName;
 
@@ -42,5 +42,9 @@ public class HintSlot implements GameObject {
 
     public void setColor(Colors.ColorName colorName) {
         _colorName = colorName;
+    }
+
+    public void setPositionY(int posY){
+        _positionY = posY;
     }
 }

@@ -15,7 +15,8 @@ public class CombinationLayout implements GameObject {
     private final List<ColorSlot> _colors;
     private final List<HintSlot> _hints;
     private final Graphics _graphics;
-    private final int _positionX, _positionY;
+    private final int _positionX;
+    private int _positionY;
     private final int _scale;
     private final int _lateralMargin;
 
@@ -62,18 +63,16 @@ public class CombinationLayout implements GameObject {
                 _graphics.getLogicWidth() - _lateralMargin * 2, (int) (_scale * 1.2f),
                 Colors.colorValues.get(Colors.ColorName.TRASPARENTBACKGROUND), 20, 20);
 
-        _graphics.drawRect(_lateralMargin + 80, _positionY - _scale/2, 2, _scale, 0);
+        _graphics.drawRect(_lateralMargin + 80, _positionY - _scale / 2, 2, _scale, 0);
         _graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, _positionY - _scale/2, 2, _scale, 0);
 
         _combinationNumber.render();
 
-        for (ColorSlot color : _colors) {
+        for (ColorSlot color : _colors)
             color.render();
-        }
 
-        for (HintSlot hint : _hints) {
+        for (HintSlot hint : _hints)
             hint.render();
-        }
     }
 
     @Override
@@ -133,6 +132,22 @@ public class CombinationLayout implements GameObject {
             } else if (predictionHints[i] == Combination.HintEnum.WHITE) {
                 _hints.get(i).setColor(Colors.ColorName.WHITE);
             }
+        }
+    }
+
+    public void setPositionY(int posY){
+        _positionY = posY;
+
+        _combinationNumber.setPos(_combinationNumber.getPosX(),
+                _positionY + _scale / 2 - _graphics.getStringHeight(_combinationNumber.getText(),
+                        _combinationNumber.getFont()) / 2 );
+
+        for (ColorSlot color : _colors)
+            color.setPositionY(_positionY - _scale / 2);
+
+        for (int i = 0; i < _gameAttributes.combinationLength; i++) {
+            _hints.get(i).setPositionY((i < _gameAttributes.combinationLength / 2f ?
+                    _positionY - _scale / 2 : _positionY) + (int) (_scale * .2f / 4));
         }
     }
 }

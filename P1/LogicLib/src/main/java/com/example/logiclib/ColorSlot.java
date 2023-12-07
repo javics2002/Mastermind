@@ -9,7 +9,7 @@ import com.example.aninterface.GameObject;
 
 public class ColorSlot implements GameObject {
     private final Graphics _graphics;
-    private final int _positionX, _positionY;
+    private int _positionX, _positionY;
     private final int _width, _height;
     private String _name;
     private boolean _hasColor;
@@ -92,6 +92,10 @@ public class ColorSlot implements GameObject {
     }
     public void deleteColor() {
         _hasColor = false;
+    }
+
+    public void setPositionY(int posY){
+        _positionY = posY;
     }
 }
 

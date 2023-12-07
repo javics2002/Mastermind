@@ -20,6 +20,8 @@ public class GameScene implements Scene {
     private final List<ColorButton> _colorButtons;
     private final Image _backgroundImage;
 
+    private final int _visibleLayouts = 10;
+
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors,
                      boolean repeatedColors, final Scene returnScene) {
         _engine = engine;
@@ -227,17 +229,21 @@ public class GameScene implements Scene {
         _quitButton.render();
         _colorblindButton.render();
 
-        for (CombinationLayout combination : _combinationLayouts) {
-            combination.render();
+        int firstCombination = _gameAttributes.activeLayout - _visibleLayouts + 1;
+        if (firstCombination < 0)
+            firstCombination = 0;
+
+        for (int i = firstCombination; i < _combinationLayouts.size() && i < firstCombination + _visibleLayouts; i++){
+            _combinationLayouts.get(i).setPositionY(100 + (15 + 40) * (i - firstCombination));
+            _combinationLayouts.get(i).render();
         }
 
         final int colorButtonBackgroundHeight = 80;
         graphics.drawRect(0, graphics.getLogicHeight() - colorButtonBackgroundHeight,
                 graphics.getLogicWidth(), colorButtonBackgroundHeight, Colors.colorValues.get(Colors.ColorName.TRASPARENTBACKGROUND));
 
-        for (ColorButton colorButton : _colorButtons) {
+        for (ColorButton colorButton : _colorButtons)
             colorButton.render();
-        }
     }
 
     @Override
