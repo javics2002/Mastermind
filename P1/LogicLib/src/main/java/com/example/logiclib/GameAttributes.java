@@ -10,7 +10,9 @@ public class GameAttributes {
     public boolean isEyeOpen;
     public Combination resultCombination;
     public Scene returnScene;
+    public int skin;
 
     public GameAttributes() {
+        skin = -1;
     }
 }

@@ -5,7 +5,7 @@ public class Colors {
     public enum ColorName {
         RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, MAGENTA, PINK, PURPLE, DARKGRAY,
         LIGHTGRAY, WHITE, BLACK, BACKGROUNDRED, BACKGROUNDORANGE, BACKGROUNDYELLOW, BACKGROUNDGREEN, BACKGROUNDBLUE,
-        LEVELCOMPLETED, LEVELUNCOMPLETED, BACKGROUND
+        LEVELCOMPLETED, LEVELUNCOMPLETED, BACKGROUND, TRASPARENTBACKGROUND
     }
     public static HashMap<ColorName, Integer> colorValues;
     static{
@@ -28,11 +28,12 @@ public class Colors {
         colorValues.put(ColorName.BACKGROUNDYELLOW, 0xFFEBD753);
         colorValues.put(ColorName.BACKGROUNDGREEN, 0xFF5DEB53);
         colorValues.put(ColorName.BACKGROUNDBLUE, 0xFF53D4EB);
-        colorValues.put(ColorName.LEVELCOMPLETED, 0x8853D4EB);
-        colorValues.put(ColorName.LEVELUNCOMPLETED, 0xFF53D4EB);
+        colorValues.put(ColorName.LEVELCOMPLETED, 0xAAE7D6BD);
+        colorValues.put(ColorName.LEVELUNCOMPLETED, 0xFFE7D6BD);
         colorValues.put(ColorName.BACKGROUND, 0xFFE7D6BD);
-
+        colorValues.put(ColorName.TRASPARENTBACKGROUND, 0xCCF8F4ED);
     }
+
     public static int getColor(int colorID){
         return Colors.colorValues.get(Colors.ColorName.values()[colorID]);
     }

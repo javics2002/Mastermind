@@ -17,6 +17,7 @@ public class ColorSlot implements GameObject {
     private Font _colorNum;
     private Text _numberText;
     private GameAttributes _gameAttributes;
+    private Image _icon;
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, GameAttributes gameAttributes) {
         _graphics = engine.getGraphics();
@@ -33,14 +34,20 @@ public class ColorSlot implements GameObject {
 
     @Override
     public void render() {
-        if (hasColor() && _gameAttributes.isEyeOpen) {
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.getColor(_colorID - 1));
-            _numberText.render();
-        } else if (hasColor()) {
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.getColor(_colorID - 1));
+        if (hasColor()) {
+            if(_icon != null)
+                _graphics.drawImage(_icon, _positionX, _positionY, _width, _height);
+            else
+                _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
+                        _width / 2, Colors.getColor(_colorID - 1));
+
+            if(_gameAttributes.isEyeOpen)
+                _numberText.render();
         } else { // Gris
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY));
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 8, Colors.colorValues.get(Colors.ColorName.DARKGRAY));
+            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
+                    _width / 2, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY));
+            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
+                    _width / 8, Colors.colorValues.get(Colors.ColorName.DARKGRAY));
         }
     }
 
@@ -63,6 +70,13 @@ public class ColorSlot implements GameObject {
 
         _numberText.setText(num);
         _numberText.setPos(textX, textY);
+
+        if (_colorID < 0){
+            _icon = null;
+        }
+        if(_gameAttributes.skin >= 0)
+            _icon = _graphics.loadImage("world"
+                    + Integer.toString(_gameAttributes.skin) + "/icon" + _colorID + ".png");
     }
 
 

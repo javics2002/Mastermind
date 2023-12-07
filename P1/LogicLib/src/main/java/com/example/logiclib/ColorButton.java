@@ -12,9 +12,9 @@ public class ColorButton implements GameObject {
     private final int _positionX, _positionY;
     private final int _width, _height;
     public int _colorID;
-    private Font _colorNum;
-    private Text _numberText;
-    private GameAttributes _gameAttributes;
+    private final Text _numberText;
+    private final GameAttributes _gameAttributes;
+    private final Image _icon;
 
     ColorButton(Engine engine, int positionX, int positionY, int width, int height, int colorID, GameAttributes gameAttributes) {
         _graphics = engine.getGraphics();
@@ -26,11 +26,17 @@ public class ColorButton implements GameObject {
         _height = height;
         _colorID = colorID;
         String num = String.valueOf(_colorID);
-        _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
+        final Font colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
 
-        int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, _colorNum) / 2;
-        int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, _colorNum) / 2;
-        _numberText = new Text(num, _colorNum, engine, textX, textY, 0);
+        int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, colorNum) / 2;
+        int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, colorNum) / 2;
+        _numberText = new Text(num, colorNum, engine, textX, textY, 0);
+
+        if(_gameAttributes.skin >= 0)
+            _icon = _graphics.loadImage("world"
+                    + Integer.toString(_gameAttributes.skin) + "/icon" + _colorID + ".png");
+        else
+            _icon = null;
     }
 
     @Override
@@ -47,11 +53,14 @@ public class ColorButton implements GameObject {
         // Cuando el botón del OJO se pulsa, este condicional se encarga de cambiar todos los colores
         // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
         // también se encarga de quitar los números para volver al modo normal.
-        _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.getColor(_colorID - 1));
+        if(_icon != null)
+            _graphics.drawImage(_icon, _positionX, _positionY, _width, _height);
+        else
+            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
+                    _width / 2, Colors.getColor(_colorID - 1));
 
-        if (_gameAttributes.isEyeOpen) {
+        if (_gameAttributes.isEyeOpen)
             _numberText.render();
-        }
     }
 
     public boolean inBounds(int mX, int mY) {

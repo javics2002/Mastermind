@@ -3,6 +3,7 @@ package com.example.logiclib;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
+import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
@@ -10,23 +11,26 @@ public class WorldScene implements Scene {
     private final Button _backButton;
     private final Button _prevWorldButton, _nextWorldButton;
     private final Button _unlockNextLevelButton; //Hack
-    private Level _levelButtons[];
+    private final Level[] _levelButtons;
     private final Text _titleText;
     final int _numLevels;
     private WorldData _worldData;
+    private final Graphics _graphics;
+    private final Image _backgroundImage;
     Engine _engine;
+
+    final int _barHeight = 80;
 
     public WorldScene(Engine engine, final int worldId) {
         _engine = engine;
 
-        Graphics graphics = _engine.getGraphics();
+        _graphics = _engine.getGraphics();
 
         final int padding = 20;
-        int barHeight = 40;
         // Back button
         int backbuttonScale = 40;
         _backButton = new Button("UI/back.png", _engine,
-                padding, barHeight - backbuttonScale / 2,
+                padding, _barHeight / 2 - backbuttonScale / 2,
                 backbuttonScale, backbuttonScale) {
             @Override
             public void callback() {
@@ -36,17 +40,17 @@ public class WorldScene implements Scene {
         };
 
         // Title
-        Font font = graphics.newFont("Comfortaa-Regular.ttf", 24f);
+        Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
         String worldTitle = "Mundo " + Integer.toString(worldId);
-        int titleWidth = graphics.getStringWidth(worldTitle, font);
+        int titleWidth = _graphics.getStringWidth(worldTitle, font);
         _titleText = new Text(worldTitle, font, _engine,
-                graphics.getLogicWidth() / 2 - titleWidth / 2,
-                barHeight + graphics.getStringHeight(worldTitle, font) / 2, 0);
+                _graphics.getLogicWidth() / 2 - titleWidth / 2,
+                _barHeight / 2 + _graphics.getStringHeight(worldTitle, font) / 2, 0);
 
         final int worlds = _engine.filesInFolder("Levels");
         _prevWorldButton = new Button("UI/prevWorld.png", _engine,
-                graphics.getLogicWidth() / 2 - titleWidth / 2 - padding - backbuttonScale, barHeight - backbuttonScale / 2,
-                backbuttonScale, backbuttonScale) {
+                _graphics.getLogicWidth() / 2 - titleWidth / 2 - padding - backbuttonScale,
+                _barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
             @Override
             public void callback() {
                 int prevWorldId = ((worldId - 2) % worlds) + 1;
@@ -58,7 +62,7 @@ public class WorldScene implements Scene {
         };
 
         _nextWorldButton = new Button("UI/nextWorld.png", _engine,
-                graphics.getLogicWidth() / 2 + titleWidth / 2 + padding, barHeight - backbuttonScale / 2,
+                _graphics.getLogicWidth() / 2 + titleWidth / 2 + padding, _barHeight / 2 - backbuttonScale / 2,
                 backbuttonScale, backbuttonScale) {
             @Override
             public void callback() {
@@ -77,10 +81,9 @@ public class WorldScene implements Scene {
 
         // Game buttons
         final int levelsPerRow = 3;
-        final int gameButtonsSize = (graphics.getLogicWidth() - (levelsPerRow + 1) * padding) / levelsPerRow;
-        final int startingGameButtonsHeight = 90;
+        final int gameButtonsSize = (_graphics.getLogicWidth() - (levelsPerRow + 1) * padding) / levelsPerRow;
 
-        Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+        Font buttonFont = _graphics.newFont("Comfortaa-Regular.ttf", 35f);
 
         String worldPath = "Levels/world" + Integer.toString(worldId);
         _numLevels = _engine.filesInFolder(worldPath);
@@ -98,19 +101,19 @@ public class WorldScene implements Scene {
             _levelButtons[i] = new Level(i > lastLevelUnlocked, i < lastLevelUnlocked,
                     Integer.toString(i + 1), buttonFont, _engine,
                     padding + column * (gameButtonsSize + padding),
-                    startingGameButtonsHeight + row * (gameButtonsSize + padding),
+                    _barHeight + padding + row * (gameButtonsSize + padding),
                     gameButtonsSize, gameButtonsSize) {
                 @Override
                 public void callback() {
                     Scene scene = new GameScene(_engine, level.attempts, level.codeSize, level.codeOpt,
-                            level.repeat, returnScene);
+                            level.repeat, returnScene, worldId, worldId);
                     _engine.setCurrentScene(scene);
                 }
             };
         }
 
         _unlockNextLevelButton = new Button("UI/nerd.png", _engine,
-                graphics.getLogicWidth() - padding - backbuttonScale, barHeight - backbuttonScale / 2,
+                _graphics.getLogicWidth() - padding - backbuttonScale, _barHeight / 2 - backbuttonScale / 2,
                 backbuttonScale, backbuttonScale) {
             @Override
             public void callback() {
@@ -123,6 +126,9 @@ public class WorldScene implements Scene {
                     _levelButtons[_worldData.getLastLevelUnlocked()].unlockLevel();
             }
         };
+
+        _backgroundImage = _graphics.loadImage("world"
+                + Integer.toString(worldId) + "/background.png");
     }
 
     @Override
@@ -131,6 +137,9 @@ public class WorldScene implements Scene {
 
     @Override
     public void render(Graphics gr) {
+        _graphics.drawImage(_backgroundImage, 0, _barHeight,
+                _graphics.getLogicWidth(), _graphics.getLogicHeight() - _barHeight);
+
         _backButton.render();
         _titleText.render();
         _prevWorldButton.render();
