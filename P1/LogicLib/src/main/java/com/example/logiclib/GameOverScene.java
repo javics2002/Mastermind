@@ -16,6 +16,7 @@ public class GameOverScene implements Scene {
     private final List<ColorSlot> _resultCombination;
 
     private final Button _adButton;
+
     Engine _engine;
     GameAttributes _gameAttributes;
 
@@ -33,16 +34,37 @@ public class GameOverScene implements Scene {
                 codeFont = graphics.newFont("Comfortaa-Regular.ttf", 18f);
         String resultString, attemptsString, attemptsNumberString, codeString = "Código:";
 
+
+
+        final int buttonWidth = 430;
+        final int buttonHeight = 90;
+        final int posY = graphics.getLogicHeight() / 2;
+        final int paddingY = 30;
+        Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+
+
         if (_gameAttributes.attemptsLeft != 0) {
             //Has ganado
             resultString = "ENHORABUENA!!";
             attemptsString = "Has averiguado el código en";
             attemptsNumberString = Integer.toString(_gameAttributes.activeLayout + 1) + " intentos";
+            _adButton=null;
         } else {
             //Has perdido
             resultString = "GAME OVER";
             attemptsString = "Te has quedado sin intentos";
             attemptsNumberString = "";
+
+
+            _adButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Consigue mas Intentos", buttonFont, _engine,
+                    graphics.getLogicWidth() / 2 - buttonWidth / 2, posY + 2 * (buttonHeight + paddingY),
+                    buttonWidth, buttonHeight) {
+                @Override
+                public void callback() {
+                    _engine.showAd();
+                }
+            };
+
         }
 
         _resultText = new Text(resultString, resultFont, _engine,
@@ -65,7 +87,7 @@ public class GameOverScene implements Scene {
             cSlotX.setColor(_gameAttributes.resultCombination.getColors()[i] , _gameAttributes.isEyeOpen);
         }
 
-        Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+
         _playAgainButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Volver a jugar", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50){
             @Override
@@ -83,19 +105,8 @@ public class GameOverScene implements Scene {
                 _engine.setCurrentScene(scene);
             }
         };*/
-        final int buttonWidth = 430;
-        final int buttonHeight = 90;
-        final int posY = graphics.getLogicHeight() / 2;
-        final int paddingY = 30;
 
-        _adButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Consigue mas Intentos", buttonFont, _engine,
-                graphics.getLogicWidth() / 2 - buttonWidth / 2, posY + 2 * (buttonHeight + paddingY),
-                buttonWidth, buttonHeight) {
-            @Override
-            public void callback() {
-                _engine.showAd();
-            }
-        };
+
     }
 
     @Override
@@ -107,7 +118,7 @@ public class GameOverScene implements Scene {
         _attemptsText.render();
         _attemptsNumberText.render();
         _codeText.render();
-        _adButton.render();
+        if(_adButton!=null)_adButton.render();
 
         for (ColorSlot colorSlot : _resultCombination) {
             colorSlot.render();
