@@ -1,6 +1,7 @@
 package com.example.p1;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.SurfaceView;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.RelativeLayout;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aninterface.Scene;
+import com.example.aninterface.Sound;
 import com.example.libengineandroid.EngineAndroid;
 import com.example.logiclib.Button;
 import com.example.logiclib.GameData;
@@ -58,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private static final int SHAKE_THRESHOLD = 1000;
 
     //Crear un sonido para cuando se agita
+    private Sound _shakeSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +74,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         _engineAndroid.setCurrentScene(firstScene);
         _engineAndroid.resume();
 
+
+        // Initialisation of sensor shake sound
+        _shakeSound = _engineAndroid.getAudio().loadSound("shake.wav", false);
+        _shakeSound.setVolume(.5f);
         // Init Game Data
         GameData.Init(_engineAndroid);
 
@@ -153,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
 
-       // shakeSound =
+
     }
     @Override
     protected void onStart() {
@@ -222,7 +229,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
                 if (speed > SHAKE_THRESHOLD) {
-                   // shakeSound.play();
+                    _shakeSound.play();
                 }
 
                 last_x = x;
@@ -258,10 +265,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     private void createNotificationsChannel() {
-        NotificationChannel channel = new NotificationChannel("game_channel" , "GameChannel", NotificationManager.IMPORTANCE_DEFAULT) ;
+        NotificationChannel channel = null;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            channel = new NotificationChannel("game_channel" , "GameChannel", NotificationManager.IMPORTANCE_DEFAULT);
+        }
 
         NotificationManager notificationManager = getSystemService(NotificationManager. class);
-        notificationManager.createNotificationChannel(channel) ;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager.createNotificationChannel(channel) ;
+        }
     }
 }
 
