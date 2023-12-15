@@ -39,7 +39,7 @@ public class InitialScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine,  8, 4, 6,
-                        false, returnScene);
+                        false, returnScene,null);
                 _engine.setCurrentScene(scene);
             }
         };

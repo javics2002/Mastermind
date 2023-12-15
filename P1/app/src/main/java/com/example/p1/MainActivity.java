@@ -3,6 +3,7 @@ package com.example.p1;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
 import android.widget.RelativeLayout;
@@ -98,6 +99,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         layout.addView(mAdView);
 
 
+
         //Esto es para hacer que se vea
         setContentView(layout);
 
@@ -105,15 +107,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         createSensor();
         createNotificationsChannel();
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        if (bundle!=null && bundle.getBoolean("reward")) {
-            //GameManager.getInstance().addCoins(10);
 
-        }
+
 
     }
 
+
+    private void sendToAndroid(){
+
+    }
     private void saveGameData() {
         String fileName = "GameData.json";
         FileOutputStream file = null; // obtain file in data/data...

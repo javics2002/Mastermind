@@ -98,15 +98,17 @@ public class WorldScene implements Scene {
 
             final LevelData level = _engine.jsonToObject(worldPath + "/level" + Integer.toString(worldId)
                     + "_" + levelNumber + ".json", LevelData.class);
+
             _levelButtons[i] = new Level(i > lastLevelUnlocked, i < lastLevelUnlocked,
                     Integer.toString(i + 1), buttonFont, _engine,
                     padding + column * (gameButtonsSize + padding),
                     _barHeight + padding + row * (gameButtonsSize + padding),
                     gameButtonsSize, gameButtonsSize) {
+
                 @Override
                 public void callback() {
                     Scene scene = new GameScene(_engine, level.attempts, level.codeSize, level.codeOpt,
-                            level.repeat, returnScene, worldId, worldId);
+                            level.repeat, returnScene, worldId, worldId,null);
                     _engine.setCurrentScene(scene);
                 }
             };

@@ -11,8 +11,12 @@ public class GameAttributes {
     public Combination resultCombination;
     public Scene returnScene;
     public int skin;
+    public int backGroundSkinId;
 
     public GameAttributes() {
         skin = -1;
+        backGroundSkinId=-1;
     }
+
+
 }

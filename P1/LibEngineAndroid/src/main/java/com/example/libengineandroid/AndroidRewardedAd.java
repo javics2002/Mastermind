@@ -1,4 +1,10 @@
 package com.example.libengineandroid;
+import android.util.Log;
+
+import com.example.aninterface.Scene;
+import com.example.logiclib.GameAttributes;
+import com.example.logiclib.GameOverScene;
+import com.example.logiclib.GameScene;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -11,6 +17,7 @@ import androidx.annotation.NonNull;
 public class AndroidRewardedAd {
 
     private RewardedAd rewardedAd;
+    private int rewardedAttemps =2;
     private final OnUserEarnedRewardListener rewardCallback;
     private final EngineAndroid engine;
     private final AdRequest adRequest;
@@ -24,6 +31,8 @@ public class AndroidRewardedAd {
         adRequest = new AdRequest.Builder().build();
 
         tryLoadAd();
+
+
     }
 
     //Intenta cargar el anuncio
@@ -51,6 +60,35 @@ public class AndroidRewardedAd {
                                     public void onAdShowedFullScreenContent() {
                                         super.onAdShowedFullScreenContent();
                                         tryLoadAd();
+                                    }
+                                    //En este metodo es donde realmente se muestra el anuncio
+                                    @Override
+                                    public void onAdDismissedFullScreenContent() {
+                                        // Este método se llama cuando el usuario cierra el anuncio
+                                        if (engine.getScene() instanceof GameOverScene) {
+                                            GameOverScene gameOverScene = (GameOverScene) engine.getScene();
+                                            GameAttributes _gameAttributes= gameOverScene.getGameAttributtes();
+
+                                            if(_gameAttributes!=null) {
+
+                                                //Diferenciamos entre si estamos en el mundo , o jugando una partida rapida
+                                                if(_gameAttributes.skin!=-1 && _gameAttributes.backGroundSkinId!=-1 && _gameAttributes.resultCombination!=null) {
+
+                                                    Scene scene = new GameScene(engine, rewardedAttemps, _gameAttributes.combinationLength,
+                                                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
+                                                            _gameAttributes.backGroundSkinId, _gameAttributes.skin,_gameAttributes.resultCombination);
+                                                    engine.setCurrentScene(scene);
+                                                }//Nos aseguramos de que existe una combinacion de la partida anterior
+                                                else if(_gameAttributes.resultCombination!=null) {
+                                                    Scene scene = new GameScene(engine, rewardedAttemps, _gameAttributes.combinationLength,
+                                                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
+                                                            _gameAttributes.resultCombination);
+                                                    engine.setCurrentScene(scene);
+
+                                                }else Log.d("AD","GAME ATTRIBUTES COMBINATION INITIALISATION ERROR IN REWARDED AD CALLBACK");
+                                            }
+                                            else Log.d("AD","GAME ATTRIBUTES INITIALISATION ERROR IN REWARDED AD CALLBACK");
+                                        } else Log.d("AD","CASTING SCENE ERROR IN REWARDED AD CALLBACK");
                                     }
                                 });
                             }

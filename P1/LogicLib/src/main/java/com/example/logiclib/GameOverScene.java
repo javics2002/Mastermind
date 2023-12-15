@@ -6,6 +6,7 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +21,16 @@ public class GameOverScene implements Scene {
     Engine _engine;
     GameAttributes _gameAttributes;
 
-    public GameOverScene(Engine engine, GameAttributes gameAttributes) {
+
+
+    public GameOverScene(Engine engine, final GameAttributes gameAttributes) {
         _engine = engine;
         Graphics graphics = _engine.getGraphics();
 
         // Init GameAttributes
         _gameAttributes = gameAttributes;
+
+
 
         //Create scene
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
@@ -87,14 +92,26 @@ public class GameOverScene implements Scene {
             cSlotX.setColor(_gameAttributes.resultCombination.getColors()[i] , _gameAttributes.isEyeOpen);
         }
 
-
+        //Atributos del juego declarados como final para su uso posterior en callback del boton de Volver a jugar
         _playAgainButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Volver a jugar", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50){
             @Override
             public void callback() {
-                Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,  _gameAttributes.combinationLength,
-                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene);
-                _engine.setCurrentScene(scene);
+                if(_gameAttributes.skin!=-1 && _gameAttributes.backGroundSkinId!=-1 && _gameAttributes.resultCombination!=null) {
+
+                    Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
+                            _gameAttributes.backGroundSkinId, _gameAttributes.skin,null);
+                    _engine.setCurrentScene(scene);
+                }//Nos aseguramos de que existe una combinacion de la partida anterior
+                else if(_gameAttributes.resultCombination!=null) {
+                    Scene scene = new GameScene(_engine, gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
+                            null);
+                    _engine.setCurrentScene(scene);
+
+                }
+
             }
         };
         /*_chooseDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Elegir dificultad", buttonFont, _engine,
@@ -133,7 +150,14 @@ public class GameOverScene implements Scene {
         if (input.getTouchEvent().size() > 0) {
             _playAgainButton.handleEvents(input.getTouchEvent().get(0));
             //_chooseDifficultyButton.handleEvents(input.getTouchEvent().get(0));
-            _adButton.handleEvents(input.getTouchEvent().get(0));
+            if(_adButton!=null)_adButton.handleEvents(input.getTouchEvent().get(0));
         }
     }
+    public GameAttributes getGameAttributtes(){
+        return _gameAttributes;
+    }
+    public void setScene(){
+
+    }
+
 }

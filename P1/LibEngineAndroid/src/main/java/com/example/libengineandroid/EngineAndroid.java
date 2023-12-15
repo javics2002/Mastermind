@@ -24,6 +24,11 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 import com.example.aninterface.IFile;
 import com.example.logiclib.Colors;
+import com.example.logiclib.GameScene;
+import com.example.logiclib.GameOverScene;
+import com.example.logiclib.GameAttributes;
+
+
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 
@@ -154,7 +159,7 @@ public class EngineAndroid implements Runnable, Engine {
         _rewardEarnedCallback = new OnUserEarnedRewardListener() {
             @Override
             public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-                Log.d("TAG", "TE HAS GANADO UN ANUNCIO");
+                Log.d("Ad","User has finished Loading Reward");
             }
         };
 
@@ -335,4 +340,5 @@ public class EngineAndroid implements Runnable, Engine {
             //throw new RuntimeException(e);
         }
     }
+
 }
