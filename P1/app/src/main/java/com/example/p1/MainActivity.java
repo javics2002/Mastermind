@@ -10,6 +10,7 @@ import android.widget.RelativeLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.aninterface.IFile;
 import com.example.aninterface.Scene;
 import com.example.aninterface.Sound;
 import com.example.libengineandroid.EngineAndroid;
@@ -17,6 +18,9 @@ import com.example.logiclib.Button;
 import com.example.logiclib.GameData;
 import com.example.logiclib.InitialScene;
 //Auncios
+import com.example.logiclib.Level;
+import com.example.logiclib.LevelData;
+import com.example.logiclib.WorldData;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -45,9 +49,14 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
@@ -79,8 +88,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Initialisation of sensor shake sound
         _shakeSound = _engineAndroid.getAudio().loadSound("shake.wav", false);
         _shakeSound.setVolume(.5f);
+
         // Init Game Data
         GameData.Init(_engineAndroid);
+        loadSaveData();
 
         //Anuncios Inicializado
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -98,63 +109,136 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         initialisedownBanner();
         layout.addView(mAdView);
 
-
-
         //Esto es para hacer que se vea
         setContentView(layout);
 
         createAdRequest();
         createSensor();
         createNotificationsChannel();
-
-
-
-
     }
 
+    private void loadSaveData() {
+        String fileName = "GameData.json";
+        boolean doesSaveExist = false;
+
+        try {
+            FileInputStream fileInputStream = _engineAndroid.getActivity().openFileInput(fileName);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            doesSaveExist = true;
+
+            int worldNumber = objectInputStream.readInt();
+
+            for (int i = 0; i < worldNumber; i++){
+                WorldData worldData = (WorldData) objectInputStream.readObject();
+                GameData.Instance().addWorld(worldData);
+            }
+
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        if (doesSaveExist) {
+            String[] folderWorldNames = _engineAndroid.getFileNames("Levels");
+            boolean[] loadedLevels = new boolean[folderWorldNames.length];
+
+            int numberOfWorlds = GameData.Instance().numberOfWorlds();
+
+            for (int i = 0; i < numberOfWorlds; i++) {
+                boolean hasBeenFound = false;
+                String saveWorldName = GameData.Instance().getWorldDataByIndex(i).getWorldName();
+
+                for (int j = 0; j < folderWorldNames.length; j++){
+                    if (saveWorldName.equals(folderWorldNames[j])){
+                        // World exists in save file, and it's already loaded.
+                        hasBeenFound = true;
+                        loadedLevels[j] = true;
+                        break;
+                    }
+                }
+
+                if (!hasBeenFound){
+                    // File does exist in save data, but does not exist in folder.
+                    // We have to delete the info of the world.
+                    GameData.Instance().deleteWorldByIndex(i);
+                }
+            }
+
+            for (int i = 0; i < folderWorldNames.length; i++){
+                if (!loadedLevels[i]){
+                    // File only exist in folder.
+                    // We need to create the info in GameData
+                    WorldData newWorld = new WorldData();
+                    newWorld.setWorldName(folderWorldNames[i]);
+
+                    GameData.Instance().addWorld(newWorld);
+                }
+            }
+        }
+        else { // File does not exist, we need to create world data from assets
+            String worldPath = "Levels";
+            String[] worldNames = _engineAndroid.getFileNames(worldPath);
+
+            for (int i = 0; i < worldNames.length; i++) {
+                WorldData newWorld = new WorldData();
+                newWorld.setWorldName(worldNames[i]);
+
+                String levelsPath = "Levels/" + worldNames[i];
+                int numLevels = _engineAndroid.filesInFolder(levelsPath);
+                newWorld.setLevelNumber(numLevels);
+
+                GameData.Instance().addWorld(newWorld);
+            }
+
+        }
+    }
 
     private void sendToAndroid(){
 
     }
     private void saveGameData() {
         String fileName = "GameData.json";
-        FileOutputStream file = null; // obtain file in data/data...
-        try {
-            file = _engineAndroid.getActivity().openFileOutput(fileName,
-                    _engineAndroid.getActivity().MODE_PRIVATE);
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-
-        // Crear un gson
-        JsonObject json = new JsonObject();
-        Gson gson = new Gson();
-
-        JsonArray worlds = new JsonArray();
-
-        // Para cada mundo, añadir una propiedad al json y guardarlo
-        int worldsNumber = _engineAndroid.filesInFolder("Levels");
-        for (int i = 0; i < worldsNumber; i++){
-            JsonObject worldSave = new JsonObject();
-            String worldNameTest = "Mundo1";
-            worldSave.addProperty(worldNameTest, 69);
-            worlds.add(worldSave);
-        }
-        json.add("Mundos", worlds);
-
-        // Dinero
-        int money = GameData.Instance().getMoney();
-        json.addProperty("Dinero", money);
-
-        // Convertir el objeto
-        String jsonString = gson.toJson(json);
 
         try {
-            file.write(jsonString.getBytes());
-            file.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            FileOutputStream fileOutputStream = _engineAndroid.getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            int numberOfWorlds = GameData.Instance().numberOfWorlds();
+            objectOutputStream.writeInt(numberOfWorlds);
+
+            for (int i = 0; i < numberOfWorlds;i++){
+                objectOutputStream.writeObject(GameData.Instance().getWorldDataByIndex(i));
+            }
+
+            objectOutputStream.close();
+            fileOutputStream.close();
         }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+//        // Crear un gson
+//        JsonObject json = new JsonObject();
+//
+//
+//        JsonArray worlds = new JsonArray();
+//
+//        WorldData test = new WorldData();
+//        test.completeLevel();
+//        json.addProperty("Mundos2", _engineAndroid.objectToJson(test));
+//
+//
+//
+//        // Dinero
+//        //int money = GameData.Instance().getMoney();
+//        //json.addProperty("Dinero", money);
+//
+//        // Convertir el objeto
+//        String jsonString = gson.toJson(json);
     }
 
     private void createSensor() {

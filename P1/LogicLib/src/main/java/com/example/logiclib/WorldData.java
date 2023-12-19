@@ -1,8 +1,8 @@
 package com.example.logiclib;
-
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class WorldData {
+public class WorldData implements Serializable {
     // TODO: En esta clase se deberían guardar la información de cada mundo:
     // los niveles, el ultimo nivel desbloqueado, el nombre del mundo...
     private String _worldName;
@@ -22,6 +22,8 @@ public class WorldData {
 
     public WorldData() {
         _lastLevelUnlocked = 0;
+        _levelNumber = 0;
+        _worldName = "defaultName";
     }
 
     public String getWorldName() {
@@ -30,11 +32,19 @@ public class WorldData {
     public int getLastLevelUnlocked() {
         return _lastLevelUnlocked;
     }
+
+    public void setWorldName(String worldName) {
+        _worldName = worldName;
+    }
     public void completeLevel(){
         _lastLevelUnlocked++;
     }
 
     public int getLevelNumber() {
         return _levelNumber;
+    }
+
+    public void setLevelNumber(int newLevelNumber) {
+        _levelNumber = newLevelNumber;
     }
 }

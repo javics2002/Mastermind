@@ -24,6 +24,7 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 import com.example.aninterface.IFile;
 import com.example.logiclib.Colors;
+import com.example.logiclib.GameData;
 import com.example.logiclib.GameScene;
 import com.example.logiclib.GameOverScene;
 import com.example.logiclib.GameAttributes;
@@ -42,6 +43,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 
 // Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
 public class EngineAndroid implements Runnable, Engine {
@@ -251,7 +253,7 @@ public class EngineAndroid implements Runnable, Engine {
         return _gson.toJson(object);
     }
 
-    private static String convertInputStreamToString(InputStream inputStream) throws IOException {
+    public static String convertInputStreamToString(InputStream inputStream) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
@@ -284,6 +286,20 @@ public class EngineAndroid implements Runnable, Engine {
     }
 
     @Override
+    public String[] getFileNames(String folderPath) {
+        try {
+            AssetManager assetManager = _surfaceView.getContext().getAssets();
+            String[] files = assetManager.list(folderPath);
+
+            return files;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    @Override
     public Input getInput() {
         return _input;
     }
@@ -307,6 +323,7 @@ public class EngineAndroid implements Runnable, Engine {
     public Audio getAudio() {
         return _audio;
     }
+
     public Activity getActivity(){ return activity;}
 
     @Override
@@ -315,30 +332,15 @@ public class EngineAndroid implements Runnable, Engine {
             String saveName = "GameData.json";
             FileInputStream fileInputStream = activity.openFileInput(saveName);
 
-            InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream);
-            BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-            StringBuilder stringBuilder = new StringBuilder();
-
-            String line;
-            try {
-                while ((line = bufferedReader.readLine()) != null){
-                    stringBuilder.append(line);
-                }
-
-                inputStreamReader.close();
-                bufferedReader.close();
-            }
-            catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
             // Create File and return it
-            FileAndroid saveFile = new FileAndroid(stringBuilder.toString());
+            FileAndroid saveFile = new FileAndroid(fileInputStream);
             return saveFile;
-        } catch (FileNotFoundException e) {
-            return null;
-            //throw new RuntimeException(e);
         }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 }

@@ -27,5 +27,7 @@ public interface Engine {
 
     int filesInFolder(String folderPath);
 
+    String[] getFileNames(String folderPath);
+
     IFile getSaveData();
 }

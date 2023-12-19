@@ -2,14 +2,16 @@ package com.example.libengineandroid;
 
 import com.example.aninterface.IFile;
 
+import java.io.FileInputStream;
+
 public class FileAndroid implements IFile {
-    String _content;
-    public FileAndroid(String content) {
-        _content = content;
+    private FileInputStream _fileInputStream;
+
+    public FileAndroid(FileInputStream fileInputStream) {
+        _fileInputStream = fileInputStream;
     }
 
-    @Override
-    public String getContent(){
-        return _content;
+    public FileInputStream getInputStream() {
+        return _fileInputStream;
     }
 }

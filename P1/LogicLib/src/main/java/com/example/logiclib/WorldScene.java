@@ -47,15 +47,17 @@ public class WorldScene implements Scene {
                 _graphics.getLogicWidth() / 2 - titleWidth / 2,
                 _barHeight / 2 + _graphics.getStringHeight(worldTitle, font) / 2, 0);
 
-        final int worlds = _engine.filesInFolder("Levels");
+        // Worlds
+        final int numberOfWorlds = GameData.Instance().numberOfWorlds();
+
         _prevWorldButton = new Button("UI/prevWorld.png", _engine,
                 _graphics.getLogicWidth() / 2 - titleWidth / 2 - padding - backbuttonScale,
                 _barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
             @Override
             public void callback() {
-                int prevWorldId = ((worldId - 2) % worlds) + 1;
+                int prevWorldId = ((worldId - 2) % numberOfWorlds) + 1;
                 if(prevWorldId < 1)
-                    prevWorldId += worlds;
+                    prevWorldId += numberOfWorlds;
                 Scene scene = new WorldScene(_engine, prevWorldId);
                 _engine.setCurrentScene(scene);
             }
@@ -66,17 +68,14 @@ public class WorldScene implements Scene {
                 backbuttonScale, backbuttonScale) {
             @Override
             public void callback() {
-                int nextWorldId = (worldId % worlds) + 1;
+                int nextWorldId = (worldId % numberOfWorlds) + 1;
                 Scene scene = new WorldScene(_engine, nextWorldId);
                 _engine.setCurrentScene(scene);
             }
         };
 
-        // Read saved data (progress)
-        _worldData = _engine.jsonToObject("RayitoPonLaRutaDeGuardadoAqui", WorldData.class);
-        if(_worldData == null){
-            _worldData = new WorldData();
-        }
+        _worldData = GameData.Instance().getWorldDataByIndex(worldId);
+
         final int lastLevelUnlocked = _worldData.getLastLevelUnlocked();
 
         // Game buttons
@@ -85,8 +84,8 @@ public class WorldScene implements Scene {
 
         Font buttonFont = _graphics.newFont("Comfortaa-Regular.ttf", 35f);
 
-        String worldPath = "Levels/world" + Integer.toString(worldId);
-        _numLevels = _engine.filesInFolder(worldPath);
+        _numLevels = _worldData.getLevelNumber();
+
         _levelButtons = new Level[_numLevels];
         final Scene returnScene = this;
 
@@ -96,7 +95,7 @@ public class WorldScene implements Scene {
 
             String levelNumber = i >= 9 ? Integer.toString(i + 1) : "0" + Integer.toString(i + 1);
 
-            final LevelData level = _engine.jsonToObject(worldPath + "/level" + Integer.toString(worldId)
+            final LevelData level = _engine.jsonToObject(_worldData.getWorldName() + "/level" + Integer.toString(worldId)
                     + "_" + levelNumber + ".json", LevelData.class);
 
             _levelButtons[i] = new Level(i > lastLevelUnlocked, i < lastLevelUnlocked,
