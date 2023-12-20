@@ -5,7 +5,16 @@ public class Colors {
     public enum ColorName {
         RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, MAGENTA, PINK, PURPLE, DARKGRAY,
         LIGHTGRAY, WHITE, BLACK, BACKGROUNDRED, BACKGROUNDORANGE, BACKGROUNDYELLOW, BACKGROUNDGREEN, BACKGROUNDBLUE,
-        LEVELCOMPLETED, LEVELUNCOMPLETED, BACKGROUND, TRASPARENTBACKGROUND
+        LEVELCOMPLETED, LEVELUNCOMPLETED, BACKGROUND, TRASPARENTBACKGROUND,
+        CUSTOMCIRCLE1_1, CUSTOMCIRCLE1_2, CUSTOMCIRCLE1_3, CUSTOMCIRCLE1_4, CUSTOMCIRCLE1_5,
+        CUSTOMCIRCLE1_6, CUSTOMCIRCLE1_7, CUSTOMCIRCLE1_8, CUSTOMCIRCLE1_9,
+        CUSTOMCIRCLE2_1, CUSTOMCIRCLE2_2, CUSTOMCIRCLE2_3, CUSTOMCIRCLE2_4, CUSTOMCIRCLE2_5,
+        CUSTOMCIRCLE2_6, CUSTOMCIRCLE2_7, CUSTOMCIRCLE2_8, CUSTOMCIRCLE2_9,
+        CUSTOMCIRCLE3_1, CUSTOMCIRCLE3_2, CUSTOMCIRCLE3_3, CUSTOMCIRCLE3_4, CUSTOMCIRCLE3_5,
+        CUSTOMCIRCLE3_6, CUSTOMCIRCLE3_7, CUSTOMCIRCLE3_8, CUSTOMCIRCLE3_9,
+        CUSTOMTHEME1_1, CUSTOMTHEME1_2, CUSTOMTHEME2_1, CUSTOMTHEME2_2,
+        CUSTOMTHEME3_1, CUSTOMTHEME3_2, CUSTOMTHEME4_1, CUSTOMTHEME4_2,
+        CUSTOMTHEME5_1, CUSTOMTHEME5_2
     }
     public static HashMap<ColorName, Integer> colorValues;
     static{
@@ -32,6 +41,59 @@ public class Colors {
         colorValues.put(ColorName.LEVELUNCOMPLETED, 0xFFE7D6BD);
         colorValues.put(ColorName.BACKGROUND, 0xFFE7D6BD);
         colorValues.put(ColorName.TRASPARENTBACKGROUND, 0xCCF8F4ED);
+
+        //Tema barbie
+        colorValues.put(ColorName.CUSTOMTHEME1_1, 0xFFFFE7EE);
+        colorValues.put(ColorName.CUSTOMTHEME1_2, 0xFFFF6D94);
+
+        //Circulos barbie
+        colorValues.put(ColorName.CUSTOMCIRCLE1_1, 0xFFDEA9BD);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_2, 0xFFB80542);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_3, 0xFF92123A);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_4, 0xFF9B058B);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_5, 0xFFFF9CE9);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_6, 0xFFFF8ABA);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_7, 0xFFFE9BCA);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_8, 0xFFFDC2C2);
+        colorValues.put(ColorName.CUSTOMCIRCLE1_9, 0xFFE96AAA);
+
+        //Tema desayuno
+        colorValues.put(ColorName.CUSTOMTHEME2_1, 0xFFE1B879);
+        colorValues.put(ColorName.CUSTOMTHEME2_2, 0xFFDD9C4C);
+
+        //Circulos desayuno
+        colorValues.put(ColorName.CUSTOMCIRCLE2_1, 0xFFFFF3C3);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_2, 0xFFFF7E6F);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_3, 0xFFFFEA94);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_4, 0xFFC1905E);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_5, 0xFF724E2C);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_6, 0xFF271300);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_7, 0xFF9C6F44);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_8, 0xFF563517);
+        colorValues.put(ColorName.CUSTOMCIRCLE2_9, 0xFF6F4827);
+
+        //Tema pikachu
+        colorValues.put(ColorName.CUSTOMTHEME3_1, 0xFFF3D245);
+        colorValues.put(ColorName.CUSTOMTHEME3_2, 0xFFDE6145);
+
+        //Circulos eeveelutions
+        colorValues.put(ColorName.CUSTOMCIRCLE3_1, 0xFFC3915C);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_2, 0xFF347190);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_3, 0xFFF3CF6F);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_4, 0xFFEB804C);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_5, 0xFFE4C9DC);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_6, 0xFF363F44);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_7, 0xFF679D7D);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_8, 0xFF68BBC9);
+        colorValues.put(ColorName.CUSTOMCIRCLE3_9, 0xFFE07D8F);
+
+        //Tema invierno
+        colorValues.put(ColorName.CUSTOMTHEME5_1, 0xFFEEFFFF);
+        colorValues.put(ColorName.CUSTOMTHEME5_2, 0xFF9CFEFF);
+
+        //Tema oscuro
+        colorValues.put(ColorName.CUSTOMTHEME4_1, 0xFF131313);
+        colorValues.put(ColorName.CUSTOMTHEME4_2, 0xFF3E3E3E);
     }
 
     public static int getColor(int colorID){

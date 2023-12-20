@@ -11,6 +11,7 @@ public class InitialScene implements Scene {
     private final Button _quickGameButton, _worldsButton;
 
     private final Button _shareButton;
+    private final Button _customizeButton;
     private final Text _titleText;
     Engine _engine;
 
@@ -54,13 +55,21 @@ public class InitialScene implements Scene {
             }
         };
 
-
-
         _shareButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Compartir :d", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight() - 100), buttonWidth, buttonHeight) {
             @Override
             public void callback() {
                 _engine.shareScreenshot(graphics.getWidth(), graphics.getHeight());
+            }
+        };
+
+        _customizeButton = new Button("UI/customize.png", _engine,
+                graphics.getLogicWidth() - 60, 10,
+                50, 50) {
+            @Override
+            public void callback() {
+                Scene scene = new ShopScene(_engine);
+                _engine.setCurrentScene(scene);
             }
         };
     }
@@ -74,17 +83,19 @@ public class InitialScene implements Scene {
         _titleText.render();
         _quickGameButton.render();
         _worldsButton.render();
-        _shareButton.render();
 
+        _shareButton.render();
+        _customizeButton.render();
     }
 
     @Override
-    public void handleEvents(Input a) {
-        if (a.getTouchEvent().size() > 0) {
-            _quickGameButton.handleEvents(a.getTouchEvent().get(0));
-            _worldsButton.handleEvents(a.getTouchEvent().get(0));
+    public void handleEvents(Input input) {
+        if (input.getTouchEvent().size() > 0) {
+            _quickGameButton.handleEvents(input.getTouchEvent().get(0));
+            _worldsButton.handleEvents(input.getTouchEvent().get(0));
 
-            _shareButton.handleEvents(a.getTouchEvent().get(0));
+            _shareButton.handleEvents(input.getTouchEvent().get(0));
+            _customizeButton.handleEvents(input.getTouchEvent().get(0));
         }
     }
 }
