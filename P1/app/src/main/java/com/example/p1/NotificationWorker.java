@@ -12,6 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.example.logiclib.GameData;
 import com.example.p1.R;
 
 
@@ -19,6 +20,7 @@ import com.example.p1.R;
 public class NotificationWorker extends Worker {
 
     private Context context;
+    final int _monedas=20;
 
     public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);
@@ -37,7 +39,7 @@ public class NotificationWorker extends Worker {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this.context, "game_channel")
                 .setSmallIcon(R.drawable.ic_notification)
-                .setContentTitle("¡Vuelve y gana 10 monedas!")
+                .setContentTitle("¡Vuelve y gana 20 monedas!")
                 .setContentText("Te echamos de menos")
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(contentIntent)
@@ -45,7 +47,7 @@ public class NotificationWorker extends Worker {
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(1, builder.build());
-
+        GameData.Instance().addMoney(_monedas);
         return Result.success();
     }
 

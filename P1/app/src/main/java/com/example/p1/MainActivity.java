@@ -58,13 +58,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
-
+import android.util.Log;
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
     private EngineAndroid _engineAndroid;
     //Anuncios
     private AdView mAdView;
     private SensorManager senSensorManager;
     private Sensor senAccelerometer;
+    private Sensor senProximity;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
     private static final int SHAKE_THRESHOLD = 1000;
@@ -230,7 +231,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private void createSensor() {
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (senSensorManager == null)Log.d("","El dispositivo no registra sensores");
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if (senAccelerometer == null)Log.d("","El dispositvo no tiene acelerometro");
+        senProximity = senSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
+        if (senProximity == null)Log.d("","El dispositvo no tiene sensor de Proximidad");
         senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
 
 
@@ -308,6 +313,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 last_x = x;
                 last_y = y;
                 last_z = z;
+            }
+        } else if (mySensor.getType() == Sensor.TYPE_PROXIMITY) {
+            // Obtenemos la distancia en centímetros
+            float distance = event.values[0];
+            if (distance < 5) {
+                _shakeSound.play();
             }
         }
     }
