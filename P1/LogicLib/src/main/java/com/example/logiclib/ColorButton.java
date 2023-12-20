@@ -26,6 +26,7 @@ public class ColorButton implements GameObject {
         _height = height;
         _colorID = colorID;
         String num = String.valueOf(_colorID);
+
         final Font colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
 
         int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, colorNum) / 2;
@@ -33,8 +34,8 @@ public class ColorButton implements GameObject {
         _numberText = new Text(num, colorNum, engine, textX, textY, 0);
 
         if(_gameAttributes.skin >= 0)
-            _icon = _graphics.loadImage("world"
-                    + Integer.toString(_gameAttributes.skin) + "/icon" + _colorID + ".png");
+            _icon = _graphics.loadImage(GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld).getWorldName()
+                    + "/icon" + _colorID + ".png");
         else
             _icon = null;
     }

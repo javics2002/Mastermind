@@ -23,7 +23,7 @@ public class GameScene implements Scene {
     private final int _visibleLayouts = 10;
 
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors,
-                     boolean repeatedColors, final Scene returnScene,Combination cResult) {
+                     boolean repeatedColors, final Scene returnScene, int worldId, Combination cResult) {
         _engine = engine;
         _graphics = _engine.getGraphics();
 
@@ -41,6 +41,7 @@ public class GameScene implements Scene {
         else _gameAttributes.resultCombination=cResult;
         _gameAttributes.returnScene = returnScene;
 
+        _gameAttributes.selectedWorld = worldId;
 
         // Title
         int verticalMargin = 5;
@@ -104,7 +105,7 @@ public class GameScene implements Scene {
     }
 
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors,
-                     boolean repeatedColors, final Scene returnScene, int backgroundSkinId, int iconSkin,Combination cResult) {
+                     boolean repeatedColors, final Scene returnScene, int backgroundSkinId, int iconSkin, int worldId, Combination cResult) {
         _engine = engine;
         _graphics = _engine.getGraphics();
 
@@ -118,13 +119,15 @@ public class GameScene implements Scene {
         _gameAttributes.repeatedColors = repeatedColors;
         _gameAttributes.activeLayout = 0;
         _gameAttributes.isEyeOpen = false;
+
         //Guardamos la combinacion por si decide seguir jugando cuando pulsa el anuncio
         if(cResult==null)_gameAttributes.resultCombination = new Combination(combinationLength, numberOfColors, repeatedColors);
         else _gameAttributes.resultCombination=cResult;
 
         _gameAttributes.returnScene = returnScene;
         _gameAttributes.skin = iconSkin;
-        _gameAttributes.backGroundSkinId=backgroundSkinId;
+        _gameAttributes.backGroundSkinId = backgroundSkinId;
+        _gameAttributes.selectedWorld = worldId;
 
         // Title
         int verticalMargin = 5;
@@ -184,8 +187,8 @@ public class GameScene implements Scene {
                     _graphics.getLogicHeight() - 60, scale, scale, i + 1, _gameAttributes));
         }
 
-        _backgroundImage = _graphics.loadImage("world"
-                + Integer.toString(backgroundSkinId) + "/background.png");
+        _backgroundImage =
+                _graphics.loadImage(GameData.Instance().getWorldDataByIndex(worldId).getWorldName() + "/background.png");
     }
 
     @Override

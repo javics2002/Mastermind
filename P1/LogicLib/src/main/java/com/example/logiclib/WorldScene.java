@@ -41,7 +41,7 @@ public class WorldScene implements Scene {
 
         // Title
         Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
-        String worldTitle = "Mundo " + Integer.toString(worldId);
+        String worldTitle = GameData.Instance().getWorldDataByIndex(worldId).getWorldName();
         int titleWidth = _graphics.getStringWidth(worldTitle, font);
         _titleText = new Text(worldTitle, font, _engine,
                 _graphics.getLogicWidth() / 2 - titleWidth / 2,
@@ -55,9 +55,10 @@ public class WorldScene implements Scene {
                 _barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
             @Override
             public void callback() {
-                int prevWorldId = ((worldId - 2) % numberOfWorlds) + 1;
-                if(prevWorldId < 1)
+                int prevWorldId = (worldId - 1) % numberOfWorlds;
+                if(prevWorldId < 0)
                     prevWorldId += numberOfWorlds;
+
                 Scene scene = new WorldScene(_engine, prevWorldId);
                 _engine.setCurrentScene(scene);
             }
@@ -69,6 +70,9 @@ public class WorldScene implements Scene {
             @Override
             public void callback() {
                 int nextWorldId = (worldId % numberOfWorlds) + 1;
+                if (nextWorldId >= numberOfWorlds) {
+                    nextWorldId = 0;
+                }
                 Scene scene = new WorldScene(_engine, nextWorldId);
                 _engine.setCurrentScene(scene);
             }
@@ -93,10 +97,7 @@ public class WorldScene implements Scene {
             int row = i / levelsPerRow;
             int column = i % levelsPerRow;
 
-            String levelNumber = i >= 9 ? Integer.toString(i + 1) : "0" + Integer.toString(i + 1);
-
-            final LevelData level = _engine.jsonToObject(_worldData.getWorldName() + "/level" + Integer.toString(worldId)
-                    + "_" + levelNumber + ".json", LevelData.class);
+            final LevelData level = _worldData.getLevelDataByIndex(i);
 
             _levelButtons[i] = new Level(i > lastLevelUnlocked, i < lastLevelUnlocked,
                     Integer.toString(i + 1), buttonFont, _engine,
@@ -107,7 +108,7 @@ public class WorldScene implements Scene {
                 @Override
                 public void callback() {
                     Scene scene = new GameScene(_engine, level.attempts, level.codeSize, level.codeOpt,
-                            level.repeat, returnScene, worldId, worldId,null);
+                            level.repeat, returnScene, worldId, worldId, worldId,null);
                     _engine.setCurrentScene(scene);
                 }
             };
@@ -128,8 +129,8 @@ public class WorldScene implements Scene {
             }
         };
 
-        _backgroundImage = _graphics.loadImage("world"
-                + Integer.toString(worldId) + "/background.png");
+        _backgroundImage =
+                _graphics.loadImage(GameData.Instance().getWorldDataByIndex(worldId).getWorldName() + "/background.png");
     }
 
     @Override

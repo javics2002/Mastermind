@@ -1,6 +1,8 @@
 package com.example.logiclib;
 
-public class LevelData {
+import java.io.Serializable;
+
+public class LevelData implements Serializable {
     public int codeSize;
     public int codeOpt;
     public boolean repeat;

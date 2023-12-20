@@ -30,15 +30,12 @@ public class GameOverScene implements Scene {
         // Init GameAttributes
         _gameAttributes = gameAttributes;
 
-
-
         //Create scene
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
                 attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 18f),
                 attemptsNumberFont = graphics.newFont("Comfortaa-Regular.ttf", 24f),
                 codeFont = graphics.newFont("Comfortaa-Regular.ttf", 18f);
         String resultString, attemptsString, attemptsNumberString, codeString = "Código:";
-
 
 
         final int buttonWidth = 430;
@@ -101,13 +98,13 @@ public class GameOverScene implements Scene {
 
                     Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                             _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                            _gameAttributes.backGroundSkinId, _gameAttributes.skin,null);
+                            _gameAttributes.backGroundSkinId, _gameAttributes.skin, _gameAttributes.selectedWorld,null);
                     _engine.setCurrentScene(scene);
                 }//Nos aseguramos de que existe una combinacion de la partida anterior
                 else if(_gameAttributes.resultCombination!=null) {
                     Scene scene = new GameScene(_engine, gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                             _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                            null);
+                            _gameAttributes.selectedWorld, null);
                     _engine.setCurrentScene(scene);
 
                 }

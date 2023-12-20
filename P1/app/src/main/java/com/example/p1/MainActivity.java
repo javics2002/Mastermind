@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         // Init Game Data
         GameData.Init(_engineAndroid);
-        loadSaveData();
+        loadGameData();
 
         //Anuncios Inicializado
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         createNotificationsChannel();
     }
 
-    private void loadSaveData() {
+    private void loadGameData() {
         String fileName = "GameData.json";
         boolean doesSaveExist = false;
 
@@ -142,8 +142,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             e.printStackTrace();
         }
 
+        String[] folderWorldNames = _engineAndroid.getFileNames("Levels");
+
         if (doesSaveExist) {
-            String[] folderWorldNames = _engineAndroid.getFileNames("Levels");
             boolean[] loadedLevels = new boolean[folderWorldNames.length];
 
             int numberOfWorlds = GameData.Instance().numberOfWorlds();
@@ -171,35 +172,40 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             for (int i = 0; i < folderWorldNames.length; i++){
                 if (!loadedLevels[i]){
                     // File only exist in folder.
-                    // We need to create the info in GameData
+                    // We need to create the info in GameData with the info in folder
                     WorldData newWorld = new WorldData();
                     newWorld.setWorldName(folderWorldNames[i]);
+
+                    String[] levels = _engineAndroid.getFileNames("Levels/" + folderWorldNames[i]);
+                    newWorld.setLevelNumber(levels.length);
+
+                    for (int j = 0; j < levels.length; j++){
+                        LevelData data =  _engineAndroid.jsonToObject("Levels/" + folderWorldNames[i] + "/" + levels[j], LevelData.class);
+                        newWorld.addLevelData(data);
+                    }
 
                     GameData.Instance().addWorld(newWorld);
                 }
             }
         }
         else { // File does not exist, we need to create world data from assets
-            String worldPath = "Levels";
-            String[] worldNames = _engineAndroid.getFileNames(worldPath);
-
-            for (int i = 0; i < worldNames.length; i++) {
+            for (int i = 0; i < folderWorldNames.length; i++) {
                 WorldData newWorld = new WorldData();
-                newWorld.setWorldName(worldNames[i]);
+                newWorld.setWorldName(folderWorldNames[i]);
 
-                String levelsPath = "Levels/" + worldNames[i];
-                int numLevels = _engineAndroid.filesInFolder(levelsPath);
-                newWorld.setLevelNumber(numLevels);
+                String[] levels = _engineAndroid.getFileNames("Levels/" + folderWorldNames[i]);
+                newWorld.setLevelNumber(levels.length);
+
+                for (int j = 0; j < levels.length; j++){
+                    LevelData data =  _engineAndroid.jsonToObject("Levels/" + folderWorldNames[i] + "/" + levels[j], LevelData.class);
+                    newWorld.addLevelData(data);
+                }
 
                 GameData.Instance().addWorld(newWorld);
             }
-
         }
     }
 
-    private void sendToAndroid(){
-
-    }
     private void saveGameData() {
         String fileName = "GameData.json";
 
@@ -211,7 +217,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             objectOutputStream.writeInt(numberOfWorlds);
 
             for (int i = 0; i < numberOfWorlds;i++){
-                objectOutputStream.writeObject(GameData.Instance().getWorldDataByIndex(i));
+                WorldData world = GameData.Instance().getWorldDataByIndex(i);
+                objectOutputStream.writeObject(world);
             }
 
             objectOutputStream.close();
@@ -220,25 +227,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         catch (IOException e) {
             e.printStackTrace();
         }
-
-//        // Crear un gson
-//        JsonObject json = new JsonObject();
-//
-//
-//        JsonArray worlds = new JsonArray();
-//
-//        WorldData test = new WorldData();
-//        test.completeLevel();
-//        json.addProperty("Mundos2", _engineAndroid.objectToJson(test));
-//
-//
-//
-//        // Dinero
-//        //int money = GameData.Instance().getMoney();
-//        //json.addProperty("Dinero", money);
-//
-//        // Convertir el objeto
-//        String jsonString = gson.toJson(json);
     }
 
     private void createSensor() {
