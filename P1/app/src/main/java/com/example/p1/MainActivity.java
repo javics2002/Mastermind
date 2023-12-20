@@ -302,6 +302,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onStart() {
         super.onStart();
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+
+        if (bundle !=null && bundle.getBoolean("reward")) {
+            GameData.Instance().addMoney(20);
+        }
         WorkManager.getInstance(this).cancelAllWork();
     }
 
@@ -391,7 +397,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         WorkRequest workRequest =
                 new OneTimeWorkRequest.Builder(NotificationWorker.class)
                         // Additional configuration
-                        .setInitialDelay(30, TimeUnit.SECONDS)
+                        .setInitialDelay(10, TimeUnit.SECONDS)
                         .build();
 
         WorkManager.getInstance(this).enqueue(workRequest);

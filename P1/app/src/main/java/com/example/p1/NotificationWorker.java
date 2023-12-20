@@ -47,7 +47,6 @@ public class NotificationWorker extends Worker {
 
         NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
         managerCompat.notify(1, builder.build());
-        GameData.Instance().addMoney(_monedas);
         return Result.success();
     }
 
