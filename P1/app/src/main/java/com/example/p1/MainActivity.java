@@ -143,48 +143,52 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         String[] folderWorldNames = _engineAndroid.getFileNames("Levels");
+        int numberOfWorlds = GameData.Instance().numberOfWorlds();
+        boolean[] loadedSaveDataWorld = new boolean[numberOfWorlds];
 
         if (doesSaveExist) {
-            boolean[] loadedLevels = new boolean[folderWorldNames.length];
+            for (int i = 0; i < folderWorldNames.length; i++){
+                boolean loadedFolder = false;
 
-            int numberOfWorlds = GameData.Instance().numberOfWorlds();
+                for (int j = 0; j < numberOfWorlds; j++){
+                    WorldData worldData = GameData.Instance().getWorldDataByIndex(j);
+                    String saveWorldName = worldData.getWorldName();
 
-            for (int i = 0; i < numberOfWorlds; i++) {
-                boolean hasBeenFound = false;
-                String saveWorldName = GameData.Instance().getWorldDataByIndex(i).getWorldName();
+                    if (saveWorldName.equals(folderWorldNames[i])){
+                        // World exists in save file
+                        loadedFolder = true;
+                        loadedSaveDataWorld[j] = true;
 
-                for (int j = 0; j < folderWorldNames.length; j++){
-                    if (saveWorldName.equals(folderWorldNames[j])){
-                        // World exists in save file, and it's already loaded.
-                        hasBeenFound = true;
-                        loadedLevels[j] = true;
+                        // Check number of levels and overwrite last level unlocked
+                        // in case we need to
+                        String[] levels = _engineAndroid.getFileNames("Levels/" + folderWorldNames[i]);
+
+                        worldData.setLevelNumber(levels.length);
+                        if (worldData.getLastLevelUnlocked() > levels.length){
+                            worldData.setLastLevelUnlocked(levels.length);
+                        }
+
                         break;
                     }
                 }
 
-                if (!hasBeenFound){
-                    // File does exist in save data, but does not exist in folder.
-                    // We have to delete the info of the world.
-                    GameData.Instance().deleteWorldByIndex(i);
-                }
-            }
-
-            for (int i = 0; i < folderWorldNames.length; i++){
-                if (!loadedLevels[i]){
-                    // File only exist in folder.
-                    // We need to create the info in GameData with the info in folder
+                if (!loadedFolder){
+                    // World does not exist in save file
                     WorldData newWorld = new WorldData();
                     newWorld.setWorldName(folderWorldNames[i]);
 
                     String[] levels = _engineAndroid.getFileNames("Levels/" + folderWorldNames[i]);
                     newWorld.setLevelNumber(levels.length);
 
-                    for (int j = 0; j < levels.length; j++){
-                        LevelData data =  _engineAndroid.jsonToObject("Levels/" + folderWorldNames[i] + "/" + levels[j], LevelData.class);
-                        newWorld.addLevelData(data);
-                    }
-
                     GameData.Instance().addWorld(newWorld);
+                }
+            }
+
+            for (int i = 0; i < numberOfWorlds; i++){
+                if (!loadedSaveDataWorld[i]){
+                    // File does exist in save data, but does not exist in folder.
+                    // We have to delete the info of the world.
+                    GameData.Instance().deleteWorldByIndex(i);
                 }
             }
         }
@@ -195,11 +199,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
                 String[] levels = _engineAndroid.getFileNames("Levels/" + folderWorldNames[i]);
                 newWorld.setLevelNumber(levels.length);
-
-                for (int j = 0; j < levels.length; j++){
-                    LevelData data =  _engineAndroid.jsonToObject("Levels/" + folderWorldNames[i] + "/" + levels[j], LevelData.class);
-                    newWorld.addLevelData(data);
-                }
 
                 GameData.Instance().addWorld(newWorld);
             }
