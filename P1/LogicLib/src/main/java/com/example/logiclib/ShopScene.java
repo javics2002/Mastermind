@@ -100,8 +100,11 @@ public class ShopScene implements Scene {
             int row = i / backgroundsPerRow;
             int column = i % backgroundsPerRow;
 
+            final Background level = _engine.jsonToObject("Shop/Backgrounds/background_0"
+                    + Integer.toString(i + 1) + ".json", Background.class);
+
             _backgroundButtons[i] = new CustomBackground(i == GameData.Instance().getCurrentBackground(),
-                    i,50, buttonFont, "custom1/background.png" , _engine,
+                    i,level.price, buttonFont, level.image, _engine,
                     _padding + column * (backgroundWidth + _padding),
                     _barHeight + _padding + row * (backgroundHeight + _padding + priceGap),
                     backgroundWidth, backgroundHeight, priceGap, _coinImage, _moneyText);
