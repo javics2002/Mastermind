@@ -100,31 +100,34 @@ public class ShopScene implements Scene {
             int row = i / backgroundsPerRow;
             int column = i % backgroundsPerRow;
 
-            _backgroundButtons[i] = new CustomBackground(false, i,
-                    50, buttonFont, "custom1/background.png" , _engine,
+            _backgroundButtons[i] = new CustomBackground(i == GameData.Instance().getCurrentBackground(),
+                    i,50, buttonFont, "custom1/background.png" , _engine,
                     _padding + column * (backgroundWidth + _padding),
                     _barHeight + _padding + row * (backgroundHeight + _padding + priceGap),
-                    backgroundWidth, backgroundHeight, priceGap, _coinImage);
+                    backgroundWidth, backgroundHeight, priceGap, _coinImage, _moneyText);
         }
     }
 
     @Override
     public void update(double deltaTime) {
+        for(int i = 0; i < backgroundsNumber; i++) {
+            _backgroundButtons[i].update(deltaTime);
+        }
     }
 
     @Override
-    public void render(Graphics gr) {
-        _backButton.render();
-        _titleText.render();
-        _prevShopButton.render();
-        _nextShopButton.render();
-        _moneyText.render();
-        _instantMoneyButton.render();
-        gr.drawImage(_coinImage, gr.getLogicWidth() - _padding - _coinSize, _barHeight / 2 - _coinSize / 2,
+    public void render(Graphics graphics) {
+        _backButton.render(graphics);
+        _titleText.render(graphics);
+        _prevShopButton.render(graphics);
+        _nextShopButton.render(graphics);
+        _moneyText.render(graphics);
+        _instantMoneyButton.render(graphics);
+        graphics.drawImage(_coinImage, graphics.getLogicWidth() - _padding - _coinSize, _barHeight / 2 - _coinSize / 2,
                 _coinSize, _coinSize);
 
         for(int i = 0; i < backgroundsNumber; i ++){
-            _backgroundButtons[i].render();
+            _backgroundButtons[i].render(graphics);
         }
     }
 

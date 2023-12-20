@@ -2,6 +2,7 @@ package com.example.logiclib;
 
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Sound;
 import com.example.aninterface.Image;
@@ -14,9 +15,10 @@ public class CustomBackground extends Button {
     private int _priceGap;
     private final Sound _purchaseSound;
     private final Image _coin;
+    private final Text _moneyText;
 
     CustomBackground(boolean selected, int index, int price, Font font, String filename, Engine engine,
-                     int positionX, int positionY, int width, int height, int priceGap, Image coin) {
+                     int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
         super(filename, selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK, Integer.toString(price), font,
                 engine, positionX, positionY, width, height);
 
@@ -30,6 +32,7 @@ public class CustomBackground extends Button {
         _purchaseSound.setVolume(.5f);
 
         _coin = coin;
+        _moneyText = moneyText;
     }
 
     @Override
@@ -47,17 +50,29 @@ public class CustomBackground extends Button {
     public void callback() {
         if (GameData.Instance().hasBackground(_index)) {
             _clickSound.play();
-            _selected = true;
-        } else if (GameData.Instance().purchaseBackground(_index, _price)) {
+
+            GameData.Instance().setBackground(_index);
+        }
+        else if (GameData.Instance().purchaseBackground(_index, _price)) {
             _purchaseSound.play();
-            _selected = true;
+
+            _moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
+            _adquired = true;
+
+            GameData.Instance().setBackground(_index);
         }
     }
 
     @Override
-    public void render() {
+    public void update(double deltaTime){
+        _selected = GameData.Instance().getCurrentBackground() == _index;
+    }
+
+    @Override
+    public void render(Graphics graphics) {
         _graphics.drawRoundedRect(_positionX - borderWidth, _positionY - borderWidth,
-                _width + 2 * borderWidth, _height + 2 * borderWidth, _backgroundColor, _arc, _arc);
+                _width + 2 * borderWidth, _height + 2 * borderWidth,
+                Colors.colorValues.get(_selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK), _arc, _arc);
         _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
 
         if(!_adquired){

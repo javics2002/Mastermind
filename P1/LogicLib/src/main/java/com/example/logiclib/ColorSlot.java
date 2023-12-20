@@ -33,7 +33,7 @@ public class ColorSlot implements GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         if (hasColor()) {
             if(_icon != null)
                 _graphics.drawImage(_icon, _positionX, _positionY, _width, _height);
@@ -42,7 +42,7 @@ public class ColorSlot implements GameObject {
                         _width / 2, Colors.getColor(_colorID - 1));
 
             if(_gameAttributes.isEyeOpen)
-                _numberText.render();
+                _numberText.render(graphics);
         } else { // Gris
             _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
                     _width / 2, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY));
@@ -52,7 +52,7 @@ public class ColorSlot implements GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
 
     }
 

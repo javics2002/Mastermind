@@ -1,10 +1,7 @@
 package com.example.aninterface;
 
 public interface GameObject {
-
-    void render();
-
-    void update();
-
-    boolean handleEvents(Input.TouchEvent e);
+    boolean handleEvents(Input.TouchEvent input);
+    void update(double deltaTime);
+    void render(Graphics graphics);
 }

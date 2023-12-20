@@ -25,13 +25,13 @@ public class HintSlot implements GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
                 _width / 2,  Colors.colorValues.get(_colorName));
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
 
     }
 

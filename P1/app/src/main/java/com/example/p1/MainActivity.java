@@ -15,11 +15,13 @@ import com.example.aninterface.Scene;
 import com.example.aninterface.Sound;
 import com.example.libengineandroid.EngineAndroid;
 import com.example.logiclib.Button;
+import com.example.logiclib.GameAttributes;
 import com.example.logiclib.GameData;
 import com.example.logiclib.InitialScene;
 //Auncios
 import com.example.logiclib.Level;
 import com.example.logiclib.LevelData;
+import com.example.logiclib.ShopScene;
 import com.example.logiclib.WorldData;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
@@ -135,6 +137,36 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 GameData.Instance().addWorld(worldData);
             }
 
+            int money = objectInputStream.readInt();
+            GameData.Instance().addMoney(money);
+
+            for(int i = 0; i < ShopScene.backgroundsNumber; i++){
+                boolean hasBackground = objectInputStream.readBoolean();
+                if(hasBackground)
+                    GameData.Instance().purchaseBackground(i, 0);
+            }
+
+            int currentBackground = objectInputStream.readInt();
+            GameData.Instance().setBackground(currentBackground);
+
+            for(int i = 0; i < ShopScene.circlesNumber; i++){
+                boolean hasCircle = objectInputStream.readBoolean();
+                if(hasCircle)
+                    GameData.Instance().purchaseCircle(i, 0);
+            }
+
+            int currentCircle = objectInputStream.readInt();
+            GameData.Instance().setCircle(currentCircle);
+
+            for(int i = 0; i < ShopScene.themesNumber; i++){
+                boolean hasTheme = objectInputStream.readBoolean();
+                if(hasTheme)
+                    GameData.Instance().purchaseTheme(i, 0);
+            }
+
+            int currentTheme = objectInputStream.readInt();
+            GameData.Instance().setCircle(currentTheme);
+
             objectInputStream.close();
             fileInputStream.close();
         } catch (IOException e) {
@@ -220,6 +252,33 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 WorldData world = GameData.Instance().getWorldDataByIndex(i);
                 objectOutputStream.writeObject(world);
             }
+
+            int money = GameData.Instance().getMoney();
+            objectOutputStream.writeInt(money);
+
+            for(int i = 0; i < ShopScene.backgroundsNumber; i++){
+                boolean hasBackground = GameData.Instance().hasBackground(i);
+                objectOutputStream.writeBoolean(hasBackground);
+            }
+
+            int currentBackground = GameData.Instance().getCurrentBackground();
+            objectOutputStream.writeInt(currentBackground);
+
+            for(int i = 0; i < ShopScene.circlesNumber; i++){
+                boolean hasCircle = GameData.Instance().hasCircle(i);
+                objectOutputStream.writeBoolean(hasCircle);
+            }
+
+            int currentCircle = GameData.Instance().getCurrentCircle();
+            objectOutputStream.writeInt(currentCircle);
+
+            for(int i = 0; i < ShopScene.themesNumber; i++){
+                boolean hasTheme = GameData.Instance().hasTheme(i);
+                objectOutputStream.writeBoolean(hasTheme);
+            }
+
+            int currentTheme = GameData.Instance().getCurrentTheme();
+            objectOutputStream.writeInt(currentTheme);
 
             objectOutputStream.close();
             fileOutputStream.close();

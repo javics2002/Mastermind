@@ -25,12 +25,12 @@ public class Text implements GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         _graphics.drawText(_text, _font, _posX, _posY, _color);
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
     }
 
     @Override

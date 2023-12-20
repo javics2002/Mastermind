@@ -19,6 +19,7 @@ public class GameData {
 
     //Si tienes el producto o no
     private boolean _backgrounds[], _circles[], _themes[];
+    private int _currentBackground, _currentCircle, _currentTheme;
 
     private GameData(Engine engine) {
         _worldsData = new ArrayList<>();
@@ -29,38 +30,9 @@ public class GameData {
         _circles = new boolean[ShopScene.circlesNumber];
         _themes = new boolean[ShopScene.themesNumber];
 
-        // If there's no file, create world data from assets
-        IFile saveFile = _engine.getSaveData();
-        if (saveFile == null) {
-            String worldPath = "Levels";
-            int numWorlds = _engine.filesInFolder(worldPath);
-
-            for (int i = 0; i < numWorlds; i++) {
-                // TODO: Get Info of World With style.json?
-
-                //WorldData worldData = new WorldData();
-                //_worldsData.add(worldData);
-            }
-
-            _money = 0;
-
-            for(int i = 0; i < ShopScene.backgroundsNumber; i++)
-                _backgrounds[i] = false;
-
-            for(int i = 0; i < ShopScene.circlesNumber; i++)
-                _circles[i] = false;
-
-            for(int i = 0; i < ShopScene.themesNumber; i++)
-                _themes[i] = false;
-        }
-        // If there is file, append world data from assets if it does not exist in file
-        else {
-            //String saveData = saveFile.getContent();
-
-            // TODO: Build worlds
-
-            // TODO: Add money from save
-        }
+        _currentBackground = -1;
+        _currentCircle = -1;
+        _currentTheme = -1;
     }
 
     public static void Init(Engine engine) {
@@ -71,6 +43,21 @@ public class GameData {
     public static GameData Instance() {
         assert (_instance != null);
         return _instance;
+    }
+
+    public void reset(){
+        _money = 0;
+
+        for(int i = 0; i < ShopScene.backgroundsNumber; i++)
+            _backgrounds[i] = false;
+        for(int i = 0; i < ShopScene.circlesNumber; i++)
+            _circles[i] = false;
+        for(int i = 0; i < ShopScene.themesNumber; i++)
+            _themes[i] = false;
+
+        _currentBackground = -1;
+        _currentCircle = -1;
+        _currentTheme = -1;
     }
 
     public WorldData getWorldDataByIndex(int index){
@@ -139,6 +126,25 @@ public class GameData {
         return _backgrounds[index];
     }
 
+    public boolean setBackground(int index){
+        //Erase selection
+        if(index == -1){
+            _currentBackground = -1;
+            return true;
+        }
+
+        //No es valido
+        if(index < 0 || index >= ShopScene.backgroundsNumber)
+            return false;
+
+        //No lo tienes
+        if(!_backgrounds[index])
+            return false;
+
+        _currentBackground = index;
+        return true;
+    }
+
     public boolean purchaseCircle(int index, int price){
         //No es valido
         if(index < 0 || index >= ShopScene.circlesNumber)
@@ -157,6 +163,25 @@ public class GameData {
         return _circles[index];
     }
 
+    public boolean setCircle(int index){
+        //Erase selection
+        if(index == -1){
+            _currentCircle = -1;
+            return true;
+        }
+
+        //No es valido
+        if(index < 0 || index >= ShopScene.circlesNumber)
+            return false;
+
+        //No lo tienes
+        if(!_circles[index])
+            return false;
+
+        _currentCircle = index;
+        return true;
+    }
+
     public boolean purchaseTheme(int index, int price){
         //No es valido
         if(index < 0 || index >= ShopScene.themesNumber)
@@ -173,5 +198,36 @@ public class GameData {
         }
 
         return _themes[index];
+    }
+
+    public boolean setTheme(int index){
+        //Erase selection
+        if(index == -1){
+            _currentTheme = -1;
+            return true;
+        }
+
+        //No es valido
+        if(index < 0 || index >= ShopScene.themesNumber)
+            return false;
+
+        //No lo tienes
+        if(!_themes[index])
+            return false;
+
+        _currentTheme = index;
+        return true;
+    }
+
+    public int getCurrentBackground(){
+        return _currentBackground;
+    }
+
+    public int getCurrentCircle(){
+        return _currentCircle;
+    }
+
+    public int getCurrentTheme(){
+        return _currentTheme;
     }
 }

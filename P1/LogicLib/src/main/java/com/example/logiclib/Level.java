@@ -2,6 +2,7 @@ package com.example.logiclib;
 
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Sound;
 
@@ -32,7 +33,7 @@ public class Level extends Button {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         _graphics.drawRoundedRect(_positionX, _positionY, _width, _height, _backgroundColor, _arc, _arc);
 
         if (_locked){

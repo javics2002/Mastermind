@@ -140,18 +140,18 @@ public class WorldScene implements Scene {
     }
 
     @Override
-    public void render(Graphics gr) {
+    public void render(Graphics graphics) {
         _graphics.drawImage(_backgroundImage, 0, _barHeight,
                 _graphics.getLogicWidth(), _graphics.getLogicHeight() - _barHeight);
 
-        _backButton.render();
-        _titleText.render();
-        _prevWorldButton.render();
-        _nextWorldButton.render();
-        _unlockNextLevelButton.render();
+        _backButton.render(graphics);
+        _titleText.render(graphics);
+        _prevWorldButton.render(graphics);
+        _nextWorldButton.render(graphics);
+        _unlockNextLevelButton.render(graphics);
 
         for(int i = 0; i < _numLevels; i ++){
-            _levelButtons[i].render();
+            _levelButtons[i].render(graphics);
         }
     }
 

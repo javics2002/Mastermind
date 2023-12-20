@@ -127,18 +127,18 @@ public class GameOverScene implements Scene {
     public void update(double deltaTime) {}
 
     @Override
-    public void render(Graphics gr) {
-        _resultText.render();
-        _attemptsText.render();
-        _attemptsNumberText.render();
-        _codeText.render();
-        if(_adButton!=null)_adButton.render();
+    public void render(Graphics graphics) {
+        _resultText.render(graphics);
+        _attemptsText.render(graphics);
+        _attemptsNumberText.render(graphics);
+        _codeText.render(graphics);
+        if(_adButton!=null)_adButton.render(graphics);
 
         for (ColorSlot colorSlot : _resultCombination) {
-            colorSlot.render();
+            colorSlot.render(graphics);
         }
 
-        _playAgainButton.render();
+        _playAgainButton.render(graphics);
         //_chooseDifficultyButton.render();
     }
 

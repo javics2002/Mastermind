@@ -220,11 +220,11 @@ public class GameScene implements Scene {
         }
 
         for (CombinationLayout combination : _combinationLayouts) {
-            combination.update();
+            combination.update(deltaTime);
         }
 
         for (ColorButton colorButton : _colorButtons) {
-            colorButton.update();
+            colorButton.update(deltaTime);
         }
     }
 
@@ -234,10 +234,10 @@ public class GameScene implements Scene {
             _graphics.drawImage(_backgroundImage, 0, 60,
                     _graphics.getLogicWidth(), _graphics.getLogicHeight() - 60);
 
-        _objectiveText.render();
-        _attemptsText.render();
-        _quitButton.render();
-        _colorblindButton.render();
+        _objectiveText.render(graphics);
+        _attemptsText.render(graphics);
+        _quitButton.render(graphics);
+        _colorblindButton.render(graphics);
 
         int firstCombination = _gameAttributes.activeLayout - _visibleLayouts + 1;
         if (firstCombination < 0)
@@ -245,7 +245,7 @@ public class GameScene implements Scene {
 
         for (int i = firstCombination; i < _combinationLayouts.size() && i < firstCombination + _visibleLayouts; i++){
             _combinationLayouts.get(i).setPositionY(100 + (15 + 40) * (i - firstCombination));
-            _combinationLayouts.get(i).render();
+            _combinationLayouts.get(i).render(graphics);
         }
 
         final int colorButtonBackgroundHeight = 80;
@@ -253,7 +253,7 @@ public class GameScene implements Scene {
                 graphics.getLogicWidth(), colorButtonBackgroundHeight, Colors.colorValues.get(Colors.ColorName.TRASPARENTBACKGROUND));
 
         for (ColorButton colorButton : _colorButtons)
-            colorButton.render();
+            colorButton.render(graphics);
     }
 
     @Override

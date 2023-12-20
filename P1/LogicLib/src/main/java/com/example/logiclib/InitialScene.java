@@ -12,6 +12,7 @@ public class InitialScene implements Scene {
 
     private final Button _shareButton;
     private final Button _customizeButton;
+    private final Button _eraseProgressButton;
     private final Text _titleText;
     Engine _engine;
 
@@ -72,6 +73,15 @@ public class InitialScene implements Scene {
                 _engine.setCurrentScene(scene);
             }
         };
+
+        Font eraseButtonFont = graphics.newFont("Comfortaa-Regular.ttf", 15f);
+        _eraseProgressButton = new Button(Colors.ColorName.BACKGROUNDRED, "Borrar progreso", eraseButtonFont, _engine,
+                10, 10, graphics.getStringWidth("Borrar progreso", eraseButtonFont) + 10, 50) {
+            @Override
+            public void callback() {
+                GameData.Instance().reset();
+            }
+        };
     }
 
     @Override
@@ -79,13 +89,15 @@ public class InitialScene implements Scene {
     }
 
     @Override
-    public void render(Graphics gr) {
-        _titleText.render();
-        _quickGameButton.render();
-        _worldsButton.render();
+    public void render(Graphics graphics) {
+        _titleText.render(graphics);
+        _quickGameButton.render(graphics);
+        _worldsButton.render(graphics);
 
-        _shareButton.render();
-        _customizeButton.render();
+        _shareButton.render(graphics);
+        _customizeButton.render(graphics);
+
+        _eraseProgressButton.render(graphics);
     }
 
     @Override
@@ -96,6 +108,8 @@ public class InitialScene implements Scene {
 
             _shareButton.handleEvents(input.getTouchEvent().get(0));
             _customizeButton.handleEvents(input.getTouchEvent().get(0));
+
+            _eraseProgressButton.handleEvents(input.getTouchEvent().get(0));
         }
     }
 }
