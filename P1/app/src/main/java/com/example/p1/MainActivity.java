@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         senProximity = senSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         if (senProximity == null)Log.d("","El dispositvo no tiene sensor de Proximidad");
         senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
-
+        senSensorManager.registerListener(this, senProximity , SensorManager.SENSOR_DELAY_NORMAL);
 
     }
     @Override
@@ -379,7 +379,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 last_y = y;
                 last_z = z;
             }
-        } else if (mySensor.getType() == Sensor.TYPE_PROXIMITY) {
+        }
+        if (mySensor.getType() == Sensor.TYPE_PROXIMITY) {
             // Obtenemos la distancia en centímetros
             float distance = event.values[0];
             if (distance < 5) {
