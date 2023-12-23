@@ -1,11 +1,12 @@
 package com.example.logiclib;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
-public class Combination {
+public class Combination implements Serializable {
     private final int _length;
     private final int[] _numbers;
 
@@ -42,6 +43,15 @@ public class Combination {
 
         for (int i = 0; i < _length; i++) {
             _numbers[i] = -1;
+        }
+    }
+
+    Combination(int[] combination) {
+        _length = combination.length;
+        _numbers = new int[_length];
+
+        for (int i = 0; i < _length; i++) {
+            _numbers[i] = combination[i];
         }
     }
 

@@ -32,6 +32,19 @@ public class ColorSlot implements GameObject {
         _colorID = -1;
     }
 
+    public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, int colorID, GameAttributes gameAttributes) {
+        _graphics = engine.getGraphics();
+        _gameAttributes = gameAttributes;
+        _positionX = positionX;
+        _positionY = positionY;
+        _width = width;
+        _height = height;
+        _hasColor = colorID != -1 ? true : false;
+        _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
+        _numberText = new Text("", _colorNum, engine, 0, 0, colorID);
+        _colorID = colorID;
+    }
+
     @Override
     public void render(Graphics graphics) {
         if (hasColor()) {

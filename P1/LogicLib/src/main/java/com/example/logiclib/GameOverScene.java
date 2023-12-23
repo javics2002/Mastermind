@@ -94,21 +94,10 @@ public class GameOverScene implements Scene {
                 graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50){
             @Override
             public void callback() {
-                if(_gameAttributes.skin!=-1 && _gameAttributes.backGroundSkinId!=-1 && _gameAttributes.resultCombination!=null) {
-
-                    Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
-                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                            _gameAttributes.backGroundSkinId, _gameAttributes.skin, _gameAttributes.selectedWorld,null);
-                    _engine.setCurrentScene(scene);
-                }//Nos aseguramos de que existe una combinacion de la partida anterior
-                else if(_gameAttributes.resultCombination!=null) {
-                    Scene scene = new GameScene(_engine, gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
-                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                            _gameAttributes.selectedWorld, null);
-                    _engine.setCurrentScene(scene);
-
-                }
-
+                Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
+                        _gameAttributes.backGroundSkinId, _gameAttributes.skin, _gameAttributes.selectedWorld,null);
+                _engine.setCurrentScene(scene);
             }
         };
         /*_chooseDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Elegir dificultad", buttonFont, _engine,

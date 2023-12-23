@@ -5,21 +5,20 @@ import com.example.aninterface.IFile;
 
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.naming.Context;
 
 public class GameData {
-    // TODO: Esta clase debería guardar gestionar todos los datos relacionados con
-    // el guardado, como el dinero o los ultimos niveles desbloqueados de cada mundo.
-
     private static GameData _instance;
     private ArrayList<WorldData> _worldsData;
     private Engine _engine;
     private int _money;
 
-    //Si tienes el producto o no
     private boolean _backgrounds[], _circles[], _themes[];
     private int _currentBackground, _currentCircle, _currentTheme;
+
+    private LevelData _currentLevelData;
 
     private GameData(Engine engine) {
         _worldsData = new ArrayList<>();
@@ -33,6 +32,8 @@ public class GameData {
         _currentBackground = -1;
         _currentCircle = -1;
         _currentTheme = -1;
+
+        _currentLevelData = null;
     }
 
     public static void Init(Engine engine) {
@@ -43,6 +44,11 @@ public class GameData {
     public static GameData Instance() {
         assert (_instance != null);
         return _instance;
+    }
+
+    public static void Release() {
+        assert(_instance != null);
+        _instance = null;
     }
 
     public void reset(){
@@ -58,6 +64,8 @@ public class GameData {
         _currentBackground = -1;
         _currentCircle = -1;
         _currentTheme = -1;
+
+        _currentLevelData = null;
     }
 
     public WorldData getWorldDataByIndex(int index){
@@ -229,5 +237,17 @@ public class GameData {
 
     public int getCurrentTheme(){
         return _currentTheme;
+    }
+
+    public LevelData getCurrentLevelData() {
+        return _currentLevelData;
+    }
+
+    public void setCurrentLevelData(LevelData data) {
+        _currentLevelData = data;
+    }
+
+    public void resetCurrentLevelData() {
+        _currentLevelData = null;
     }
 }

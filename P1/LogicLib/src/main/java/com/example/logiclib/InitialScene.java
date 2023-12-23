@@ -40,8 +40,8 @@ public class InitialScene implements Scene {
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY, buttonWidth, buttonHeight) {
             @Override
             public void callback() {
-                Scene scene = new GameScene(_engine,  8, 4, 6,
-                        false, returnScene, -1, null);
+                Scene scene = new GameScene(_engine,  8, 8, 4, 6,
+                        false, returnScene, -1, -1, -1, null);
                 _engine.setCurrentScene(scene);
             }
         };
@@ -51,8 +51,16 @@ public class InitialScene implements Scene {
                 buttonWidth, buttonHeight) {
             @Override
             public void callback() {
-                Scene scene = new WorldScene(_engine, 0);
-                _engine.setCurrentScene(scene);
+                LevelData data = GameData.Instance().getCurrentLevelData();
+                if (data != null){
+                    Scene scene = new GameScene(_engine, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
+                            data.repeat, returnScene, 0, 0, 0,data.resultCombination);
+                    _engine.setCurrentScene(scene);
+                }
+                else{
+                    Scene scene = new WorldScene(_engine, 0);
+                    _engine.setCurrentScene(scene);
+                }
             }
         };
 

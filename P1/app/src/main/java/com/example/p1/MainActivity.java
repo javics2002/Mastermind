@@ -92,6 +92,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         _shakeSound = _engineAndroid.getAudio().loadSound("shake.wav", false);
         _shakeSound.setVolume(.5f);
 
+        // HASH
+//        String salt = "messi";
+//
+//        String hash = hashJson("filecontent"); // TODO: get file content
+//        String finalHash = hashJson(hash + "filecontent" + salt); // TODO: get file content
+
+        // TODO:
+        // guardar finalHash dentro del json
+
+
         // Init Game Data
         GameData.Init(_engineAndroid);
         loadGameData();
@@ -166,6 +176,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             int currentTheme = objectInputStream.readInt();
             GameData.Instance().setCircle(currentTheme);
+
+            // Load LevelData
+            LevelData newData = (LevelData) objectInputStream.readObject();
+            GameData.Instance().setCurrentLevelData(newData);
+
+            // HASH
+//            String salt = "messi";
+//
+//            String hash = hashJson("filecontent"); // TODO: get file content
+//            String finalHash = hashJson(hash + "filecontent" + salt); // TODO: get file content
+
+            // TODO:
+            // guardar finalHash dentro del json
 
             objectInputStream.close();
             fileInputStream.close();
@@ -280,12 +303,24 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             int currentTheme = GameData.Instance().getCurrentTheme();
             objectOutputStream.writeInt(currentTheme);
 
+            // Save LevelData
+            objectOutputStream.writeObject(GameData.Instance().getCurrentLevelData());
+
             objectOutputStream.close();
             fileOutputStream.close();
         }
         catch (IOException e) {
             e.printStackTrace();
         }
+
+        // HASH
+        String salt = "messi";
+
+        String hash = hashJson("filecontent"); // TODO: get file content
+        String finalHash = hashJson(hash + "filecontent" + salt); // TODO: get file content
+
+        // TODO:
+        // guardar finalHash dentro del json
     }
 
     private void createSensor() {
@@ -355,7 +390,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     protected void onDestroy() {
         super.onDestroy();
+        GameData.Release();
     }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         Sensor mySensor = event.sensor;
@@ -425,5 +462,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             notificationManager.createNotificationChannel(channel) ;
         }
     }
+
+    static {
+        System.loadLibrary("PR2");
+    }
+
+    private native String hashJson(String fileContent);
 }
 

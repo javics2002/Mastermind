@@ -73,22 +73,10 @@ public class AndroidRewardedAd {
                                             GameAttributes _gameAttributes= gameOverScene.getGameAttributtes();
 
                                             if(_gameAttributes!=null) {
-
-                                                //Diferenciamos entre si estamos en el mundo , o jugando una partida rapida
-                                                if(_gameAttributes.skin!=-1 && _gameAttributes.backGroundSkinId!=-1 && _gameAttributes.resultCombination!=null) {
-
-                                                    Scene scene = new GameScene(engine, rewardedAttemps, _gameAttributes.combinationLength,
-                                                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                                                            _gameAttributes.backGroundSkinId, _gameAttributes.skin, _gameAttributes.selectedWorld, _gameAttributes.resultCombination);
-                                                    engine.setCurrentScene(scene);
-                                                }//Nos aseguramos de que existe una combinacion de la partida anterior
-                                                else if(_gameAttributes.resultCombination!=null) {
-                                                    Scene scene = new GameScene(engine, rewardedAttemps, _gameAttributes.combinationLength,
-                                                            _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                                                            _gameAttributes.selectedWorld, _gameAttributes.resultCombination);
-                                                    engine.setCurrentScene(scene);
-
-                                                }else Log.d("AD","GAME ATTRIBUTES COMBINATION INITIALISATION ERROR IN REWARDED AD CALLBACK");
+                                                Scene scene = new GameScene(engine, rewardedAttemps, rewardedAttemps, _gameAttributes.combinationLength,
+                                                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
+                                                        _gameAttributes.backGroundSkinId, _gameAttributes.skin, _gameAttributes.selectedWorld, _gameAttributes.resultCombination);
+                                                engine.setCurrentScene(scene);
                                             }
                                             else Log.d("AD","GAME ATTRIBUTES INITIALISATION ERROR IN REWARDED AD CALLBACK");
                                         } else Log.d("AD","CASTING SCENE ERROR IN REWARDED AD CALLBACK");
