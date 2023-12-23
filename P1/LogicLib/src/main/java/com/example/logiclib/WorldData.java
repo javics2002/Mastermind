@@ -40,4 +40,9 @@ public class WorldData implements Serializable {
     public void setLevelNumber(int newLevelNumber) {
         _levelNumber = newLevelNumber;
     }
+
+    @Override
+    public String toString() {
+        return "WorldData[Name_" + _worldName + "_LastLevelUnlocked_" + _lastLevelUnlocked + "_LevelNumber_" + _levelNumber + "]";
+    }
 }

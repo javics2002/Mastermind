@@ -51,6 +51,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -140,55 +141,73 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
             doesSaveExist = true;
 
+            String currentFileContent = "";
+
             int worldNumber = objectInputStream.readInt();
+            currentFileContent += worldNumber;
 
             for (int i = 0; i < worldNumber; i++){
                 WorldData worldData = (WorldData) objectInputStream.readObject();
                 GameData.Instance().addWorld(worldData);
+                currentFileContent += worldData.toString();
             }
 
             int money = objectInputStream.readInt();
             GameData.Instance().addMoney(money);
+            currentFileContent += money;
 
             for(int i = 0; i < ShopScene.backgroundsNumber; i++){
                 boolean hasBackground = objectInputStream.readBoolean();
+                currentFileContent += hasBackground;
                 if(hasBackground)
                     GameData.Instance().purchaseBackground(i, 0);
             }
 
             int currentBackground = objectInputStream.readInt();
             GameData.Instance().setBackground(currentBackground);
+            currentFileContent += currentBackground;
 
             for(int i = 0; i < ShopScene.circlesNumber; i++){
                 boolean hasCircle = objectInputStream.readBoolean();
+                currentFileContent += hasCircle;
                 if(hasCircle)
                     GameData.Instance().purchaseCircle(i, 0);
             }
 
             int currentCircle = objectInputStream.readInt();
             GameData.Instance().setCircle(currentCircle);
+            currentFileContent += currentCircle;
 
             for(int i = 0; i < ShopScene.themesNumber; i++){
                 boolean hasTheme = objectInputStream.readBoolean();
+                currentFileContent += hasTheme;
                 if(hasTheme)
                     GameData.Instance().purchaseTheme(i, 0);
             }
 
             int currentTheme = objectInputStream.readInt();
             GameData.Instance().setCircle(currentTheme);
+            currentFileContent += currentTheme;
 
             // Load LevelData
             LevelData newData = (LevelData) objectInputStream.readObject();
             GameData.Instance().setCurrentLevelData(newData);
 
-            // HASH
-//            String salt = "messi";
-//
-//            String hash = hashJson("filecontent"); // TODO: get file content
-//            String finalHash = hashJson(hash + "filecontent" + salt); // TODO: get file content
+            if (newData != null){
+                currentFileContent += newData.toString();
+            }
 
-            // TODO:
-            // guardar finalHash dentro del json
+            // HASH
+            String saveHash = (String) objectInputStream.readObject();
+
+            String salt = "contrasenya";
+
+            String hash = hashJson(currentFileContent);
+            String finalHash = hashJson(hash + currentFileContent + salt);
+
+            if (!saveHash.equals(finalHash)){
+                doesSaveExist = false;
+            }
 
             objectInputStream.close();
             fileInputStream.close();
@@ -268,43 +287,67 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             FileOutputStream fileOutputStream = _engineAndroid.getActivity().openFileOutput(fileName, Context.MODE_PRIVATE);
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
 
+            String currentFileContent = "";
+
             int numberOfWorlds = GameData.Instance().numberOfWorlds();
             objectOutputStream.writeInt(numberOfWorlds);
+            currentFileContent += numberOfWorlds;
 
             for (int i = 0; i < numberOfWorlds;i++){
                 WorldData world = GameData.Instance().getWorldDataByIndex(i);
                 objectOutputStream.writeObject(world);
+                currentFileContent += world.toString();
             }
 
             int money = GameData.Instance().getMoney();
             objectOutputStream.writeInt(money);
+            currentFileContent += money;
 
             for(int i = 0; i < ShopScene.backgroundsNumber; i++){
                 boolean hasBackground = GameData.Instance().hasBackground(i);
                 objectOutputStream.writeBoolean(hasBackground);
+                currentFileContent += hasBackground;
             }
 
             int currentBackground = GameData.Instance().getCurrentBackground();
             objectOutputStream.writeInt(currentBackground);
+            currentFileContent += currentBackground;
 
             for(int i = 0; i < ShopScene.circlesNumber; i++){
                 boolean hasCircle = GameData.Instance().hasCircle(i);
                 objectOutputStream.writeBoolean(hasCircle);
+                currentFileContent += hasCircle;
             }
 
             int currentCircle = GameData.Instance().getCurrentCircle();
             objectOutputStream.writeInt(currentCircle);
+            currentFileContent += currentCircle;
 
             for(int i = 0; i < ShopScene.themesNumber; i++){
                 boolean hasTheme = GameData.Instance().hasTheme(i);
                 objectOutputStream.writeBoolean(hasTheme);
+                currentFileContent += hasTheme;
             }
 
             int currentTheme = GameData.Instance().getCurrentTheme();
             objectOutputStream.writeInt(currentTheme);
+            currentFileContent += currentTheme;
 
             // Save LevelData
-            objectOutputStream.writeObject(GameData.Instance().getCurrentLevelData());
+            LevelData data = GameData.Instance().getCurrentLevelData();
+            objectOutputStream.writeObject(data);
+
+            if (data != null){
+                currentFileContent += data.toString();
+            }
+
+            // HASH
+            String salt = "contrasenya";
+
+            String hash = hashJson(currentFileContent);
+            String finalHash = hashJson(hash + currentFileContent + salt);
+
+            objectOutputStream.writeObject(finalHash);
 
             objectOutputStream.close();
             fileOutputStream.close();
@@ -312,15 +355,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         catch (IOException e) {
             e.printStackTrace();
         }
-
-        // HASH
-        String salt = "messi";
-
-        String hash = hashJson("filecontent"); // TODO: get file content
-        String finalHash = hashJson(hash + "filecontent" + salt); // TODO: get file content
-
-        // TODO:
-        // guardar finalHash dentro del json
     }
 
     private void createSensor() {
