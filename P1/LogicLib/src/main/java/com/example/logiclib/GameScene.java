@@ -19,11 +19,12 @@ public class GameScene implements Scene {
     private final List<CombinationLayout> _combinationLayouts;
     private final List<ColorButton> _colorButtons;
     private final Image _backgroundImage;
+    private final int _backgroundColor;
 
     private final int _visibleLayouts = 10;
 
     public GameScene(Engine engine, int tryNumber, int attemptsLeft, int combinationLength, int numberOfColors,
-                     boolean repeatedColors, final Scene returnScene, int backgroundSkinId, int iconSkin, int worldId, Combination cResult) {
+                     boolean repeatedColors, final Scene returnScene, int worldId, Combination cResult) {
         _engine = engine;
         _graphics = _engine.getGraphics();
 
@@ -41,10 +42,7 @@ public class GameScene implements Scene {
         else _gameAttributes.resultCombination=cResult;
 
         _gameAttributes.returnScene = returnScene;
-        _gameAttributes.skin = iconSkin;
-        _gameAttributes.backGroundSkinId = backgroundSkinId;
         _gameAttributes.selectedWorld = worldId;
-
 
         // Save data attributes
         if (GameData.Instance().getCurrentLevelData() == null){
@@ -64,6 +62,16 @@ public class GameScene implements Scene {
         }
         else{
             _gameAttributes.activeLayout = _gameAttributes.attemptsNumber - _gameAttributes.attemptsLeft;
+        }
+
+        if(GameData.Instance().getCurrentTheme() < 0){
+            _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
+        }
+        else{
+            final Theme theme = _engine.jsonToObject("Shop/Themes/themes_0"
+                    + Integer.toString(GameData.Instance().getCurrentTheme() + 1) + ".json", Theme.class);
+
+            _backgroundColor = Colors.parseARGB(theme.backgroundColor);
         }
 
         // Title
@@ -149,8 +157,19 @@ public class GameScene implements Scene {
                     _graphics.getLogicHeight() - 60, scale, scale, i + 1, _gameAttributes));
         }
 
-        _backgroundImage =
-                _graphics.loadImage(GameData.Instance().getWorldDataByIndex(worldId).getWorldName() + "/background.png");
+        if(worldId != -1){
+            _backgroundImage =
+                    _graphics.loadImage(GameData.Instance().getWorldDataByIndex(worldId).getWorldName() + "/background.png");
+        }
+        else if (GameData.Instance().getCurrentBackground() >= 0) {
+            final Background background = engine.jsonToObject("Shop/Backgrounds/background_0"
+                    + Integer.toString(GameData.Instance().getCurrentBackground() + 1) + ".json", Background.class);
+
+            _backgroundImage = _graphics.loadImage(background.image);
+        }
+        else {
+            _backgroundImage = null;
+        }
     }
 
     @Override
@@ -198,6 +217,8 @@ public class GameScene implements Scene {
 
     @Override
     public void render(Graphics graphics) {
+        _graphics.clear(_backgroundColor);
+
         if(_backgroundImage != null)
             _graphics.drawImage(_backgroundImage, 0, 60,
                     _graphics.getLogicWidth(), _graphics.getLogicHeight() - 60);

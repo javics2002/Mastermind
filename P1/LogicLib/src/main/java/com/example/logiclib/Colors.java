@@ -99,4 +99,23 @@ public class Colors {
     public static int getColor(int colorID){
         return Colors.colorValues.get(Colors.ColorName.values()[colorID]);
     }
+
+    public static int parseARGB(String hexadecimalARGBColor){
+        // Eliminar el carácter '#' o los caracteres "Ox" si están presentes
+        if (hexadecimalARGBColor.startsWith("#")) {
+            hexadecimalARGBColor = hexadecimalARGBColor.substring(1);
+        }
+        else if (hexadecimalARGBColor.startsWith("0x")) {
+            hexadecimalARGBColor = hexadecimalARGBColor.substring(2);
+        }
+
+        int argb = (int) Long.parseLong(hexadecimalARGBColor, 16);
+
+        // Si la cadena no tiene el canal alfa (A), agregar el valor predeterminado (255)
+        if (hexadecimalARGBColor.length() <= 6) {
+            argb |= 0xFF000000;
+        }
+
+        return argb;
+    }
 }

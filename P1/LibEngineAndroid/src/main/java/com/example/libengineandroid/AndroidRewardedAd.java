@@ -73,10 +73,13 @@ public class AndroidRewardedAd {
                                             GameAttributes _gameAttributes= gameOverScene.getGameAttributtes();
 
                                             if(_gameAttributes!=null) {
-                                                Scene scene = new GameScene(engine, rewardedAttemps, rewardedAttemps, _gameAttributes.combinationLength,
+                                                if(_gameAttributes.resultCombination!=null){
+                                                    Scene scene = new GameScene(engine, rewardedAttemps, rewardedAttemps, _gameAttributes.combinationLength,
                                                         _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                                                        _gameAttributes.backGroundSkinId, _gameAttributes.skin, _gameAttributes.selectedWorld, _gameAttributes.resultCombination);
-                                                engine.setCurrentScene(scene);
+                                                        _gameAttributes.selectedWorld, _gameAttributes.resultCombination);
+                                                    engine.setCurrentScene(scene);
+                                                }
+                                                
                                             }
                                             else Log.d("AD","GAME ATTRIBUTES INITIALISATION ERROR IN REWARDED AD CALLBACK");
                                         } else Log.d("AD","CASTING SCENE ERROR IN REWARDED AD CALLBACK");

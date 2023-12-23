@@ -19,12 +19,24 @@ public class WorldScene implements Scene {
     private final Image _backgroundImage;
     Engine _engine;
 
+    private final int _backgroundColor;
+
     final int _barHeight = 80;
 
     public WorldScene(Engine engine, final int worldId) {
         _engine = engine;
 
         _graphics = _engine.getGraphics();
+
+        if(GameData.Instance().getCurrentTheme() < 0){
+            _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
+        }
+        else{
+            final Theme theme = _engine.jsonToObject("Shop/Themes/themes_0"
+                    + Integer.toString(GameData.Instance().getCurrentTheme() + 1) + ".json", Theme.class);
+
+            _backgroundColor = Colors.parseARGB(theme.backgroundColor);
+        }
 
         final int padding = 20;
         // Back button
@@ -110,7 +122,7 @@ public class WorldScene implements Scene {
                 @Override
                 public void callback() {
                     Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
-                            level.repeat, returnScene, worldId, worldId, worldId,null);
+                            level.repeat, returnScene, worldId, null);
                     _engine.setCurrentScene(scene);
                 }
             };
@@ -141,6 +153,8 @@ public class WorldScene implements Scene {
 
     @Override
     public void render(Graphics graphics) {
+        _graphics.clear(_backgroundColor);
+
         _graphics.drawImage(_backgroundImage, 0, _barHeight,
                 _graphics.getLogicWidth(), _graphics.getLogicHeight() - _barHeight);
 

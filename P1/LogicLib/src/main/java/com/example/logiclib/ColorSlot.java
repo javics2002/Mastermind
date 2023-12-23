@@ -9,6 +9,7 @@ import com.example.aninterface.GameObject;
 
 public class ColorSlot implements GameObject {
     private final Graphics _graphics;
+    private final Engine _engine;
     private int _positionX, _positionY;
     private final int _width, _height;
     private String _name;
@@ -18,8 +19,10 @@ public class ColorSlot implements GameObject {
     private Text _numberText;
     private GameAttributes _gameAttributes;
     private Image _icon;
+    private int _color;
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, GameAttributes gameAttributes) {
+        _engine = engine;
         _graphics = engine.getGraphics();
         _gameAttributes = gameAttributes;
         _positionX = positionX;
@@ -33,6 +36,7 @@ public class ColorSlot implements GameObject {
     }
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, int colorID, GameAttributes gameAttributes) {
+        _engine = engine;
         _graphics = engine.getGraphics();
         _gameAttributes = gameAttributes;
         _positionX = positionX;
@@ -52,7 +56,7 @@ public class ColorSlot implements GameObject {
                 _graphics.drawImage(_icon, _positionX, _positionY, _width, _height);
             else
                 _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
-                        _width / 2, Colors.getColor(_colorID - 1));
+                        _width / 2, _color);
 
             if(_gameAttributes.isEyeOpen)
                 _numberText.render(graphics);
@@ -84,12 +88,30 @@ public class ColorSlot implements GameObject {
         _numberText.setText(num);
         _numberText.setPos(textX, textY);
 
-        if (_colorID < 0){
-            _icon = null;
+        if(_gameAttributes.selectedWorld == -1){
+            if(GameData.Instance().getCurrentCircle() < 0){
+                _color = Colors.getColor(_colorID - 1);
+                _icon = null;
+            }
+            else{
+                final Circles circles = _engine.jsonToObject("Shop/Circles/circles_0"
+                        + Integer.toString(GameData.Instance().getCurrentCircle() + 1) + ".json", Circles.class);
+
+                if(circles.skin){
+                    _icon = _graphics.loadImage(circles.packPath + "/icon" + _colorID + ".png");
+                    _color = Colors.getColor(_colorID - 1);
+                }
+                else{
+                    _icon = null;
+                    _color = Colors.parseARGB(circles.colors[color]);
+                }
+            }
         }
-        if(_gameAttributes.skin >= 0)
-            _icon = _graphics.loadImage("world"
-                    + Integer.toString(_gameAttributes.skin) + "/icon" + _colorID + ".png");
+        else {
+            _icon = _graphics.loadImage(GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld).getWorldName()
+                    + "/icon" + _colorID + ".png");
+            _color = Colors.getColor(_colorID - 1);
+        }
     }
 
 

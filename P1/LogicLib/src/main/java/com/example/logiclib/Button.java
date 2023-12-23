@@ -20,7 +20,7 @@ public class Button implements GameObject {
     protected final String _text;
     protected Font _font;
 
-    Button(Colors.ColorName backgroundColor, String text, Font font, Engine engine, int positionX, int positionY, int width, int height) {
+    Button(int backgroundColor, String text, Font font, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;
         _graphics = engine.getGraphics();
 
@@ -30,7 +30,7 @@ public class Button implements GameObject {
         _height = height;
         _image = null;
 
-        _backgroundColor = Colors.colorValues.get(backgroundColor);
+        _backgroundColor = backgroundColor;
         _arc = 20;
 
         _text = text;

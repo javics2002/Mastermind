@@ -15,6 +15,7 @@ public class ColorButton implements GameObject {
     private final Text _numberText;
     private final GameAttributes _gameAttributes;
     private final Image _icon;
+    private final int _color;
 
     ColorButton(Engine engine, int positionX, int positionY, int width, int height, int colorID, GameAttributes gameAttributes) {
         _graphics = engine.getGraphics();
@@ -33,11 +34,30 @@ public class ColorButton implements GameObject {
         int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, colorNum) / 2;
         _numberText = new Text(num, colorNum, engine, textX, textY, 0);
 
-        if(_gameAttributes.skin >= 0)
+        if(_gameAttributes.selectedWorld == -1){
+            if(GameData.Instance().getCurrentCircle() < 0){
+                _color = Colors.getColor(_colorID - 1);
+                _icon = null;
+            }
+            else{
+                final Circles circles = engine.jsonToObject("Shop/Circles/circles_0"
+                        + Integer.toString(GameData.Instance().getCurrentCircle() + 1) + ".json", Circles.class);
+
+                if(circles.skin){
+                    _icon = _graphics.loadImage(circles.packPath + "/icon" + _colorID + ".png");
+                    _color = Colors.getColor(_colorID - 1);
+                }
+                else{
+                    _icon = null;
+                    _color = Colors.parseARGB(circles.colors[colorID]);
+                }
+            }
+        }
+        else {
             _icon = _graphics.loadImage(GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld).getWorldName()
                     + "/icon" + _colorID + ".png");
-        else
-            _icon = null;
+            _color = Colors.getColor(_colorID - 1);
+        }
     }
 
     @Override
@@ -58,7 +78,7 @@ public class ColorButton implements GameObject {
             _graphics.drawImage(_icon, _positionX, _positionY, _width, _height);
         else
             _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
-                    _width / 2, Colors.getColor(_colorID - 1));
+                    _width / 2, _color);
 
         if (_gameAttributes.isEyeOpen)
             _numberText.render(graphics);

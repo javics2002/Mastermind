@@ -21,7 +21,7 @@ public class GameOverScene implements Scene {
     Engine _engine;
     GameAttributes _gameAttributes;
 
-
+    private final int _backgroundColor;
 
     public GameOverScene(Engine engine, final GameAttributes gameAttributes) {
         _engine = engine;
@@ -29,6 +29,19 @@ public class GameOverScene implements Scene {
 
         // Init GameAttributes
         _gameAttributes = gameAttributes;
+
+        int buttonColor = Colors.colorValues.get(Colors.ColorName.BACKGROUNDORANGE);
+
+        if(GameData.Instance().getCurrentTheme() < 0){
+            _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
+        }
+        else{
+            final Theme theme = _engine.jsonToObject("Shop/Themes/themes_0"
+                    + Integer.toString(GameData.Instance().getCurrentTheme() + 1) + ".json", Theme.class);
+
+            _backgroundColor = Colors.parseARGB(theme.backgroundColor);
+            buttonColor = Colors.parseARGB(theme.buttonColor);
+        }
 
         //Create scene
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
@@ -58,7 +71,7 @@ public class GameOverScene implements Scene {
             attemptsNumberString = "";
 
 
-            _adButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Consigue mas Intentos", buttonFont, _engine,
+            _adButton = new Button(buttonColor, "Consigue mas Intentos", buttonFont, _engine,
                     graphics.getLogicWidth() / 2 - buttonWidth / 2, posY + 2 * (buttonHeight + paddingY),
                     buttonWidth, buttonHeight) {
                 @Override
@@ -66,7 +79,6 @@ public class GameOverScene implements Scene {
                     _engine.showAd();
                 }
             };
-
         }
 
         _resultText = new Text(resultString, resultFont, _engine,
@@ -90,13 +102,13 @@ public class GameOverScene implements Scene {
         }
 
         //Atributos del juego declarados como final para su uso posterior en callback del boton de Volver a jugar
-        _playAgainButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Volver a jugar", buttonFont, _engine,
+        _playAgainButton = new Button(buttonColor, "Volver a jugar", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50){
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
-                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                        _gameAttributes.backGroundSkinId, _gameAttributes.skin, _gameAttributes.selectedWorld,null);
+                    _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
+                    _gameAttributes.selectedWorld, null);
                 _engine.setCurrentScene(scene);
             }
         };
@@ -117,6 +129,8 @@ public class GameOverScene implements Scene {
 
     @Override
     public void render(Graphics graphics) {
+        graphics.clear(_backgroundColor);
+
         _resultText.render(graphics);
         _attemptsText.render(graphics);
         _attemptsNumberText.render(graphics);

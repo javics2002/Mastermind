@@ -83,10 +83,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         _engineAndroid = new EngineAndroid(sf,this);
 
-        Scene firstScene = new InitialScene(_engineAndroid);
-        _engineAndroid.setCurrentScene(firstScene);
-        _engineAndroid.resume();
-
 
         // Initialisation of sensor shake sound
         _shakeSound = _engineAndroid.getAudio().loadSound("shake.wav", false);
@@ -105,6 +101,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         // Init Game Data
         GameData.Init(_engineAndroid);
         loadGameData();
+
+        Scene firstScene = new InitialScene(_engineAndroid);
+        _engineAndroid.setCurrentScene(firstScene);
+        _engineAndroid.resume();
 
         //Anuncios Inicializado
         MobileAds.initialize(this, new OnInitializationCompleteListener() {

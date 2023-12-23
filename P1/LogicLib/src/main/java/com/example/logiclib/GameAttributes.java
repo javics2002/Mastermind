@@ -10,15 +10,9 @@ public class GameAttributes {
     public boolean isEyeOpen;
     public Combination resultCombination;
     public Scene returnScene;
-    public int skin;
-    public int backGroundSkinId;
     public int selectedWorld;
 
     public GameAttributes() {
-        skin = -1;
-        backGroundSkinId = -1;
         selectedWorld = -1;
     }
-
-
 }

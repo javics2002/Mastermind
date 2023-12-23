@@ -110,8 +110,6 @@ public class EngineAndroid implements Runnable, Engine {
 
     // Método para renderizar la escena actual
     protected void render() {
-        // Limpia el fondo con un color específico
-        getGraphics().clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
         _currentScene.render(_graphics);
     }
 

@@ -16,10 +16,26 @@ public class InitialScene implements Scene {
     private final Text _titleText;
     Engine _engine;
 
+    private final int _backgroundColor;
+
+
     public InitialScene(Engine engine) {
         _engine = engine;
 
         final Graphics graphics = _engine.getGraphics();
+
+        int buttonColor = Colors.colorValues.get(Colors.ColorName.BACKGROUNDBLUE);
+
+        if(GameData.Instance().getCurrentTheme() < 0){
+            _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
+        }
+        else{
+            final Theme theme = _engine.jsonToObject("Shop/Themes/themes_0"
+                    + Integer.toString(GameData.Instance().getCurrentTheme() + 1) + ".json", Theme.class);
+
+            _backgroundColor = Colors.parseARGB(theme.backgroundColor);
+            buttonColor = Colors.parseARGB(theme.buttonColor);
+        }
 
         Font _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
         String title = "Master Mind";
@@ -36,17 +52,17 @@ public class InitialScene implements Scene {
         final Scene returnScene = this;
 
         Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
-        _quickGameButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Partida rápida", buttonFont, _engine,
+        _quickGameButton = new Button(buttonColor, "Partida rápida", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY, buttonWidth, buttonHeight) {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine,  8, 8, 4, 6,
-                        false, returnScene, -1, -1, -1, null);
+                        false, returnScene, -1, null);
                 _engine.setCurrentScene(scene);
             }
         };
 
-        _worldsButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Explorar mundos", buttonFont, _engine,
+        _worldsButton = new Button(buttonColor, "Explorar mundos", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY + buttonHeight + paddingY,
                 buttonWidth, buttonHeight) {
             @Override
@@ -54,7 +70,7 @@ public class InitialScene implements Scene {
                 LevelData data = GameData.Instance().getCurrentLevelData();
                 if (data != null){
                     Scene scene = new GameScene(_engine, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
-                            data.repeat, returnScene, 0, 0, 0,data.resultCombination);
+                            data.repeat, returnScene, 0,data.resultCombination);
                     _engine.setCurrentScene(scene);
                 }
                 else{
@@ -64,7 +80,7 @@ public class InitialScene implements Scene {
             }
         };
 
-        _shareButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Compartir :d", buttonFont, _engine,
+        _shareButton = new Button(buttonColor, "Compartir :d", buttonFont, _engine,
                 graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight() - 100), buttonWidth, buttonHeight) {
             @Override
             public void callback() {
@@ -77,13 +93,13 @@ public class InitialScene implements Scene {
                 50, 50) {
             @Override
             public void callback() {
-                Scene scene = new ShopScene(_engine);
+                Scene scene = new ShopScene(_engine, ShopScene.ShopType.BACKGROUNDS);
                 _engine.setCurrentScene(scene);
             }
         };
 
         Font eraseButtonFont = graphics.newFont("Comfortaa-Regular.ttf", 15f);
-        _eraseProgressButton = new Button(Colors.ColorName.BACKGROUNDRED, "Borrar progreso", eraseButtonFont, _engine,
+        _eraseProgressButton = new Button(buttonColor, "Borrar progreso", eraseButtonFont, _engine,
                 10, 10, graphics.getStringWidth("Borrar progreso", eraseButtonFont) + 10, 50) {
             @Override
             public void callback() {
@@ -98,6 +114,8 @@ public class InitialScene implements Scene {
 
     @Override
     public void render(Graphics graphics) {
+        graphics.clear(_backgroundColor);
+
         _titleText.render(graphics);
         _quickGameButton.render(graphics);
         _worldsButton.render(graphics);
