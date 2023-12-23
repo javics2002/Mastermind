@@ -24,6 +24,7 @@ public class AndroidRewardedAd {
 
     public AndroidRewardedAd(EngineAndroid engine, OnUserEarnedRewardListener earned) {
 
+
         this.engine = engine;
         this.rewardCallback = earned;
 
@@ -61,7 +62,9 @@ public class AndroidRewardedAd {
                                         super.onAdShowedFullScreenContent();
                                         tryLoadAd();
                                     }
-                                    //En este metodo es donde realmente se muestra el anuncio
+                                    //En este metodo es donde realmente se quita el anuncio
+                                    //Recompensamos con intentos al jugador usando game attributes
+                                    //Diferenciamos entre si hay mundos o si de lo contrario es una partida rapida
                                     @Override
                                     public void onAdDismissedFullScreenContent() {
                                         // Este método se llama cuando el usuario cierra el anuncio
