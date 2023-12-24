@@ -76,7 +76,7 @@ public class AndroidRewardedAd {
                                                 if(_gameAttributes.resultCombination!=null){
                                                     Scene scene = new GameScene(_engine, _rewardedAttemps, _rewardedAttemps, _gameAttributes.combinationLength,
                                                         _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                                                        _gameAttributes.selectedWorld, _gameAttributes.resultCombination);
+                                                        _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, _gameAttributes.resultCombination);
                                                     _engine.setCurrentScene(scene);
                                                 }
                                                 

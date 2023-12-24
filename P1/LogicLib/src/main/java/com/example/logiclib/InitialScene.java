@@ -9,8 +9,6 @@ import com.example.aninterface.Scene;
 
 public class InitialScene implements Scene {
     private final Button _quickGameButton, _worldsButton;
-
-    private final Button _shareButton;
     private final Button _customizeButton;
     private final Button _eraseProgressButton;
     private final Text _titleText;
@@ -57,7 +55,7 @@ public class InitialScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine,  8, 8, 4, 6,
-                        false, returnScene, -1, null);
+                        false, returnScene, -1, -1, null);
                 _engine.setCurrentScene(scene);
             }
         };
@@ -67,26 +65,12 @@ public class InitialScene implements Scene {
                 buttonWidth, buttonHeight) {
             @Override
             public void callback() {
-                LevelData data = GameData.Instance().getCurrentLevelData();
-                if (data != null){
-                    Scene scene = new GameScene(_engine, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
-                            data.repeat, returnScene, 0,data.resultCombination);
-                    _engine.setCurrentScene(scene);
-                }
-                else{
-                    Scene scene = new WorldScene(_engine, 0);
-                    _engine.setCurrentScene(scene);
-                }
+                Scene scene = new WorldScene(_engine, 0);
+                _engine.setCurrentScene(scene);
             }
         };
 
-        _shareButton = new Button(buttonColor, "Compartir :d", buttonFont, _engine,
-                graphics.getLogicWidth() / 2 - buttonWidth / 2, (int)(graphics.getLogicHeight() - 100), buttonWidth, buttonHeight) {
-            @Override
-            public void callback() {
-                _engine.shareScreenshot(graphics.getWidth(), graphics.getHeight());
-            }
-        };
+
 
         _customizeButton = new Button("UI/customize.png", _engine,
                 graphics.getLogicWidth() - 60, 10,
@@ -120,8 +104,6 @@ public class InitialScene implements Scene {
         _titleText.render(graphics);
         _quickGameButton.render(graphics);
         _worldsButton.render(graphics);
-
-        _shareButton.render(graphics);
         _customizeButton.render(graphics);
 
         _eraseProgressButton.render(graphics);
@@ -132,8 +114,6 @@ public class InitialScene implements Scene {
         if (input.getTouchEvent().size() > 0) {
             _quickGameButton.handleEvents(input.getTouchEvent().get(0));
             _worldsButton.handleEvents(input.getTouchEvent().get(0));
-
-            _shareButton.handleEvents(input.getTouchEvent().get(0));
             _customizeButton.handleEvents(input.getTouchEvent().get(0));
 
             _eraseProgressButton.handleEvents(input.getTouchEvent().get(0));

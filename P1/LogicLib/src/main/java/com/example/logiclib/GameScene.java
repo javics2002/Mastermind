@@ -23,8 +23,10 @@ public class GameScene implements Scene {
 
     private final int _visibleLayouts = 10;
 
+    boolean overrideData = false;
+
     public GameScene(Engine engine, int tryNumber, int attemptsLeft, int combinationLength, int numberOfColors,
-                     boolean repeatedColors, final Scene returnScene, int worldId, Combination cResult) {
+                     boolean repeatedColors, final Scene returnScene, int worldId, int selectedLevelID, Combination cResult) {
         _engine = engine;
         _graphics = _engine.getGraphics();
 
@@ -43,6 +45,7 @@ public class GameScene implements Scene {
 
         _gameAttributes.returnScene = returnScene;
         _gameAttributes.selectedWorld = worldId;
+        _gameAttributes.selectedLevelID = selectedLevelID;
 
         // Save data attributes
         if (GameData.Instance().getCurrentLevelData() == null){
@@ -56,8 +59,11 @@ public class GameScene implements Scene {
 
             data.resultCombination = _gameAttributes.resultCombination;
             data.leftAttemptsNumber = _gameAttributes.attemptsLeft;
-
             data.combinations = new ArrayList<>();
+
+            data.worldID = _gameAttributes.selectedWorld;
+            data.levelID = _gameAttributes.selectedLevelID;
+
             GameData.Instance().setCurrentLevelData(data);
         }
         else{

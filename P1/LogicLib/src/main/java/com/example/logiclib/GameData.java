@@ -12,18 +12,15 @@ import javax.naming.Context;
 public class GameData {
     private static GameData _instance;
     private ArrayList<WorldData> _worldsData;
-    private Engine _engine;
     private int _money;
-
     private boolean _backgrounds[], _circles[], _themes[];
     private int _currentBackground, _currentCircle, _currentTheme;
 
     private LevelData _currentLevelData;
 
-    private GameData(Engine engine) {
+    private GameData() {
         _worldsData = new ArrayList<>();
         _money = 0;
-        _engine = engine;
 
         _backgrounds = new boolean[ShopScene.backgroundsNumber];
         _circles = new boolean[ShopScene.circlesNumber];
@@ -36,9 +33,9 @@ public class GameData {
         _currentLevelData = null;
     }
 
-    public static void Init(Engine engine) {
+    public static void Init() {
         assert (_instance == null);
-        _instance = new GameData(engine);
+        _instance = new GameData();
     }
 
     public static GameData Instance() {

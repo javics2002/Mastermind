@@ -47,6 +47,16 @@ public class ColorSlot implements GameObject {
         _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
         _numberText = new Text("", _colorNum, engine, 0, 0, colorID);
         _colorID = colorID;
+
+        if(_gameAttributes.selectedWorld == -1 && _hasColor){
+            _color = Colors.getColor(_colorID - 1);
+            _icon = null;
+        }
+        else if (_gameAttributes.selectedWorld >= 0 && _hasColor){
+            _icon = _graphics.loadImage(GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld).getWorldName()
+                    + "/icon" + _colorID + ".png");
+            _color = Colors.getColor(_colorID - 1);
+        }
     }
 
     @Override

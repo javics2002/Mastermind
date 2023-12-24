@@ -13,11 +13,14 @@ public class LevelData implements Serializable {
     public Combination currentCombination;
     public Combination resultCombination;
     public int leftAttemptsNumber;
+    public int worldID;
+    public int levelID;
 
     @Override
     public String toString() {
         return "LevelData[codeSize_" + codeSize + "_codeOpt_" + codeOpt + "_repeat_" + repeat + "_attempts_" + attempts +
                 "_leftAttemptsNumber_" + leftAttemptsNumber + "_combinationsSize_" + combinations.size() +
-                "_resultCombinationSize_" + resultCombination.getColors().length + "_currentCombinationSize_" + currentCombination.getColors().length + "]";
+                "_resultCombinationSize_" + resultCombination.getColors().length + "_currentCombinationSize_" + currentCombination.getColors().length
+                + "_worldID_" + worldID + "_levelID_" + levelID + "]";
     }
 }
