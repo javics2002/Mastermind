@@ -134,45 +134,59 @@ public class ShopScene implements Scene {
                 final int backgroundWidth = (_graphics.getLogicWidth() - (backgroundsPerRow + 1) * _padding) / backgroundsPerRow;
                 final int backgroundHeight = backgroundWidth * 3 / 2;
 
-                _backgroundButtons = new CustomBackground[backgroundsNumber];
+                _backgroundButtons = new CustomBackground[backgroundsNumber + 1];
 
-                for(int i = 0; i < backgroundsNumber; i++){
+                _backgroundButtons[0] = new CustomBackground(-1 == GameData.Instance().getCurrentBackground(),
+                        -1, 0, buttonFont, "UI/defaultProduct.png", _engine,
+                        _padding,_barHeight + _padding, backgroundWidth, backgroundHeight,
+                        priceGap, _coinImage, _moneyText);
+
+                for(int i = 1; i <= backgroundsNumber; i++){
                     int row = i / backgroundsPerRow;
                     int column = i % backgroundsPerRow;
 
                     final Background background = _engine.jsonToObject("Shop/Backgrounds/background_0"
-                            + Integer.toString(i + 1) + ".json", Background.class);
+                            + Integer.toString(i) + ".json", Background.class);
 
-                    _backgroundButtons[i] = new CustomBackground(i == GameData.Instance().getCurrentBackground(),
-                            i, background.price, buttonFont, background.image, _engine,
+                    _backgroundButtons[i] = new CustomBackground(i - 1 == GameData.Instance().getCurrentBackground(),
+                            i - 1, background.price, buttonFont, background.image, _engine,
                             _padding + column * (backgroundWidth + _padding),
                             _barHeight + _padding + row * (backgroundHeight + _padding + priceGap),
                             backgroundWidth, backgroundHeight, priceGap, _coinImage, _moneyText);
                 }
                 break;
             case CIRCLES:
-                final int circlesPerRow = 3;
+                final int circlesPerRow = 4;
                 final int circlesSize = (_graphics.getLogicWidth() - (circlesPerRow + 1) * _padding) / circlesPerRow;
 
-                _circlesButtons = new CustomCircles[circlesNumber];
+                _circlesButtons = new CustomCircles[circlesNumber + 1];
 
-                for(int i = 0; i < circlesNumber; i++){
+                int[] defaultColors = new int[9];
+                for (int i = 0; i < 9; i++){
+                    defaultColors[i] = Colors.getColor(i);
+                }
+                _circlesButtons[0] = new CustomCircles(defaultColors, -1 == GameData.Instance().getCurrentCircle(),
+                        -1, 0, buttonFont, _engine,
+                        _padding, _barHeight + _padding,
+                        circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
+
+                for(int i = 1; i <= circlesNumber; i++){
                     int row = i / circlesPerRow;
                     int column = i % circlesPerRow;
 
                     final Circles circles = _engine.jsonToObject("Shop/Circles/circles_0"
-                            + Integer.toString(i + 1) + ".json", Circles.class);
+                            + Integer.toString(i) + ".json", Circles.class);
 
-                    if(circles.skin){
-                        _circlesButtons[i] = new CustomCircles(circles.packPath, i == GameData.Instance().getCurrentCircle(),
-                                i,circles.price, buttonFont, circles.packPath, _engine,
+                    if(circles.skin) {
+                        _circlesButtons[i] = new CustomCircles(circles.packPath, i - 1 == GameData.Instance().getCurrentCircle(),
+                                i - 1, circles.price, buttonFont, _engine,
                                 _padding + column * (circlesSize + _padding),
                                 _barHeight + _padding + row * (circlesSize + _padding + priceGap),
                                 circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
                     }
                     else {
-                        _circlesButtons[i] = new CustomCircles(circles.colors, i == GameData.Instance().getCurrentCircle(),
-                                i,circles.price, buttonFont, circles.packPath, _engine,
+                        _circlesButtons[i] = new CustomCircles(circles.colors, i - 1 == GameData.Instance().getCurrentCircle(),
+                                i - 1, circles.price, buttonFont, _engine,
                                 _padding + column * (circlesSize + _padding),
                                 _barHeight + _padding + row * (circlesSize + _padding + priceGap),
                                 circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
@@ -183,17 +197,22 @@ public class ShopScene implements Scene {
                 final int themesPerRow = 3;
                 final int themesSize = (_graphics.getLogicWidth() - (themesPerRow + 1) * _padding) / themesPerRow;
 
-                _themeButtons = new CustomTheme[themesNumber];
+                _themeButtons = new CustomTheme[themesNumber + 1];
 
-                for(int i = 0; i < themesNumber; i++){
+                _themeButtons[0] = new CustomTheme(-1 == GameData.Instance().getCurrentTheme(),
+                        -1, 0, Colors.ColorName.BACKGROUND, Colors.ColorName.BACKGROUNDBLUE, buttonFont, _engine,
+                        _padding, _barHeight + _padding,
+                        themesSize, themesSize, priceGap, _coinImage, _moneyText);
+
+                for(int i = 1; i <= themesNumber; i++){
                     int row = i / themesPerRow;
                     int column = i % themesPerRow;
 
                     final Theme theme = _engine.jsonToObject("Shop/Themes/themes_0"
-                            + Integer.toString(i + 1) + ".json", Theme.class);
+                            + Integer.toString(i) + ".json", Theme.class);
 
-                    _themeButtons[i] = new CustomTheme(i == GameData.Instance().getCurrentTheme(),
-                            i, theme.price, theme.backgroundColor, theme.buttonColor, buttonFont, _engine,
+                    _themeButtons[i] = new CustomTheme(i - 1 == GameData.Instance().getCurrentTheme(),
+                            i - 1, theme.price, theme.backgroundColor, theme.buttonColor, buttonFont, _engine,
                             _padding + column * (themesSize + _padding),
                             _barHeight + _padding + row * (themesSize + _padding + priceGap),
                             themesSize, themesSize, priceGap, _coinImage, _moneyText);
@@ -209,15 +228,15 @@ public class ShopScene implements Scene {
     public void update(double deltaTime) {
         switch (_shopType){
             case BACKGROUNDS:
-                for(int i = 0; i < backgroundsNumber; i++)
+                for(int i = 0; i <= backgroundsNumber; i++)
                     _backgroundButtons[i].update(deltaTime);
                 break;
             case CIRCLES:
-                for(int i = 0; i < circlesNumber; i++)
+                for(int i = 0; i <= circlesNumber; i++)
                     _circlesButtons[i].update(deltaTime);
                 break;
             case THEMES:
-                for(int i = 0; i < themesNumber; i++)
+                for(int i = 0; i <= themesNumber; i++)
                     _themeButtons[i].update(deltaTime);
                 break;
             default:
@@ -250,15 +269,15 @@ public class ShopScene implements Scene {
 
         switch (_shopType){
             case BACKGROUNDS:
-                for(int i = 0; i < backgroundsNumber; i++)
+                for(int i = 0; i <= backgroundsNumber; i++)
                     _backgroundButtons[i].render(graphics);
                 break;
             case CIRCLES:
-                for(int i = 0; i < circlesNumber; i++)
+                for(int i = 0; i <= circlesNumber; i++)
                     _circlesButtons[i].render(graphics);
                 break;
             case THEMES:
-                for(int i = 0; i < themesNumber; i++)
+                for(int i = 0; i <= themesNumber; i++)
                     _themeButtons[i].render(graphics);
                 break;
             default:
@@ -278,15 +297,15 @@ public class ShopScene implements Scene {
 
             switch (_shopType){
                 case BACKGROUNDS:
-                    for(int i = 0; i < backgroundsNumber; i ++)
+                    for(int i = 0; i <= backgroundsNumber; i ++)
                         _backgroundButtons[i].handleEvents(input.getTouchEvent().get(0));
                     break;
                 case CIRCLES:
-                    for(int i = 0; i < circlesNumber; i++)
+                    for(int i = 0; i <= circlesNumber; i++)
                         _circlesButtons[i].handleEvents(input.getTouchEvent().get(0));
                     break;
                 case THEMES:
-                    for(int i = 0; i < themesNumber; i++)
+                    for(int i = 0; i <= themesNumber; i++)
                         _themeButtons[i].handleEvents(input.getTouchEvent().get(0));
                     break;
                 default:

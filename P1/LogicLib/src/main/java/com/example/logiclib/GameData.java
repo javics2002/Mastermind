@@ -93,6 +93,10 @@ public class GameData {
     }
 
     public boolean hasBackground(int index){
+        //Default background
+        if(index == -1)
+            return true;
+
         //No es valido
         if(index < 0 || index >= ShopScene.backgroundsNumber)
             return false;
@@ -101,6 +105,10 @@ public class GameData {
     }
 
     public boolean hasCircle(int index){
+        //Default circles
+        if(index == -1)
+            return true;
+
         //No es valido
         if(index < 0 || index >= ShopScene.circlesNumber)
             return false;
@@ -109,6 +117,10 @@ public class GameData {
     }
 
     public boolean hasTheme(int index){
+        //Default theme
+        if(index == -1)
+            return true;
+
         //No es valido
         if(index < 0 || index >= ShopScene.themesNumber)
             return false;
