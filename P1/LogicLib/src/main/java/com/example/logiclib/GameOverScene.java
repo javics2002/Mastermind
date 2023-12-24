@@ -190,7 +190,7 @@ public class GameOverScene implements Scene {
                     _engine.setCurrentScene(scene);
                 }
                 else{
-                    Scene scene = new WorldScene(_engine, _gameAttributes.selectedWorld);
+                    WorldScene scene = new WorldScene(_engine, _gameAttributes.selectedWorld);
                     _engine.setCurrentScene(scene);
                 }
             }

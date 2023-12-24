@@ -105,7 +105,14 @@ public class GameScene implements Scene {
             @Override
             public void callback() {
                 GameData.Instance().resetCurrentLevelData();
-                _engine.setCurrentScene(returnScene);
+                if (_gameAttributes.selectedWorld == -1){
+                    Scene scene = new InitialScene(_engine);
+                    _engine.setCurrentScene(scene);
+                }
+                else{
+                    WorldScene scene = new WorldScene(_engine, _gameAttributes.selectedWorld);
+                    _engine.setCurrentScene(scene);
+                }
             }
         };
 
