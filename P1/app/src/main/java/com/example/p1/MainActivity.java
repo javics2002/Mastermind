@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor senProximity;
     private long lastUpdate = 0;
     private float last_x, last_y, last_z;
+    private int cmDistance=5;
     private static final int SHAKE_THRESHOLD = 1000;
 
     //Crear un sonido para cuando se agita
@@ -618,7 +619,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         if (mySensor.getType() == Sensor.TYPE_PROXIMITY) {
             // Obtenemos la distancia en centímetros
             float distance = event.values[0];
-            if (distance < 5) {
+            if (distance < cmDistance) {
                 _shakeSound.play();
             }
         }
