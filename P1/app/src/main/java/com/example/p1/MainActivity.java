@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
 
             int currentTheme = objectInputStream.readInt();
-            GameData.Instance().setCircle(currentTheme);
+            GameData.Instance().setTheme(currentTheme);
             currentFileContent += currentTheme;
 
             // Load LevelData
