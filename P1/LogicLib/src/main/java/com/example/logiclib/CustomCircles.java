@@ -38,7 +38,7 @@ public class CustomCircles extends Button {
         _index = index;
         _price = price;
         _selected = selected;
-        _adquired = GameData.Instance().hasBackground(_index);
+        _adquired = GameData.Instance().hasCircle(_index);
         _priceGap = priceGap;
 
         _purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
@@ -118,7 +118,7 @@ public class CustomCircles extends Button {
         if (GameData.Instance().hasCircle(_index)) {
             _clickSound.play();
 
-            GameData.Instance().setCircle(_index);
+            GameData.Instance().setCircles(_index);
         }
         else if (GameData.Instance().purchaseCircle(_index, _price)) {
             _purchaseSound.play();
@@ -126,13 +126,13 @@ public class CustomCircles extends Button {
             _moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
             _adquired = true;
 
-            GameData.Instance().setCircle(_index);
+            GameData.Instance().setCircles(_index);
         }
     }
 
     @Override
     public void update(double deltaTime){
-        _selected = GameData.Instance().getCurrentCircle() == _index;
+        _selected = GameData.Instance().getCurrentCircles() == _index;
     }
 
     @Override

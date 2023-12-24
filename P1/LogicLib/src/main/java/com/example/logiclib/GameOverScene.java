@@ -36,8 +36,7 @@ public class GameOverScene implements Scene {
             _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
         }
         else{
-            final Theme theme = _engine.jsonToObject("Shop/Themes/themes_0"
-                    + Integer.toString(GameData.Instance().getCurrentTheme() + 1) + ".json", Theme.class);
+            final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
 
             _backgroundColor = Colors.parseARGB(theme.backgroundColor);
             buttonColor = Colors.parseARGB(theme.buttonColor);

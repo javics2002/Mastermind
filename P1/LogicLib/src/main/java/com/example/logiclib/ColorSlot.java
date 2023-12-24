@@ -89,13 +89,12 @@ public class ColorSlot implements GameObject {
         _numberText.setPos(textX, textY);
 
         if(_gameAttributes.selectedWorld == -1){
-            if(GameData.Instance().getCurrentCircle() < 0){
+            if(GameData.Instance().getCurrentCircles() < 0){
                 _color = Colors.getColor(_colorID - 1);
                 _icon = null;
             }
             else{
-                final Circles circles = _engine.jsonToObject("Shop/Circles/circles_0"
-                        + Integer.toString(GameData.Instance().getCurrentCircle() + 1) + ".json", Circles.class);
+                final Circles circles = GameData.Instance().getCircles().get(GameData.Instance().getCurrentCircles());
 
                 if(circles.skin){
                     _icon = _graphics.loadImage(circles.packPath + "/icon" + _colorID + ".png");

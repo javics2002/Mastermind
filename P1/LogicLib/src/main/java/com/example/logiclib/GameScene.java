@@ -68,8 +68,7 @@ public class GameScene implements Scene {
             _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
         }
         else{
-            final Theme theme = _engine.jsonToObject("Shop/Themes/themes_0"
-                    + Integer.toString(GameData.Instance().getCurrentTheme() + 1) + ".json", Theme.class);
+            final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
 
             _backgroundColor = Colors.parseARGB(theme.backgroundColor);
         }
@@ -162,8 +161,7 @@ public class GameScene implements Scene {
                     _graphics.loadImage(GameData.Instance().getWorldDataByIndex(worldId).getWorldName() + "/background.png");
         }
         else if (GameData.Instance().getCurrentBackground() >= 0) {
-            final Background background = engine.jsonToObject("Shop/Backgrounds/background_0"
-                    + Integer.toString(GameData.Instance().getCurrentBackground() + 1) + ".json", Background.class);
+            final Background background = GameData.Instance().getBackgrounds().get(GameData.Instance().getCurrentBackground());
 
             _backgroundImage = _graphics.loadImage(background.image);
         }

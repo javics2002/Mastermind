@@ -1,13 +1,8 @@
 package com.example.logiclib;
 
 import com.example.aninterface.Engine;
-import com.example.aninterface.IFile;
 
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import javax.naming.Context;
 
 public class GameData {
     private static GameData _instance;
@@ -15,8 +10,10 @@ public class GameData {
     private Engine _engine;
     private int _money;
 
-    private boolean _backgrounds[], _circles[], _themes[];
-    private int _currentBackground, _currentCircle, _currentTheme;
+    private ArrayList<Background> _backgrounds;
+    private ArrayList<Circles> _circles;
+    private ArrayList<Theme> _themes;
+    private int _currentBackground, _currentCircles, _currentTheme;
 
     private LevelData _currentLevelData;
 
@@ -25,12 +22,12 @@ public class GameData {
         _money = 0;
         _engine = engine;
 
-        _backgrounds = new boolean[ShopScene.backgroundsNumber];
-        _circles = new boolean[ShopScene.circlesNumber];
-        _themes = new boolean[ShopScene.themesNumber];
+        _backgrounds = new ArrayList<>();
+        _circles = new ArrayList<>();
+        _themes = new ArrayList<>();
 
         _currentBackground = -1;
-        _currentCircle = -1;
+        _currentCircles = -1;
         _currentTheme = -1;
 
         _currentLevelData = null;
@@ -52,17 +49,22 @@ public class GameData {
     }
 
     public void reset(){
+        for(WorldData worldData : _worldsData)
+            worldData.setLastLevelUnlocked(0);
+
         _money = 0;
 
-        for(int i = 0; i < ShopScene.backgroundsNumber; i++)
-            _backgrounds[i] = false;
-        for(int i = 0; i < ShopScene.circlesNumber; i++)
-            _circles[i] = false;
-        for(int i = 0; i < ShopScene.themesNumber; i++)
-            _themes[i] = false;
+        for(Background background : _backgrounds)
+            background.acquired = false;
+
+        for(Circles circles : _circles)
+            circles.acquired = false;
+
+        for(Theme theme : _themes)
+            theme.acquired = false;
 
         _currentBackground = -1;
-        _currentCircle = -1;
+        _currentCircles = -1;
         _currentTheme = -1;
 
         _currentLevelData = null;
@@ -92,16 +94,52 @@ public class GameData {
         _money += money;
     }
 
+    public ArrayList<Background> getBackgrounds(){
+        return _backgrounds;
+    }
+
+    public ArrayList<Circles> getCircles() {
+        return _circles;
+    }
+
+    public ArrayList<Theme> getThemes(){
+        return _themes;
+    }
+
+    public void addBackground(Background background){
+        _backgrounds.add(background);
+    }
+
+    public void addCircles(Circles circles){
+        _circles.add(circles);
+    }
+
+    public void addTheme(Theme theme){
+        _themes.add(theme);
+    }
+
+    public void removeBackgroundByIndex(int index){
+        _backgrounds.remove(index);
+    }
+
+    public void removeCirclesByIndex(int index){
+        _circles.remove(index);
+    }
+
+    public void removeThemesByIndex(int index){
+        _themes.remove(index);
+    }
+
     public boolean hasBackground(int index){
         //Default background
         if(index == -1)
             return true;
 
         //No es valido
-        if(index < 0 || index >= ShopScene.backgroundsNumber)
+        if(index < 0 || index >= _backgrounds.size())
             return false;
 
-        return _backgrounds[index];
+        return _backgrounds.get(index).acquired;
     }
 
     public boolean hasCircle(int index){
@@ -110,10 +148,10 @@ public class GameData {
             return true;
 
         //No es valido
-        if(index < 0 || index >= ShopScene.circlesNumber)
+        if(index < 0 || index >= _circles.size())
             return false;
 
-        return _circles[index];
+        return _circles.get(index).acquired;
     }
 
     public boolean hasTheme(int index){
@@ -122,28 +160,28 @@ public class GameData {
             return true;
 
         //No es valido
-        if(index < 0 || index >= ShopScene.themesNumber)
+        if(index < 0 || index >= _themes.size())
             return false;
 
-        return _themes[index];
+        return _themes.get(index).acquired;
     }
 
     public boolean purchaseBackground(int index, int price){
         //No es valido
-        if(index < 0 || index >= ShopScene.backgroundsNumber)
+        if(index < 0 || index >= _backgrounds.size())
             return false;
 
         //Ya lo tienes
-        if(_backgrounds[index])
+        if(_backgrounds.get(index).acquired)
             return false;
 
         //Compramos fondo
         if(_money >= price){
             _money -= price;
-            _backgrounds[index] = true;
+            _backgrounds.get(index).acquired = true;
         }
 
-        return _backgrounds[index];
+        return _backgrounds.get(index).acquired;
     }
 
     public boolean setBackground(int index){
@@ -154,11 +192,11 @@ public class GameData {
         }
 
         //No es valido
-        if(index < 0 || index >= ShopScene.backgroundsNumber)
+        if(index < 0 || index >= _backgrounds.size())
             return false;
 
         //No lo tienes
-        if(!_backgrounds[index])
+        if(!_backgrounds.get(index).acquired)
             return false;
 
         _currentBackground = index;
@@ -167,57 +205,57 @@ public class GameData {
 
     public boolean purchaseCircle(int index, int price){
         //No es valido
-        if(index < 0 || index >= ShopScene.circlesNumber)
+        if(index < 0 || index >= _circles.size())
             return false;
 
         //Ya lo tienes
-        if(_circles[index])
+        if(_circles.get(index).acquired)
             return false;
 
         //Compramos fondo
         if(_money >= price){
             _money -= price;
-            _circles[index] = true;
+            _circles.get(index).acquired = true;
         }
 
-        return _circles[index];
+        return _circles.get(index).acquired;
     }
 
-    public boolean setCircle(int index){
+    public boolean setCircles(int index){
         //Erase selection
         if(index == -1){
-            _currentCircle = -1;
+            _currentCircles = -1;
             return true;
         }
 
         //No es valido
-        if(index < 0 || index >= ShopScene.circlesNumber)
+        if(index < 0 || index >= _circles.size())
             return false;
 
         //No lo tienes
-        if(!_circles[index])
+        if(!_circles.get(index).acquired)
             return false;
 
-        _currentCircle = index;
+        _currentCircles = index;
         return true;
     }
 
     public boolean purchaseTheme(int index, int price){
         //No es valido
-        if(index < 0 || index >= ShopScene.themesNumber)
+        if(index < 0 || index >= _themes.size())
             return false;
 
         //Ya lo tienes
-        if(_themes[index])
+        if(_themes.get(index).acquired)
             return false;
 
         //Compramos fondo
         if(_money >= price){
             _money -= price;
-            _themes[index] = true;
+            _themes.get(index).acquired = true;
         }
 
-        return _themes[index];
+        return _themes.get(index).acquired;
     }
 
     public boolean setTheme(int index){
@@ -228,11 +266,11 @@ public class GameData {
         }
 
         //No es valido
-        if(index < 0 || index >= ShopScene.themesNumber)
+        if(index < 0 || index >= _themes.size())
             return false;
 
         //No lo tienes
-        if(!_themes[index])
+        if(!_themes.get(index).acquired)
             return false;
 
         _currentTheme = index;
@@ -243,8 +281,9 @@ public class GameData {
         return _currentBackground;
     }
 
-    public int getCurrentCircle(){
-        return _currentCircle;
+
+    public int getCurrentCircles(){
+        return _currentCircles;
     }
 
     public int getCurrentTheme(){
