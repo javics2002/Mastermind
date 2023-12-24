@@ -189,7 +189,7 @@ public class EngineAndroid implements Runnable, Engine {
                         Intent intent = new Intent(android.content.Intent.ACTION_SEND);
                         intent.putExtra(Intent.EXTRA_STREAM, fileUri);
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                        intent.putExtra(Intent.EXTRA_TEXT, "¡Mira esta imagen!");
+                        intent.putExtra(Intent.EXTRA_TEXT, "¡He completado el nivel!");
                         intent.setType("image/png");
 
                         activity.startActivity(Intent.createChooser(intent, "Share"));

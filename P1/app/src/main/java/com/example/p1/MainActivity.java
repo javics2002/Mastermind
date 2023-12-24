@@ -16,6 +16,7 @@ import com.example.libengineandroid.EngineAndroid;
 import com.example.logiclib.Background;
 import com.example.logiclib.Circles;
 import com.example.logiclib.GameData;
+import com.example.logiclib.GameScene;
 import com.example.logiclib.InitialScene;
 //Auncios
 import com.example.logiclib.LevelData;
@@ -75,23 +76,22 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         _shakeSound = _engineAndroid.getAudio().loadSound("shake.wav", false);
         _shakeSound.setVolume(.5f);
 
-        // HASH
-//        String salt = "messi";
-//
-//        String hash = hashJson("filecontent"); // TODO: get file content
-//        String finalHash = hashJson(hash + "filecontent" + salt); // TODO: get file content
-
-        // TODO:
-        // guardar finalHash dentro del json
-
-
         // Init Game Data
-        GameData.Init(_engineAndroid);
+        GameData.Init();
         loadGameData();
 
         Scene firstScene = new InitialScene(_engineAndroid);
-        _engineAndroid.setCurrentScene(firstScene);
-        _engineAndroid.resume();
+
+        if (GameData.Instance().getCurrentLevelData() != null) {
+            LevelData data = GameData.Instance().getCurrentLevelData();
+            Scene scene = new GameScene(_engineAndroid, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
+                    data.repeat, firstScene, data.worldID, data.levelID, data.resultCombination);
+            _engineAndroid.setCurrentScene(scene);
+        }
+        else{
+            _engineAndroid.setCurrentScene(firstScene);
+            _engineAndroid.resume();
+        }
 
         //Anuncios Inicializado
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
@@ -124,8 +124,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         try {
             FileInputStream fileInputStream = _engineAndroid.getActivity().openFileInput(fileName);
             ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-
-            doesSaveExist = true;
 
             String currentFileContent = "";
 
@@ -197,9 +195,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             String hash = hashJson(currentFileContent);
             String finalHash = hashJson(hash + currentFileContent + salt);
 
-            if (!saveHash.equals(finalHash)){
-                doesSaveExist = false;
-            }
+            doesSaveExist = saveHash.equals(finalHash);
 
             objectInputStream.close();
             fileInputStream.close();
@@ -418,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 GameData.Instance().addBackground(background);
             }
 
-            for (int i = 0; i < backgroundsFolderNames.length; i++) {
+            for (int i = 0; i < circlesFolderNames.length; i++) {
                 final Circles circles = _engineAndroid.jsonToObject("Shop/Circles/"
                         + circlesFolderNames[i], Circles.class);
                 circles.name = circlesFolderNames[i];
@@ -426,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 GameData.Instance().addCircles(circles);
             }
 
-            for (int i = 0; i < backgroundsFolderNames.length; i++) {
+            for (int i = 0; i < themesFolderNames.length; i++) {
                 final Theme theme = _engineAndroid.jsonToObject("Shop/Themes/"
                         + themesFolderNames[i], Theme.class);
                 theme.name = themesFolderNames[i];

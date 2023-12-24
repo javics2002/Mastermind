@@ -7,7 +7,6 @@ import java.util.ArrayList;
 public class GameData {
     private static GameData _instance;
     private ArrayList<WorldData> _worldsData;
-    private Engine _engine;
     private int _money;
 
     private ArrayList<Background> _backgrounds;
@@ -17,10 +16,9 @@ public class GameData {
 
     private LevelData _currentLevelData;
 
-    private GameData(Engine engine) {
+    private GameData() {
         _worldsData = new ArrayList<>();
         _money = 0;
-        _engine = engine;
 
         _backgrounds = new ArrayList<>();
         _circles = new ArrayList<>();
@@ -33,9 +31,9 @@ public class GameData {
         _currentLevelData = null;
     }
 
-    public static void Init(Engine engine) {
+    public static void Init() {
         assert (_instance == null);
-        _instance = new GameData(engine);
+        _instance = new GameData();
     }
 
     public static GameData Instance() {

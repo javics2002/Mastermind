@@ -121,7 +121,7 @@ public class WorldScene implements Scene {
                 @Override
                 public void callback() {
                     Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
-                            level.repeat, returnScene, worldId, null);
+                            level.repeat, returnScene, worldId, level.levelID, null);
                     _engine.setCurrentScene(scene);
                 }
             };

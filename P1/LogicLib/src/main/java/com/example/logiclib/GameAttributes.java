@@ -11,6 +11,7 @@ public class GameAttributes {
     public Combination resultCombination;
     public Scene returnScene;
     public int selectedWorld;
+    public int selectedLevelID;
 
     public GameAttributes() {
         selectedWorld = -1;
