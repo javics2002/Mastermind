@@ -99,8 +99,9 @@ public class InitialScene implements Scene {
         };
 
         Font eraseButtonFont = graphics.newFont("Comfortaa-Regular.ttf", 15f);
-        _eraseProgressButton = new Button(buttonColor, "Borrar progreso", eraseButtonFont, _engine,
-                10, 10, graphics.getStringWidth("Borrar progreso", eraseButtonFont) + 10, 50) {
+        _eraseProgressButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDRED),
+                "Borrar progreso", eraseButtonFont, _engine,  10, 10,
+                graphics.getStringWidth("Borrar progreso", eraseButtonFont) + 10, 50) {
             @Override
             public void callback() {
                 GameData.Instance().reset();

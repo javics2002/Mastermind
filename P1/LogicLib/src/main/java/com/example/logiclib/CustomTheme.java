@@ -26,11 +26,33 @@ public class CustomTheme extends Button{
         _index = index;
         _price = price;
         _selected = selected;
-        _adquired = GameData.Instance().hasBackground(_index);
+        _adquired = GameData.Instance().hasTheme(_index);
         _priceGap = priceGap;
 
         _backgroundColor = Colors.parseARGB(backgroundColor);
         _buttonColor = Colors.parseARGB(buttonColor);
+
+        _purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
+        _purchaseSound.setVolume(.5f);
+
+        _coin = coin;
+        _moneyText = moneyText;
+    }
+
+    CustomTheme(boolean selected, int index, int price, Colors.ColorName backgroundColor,
+                Colors.ColorName buttonColor, Font font, Engine engine,
+                int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
+        super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK), Integer.toString(price), font,
+                engine, positionX, positionY, width, height);
+
+        _index = index;
+        _price = price;
+        _selected = selected;
+        _adquired = GameData.Instance().hasTheme(_index);
+        _priceGap = priceGap;
+
+        _backgroundColor = Colors.colorValues.get(backgroundColor);
+        _buttonColor = Colors.colorValues.get(buttonColor);
 
         _purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
         _purchaseSound.setVolume(.5f);
