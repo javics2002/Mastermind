@@ -20,7 +20,6 @@ import com.example.p1.R;
 public class NotificationWorker extends Worker {
 
     private Context context;
-    final int _monedas=20;
 
     public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
         super(context, workerParams);

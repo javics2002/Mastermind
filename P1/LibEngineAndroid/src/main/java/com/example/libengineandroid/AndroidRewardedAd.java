@@ -17,19 +17,19 @@ import androidx.annotation.NonNull;
 public class AndroidRewardedAd {
 
     private RewardedAd rewardedAd;
-    private int rewardedAttemps =2;
-    private final OnUserEarnedRewardListener rewardCallback;
-    private final EngineAndroid engine;
-    private final AdRequest adRequest;
+    private int _rewardedAttemps =2;
+    private final OnUserEarnedRewardListener _rewardCallback;
+    private final EngineAndroid _engine;
+    private final AdRequest _adRequest;
 
     public AndroidRewardedAd(EngineAndroid engine, OnUserEarnedRewardListener earned) {
 
 
-        this.engine = engine;
-        this.rewardCallback = earned;
+        this._engine = engine;
+        this._rewardCallback = earned;
 
         // Request de un anuncio como el banner
-        adRequest = new AdRequest.Builder().build();
+        _adRequest = new AdRequest.Builder().build();
 
         tryLoadAd();
 
@@ -38,11 +38,11 @@ public class AndroidRewardedAd {
 
     //Intenta cargar el anuncio
     private void tryLoadAd() {
-        engine.getActivity().runOnUiThread(new Runnable() {
+        _engine.getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                RewardedAd.load(engine.getActivity(), "ca-app-pub-3940256099942544/5224354917",
-                        adRequest, new RewardedAdLoadCallback() {
+                RewardedAd.load(_engine.getActivity(), "ca-app-pub-3940256099942544/5224354917",
+                        _adRequest, new RewardedAdLoadCallback() {
                             @Override
                             public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
                                 super.onAdFailedToLoad(loadAdError);
@@ -68,16 +68,16 @@ public class AndroidRewardedAd {
                                     @Override
                                     public void onAdDismissedFullScreenContent() {
                                         // Este método se llama cuando el usuario cierra el anuncio
-                                        if (engine.getScene() instanceof GameOverScene) {
-                                            GameOverScene gameOverScene = (GameOverScene) engine.getScene();
+                                        if (_engine.getScene() instanceof GameOverScene) {
+                                            GameOverScene gameOverScene = (GameOverScene) _engine.getScene();
                                             GameAttributes _gameAttributes= gameOverScene.getGameAttributtes();
 
                                             if(_gameAttributes!=null) {
                                                 if(_gameAttributes.resultCombination!=null){
-                                                    Scene scene = new GameScene(engine, rewardedAttemps, rewardedAttemps, _gameAttributes.combinationLength,
+                                                    Scene scene = new GameScene(_engine, _rewardedAttemps, _rewardedAttemps, _gameAttributes.combinationLength,
                                                         _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
                                                         _gameAttributes.selectedWorld, _gameAttributes.resultCombination);
-                                                    engine.setCurrentScene(scene);
+                                                    _engine.setCurrentScene(scene);
                                                 }
                                                 
                                             }
@@ -92,10 +92,10 @@ public class AndroidRewardedAd {
     }
 
     public void show() {
-        engine.getActivity().runOnUiThread(() -> {
+        _engine.getActivity().runOnUiThread(() -> {
             // Si se ha creado correctamente
             if (rewardedAd != null) {
-                rewardedAd.show(engine.getActivity(), rewardCallback);
+                rewardedAd.show(_engine.getActivity(), _rewardCallback);
             }
             else {
                 //Si no, se intenta cargar de nuevo
