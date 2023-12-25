@@ -77,7 +77,8 @@ public class AndroidRewardedAd {
                                             if (GameData.Instance().getCurrentLevelData() != null) {
                                                 LevelData data = GameData.Instance().getCurrentLevelData();
                                                 Scene scene = new GameScene(_engine, data.attempts + _rewardedAttemps, _rewardedAttemps,
-                                                        data.codeSize, data.codeOpt, data.repeat, _gameAttributes.returnScene, data.worldID, data.levelID, data.resultCombination);
+                                                        data.codeSize, data.codeOpt, data.repeat, _gameAttributes.returnScene, data.worldID, 
+                                                        data.levelID, _gameAttributes.reward, data.resultCombination);
                                                 _engine.setCurrentScene(scene);
                                             }
 

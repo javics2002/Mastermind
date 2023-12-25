@@ -51,7 +51,7 @@ public class InitialScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine,  8, 8, 4, 6,
-                        false, returnScene, -1, -1, null);
+                        false, returnScene, -1, -1, 0, null);
                 _engine.setCurrentScene(scene);
             }
         };

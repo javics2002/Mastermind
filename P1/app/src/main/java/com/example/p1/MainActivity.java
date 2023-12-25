@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity  {
         if (GameData.Instance().getCurrentLevelData() != null) {
             LevelData data = GameData.Instance().getCurrentLevelData();
             Scene scene = new GameScene(_engineAndroid, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
-                    data.repeat, firstScene, data.worldID, data.levelID, data.resultCombination);
+                    data.repeat, firstScene, data.worldID, data.levelID, data.reward, data.resultCombination);
             _engineAndroid.setCurrentScene(scene);
         }
         else{

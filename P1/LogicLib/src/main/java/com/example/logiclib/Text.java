@@ -11,7 +11,7 @@ public class Text implements GameObject {
     private final int _color;
     private final Graphics _graphics;
     private int _posX, _posY;
-    Font _font;
+    private Font _font;
 
     Text(String text, Font font, Engine engine, int posX, int posY, int color) {
         _graphics = engine.getGraphics();

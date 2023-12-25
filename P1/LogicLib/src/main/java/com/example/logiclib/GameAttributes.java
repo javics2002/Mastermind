@@ -12,6 +12,7 @@ public class GameAttributes {
     public Scene returnScene;
     public int selectedWorld;
     public int selectedLevelID;
+    public int reward;
 
     public GameAttributes() {
         selectedWorld = -1;

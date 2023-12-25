@@ -20,6 +20,7 @@ public class GameOverScene implements Scene {
     private Image _coinImage;
     private Text _moneyText;
     private Button _adButton;
+    private final int _coinSize = 40;
 
     Engine _engine;
     GameAttributes _gameAttributes;
@@ -51,7 +52,6 @@ public class GameOverScene implements Scene {
                 attemptsNumberFont = graphics.newFont("Comfortaa-Regular.ttf", 24f),
                 codeFont = graphics.newFont("Comfortaa-Regular.ttf", 18f);
         String resultString, attemptsString, attemptsNumberString, codeString = "Código:";
-
 
         final int buttonWidth = 430;
         final int buttonHeight = 90;
@@ -109,7 +109,7 @@ public class GameOverScene implements Scene {
 
                         Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                                 _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                                _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, null);
+                                _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, _gameAttributes.reward, null);
                         _engine.setCurrentScene(scene);
                     }
                 };
@@ -135,18 +135,19 @@ public class GameOverScene implements Scene {
                         LevelData level = _engine.jsonToObject(levelPath, LevelData.class);
 
                         Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
-                                level.repeat, _gameAttributes.returnScene, _gameAttributes.selectedWorld, levelID + 1, null);
+                                level.repeat, _gameAttributes.returnScene, _gameAttributes.selectedWorld,
+                                levelID + 1, _gameAttributes.reward, null);
                         _engine.setCurrentScene(scene);
                     }
                 };
 
                 _coinImage = graphics.loadImage("UI/coin.png");
 
-                GameData.Instance().addMoney(2);
-                String moneyString = "+2 - Total: " + Integer.toString(GameData.Instance().getMoney());
+                GameData.Instance().addMoney(_gameAttributes.reward);
+                String moneyString = "+" + _gameAttributes.reward + " - Total: " + Integer.toString(GameData.Instance().getMoney());
 
                 _moneyText = new Text(moneyString, resultFont, _engine,
-                        graphics.getLogicWidth() - graphics.getStringWidth(moneyString, resultFont) - 80,
+                        graphics.getLogicWidth() / 2 - (_coinSize + graphics.getStringWidth(moneyString, resultFont)) / 2 + _coinSize,
                         graphics.getLogicHeight() / 2 + graphics.getStringHeight(moneyString, resultFont) / 2 - 30, 0);
             }
         } else {
@@ -172,7 +173,7 @@ public class GameOverScene implements Scene {
 
                     Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                             _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                            _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, null);
+                            _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, _gameAttributes.reward, null);
                     _engine.setCurrentScene(scene);
                 }
             };
@@ -232,8 +233,10 @@ public class GameOverScene implements Scene {
         }
 
         if (_coinImage != null){
-            graphics.drawImage(_coinImage, graphics.getLogicWidth() / 2 - 80 / 2 - 110, graphics.getLogicHeight() / 2 - 80 / 2 - 30,
-                    80, 80);
+            final int padding = 10;
+            graphics.drawImage(_coinImage, graphics.getLogicWidth() / 2
+                            - (_coinSize + graphics.getStringWidth(_moneyText.getText(), _moneyText.getFont())) / 2 - padding,
+                    graphics.getLogicHeight() / 2 - _coinSize / 2 - 30, _coinSize, _coinSize);
         }
 
         if (_moneyText != null) {
