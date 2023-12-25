@@ -1,4 +1,5 @@
-package com.example.p1;
+package com.example.libengineandroid;
+
 
 import android.content.Context;
 import android.hardware.Sensor;
@@ -7,7 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import com.example.aninterface.Sound;
 
-public class SensorManagerWrapper implements SensorEventListener {
+public class SensorManagerAndroid implements SensorEventListener {
     private SensorManager _senSensorManager;
     private Sensor _senAccelerometer;
     private Sensor _senProximity;
@@ -18,7 +19,7 @@ public class SensorManagerWrapper implements SensorEventListener {
 
     private Sound _shakeSound;
 
-    public SensorManagerWrapper(Context context, Sound shakeSound) {
+    public SensorManagerAndroid(Context context, Sound shakeSound) {
         _senSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         _senAccelerometer = _senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         _senProximity = _senSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);

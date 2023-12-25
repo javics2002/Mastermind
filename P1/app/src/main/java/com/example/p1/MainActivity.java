@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.aninterface.Scene;
 import com.example.aninterface.Sound;
 import com.example.libengineandroid.EngineAndroid;
+import com.example.libengineandroid.SensorManagerAndroid;
 import com.example.logiclib.Background;
 import com.example.logiclib.Circles;
 import com.example.logiclib.GameData;
@@ -28,11 +29,6 @@ import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
-
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity  {
     //Anuncios
     private AdView mAdView;
 
-    private  SensorManagerWrapper sensorManagerWrapper;
+    private  SensorManagerAndroid sensorManagerWrapper;
     //Crear un sonido para cuando se agita
     private Sound _shakeSound;
 
@@ -109,9 +105,9 @@ public class MainActivity extends AppCompatActivity  {
 
         createAdRequest();
         createNotificationsChannel();
-        // Inicializar el wrapper del sensor
-        sensorManagerWrapper = new SensorManagerWrapper(this, _shakeSound);
-        sensorManagerWrapper.registerListener();
+        // Inicializar el wrapper del sensor( se registra en la propia clase)
+        sensorManagerWrapper = new SensorManagerAndroid(this, _shakeSound);
+
     }
 
     private void loadGameData() {
