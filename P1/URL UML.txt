@@ -1,11 +1,1 @@
 https://app.moqups.com/D8ersGczN1hWw9ZYvLenHHeTFLY1dDpg/share#
-
-Girar la pantalla en android y se reinicia.
-Singleton con las variables publicas? Le pasas la instancia
-Estructura de escenas
-Herencia de botones. Eliminar con lambda expressions.
-Carpeta assets
-Insets
-
-Arreglar problema de memoria: guardar la imagen en un hashmap y crearla solo 1 vez.
-Hacer un circulo y bordes redondeados.

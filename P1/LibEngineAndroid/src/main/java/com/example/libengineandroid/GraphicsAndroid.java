@@ -59,8 +59,7 @@ public class GraphicsAndroid implements Graphics {
     //Limpieza de pantalla poniendolo todo de un color usando la variable canvas
     @Override
     public void clear(int color) {
-        //TODO ponerlo a false
-        final boolean debug = true;
+        final boolean debug = false;
         if (debug) {
             _canvas.drawColor(0);
 
