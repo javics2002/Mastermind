@@ -3,8 +3,10 @@ import android.util.Log;
 
 import com.example.aninterface.Scene;
 import com.example.logiclib.GameAttributes;
+import com.example.logiclib.GameData;
 import com.example.logiclib.GameOverScene;
 import com.example.logiclib.GameScene;
+import com.example.logiclib.LevelData;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -72,15 +74,13 @@ public class AndroidRewardedAd {
                                             GameOverScene gameOverScene = (GameOverScene) _engine.getScene();
                                             GameAttributes _gameAttributes= gameOverScene.getGameAttributtes();
 
-                                            if(_gameAttributes!=null) {
-                                                if(_gameAttributes.resultCombination!=null){
-                                                    Scene scene = new GameScene(_engine, _rewardedAttemps, _rewardedAttemps, _gameAttributes.combinationLength,
-                                                        _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-                                                        _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, _gameAttributes.resultCombination);
-                                                    _engine.setCurrentScene(scene);
-                                                }
-                                                
+                                            if (GameData.Instance().getCurrentLevelData() != null) {
+                                                LevelData data = GameData.Instance().getCurrentLevelData();
+                                                Scene scene = new GameScene(_engine, data.attempts + _rewardedAttemps, _rewardedAttemps,
+                                                        data.codeSize, data.codeOpt, data.repeat, _gameAttributes.returnScene, data.worldID, data.levelID, data.resultCombination);
+                                                _engine.setCurrentScene(scene);
                                             }
+
                                             else Log.d("AD","GAME ATTRIBUTES INITIALISATION ERROR IN REWARDED AD CALLBACK");
                                         } else Log.d("AD","CASTING SCENE ERROR IN REWARDED AD CALLBACK");
                                     }

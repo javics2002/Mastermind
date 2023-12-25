@@ -8,7 +8,6 @@ import com.example.aninterface.Sound;
 import com.example.aninterface.Image;
 
 public class CustomBackground extends Button {
-
     private boolean _selected, _adquired;
     private final int _index, _price;
     private final int _priceGap;

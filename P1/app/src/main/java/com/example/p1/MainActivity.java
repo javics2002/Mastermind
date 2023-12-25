@@ -12,16 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.aninterface.Scene;
 import com.example.libengineandroid.EngineAndroid;
 import com.example.libengineandroid.SensorManagerAndroid;
-import com.example.logiclib.Background;
-import com.example.logiclib.Circles;
 import com.example.logiclib.GameData;
 import com.example.logiclib.GameScene;
 import com.example.logiclib.InitialScene;
 import com.example.logiclib.LevelData;
 import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 

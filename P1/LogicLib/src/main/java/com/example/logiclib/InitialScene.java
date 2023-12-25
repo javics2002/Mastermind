@@ -8,14 +8,11 @@ import com.example.aninterface.Scene;
 
 
 public class InitialScene implements Scene {
-    private final Button _quickGameButton, _worldsButton;
-    private final Button _customizeButton;
-    private final Button _eraseProgressButton;
+    private final Engine _engine;
+
+    private final Button _quickGameButton, _worldsButton, _customizeButton, _eraseProgressButton;
     private final Text _titleText;
-    Engine _engine;
-
     private final int _backgroundColor;
-
 
     public InitialScene(Engine engine) {
         _engine = engine;
@@ -68,8 +65,6 @@ public class InitialScene implements Scene {
                 _engine.setCurrentScene(scene);
             }
         };
-
-
 
         _customizeButton = new Button("UI/customize.png", _engine,
                 graphics.getLogicWidth() - 60, 10,

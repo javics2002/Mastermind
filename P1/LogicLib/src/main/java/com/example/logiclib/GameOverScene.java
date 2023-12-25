@@ -105,6 +105,8 @@ public class GameOverScene implements Scene {
                         graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50){
                     @Override
                     public void callback() {
+                        GameData.Instance().resetCurrentLevelData();
+
                         Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                                 _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
                                 _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, null);
@@ -117,6 +119,8 @@ public class GameOverScene implements Scene {
                         graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50){
                     @Override
                     public void callback() {
+                        GameData.Instance().resetCurrentLevelData();
+
                         int levelID = _gameAttributes.selectedLevelID + 1;
                         final WorldData data = GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld);
 
@@ -164,6 +168,8 @@ public class GameOverScene implements Scene {
                     graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50){
                 @Override
                 public void callback() {
+                    GameData.Instance().resetCurrentLevelData();
+
                     Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                             _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
                             _gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, null);
@@ -184,6 +190,8 @@ public class GameOverScene implements Scene {
                 graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 100, 400, 50) {
             @Override
             public void callback() {
+                GameData.Instance().resetCurrentLevelData();
+                
                 if (_gameAttributes.selectedWorld == -1){
                     Scene scene = new InitialScene(_engine);
                     _engine.setCurrentScene(scene);

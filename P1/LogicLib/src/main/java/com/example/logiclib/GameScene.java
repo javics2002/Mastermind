@@ -196,7 +196,6 @@ public class GameScene implements Scene {
                 // USER WON
                 Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
                 _engine.setCurrentScene(gameOverScene);
-                GameData.Instance().resetCurrentLevelData();
                 return;
             }
 
@@ -211,10 +210,13 @@ public class GameScene implements Scene {
 
             if (_gameAttributes.attemptsLeft == 0) {
                 // User LOST
+                GameData.Instance().getCurrentLevelData().currentCombination = new Combination(_gameAttributes.combinationLength);
+
                 Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
                 _engine.setCurrentScene(gameOverScene);
-                GameData.Instance().resetCurrentLevelData();
             }
+
+            _engine.saveGameData();
         }
 
         for (CombinationLayout combination : _combinationLayouts) {

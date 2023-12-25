@@ -1,7 +1,5 @@
 package com.example.logiclib;
 
-import com.example.aninterface.Engine;
-
 import java.util.ArrayList;
 
 public class GameData {
