@@ -49,18 +49,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity  {
     private EngineAndroid _engineAndroid;
     //Anuncios
     private AdView mAdView;
-    private SensorManager senSensorManager;
-    private Sensor senAccelerometer;
-    private Sensor senProximity;
-    private long lastUpdate = 0;
-    private float last_x, last_y, last_z;
-    private int cmDistance=5;
-    private static final int SHAKE_THRESHOLD = 1000;
 
+    private  SensorManagerWrapper sensorManagerWrapper;
     //Crear un sonido para cuando se agita
     private Sound _shakeSound;
 
@@ -114,8 +108,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         setContentView(layout);
 
         createAdRequest();
-        createSensor();
         createNotificationsChannel();
+        // Inicializar el wrapper del sensor
+        sensorManagerWrapper = new SensorManagerWrapper(this, _shakeSound);
+        sensorManagerWrapper.registerListener();
     }
 
     private void loadGameData() {
@@ -522,17 +518,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
     }
 
-    private void createSensor() {
-        senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (senSensorManager == null)Log.d("","El dispositivo no registra sensores");
-        senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        if (senAccelerometer == null)Log.d("","El dispositvo no tiene acelerometro");
-        senProximity = senSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
-        if (senProximity == null)Log.d("","El dispositvo no tiene sensor de Proximidad");
-        senSensorManager.registerListener(this, senAccelerometer , SensorManager.SENSOR_DELAY_NORMAL);
-        senSensorManager.registerListener(this, senProximity , SensorManager.SENSOR_DELAY_NORMAL);
 
-    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -543,21 +529,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             GameData.Instance().addMoney(20);
         }
         WorkManager.getInstance(this).cancelAllWork();
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        senSensorManager.unregisterListener(this);
         saveGameData();
         _engineAndroid.pause();
+        sensorManagerWrapper.unregisterListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         _engineAndroid.resume();
+        sensorManagerWrapper.registerListener();
+
     }
     protected void createAdRequest()
     {
@@ -585,50 +573,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         super.onStop();
         createOneTimeNotification();
         createPeriodicNotification();
+        sensorManagerWrapper.unregisterListener();
+
     }
 
     protected void onDestroy() {
         super.onDestroy();
         GameData.Release();
+        sensorManagerWrapper.unregisterListener();
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        Sensor mySensor = event.sensor;
 
-        if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-            long curTime = System.currentTimeMillis();
 
-            if ((curTime - lastUpdate) > 100) {
-                long diffTime = (curTime - lastUpdate);
-                lastUpdate = curTime;
 
-                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
-                if (speed > SHAKE_THRESHOLD) {
-                    _shakeSound.play();
-                }
-
-                last_x = x;
-                last_y = y;
-                last_z = z;
-            }
-        }
-        if (mySensor.getType() == Sensor.TYPE_PROXIMITY) {
-            // Obtenemos la distancia en centímetros
-            float distance = event.values[0];
-            if (distance < cmDistance) {
-                _shakeSound.play();
-            }
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }
 
     private void createOneTimeNotification() {
         WorkRequest workRequest =

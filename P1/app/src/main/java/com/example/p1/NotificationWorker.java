@@ -31,6 +31,8 @@ public class NotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+
+        //Añade el extra recompensa (monedas) cuando pulsas sobre la notificacion llevandote a la actividad principal
         Intent intent = new Intent(context , MainActivity.class);
         intent.putExtra("reward",true);
 
