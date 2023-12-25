@@ -24,8 +24,6 @@ public class WorldScene implements Scene {
         _engine = engine;
         _graphics = _engine.getGraphics();
 
-        GameData.Instance().resetCurrentLevelData();
-
         if (GameData.Instance().getCurrentTheme() < 0){
             _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
         }

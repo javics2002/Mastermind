@@ -107,6 +107,7 @@ public class GameOverScene implements Scene {
                     @Override
                     public void callback() {
                         GameData.Instance().resetCurrentLevelData();
+                        _engine.saveGameData();
 
                         Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                                 _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
@@ -122,12 +123,13 @@ public class GameOverScene implements Scene {
                     @Override
                     public void callback() {
                         GameData.Instance().resetCurrentLevelData();
+                        _engine.saveGameData();
 
                         int levelID = _gameAttributes.selectedLevelID + 1;
                         final WorldData data = GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld);
 
-                        if (levelID > data.getLevelNumber()){
-                            levelID = data.getLevelNumber();
+                        if (levelID >= data.getLevelNumber()){
+                            levelID = _gameAttributes.selectedLevelID;
                         }
 
                         String levelNumber = levelID >= 9 ? Integer.toString( levelID + 1) : "0" + Integer.toString(levelID + 1);
@@ -138,7 +140,7 @@ public class GameOverScene implements Scene {
 
                         Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
                                 level.repeat, _gameAttributes.returnScene, _gameAttributes.selectedWorld,
-                                levelID + 1, _gameAttributes.reward, null);
+                                levelID, _gameAttributes.reward, null);
                         _engine.setCurrentScene(scene);
                     }
                 };
@@ -172,6 +174,7 @@ public class GameOverScene implements Scene {
                 @Override
                 public void callback() {
                     GameData.Instance().resetCurrentLevelData();
+                    _engine.saveGameData();
 
                     Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
                             _gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
@@ -194,6 +197,7 @@ public class GameOverScene implements Scene {
             @Override
             public void callback() {
                 GameData.Instance().resetCurrentLevelData();
+                _engine.saveGameData();
                 
                 if (_gameAttributes.selectedWorld == -1){
                     Scene scene = new InitialScene(_engine);

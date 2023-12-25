@@ -52,6 +52,7 @@ public class GameScene implements Scene {
 
             LevelData data = new LevelData();
             data.attempts = tryNumber;
+            data.initialAttemptsNumber = tryNumber;
             data.codeSize = combinationLength;
             data.codeOpt = numberOfColors;
             data.repeat = repeatedColors;
@@ -62,13 +63,13 @@ public class GameScene implements Scene {
 
             data.worldID = _gameAttributes.selectedWorld;
             data.levelID = _gameAttributes.selectedLevelID;
-
             data.reward = _gameAttributes.reward;
 
             GameData.Instance().setCurrentLevelData(data);
         }
         else{
             _gameAttributes.activeLayout = _gameAttributes.attemptsNumber - _gameAttributes.attemptsLeft;
+            _gameAttributes.attemptsNumber = GameData.Instance().getCurrentLevelData().initialAttemptsNumber;
         }
 
         if(GameData.Instance().getCurrentTheme() < 0){
@@ -105,6 +106,7 @@ public class GameScene implements Scene {
             @Override
             public void callback() {
                 GameData.Instance().resetCurrentLevelData();
+                _engine.saveGameData();
 
                 if (_gameAttributes.selectedWorld == -1){
                     Scene scene = new InitialScene(_engine);

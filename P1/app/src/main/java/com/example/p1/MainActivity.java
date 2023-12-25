@@ -44,7 +44,9 @@ public class MainActivity extends AppCompatActivity  {
         _engineAndroid = new EngineAndroid(sf,this);
 
         GameData.Init();
+        // Sobreescribir datos de guardado
         _engineAndroid.loadGameData();
+        _engineAndroid.saveGameData();
 
         Scene firstScene = new InitialScene(_engineAndroid);
 
