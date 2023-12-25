@@ -1,7 +1,5 @@
 package com.example.aninterface;
 
-import java.io.File;
-
 public interface Engine {
     Graphics getGraphics();
 
@@ -29,5 +27,6 @@ public interface Engine {
 
     String[] getFileNames(String folderPath);
 
-    IFile getSaveData();
+    void loadGameData();
+    void saveGameData();
 }

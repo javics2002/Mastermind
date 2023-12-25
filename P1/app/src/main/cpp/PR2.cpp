@@ -6,7 +6,7 @@ using namespace std;
 using namespace picosha2;
 extern "C"
 JNIEXPORT jstring JNICALL
-Java_com_example_p1_MainActivity_hashJson(JNIEnv *env, jobject _this, jstring savedInfo) {
+Java_com_example_libengineandroid_EngineAndroid_hashJson(JNIEnv *env, jobject _this, jstring savedInfo) {
     vector<unsigned char> hash(k_digest_size);
     jboolean isCopy;
 

@@ -5,6 +5,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+
+import com.example.aninterface.Engine;
 import com.example.aninterface.Sound;
 
 public class SensorManagerWrapper implements SensorEventListener {
@@ -12,20 +14,21 @@ public class SensorManagerWrapper implements SensorEventListener {
     private Sensor _senAccelerometer;
     private Sensor _senProximity;
     private long _lastUpdate = 0;
-    private float last_x, last_y, last_z;
+    private float _lastX, _lastY, _lastZ;
     private static final int SHAKE_THRESHOLD = 1000;
-    private final int _cmDistance =5;
-
+    private final int _cmDistance = 5;
     private Sound _shakeSound;
 
-    public SensorManagerWrapper(Context context, Sound shakeSound) {
+    public SensorManagerWrapper(Context context, Engine engine) {
         _senSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         _senAccelerometer = _senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         _senProximity = _senSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
         _senSensorManager.registerListener(this, _senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         _senSensorManager.registerListener(this, _senProximity, SensorManager.SENSOR_DELAY_NORMAL);
 
-        _shakeSound = shakeSound;
+        // Initialisation of sensor shake sound
+        _shakeSound = engine.getAudio().loadSound("shake.wav", false);
+        _shakeSound.setVolume(.5f);
     }
 
     @Override
@@ -42,14 +45,14 @@ public class SensorManagerWrapper implements SensorEventListener {
                 long diffTime = (curTime - _lastUpdate);
                 _lastUpdate = curTime;
 
-                float speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
+                float speed = Math.abs(x + y + z - _lastX - _lastY - _lastZ) / diffTime * 10000;
                 if (speed > SHAKE_THRESHOLD) {
                     _shakeSound.play();
                 }
 
-                last_x = x;
-                last_y = y;
-                last_z = z;
+                _lastX = x;
+                _lastY = y;
+                _lastZ = z;
             }
         }
         if (mySensor.getType() == Sensor.TYPE_PROXIMITY) {
@@ -62,9 +65,7 @@ public class SensorManagerWrapper implements SensorEventListener {
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
     }
-
 
     public void registerListener() {
         boolean isAccelerometerListenerRegistered = _senSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).contains(_senAccelerometer);

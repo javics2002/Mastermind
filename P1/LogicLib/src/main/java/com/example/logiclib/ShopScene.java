@@ -8,18 +8,16 @@ import com.example.aninterface.Scene;
 import com.example.aninterface.Image;
 
 public class ShopScene implements Scene {
+    private final Graphics _graphics;
+    private final Engine _engine;
+
     public enum ShopType { BACKGROUNDS, CIRCLES, THEMES }
     public final ShopType _shopType;
     private final int _backgroundsNumber, _circlesNumber, _themesNumber;
-    private final Button _backButton;
-    private final Button _prevShopButton, _nextShopButton;
+    private final Button _backButton,  _prevShopButton, _nextShopButton, _instantMoneyButton;
     private final Image _coinImage;
     private final int _coinSize = 20;
-    private final Button _instantMoneyButton; //Hack
     private final Text _titleText, _moneyText;
-
-    private final Graphics _graphics;
-    Engine _engine;
 
     final int _barHeight = 80;
     final int _padding = 20;

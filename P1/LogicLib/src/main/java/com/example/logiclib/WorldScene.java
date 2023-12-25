@@ -8,37 +8,32 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
 public class WorldScene implements Scene {
-    private final Button _backButton;
-    private final Button _prevWorldButton, _nextWorldButton;
-    private final Button _unlockNextLevelButton; //Hack
+    private final Engine _engine;
+    private final Graphics _graphics;
+
+    private final Button _backButton, _prevWorldButton, _nextWorldButton, _unlockNextLevelButton;
     private final Level[] _levelButtons;
-    private final Text _titleText;
     final int _numLevels;
     private WorldData _worldData;
-    private final Graphics _graphics;
     private final Image _backgroundImage;
-    Engine _engine;
-
+    private final Text _titleText;
     private final int _backgroundColor;
-
     final int _barHeight = 80;
 
     public WorldScene(Engine engine, final int worldId) {
         _engine = engine;
-
         _graphics = _engine.getGraphics();
 
-        if(GameData.Instance().getCurrentTheme() < 0){
+        if (GameData.Instance().getCurrentTheme() < 0){
             _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
         }
-        else{
+        else {
             final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
-
             _backgroundColor = Colors.parseARGB(theme.backgroundColor);
         }
 
+        // Back Button
         final int padding = 20;
-        // Back button
         int backbuttonScale = 40;
         _backButton = new Button("UI/back.png", _engine,
                 padding, _barHeight / 2 - backbuttonScale / 2,

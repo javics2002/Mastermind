@@ -22,14 +22,14 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
-import com.example.aninterface.IFile;
-import com.example.logiclib.Colors;
+
+
+import com.example.logiclib.Background;
+import com.example.logiclib.Circles;
 import com.example.logiclib.GameData;
-import com.example.logiclib.GameScene;
-import com.example.logiclib.GameOverScene;
-import com.example.logiclib.GameAttributes;
-
-
+import com.example.logiclib.LevelData;
+import com.example.logiclib.Theme;
+import com.example.logiclib.WorldData;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 
@@ -44,6 +44,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 
 // Esta clase representa un motor de juego para Android que implementa la interfaz Runnable y la interfaz Engine.
 public class EngineAndroid implements Runnable, Engine {
@@ -325,20 +326,404 @@ public class EngineAndroid implements Runnable, Engine {
     public Activity getActivity(){ return activity;}
 
     @Override
-    public IFile getSaveData() {
-        try {
-            String saveName = "GameData.json";
-            FileInputStream fileInputStream = activity.openFileInput(saveName);
+    public void loadGameData() {
+        String fileName = "GameData.json";
+        boolean doesSaveExist = false;
 
-            // Create File and return it
-            FileAndroid saveFile = new FileAndroid(fileInputStream);
-            return saveFile;
-        }
-        catch (FileNotFoundException e) {
+        try {
+            FileInputStream fileInputStream = activity.openFileInput(fileName);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            String currentFileContent = "";
+
+            int worldNumber = objectInputStream.readInt();
+            currentFileContent += worldNumber;
+
+            for (int i = 0; i < worldNumber; i++){
+                WorldData worldData = (WorldData) objectInputStream.readObject();
+                GameData.Instance().addWorld(worldData);
+                currentFileContent += worldData.toString();
+            }
+
+            int money = objectInputStream.readInt();
+            GameData.Instance().addMoney(money);
+            currentFileContent += money;
+
+            int backgroundNumber = objectInputStream.readInt();
+            currentFileContent += backgroundNumber;
+
+            for(int i = 0; i < backgroundNumber; i++){
+                Background background = (Background) objectInputStream.readObject();
+                currentFileContent += background.toString();
+                GameData.Instance().addBackground(background);
+            }
+
+            int currentBackground = objectInputStream.readInt();
+            GameData.Instance().setBackground(currentBackground);
+            currentFileContent += currentBackground;
+
+            int circlesNumber = objectInputStream.readInt();
+            currentFileContent += circlesNumber;
+
+            for(int i = 0; i < circlesNumber; i++){
+                Circles circles = (Circles) objectInputStream.readObject();
+                currentFileContent += circles.toString();
+                GameData.Instance().addCircles(circles);
+            }
+
+            int currentCircle = objectInputStream.readInt();
+            GameData.Instance().setCircles(currentCircle);
+            currentFileContent += currentCircle;
+
+            int themesNumber = objectInputStream.readInt();
+            currentFileContent += themesNumber;
+
+            for(int i = 0; i < themesNumber; i++){
+                Theme theme = (Theme) objectInputStream.readObject();
+                currentFileContent += theme;
+                GameData.Instance().addTheme(theme);
+            }
+
+            int currentTheme = objectInputStream.readInt();
+            GameData.Instance().setTheme(currentTheme);
+            currentFileContent += currentTheme;
+
+            // Load LevelData
+            LevelData newData = (LevelData) objectInputStream.readObject();
+            GameData.Instance().setCurrentLevelData(newData);
+
+            if (newData != null){
+                currentFileContent += newData.toString();
+            }
+
+            // HASH
+            String saveHash = (String) objectInputStream.readObject();
+
+            String salt = "contrasenya";
+
+            String hash = hashJson(currentFileContent);
+            String finalHash = hashJson(hash + currentFileContent + salt);
+
+            doesSaveExist = saveHash.equals(finalHash);
+
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return null;
+        String[] worldFolderNames = getFileNames("Levels");
+        int numberOfWorlds = GameData.Instance().numberOfWorlds();
+        boolean[] loadedWorldSaveData = new boolean[numberOfWorlds];
+
+        if (doesSaveExist) {
+            for (int i = 0; i < worldFolderNames.length; i++){
+                boolean loadedFolder = false;
+
+                for (int j = 0; j < numberOfWorlds; j++){
+                    WorldData worldData = GameData.Instance().getWorldDataByIndex(j);
+                    String saveWorldName = worldData.getWorldName();
+
+                    if (saveWorldName.equals(worldFolderNames[i])){
+                        // World exists in save file
+                        loadedFolder = true;
+                        loadedWorldSaveData[j] = true;
+
+                        // Check number of levels and overwrite last level unlocked
+                        // in case we need to
+                        String[] levels = getFileNames("Levels/" + worldFolderNames[i]);
+
+                        worldData.setLevelNumber(levels.length);
+                        if (worldData.getLastLevelUnlocked() > levels.length){
+                            worldData.setLastLevelUnlocked(levels.length);
+                        }
+
+                        break;
+                    }
+                }
+
+                if (!loadedFolder){
+                    // World does not exist in save file
+                    WorldData newWorld = new WorldData();
+                    newWorld.setWorldName(worldFolderNames[i]);
+
+                    String[] levels = getFileNames("Levels/" + worldFolderNames[i]);
+                    newWorld.setLevelNumber(levels.length);
+
+                    GameData.Instance().addWorld(newWorld);
+                }
+            }
+
+            int erasedFiles = 0;
+            for (int i = 0; i < numberOfWorlds; i++){
+                if (!loadedWorldSaveData[i]){
+                    // File does exist in save data, but does not exist in folder.
+                    // We have to delete the info of the world.
+                    GameData.Instance().deleteWorldByIndex(i - erasedFiles);
+                    erasedFiles++;
+                }
+            }
+        }
+        else { // File does not exist, we need to create world data from assets
+            for (int i = 0; i < worldFolderNames.length; i++) {
+                WorldData newWorld = new WorldData();
+                newWorld.setWorldName(worldFolderNames[i]);
+
+                String[] levels = getFileNames("Levels/" + worldFolderNames[i]);
+                newWorld.setLevelNumber(levels.length);
+
+                GameData.Instance().addWorld(newWorld);
+            }
+        }
+
+        String[] backgroundsFolderNames = getFileNames("Shop/Backgrounds");
+        String[] circlesFolderNames = getFileNames("Shop/Circles");
+        String[] themesFolderNames = getFileNames("Shop/Themes");
+        int numberOfBackgrounds = GameData.Instance().getBackgrounds().size();
+        int numberOfCircles = GameData.Instance().getCircles().size();
+        int numberOfThemes = GameData.Instance().getThemes().size();
+        boolean[] loadedBackgroundSaveData = new boolean[numberOfBackgrounds];
+        boolean[] loadedCirclesSaveData = new boolean[numberOfCircles];
+        boolean[] loadedThemesSaveData = new boolean[numberOfThemes];
+
+        if (doesSaveExist) {
+            for (int i = 0; i < backgroundsFolderNames.length; i++){
+                boolean loadedBackground = false;
+
+                for (int j = 0; j < numberOfBackgrounds; j++){
+                    Background background = GameData.Instance().getBackgrounds().get(j);
+                    String backgroundName = background.name;
+
+                    if (backgroundName.equals(backgroundsFolderNames[i])){
+                        // Background exists in save file
+                        loadedBackground = true;
+                        loadedBackgroundSaveData[j] = true;
+
+                        break;
+                    }
+                }
+
+                if (!loadedBackground){
+                    // Background does not exist in save file
+                    final Background background = jsonToObject("Shop/Backgrounds/" + backgroundsFolderNames[i], Background.class);
+                    background.name = backgroundsFolderNames[i];
+
+                    GameData.Instance().addBackground(background);
+                }
+            }
+
+            int erasedFiles = 0;
+            for (int i = 0; i < numberOfBackgrounds; i++){
+                if (!loadedBackgroundSaveData[i]){
+                    // File does exist in save data, but does not exist in folder.
+                    // We have to delete the info of the world.
+                    GameData.Instance().removeBackgroundByIndex(i - erasedFiles);
+
+                    if(GameData.Instance().getCurrentBackground() > i - erasedFiles)
+                        GameData.Instance().setBackground(GameData.Instance().getCurrentBackground() - 1);
+                    else if(GameData.Instance().getCurrentBackground() == i - erasedFiles)
+                        GameData.Instance().setBackground(-1);
+
+                    erasedFiles++;
+                }
+            }
+
+            for (int i = 0; i < circlesFolderNames.length; i++){
+                boolean loadedCircles = false;
+
+                for (int j = 0; j < numberOfCircles; j++){
+                    Circles circles = GameData.Instance().getCircles().get(j);
+                    String circlesName = circles.name;
+
+                    if (circlesName.equals(circlesFolderNames[i])){
+                        // Circles exist in save file
+                        loadedCircles = true;
+                        loadedCirclesSaveData[j] = true;
+
+                        break;
+                    }
+                }
+
+                if (!loadedCircles){
+                    // Background does not exist in save file
+                    final Circles circles = jsonToObject("Shop/Circles/" + circlesFolderNames[i], Circles.class);
+                    circles.name = circlesFolderNames[i];
+
+                    GameData.Instance().addCircles(circles);
+                }
+            }
+
+            erasedFiles = 0;
+            for (int i = 0; i < numberOfCircles; i++){
+                if (!loadedCirclesSaveData[i]){
+                    // File does exist in save data, but does not exist in folder.
+                    // We have to delete the info of the world.
+                    GameData.Instance().removeCirclesByIndex(i - erasedFiles);
+
+                    if(GameData.Instance().getCurrentCircles() > i - erasedFiles)
+                        GameData.Instance().setCircles(GameData.Instance().getCurrentCircles() - 1);
+                    else if(GameData.Instance().getCurrentCircles() == i - erasedFiles)
+                        GameData.Instance().setCircles(-1);
+
+                    erasedFiles++;
+                }
+            }
+
+            for (int i = 0; i < themesFolderNames.length; i++){
+                boolean loadedTheme = false;
+
+                for (int j = 0; j < numberOfThemes; j++){
+                    Theme theme = GameData.Instance().getThemes().get(j);
+                    String themeName = theme.name;
+
+                    if (themeName.equals(themesFolderNames[i])){
+                        // Theme exists in save file
+                        loadedTheme = true;
+                        loadedThemesSaveData[j] = true;
+
+                        break;
+                    }
+                }
+
+                if (!loadedTheme){
+                    // Background does not exist in save file
+                    final Theme theme = jsonToObject("Shop/Themes/" + themesFolderNames[i], Theme.class);
+                    theme.name = themesFolderNames[i];
+
+                    GameData.Instance().addTheme(theme);
+                }
+            }
+
+            erasedFiles = 0;
+            for (int i = 0; i < numberOfThemes; i++){
+                if (!loadedThemesSaveData[i]){
+                    // File does exist in save data, but does not exist in folder.
+                    // We have to delete the info of the world.
+                    GameData.Instance().removeThemesByIndex(i - erasedFiles);
+
+                    if(GameData.Instance().getCurrentTheme() > i - erasedFiles)
+                        GameData.Instance().setTheme(GameData.Instance().getCurrentTheme() - 1);
+                    else if(GameData.Instance().getCurrentTheme() == i - erasedFiles)
+                        GameData.Instance().setTheme(-1);
+
+
+                    erasedFiles++;
+                }
+            }
+        }
+        else { // File does not exist, we need to create world data from assets
+            for (int i = 0; i < backgroundsFolderNames.length; i++) {
+                final Background background = jsonToObject("Shop/Backgrounds/" + backgroundsFolderNames[i], Background.class);
+                background.name = backgroundsFolderNames[i];
+
+                GameData.Instance().addBackground(background);
+            }
+
+            for (int i = 0; i < circlesFolderNames.length; i++) {
+                final Circles circles = jsonToObject("Shop/Circles/" + circlesFolderNames[i], Circles.class);
+                circles.name = circlesFolderNames[i];
+
+                GameData.Instance().addCircles(circles);
+            }
+
+            for (int i = 0; i < themesFolderNames.length; i++) {
+                final Theme theme = jsonToObject("Shop/Themes/" + themesFolderNames[i], Theme.class);
+                theme.name = themesFolderNames[i];
+
+                GameData.Instance().addTheme(theme);
+            }
+        }
     }
 
+    @Override
+    public void saveGameData() {
+        String fileName = "GameData.json";
+
+        try {
+            FileOutputStream fileOutputStream = activity.openFileOutput(fileName, Context.MODE_PRIVATE);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            String currentFileContent = "";
+
+            int numberOfWorlds = GameData.Instance().numberOfWorlds();
+            objectOutputStream.writeInt(numberOfWorlds);
+            currentFileContent += numberOfWorlds;
+
+            for (int i = 0; i < numberOfWorlds;i++){
+                WorldData world = GameData.Instance().getWorldDataByIndex(i);
+                objectOutputStream.writeObject(world);
+                currentFileContent += world.toString();
+            }
+
+            int money = GameData.Instance().getMoney();
+            objectOutputStream.writeInt(money);
+            currentFileContent += money;
+
+            int backgroundsNumber = GameData.Instance().getBackgrounds().size();
+            objectOutputStream.writeInt(backgroundsNumber);
+            currentFileContent += backgroundsNumber;
+
+            for(int i = 0; i < backgroundsNumber; i++){
+                Background background = GameData.Instance().getBackgrounds().get(i);
+                objectOutputStream.writeObject(background);
+                currentFileContent += background.toString();
+            }
+
+            int currentBackground = GameData.Instance().getCurrentBackground();
+            objectOutputStream.writeInt(currentBackground);
+            currentFileContent += currentBackground;
+
+            int circlesNumber = GameData.Instance().getCircles().size();
+            objectOutputStream.writeInt(circlesNumber);
+            currentFileContent += circlesNumber;
+
+            for(int i = 0; i < circlesNumber; i++){
+                Circles circles = GameData.Instance().getCircles().get(i);
+                objectOutputStream.writeObject(circles);
+                currentFileContent += circles.toString();
+            }
+
+            int currentCircle = GameData.Instance().getCurrentCircles();
+            objectOutputStream.writeInt(currentCircle);
+            currentFileContent += currentCircle;
+
+            int themesNumber = GameData.Instance().getThemes().size();
+            objectOutputStream.writeInt(themesNumber);
+            currentFileContent += themesNumber;
+
+            for(int i = 0; i < themesNumber; i++){
+                Theme theme = GameData.Instance().getThemes().get(i);
+                objectOutputStream.writeObject(theme);
+                currentFileContent += theme.toString();
+            }
+
+            int currentTheme = GameData.Instance().getCurrentTheme();
+            objectOutputStream.writeInt(currentTheme);
+            currentFileContent += currentTheme;
+
+            // Save LevelData
+            LevelData data = GameData.Instance().getCurrentLevelData();
+            objectOutputStream.writeObject(data);
+
+            if (data != null){
+                currentFileContent += data.toString();
+            }
+
+            // HASH
+            String salt = "contrasenya";
+
+            String hash = hashJson(currentFileContent);
+            String finalHash = hashJson(hash + currentFileContent + salt);
+
+            objectOutputStream.writeObject(finalHash);
+
+            objectOutputStream.close();
+            fileOutputStream.close();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private native String hashJson(String fileContent);
 }

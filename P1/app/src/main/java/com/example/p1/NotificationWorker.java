@@ -12,13 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.example.logiclib.GameData;
-import com.example.p1.R;
-
-
-
 public class NotificationWorker extends Worker {
-
     private Context context;
 
     public NotificationWorker(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -31,7 +25,6 @@ public class NotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
-
         //Añade el extra recompensa (monedas) cuando pulsas sobre la notificacion llevandote a la actividad principal
         Intent intent = new Intent(context , MainActivity.class);
         intent.putExtra("reward",true);
@@ -50,5 +43,4 @@ public class NotificationWorker extends Worker {
         managerCompat.notify(1, builder.build());
         return Result.success();
     }
-
 }

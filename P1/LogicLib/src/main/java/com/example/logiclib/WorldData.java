@@ -1,17 +1,10 @@
 package com.example.logiclib;
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class WorldData implements Serializable {
     private String _worldName;
     private int _lastLevelUnlocked;
     private int _levelNumber;
-
-    public WorldData(String worldName, int levelNumber) {
-        _worldName = worldName;
-        _levelNumber = levelNumber;
-        _lastLevelUnlocked = 0;
-    }
 
     public WorldData() {
         _worldName = "defaultName";
