@@ -61,14 +61,6 @@ public class GameOverScene implements Scene {
         _resultCombination = new ArrayList<>();
 
         if (_gameAttributes.attemptsLeft != 0) {
-            if (gameAttributes.selectedWorld != -1){
-                final WorldData data = GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld);
-
-                if(data.getLastLevelUnlocked() < data.getLevelNumber() && data.getLastLevelUnlocked() == _gameAttributes.selectedLevelID){
-                    data.completeLevel();
-                }
-            }
-
             // Has ganado
             resultString = "ENHORABUENA!!";
             attemptsString = "Has averiguado el código en";
@@ -145,14 +137,24 @@ public class GameOverScene implements Scene {
                     }
                 };
 
-                _coinImage = graphics.loadImage("UI/coin.png");
+                if(GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld).getLastLevelUnlocked() <= _gameAttributes.selectedLevelID){
+                    _coinImage = graphics.loadImage("UI/coin.png");
 
-                GameData.Instance().addMoney(_gameAttributes.reward);
-                String moneyString = "+" + _gameAttributes.reward + " - Total: " + Integer.toString(GameData.Instance().getMoney());
+                    GameData.Instance().addMoney(_gameAttributes.reward);
+                    String moneyString = "+" + _gameAttributes.reward + " - Total: " + Integer.toString(GameData.Instance().getMoney());
 
-                _moneyText = new Text(moneyString, resultFont, _engine,
-                        graphics.getLogicWidth() / 2 - (_coinSize + graphics.getStringWidth(moneyString, resultFont)) / 2 + _coinSize,
-                        graphics.getLogicHeight() / 2 + graphics.getStringHeight(moneyString, resultFont) / 2 - 30, 0);
+                    _moneyText = new Text(moneyString, resultFont, _engine,
+                            graphics.getLogicWidth() / 2 - (_coinSize + graphics.getStringWidth(moneyString, resultFont)) / 2 + _coinSize,
+                            graphics.getLogicHeight() / 2 + graphics.getStringHeight(moneyString, resultFont) / 2 - 30, 0);
+                }
+            }
+
+            if (gameAttributes.selectedWorld != -1){
+                final WorldData data = GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld);
+
+                if(data.getLastLevelUnlocked() < data.getLevelNumber() && data.getLastLevelUnlocked() == _gameAttributes.selectedLevelID){
+                    data.completeLevel();
+                }
             }
         } else {
             // Has perdido
@@ -198,7 +200,7 @@ public class GameOverScene implements Scene {
             public void callback() {
                 GameData.Instance().resetCurrentLevelData();
                 _engine.saveGameData();
-                
+
                 if (_gameAttributes.selectedWorld == -1){
                     Scene scene = new InitialScene(_engine);
                     _engine.setCurrentScene(scene);
