@@ -1,6 +1,9 @@
 package com.example.logiclib;
 import java.io.Serializable;
 
+// Esta clase contiene la información que se guardará de un mundo especifico.
+// La informacion de utilidad que se guardará es el nombre del mundo, el ultimo nivel desbloqueado y el numero de niveles.
+
 public class WorldData implements Serializable {
     private String _worldName;
     private int _lastLevelUnlocked;

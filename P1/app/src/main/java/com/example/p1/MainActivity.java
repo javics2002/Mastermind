@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity  {
     private void createOneTimeNotification() {
         WorkRequest workRequest =
                 new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                        // Additional configuration
+                        // Configuracion adicional
                         .setInitialDelay(10, TimeUnit.SECONDS)
                         .build();
 

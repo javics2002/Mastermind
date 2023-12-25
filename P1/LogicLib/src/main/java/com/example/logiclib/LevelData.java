@@ -3,6 +3,9 @@ package com.example.logiclib;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+// Clase que contiene toda la información de los niveles usada para el guardado del juego.
+// Además, contiene información específica de cada nivel que permite reconstruir una escena de juego
+// (cuando se cierra el juego mientras se juega a un nivel)
 public class LevelData implements Serializable {
     public int reward;
     public int codeSize;

@@ -24,6 +24,8 @@ public class WorldScene implements Scene {
         _engine = engine;
         _graphics = _engine.getGraphics();
 
+        GameData.Instance().resetCurrentLevelData();
+
         if (GameData.Instance().getCurrentTheme() < 0){
             _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
         }
@@ -32,7 +34,7 @@ public class WorldScene implements Scene {
             _backgroundColor = Colors.parseARGB(theme.backgroundColor);
         }
 
-        // Back Button
+        // Botón atras
         final int padding = 20;
         int backbuttonScale = 40;
         _backButton = new Button("UI/back.png", _engine,
@@ -45,7 +47,7 @@ public class WorldScene implements Scene {
             }
         };
 
-        // Title
+        // Titulo
         Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
         String worldTitle = GameData.Instance().getWorldDataByIndex(worldId).getWorldName();
         int titleWidth = _graphics.getStringWidth(worldTitle, font);
@@ -53,7 +55,7 @@ public class WorldScene implements Scene {
                 _graphics.getLogicWidth() / 2 - titleWidth / 2,
                 _barHeight / 2 + _graphics.getStringHeight(worldTitle, font) / 2, 0);
 
-        // Worlds
+        // Mundos
         final int numberOfWorlds = GameData.Instance().numberOfWorlds();
 
         _prevWorldButton = new Button("UI/prevWorld.png", _engine,

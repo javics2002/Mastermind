@@ -23,8 +23,6 @@ public class GameScene implements Scene {
 
     private final int _visibleLayouts = 10;
 
-    boolean overrideData = false;
-
     public GameScene(Engine engine, int tryNumber, int attemptsLeft, int combinationLength, int numberOfColors,
                      boolean repeatedColors, final Scene returnScene, int worldId, int selectedLevelID, int reward, Combination cResult) {
         _engine = engine;
@@ -48,7 +46,7 @@ public class GameScene implements Scene {
         _gameAttributes.selectedWorld = worldId;
         _gameAttributes.selectedLevelID = selectedLevelID;
 
-        // Save data attributes
+        // Guarda datos del nivel
         if (GameData.Instance().getCurrentLevelData() == null){
             _gameAttributes.activeLayout = 0;
 
@@ -82,7 +80,7 @@ public class GameScene implements Scene {
             _backgroundColor = Colors.parseARGB(theme.backgroundColor);
         }
 
-        // Title
+        // Titulo
         int verticalMargin = 5;
         Font objetiveFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
         String objectiveString = "Averigua el código";
@@ -90,7 +88,7 @@ public class GameScene implements Scene {
                 (_graphics.getLogicWidth() / 2) - (_graphics.getStringWidth(objectiveString, objetiveFont) / 2),
                 verticalMargin + _graphics.getStringHeight(objectiveString, objetiveFont), 0);
 
-        // Attempts
+        // Intentos
         String attemptsString = "Te quedan " + _gameAttributes.attemptsLeft + " intentos.";
         Font attemptsFont = _graphics.newFont("Comfortaa-Regular.ttf", 16f);
         _attemptsText = new Text(attemptsString, attemptsFont, _engine,
@@ -99,7 +97,7 @@ public class GameScene implements Scene {
                         + _graphics.getStringHeight(attemptsString, attemptsFont) + 5,
                 0);
 
-        // Quit button
+        // Boton de salir
         int buttonDimension = 50;
         int horizontalMargin = 5;
         _quitButton = new Button("UI/close.png", _engine,
@@ -107,6 +105,7 @@ public class GameScene implements Scene {
             @Override
             public void callback() {
                 GameData.Instance().resetCurrentLevelData();
+
                 if (_gameAttributes.selectedWorld == -1){
                     Scene scene = new InitialScene(_engine);
                     _engine.setCurrentScene(scene);
@@ -118,7 +117,7 @@ public class GameScene implements Scene {
             }
         };
 
-        // ColorBlind button
+        // Botón daltónicos
         _colorblindButton = new Button("UI/eyeClosed.png", _engine,
                 _graphics.getLogicWidth() - buttonDimension - horizontalMargin, verticalMargin,
                 buttonDimension, buttonDimension) {
@@ -129,7 +128,7 @@ public class GameScene implements Scene {
             }
         };
 
-        // Combination
+        // Combinacion
         int initialHeight = 100;
         int verticalPadding = 15, scale = 40;
         _combinationLayouts = new ArrayList<>();
@@ -142,7 +141,7 @@ public class GameScene implements Scene {
                     scale, GameData.Instance().getCurrentLevelData().combinations.get(i).getColors(), _gameAttributes);
 
 
-            // Update hints
+            // Actualizar pistas
             Combination.HintEnum[] hints = newCombinationLayout.getCurrentCombination().getHint(_gameAttributes.resultCombination);
             newCombinationLayout.setHints(hints);
 
@@ -163,7 +162,7 @@ public class GameScene implements Scene {
                     scale, _gameAttributes));
         }
 
-        // Color buttons
+        // Botones de colores
         int horizontalPadding = 6;
         _colorButtons = new ArrayList<>();
         for (int i = 0; i < numberOfColors; i++) {
@@ -218,8 +217,6 @@ public class GameScene implements Scene {
                 Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
                 _engine.setCurrentScene(gameOverScene);
             }
-
-            _engine.saveGameData();
         }
 
         for (CombinationLayout combination : _combinationLayouts) {
@@ -277,6 +274,8 @@ public class GameScene implements Scene {
                 if (colorButton.handleEvents(touchEvent)) {
                     _combinationLayouts.get(_gameAttributes.activeLayout).setNextColor(colorButton._colorID,
                             _gameAttributes.isEyeOpen);
+
+                    _engine.saveGameData();
                     break;
                 }
             }

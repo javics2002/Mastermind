@@ -45,7 +45,12 @@ public class ColorSlot implements GameObject {
         _height = height;
         _hasColor = colorID != -1 ? true : false;
         _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
-        _numberText = new Text("", _colorNum, engine, 0, 0, colorID);
+
+        String number = String.valueOf(colorID);
+        int textX = _positionX + _width / 2 - _graphics.getStringWidth(number, _colorNum) / 2;
+        int textY = _positionY + _height / 2 + _graphics.getStringHeight(number, _colorNum) / 2;
+
+        _numberText = new Text(Integer.toString(colorID), _colorNum, engine, textX, textY, 0);
         _colorID = colorID;
 
         if(_gameAttributes.selectedWorld == -1 && _hasColor){

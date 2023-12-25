@@ -57,6 +57,8 @@ public class CustomBackground extends Button {
             _moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
             _adquired = true;
 
+            _engine.saveGameData();
+
             GameData.Instance().setBackground(_index);
         }
     }

@@ -126,6 +126,8 @@ public class CustomCircles extends Button {
             _moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
             _adquired = true;
 
+            _engine.saveGameData();
+
             GameData.Instance().setCircles(_index);
         }
     }

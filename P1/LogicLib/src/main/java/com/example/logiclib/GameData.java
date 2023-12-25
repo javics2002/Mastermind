@@ -2,6 +2,12 @@ package com.example.logiclib;
 
 import java.util.ArrayList;
 
+// Clase Singleton que guarda datos útiles para la ejecución y persistencia del juego.
+// Contiene información de todos los mundos y de toda la tienda, además de información
+// del nivel jugado por el jugador en ese momento.
+
+// Cuando se ejecuta el juego, se inicializa el singleton y se completa usando la información
+// leida del guardado de datos.
 public class GameData {
     private static GameData _instance;
     private ArrayList<WorldData> _worldsData;

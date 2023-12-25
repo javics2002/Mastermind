@@ -85,6 +85,8 @@ public class CustomTheme extends Button{
             _moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
             _adquired = true;
 
+            _engine.saveGameData();
+
             GameData.Instance().setTheme(_index);
         }
     }

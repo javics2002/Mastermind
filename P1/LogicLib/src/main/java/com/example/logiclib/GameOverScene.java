@@ -46,7 +46,7 @@ public class GameOverScene implements Scene {
             buttonColor = Colors.parseARGB(theme.buttonColor);
         }
 
-        //Create scene
+        // Escena
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
                 attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 18f),
                 attemptsNumberFont = graphics.newFont("Comfortaa-Regular.ttf", 24f),
@@ -69,7 +69,7 @@ public class GameOverScene implements Scene {
                 }
             }
 
-            //Has ganado
+            // Has ganado
             resultString = "ENHORABUENA!!";
             attemptsString = "Has averiguado el código en";
             attemptsNumberString = Integer.toString(_gameAttributes.activeLayout + 1) + " intentos";
@@ -100,6 +100,7 @@ public class GameOverScene implements Scene {
                 }
             };
 
+            // Si te encuentras en una partida rapida
             if (_gameAttributes.selectedWorld == -1){
                 _playAgainButton = new Button(buttonColor, "Volver a Jugar", buttonFont, _engine,
                         graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50){
@@ -114,6 +115,7 @@ public class GameOverScene implements Scene {
                     }
                 };
             }
+            // Si te encuentras en un nivel de un mundo
             else {
                 _playAgainButton = new Button(buttonColor, "Siguiente Nivel", buttonFont, _engine,
                         graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50){
@@ -151,7 +153,7 @@ public class GameOverScene implements Scene {
                         graphics.getLogicHeight() / 2 + graphics.getStringHeight(moneyString, resultFont) / 2 - 30, 0);
             }
         } else {
-            //Has perdido
+            // Has perdido
             resultString = "GAME OVER";
             attemptsString = "Te has quedado sin intentos";
             attemptsNumberString = "";
