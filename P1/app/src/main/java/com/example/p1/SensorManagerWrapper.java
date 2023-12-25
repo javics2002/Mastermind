@@ -67,8 +67,12 @@ public class SensorManagerWrapper implements SensorEventListener {
 
 
     public void registerListener() {
-        _senSensorManager.registerListener(this, _senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
-        _senSensorManager.registerListener(this, _senProximity, SensorManager.SENSOR_DELAY_NORMAL);
+        boolean isAccelerometerListenerRegistered = _senSensorManager.getSensorList(Sensor.TYPE_ACCELEROMETER).contains(_senAccelerometer);
+        boolean isProximityListenerRegistered = _senSensorManager.getSensorList(Sensor.TYPE_PROXIMITY).contains(_senProximity);
+        if(!isAccelerometerListenerRegistered &&!isProximityListenerRegistered) {
+            _senSensorManager.registerListener(this, _senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+            _senSensorManager.registerListener(this, _senProximity, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
 
     public void unregisterListener() {
