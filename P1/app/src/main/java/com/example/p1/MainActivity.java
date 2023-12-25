@@ -11,6 +11,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aninterface.Scene;
 import com.example.libengineandroid.EngineAndroid;
+import com.example.libengineandroid.SensorManagerAndroid;
+import com.example.logiclib.Background;
+import com.example.logiclib.Circles;
 import com.example.logiclib.GameData;
 import com.example.logiclib.GameScene;
 import com.example.logiclib.InitialScene;
@@ -35,7 +38,7 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity  {
     private EngineAndroid _engineAndroid;
     private AdView mAdView;
-    private SensorManagerWrapper sensorManagerWrapper;
+    private SensorManagerAndroid sensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,8 +76,7 @@ public class MainActivity extends AppCompatActivity  {
         createAdRequest();
         createNotificationsChannel();
 
-        sensorManagerWrapper = new SensorManagerWrapper(this, _engineAndroid);
-        sensorManagerWrapper.registerListener();
+        sensorManager = new SensorManagerAndroid(this, _engineAndroid);
     }
 
     @Override
@@ -95,14 +97,14 @@ public class MainActivity extends AppCompatActivity  {
         super.onPause();
         _engineAndroid.saveGameData();
         _engineAndroid.pause();
-        sensorManagerWrapper.unregisterListener();
+        sensorManager.unregisterListener();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         _engineAndroid.resume();
-        sensorManagerWrapper.registerListener();
+        sensorManager.registerListener();
 
     }
 
@@ -111,14 +113,14 @@ public class MainActivity extends AppCompatActivity  {
         super.onStop();
         createOneTimeNotification();
         createPeriodicNotification();
-        sensorManagerWrapper.unregisterListener();
+        sensorManager.unregisterListener();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         GameData.Release();
-        sensorManagerWrapper.unregisterListener();
+        sensorManager.unregisterListener();
     }
 
     protected void createAdRequest()
