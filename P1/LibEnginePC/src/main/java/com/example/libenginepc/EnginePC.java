@@ -16,13 +16,12 @@ public class EnginePC implements Runnable, Engine {
     private final InputPC _input;
     private AudioPC _audio;
 
-    private final float _aspectRatio = 2f / 3f;
-    private final int _logicHeight = 720;
 
 
-    public EnginePC(JFrame myView) {
-        int _logicWidth = (int) (_logicHeight * _aspectRatio);
-        _graphics = new GraphicsPC(myView, _logicWidth, _logicHeight);
+
+    public EnginePC(JFrame myView,float aspectRatio , int logicHeight) {
+        int _logicWidth = (int) (logicHeight * aspectRatio);
+        _graphics = new GraphicsPC(myView, _logicWidth, logicHeight);
         _input = new InputPC();
         _audio = new AudioPC();
         myView.addMouseListener(_input.getHandlerInput());

@@ -18,7 +18,9 @@ public class InputAndroid implements Input {
 
 
     public void clearEvents() {
-        _handler.clearEvents(); // Limpia (borra) todos los eventos táctiles registrados en el controlador
+        synchronized (_handler) {
+            _handler.clearEvents(); // Limpia (borra) todos los eventos táctiles registrados en el controlador
+        }
     }
 
 

@@ -11,6 +11,8 @@ import com.example.logiclib.InitialScene;
 
 public class MainActivity extends AppCompatActivity {
     private EngineAndroid _engineAndroid;
+    private final float _aspectRatio = 2f / 3f;
+    private final int _logicHeight = 720;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(surfaceView);
 
-        _engineAndroid = new EngineAndroid(surfaceView);
+        _engineAndroid = new EngineAndroid(surfaceView,_aspectRatio,_logicHeight);
 
         Scene firstScene = new InitialScene(_engineAndroid);
         _engineAndroid.setCurrentScene(firstScene);

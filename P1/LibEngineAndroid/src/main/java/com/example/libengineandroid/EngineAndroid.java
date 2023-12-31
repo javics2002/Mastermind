@@ -22,16 +22,15 @@ public class EngineAndroid implements Runnable, Engine {
     private final AudioAndroid _audio;
 
     // Constructor
-    public EngineAndroid(SurfaceView myView) {
-        float aspectRatio = 2f / 3f;
-        int height = 720;
+    public EngineAndroid(SurfaceView myView,float aspectRatio , int logicHeight) {
+
 
         _surfaceView = myView;
         _input = new InputAndroid();
         // Administrador de activos del juego
         AssetManager _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
         myView.setOnTouchListener((View.OnTouchListener) _input.getTouchHandler()); // Configura el manejador de eventos táctiles
-        _graphics = new GraphicsAndroid(_surfaceView, _assetManager, (int) (height * aspectRatio), height);
+        _graphics = new GraphicsAndroid(_surfaceView, _assetManager, (int) (logicHeight * aspectRatio), logicHeight);
         _audio = new AudioAndroid(myView.getContext());
     }
 
