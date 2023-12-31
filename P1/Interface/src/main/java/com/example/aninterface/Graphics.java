@@ -17,11 +17,8 @@ public interface Graphics {
     void drawText(String text, Font font, int x, int y, int color);
     void drawCircle(int logicX, int logicY, int radius, int color);
 
-    int logicToRealX(int x);
 
-    int logicToRealY(int y);
-
-    int scaleToReal(int realScale);
+    boolean inBounds(int posX, int posY, int checkX, int checkY , int width, int height);
 
     int getWidth();
 

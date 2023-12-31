@@ -81,10 +81,7 @@ public class Button implements GameObject {
     }
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return (mouseX >= (_graphics.logicToRealX(_positionX))
-                && mouseX <= _graphics.logicToRealX(_positionX) + _graphics.scaleToReal(_width)
-                && mouseY >= _graphics.logicToRealY(_positionY)
-                && mouseY <= _graphics.logicToRealY(_positionY) + _graphics.scaleToReal(_height));
+        return _graphics.inBounds(_positionX,_positionY,mouseX,mouseY,_width,_height);
     }
 
     public void callback() {}

@@ -200,17 +200,17 @@ public class GraphicsAndroid implements Graphics {
     }
 
 
-    @Override
+
     public int logicToRealX(int logicX) {
         return (int) (logicX * _scaleFactor + _borderWidth);
     }
 
-    @Override
+
     public int logicToRealY(int logicY) {
         return (int) (logicY * _scaleFactor + _borderHeight);
     }
 
-    @Override
+
     public int scaleToReal(int realScale) {
         return (int) (realScale * _scaleFactor);
     }
@@ -276,5 +276,13 @@ public class GraphicsAndroid implements Graphics {
             _borderWidth = (int) ((getWidth() - (_logicWidth * factorY)) / 2);
             _borderHeight = 0;
         }
+    }
+    @Override
+    public boolean inBounds(int posX, int posY, int checkX, int checkY,int width, int height)
+    {
+        return(checkX >=logicToRealX(posX)
+                && checkX <= logicToRealX(posX) + scaleToReal(width)
+                && checkY >= logicToRealY(posY)
+                && checkY <= logicToRealY(posY) + scaleToReal(height));
     }
 }

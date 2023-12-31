@@ -169,12 +169,12 @@ public class GraphicsPC implements Graphics {
 
     // Funciones encargadas de convertir las dimensiones lógicas a dimensiones reales.
     // Tienen en cuenta los insets para realizar el calculo.
-    @Override
+
     public int logicToRealX(int logicX) {
         return (int) (logicX * _scaleFactor + _leftInset + _borderWidth);
     }
 
-    @Override
+
     public int logicToRealY(int logicY) {
         return (int) (logicY * _scaleFactor + _topInset + _borderHeight);
     }
@@ -182,7 +182,7 @@ public class GraphicsPC implements Graphics {
     // Función que no tiene en cuenta los Insets al convertir de tamaño lógico a real, debido a que
     // no podemos tener en cuenta el offset dos veces seguidas (Por ejemplo, al crear un rectángulo,
     // se tiene en cuenta el offset en las coordenadas x,y, pero no en el ancho/alto del rectángulo)
-    @Override
+
     public int scaleToReal(int realScale) {
         return (int) (realScale * _scaleFactor);
     }
@@ -228,5 +228,13 @@ public class GraphicsPC implements Graphics {
             _borderWidth = (int) ((getWidth() - (_logicWidth * factorY)) / 2);
             _borderHeight = 0;
         }
+    }
+    @Override
+    public boolean inBounds(int posX, int posY, int checkX, int checkY,int width, int height)
+    {
+        return(checkX >=logicToRealX(posX)
+                && checkX <= logicToRealX(posX) + scaleToReal(width)
+                && checkY >= logicToRealY(posY)
+                && checkY <= logicToRealY(posY) + scaleToReal(height));
     }
 }

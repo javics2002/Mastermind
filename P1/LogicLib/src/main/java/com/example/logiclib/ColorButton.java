@@ -54,10 +54,7 @@ public class ColorButton implements GameObject {
         }
     }
 
-    public boolean inBounds(int mX, int mY) {
-        return (mX >= (_graphics.logicToRealX(_positionX))
-                && mX <= _graphics.logicToRealX(_positionX) + _graphics.scaleToReal(_width)
-                && mY >= _graphics.logicToRealY(_positionY)
-                && mY <= _graphics.logicToRealY(_positionY) + _graphics.scaleToReal(_height));
+    public boolean inBounds(int mouseX, int mouseY) {
+        return _graphics.inBounds(_positionX,_positionY,mouseX,mouseY,_width,_height);
     }
 }
