@@ -16,15 +16,12 @@ public class InputAndroid implements Input {
         return _handler.getTouchEvent(); // Obtiene la lista de eventos táctiles del controlador
     }
 
-    @Override
+
     public void clearEvents() {
         _handler.clearEvents(); // Limpia (borra) todos los eventos táctiles registrados en el controlador
     }
 
-    @Override
-    public void addTouchEvent() {
-        _handler.addTouchEvent(); // Agrega un evento táctil al controlador
-    }
+
 
     public TouchHandlerAndroid getTouchHandler() {
         return _handler; // Obtiene el controlador de eventos táctiles

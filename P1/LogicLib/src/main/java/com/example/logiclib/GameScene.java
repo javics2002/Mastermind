@@ -152,6 +152,7 @@ public class GameScene implements Scene {
 
     @Override
     public void handleEvents(Input input) {
+
         if (input.getTouchEvent().size() > 0) {
             Input.TouchEvent touchEvent = input.getTouchEvent().get(0);
             _colorblindButton.handleEvents(touchEvent);

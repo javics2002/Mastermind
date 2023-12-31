@@ -20,12 +20,7 @@ public class InputPC implements Input {
         return _handler.getMouseEvent();
     }
 
-    @Override
-    public void addTouchEvent() {
-        _handler.addMouseEvent();
-    }
 
-    @Override
     public void clearEvents() {
         _handler.clearMouseEvents();
     }

@@ -18,7 +18,6 @@ public interface Input {
 
     List<TouchEvent> getTouchEvent();
 
-    public void addTouchEvent();
 
-    public void clearEvents();
+
 }
