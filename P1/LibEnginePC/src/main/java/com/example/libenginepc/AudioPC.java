@@ -56,8 +56,22 @@ public class AudioPC implements Audio {
         return _sounds.get(file);
     }
 
+
     @Override
     public boolean isLoaded(String file) {
         return _sounds.containsKey(file);
+    }
+    @Override
+    public void playSound(Sound sound) {
+        if (sound != null) {
+            sound.play();
+        }
+    }
+
+    @Override
+    public void stopSound(Sound sound) {
+        if (sound != null) {
+            sound.stop();
+        }
     }
 }

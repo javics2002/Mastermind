@@ -52,4 +52,18 @@ public class AudioAndroid implements Audio {
     public boolean isLoaded(String file) {
         return _soundMap.containsKey(file);
     }
+
+    @Override
+    public void playSound(Sound sound) {
+        if (sound != null) {
+            sound.play();
+        }
+    }
+
+    @Override
+    public void stopSound(Sound sound) {
+        if (sound != null) {
+            sound.stop();
+        }
+    }
 }

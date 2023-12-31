@@ -25,4 +25,7 @@ public interface Audio {
      * @return si el sonido de nombre file esta cargado en memoria o no.
      */
     boolean isLoaded(String file);
+
+    public void playSound(Sound sound);
+    public void stopSound(Sound sound);
 }

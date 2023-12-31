@@ -7,6 +7,7 @@ import com.example.aninterface.Input;
 import com.example.aninterface.GameObject;
 import com.example.aninterface.Sound;
 import com.example.aninterface.Font;
+import com.example.aninterface.Audio;
 
 public class Button implements GameObject {
     private Image _image;
@@ -19,6 +20,7 @@ public class Button implements GameObject {
     private int _arc;
     private String _text;
     private Font _font;
+    private Audio _audio;
 
     Button(Colors.ColorName backgroundColor, String text, Font font, Engine engine, int positionX, int positionY, int width, int height) {
         _engine = engine;
@@ -36,7 +38,8 @@ public class Button implements GameObject {
         _text = text;
         _font = font;
 
-        _clickSound = _engine.getAudio().loadSound("click.wav", false);
+        _audio=_engine.getAudio();
+        _clickSound = _audio.loadSound("click.wav", false);
         _clickSound.setVolume(.5f);
     }
     Button(String filename, Engine engine, int positionX, int positionY, int width, int height) {
@@ -49,14 +52,16 @@ public class Button implements GameObject {
         _width = width;
         _height = height;
 
-        _clickSound = _engine.getAudio().loadSound("click.wav", false);
+
+        _audio=_engine.getAudio();
+        _clickSound = _audio.loadSound("click.wav", false);
         _clickSound.setVolume(.5f);
     }
 
     @Override
     public boolean handleEvents(Input.TouchEvent event) {
         if (event.type == Input.InputType.PRESSED && inBounds(event.x, event.y)) {
-            _clickSound.play();
+            _audio.playSound(_clickSound);
             callback();
 
             return true;
