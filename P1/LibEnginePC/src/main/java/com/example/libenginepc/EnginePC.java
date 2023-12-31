@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 
 public class EnginePC implements Runnable, Engine {
     private Thread _renderThread;
-    private boolean _running;        // Boolean to know if the app is still running
+    private volatile boolean _running;        // Boolean to know if the app is still running
     private Scene _currentScene;
     private final GraphicsPC _graphics;
     private final InputPC _input;

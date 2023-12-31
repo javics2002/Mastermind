@@ -15,7 +15,7 @@ public class EngineAndroid implements Runnable, Engine {
     // Atributos
     private final SurfaceView _surfaceView; // Superficie de renderización
     private Thread _renderThread; // Hilo de renderizado
-    private boolean _running; // Indica si el motor está en ejecución
+    private volatile boolean _running; // Indica si el motor está en ejecución
     private Scene _currentScene; // Escena actual
     private final InputAndroid _input; // Manejador de entrada
     private final GraphicsAndroid _graphics; // Motor de renderizado

@@ -5,6 +5,7 @@ import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
+import java.util.List;
 
 public class DifficultyScene implements Scene {
     private final Button _backButton;
@@ -100,16 +101,19 @@ public class DifficultyScene implements Scene {
     }
 
     @Override
-    public void handleEvents(Input a) {
-        int numEvents = a.getTouchEvent().size();
-        if (numEvents > 0) {
-            _backButton.handleEvents(a.getTouchEvent().get(0));
-            _easyDifficultyButton.handleEvents(a.getTouchEvent().get(0));
-            _mediumDifficultyButton.handleEvents(a.getTouchEvent().get(0));
-            _difficultDifficultyButton.handleEvents(a.getTouchEvent().get(0));
-            _impossibleDifficultyButton.handleEvents(a.getTouchEvent().get(0));
+    public void handleEvents(Input input) {
+        List<Input.TouchEvent> touchEvents = input.getTouchEvent();
+
+        for (Input.TouchEvent touchEvent : touchEvents) {
+            _backButton.handleEvents(touchEvent);
+            _easyDifficultyButton.handleEvents(touchEvent);
+            _mediumDifficultyButton.handleEvents(touchEvent);
+            _difficultDifficultyButton.handleEvents(touchEvent);
+            _impossibleDifficultyButton.handleEvents(touchEvent);
+            // Puedes agregar más llamadas a handleEvents aquí según sea necesario.
         }
     }
+
 }
 
 

@@ -148,13 +148,14 @@ public class GameScene implements Scene {
         for (ColorButton colorButton : _colorButtons) {
             colorButton.render();
         }
+
     }
 
     @Override
     public void handleEvents(Input input) {
+        List<Input.TouchEvent> touchEvents = input.getTouchEvent();
 
-        if (input.getTouchEvent().size() > 0) {
-            Input.TouchEvent touchEvent = input.getTouchEvent().get(0);
+        for (Input.TouchEvent touchEvent : touchEvents) {
             _colorblindButton.handleEvents(touchEvent);
             _quitButton.handleEvents(touchEvent);
 
@@ -170,8 +171,8 @@ public class GameScene implements Scene {
                 }
             }
         }
-
     }
+
 
     private void updateTriesText() {
         String attemptsString = "Te quedan " + _gameAttributes.attemptsLeft + " intentos.";

@@ -5,6 +5,7 @@ import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
+import java.util.List;
 
 public class InitialScene implements Scene {
     private final Button _playButton;
@@ -47,12 +48,16 @@ public class InitialScene implements Scene {
         _titleText.render();
     }
 
-    @Override
-    public void handleEvents(Input a) {
-        if (a.getTouchEvent().size() > 0) {
-            this._playButton.handleEvents(a.getTouchEvent().get(0));
+    public void handleEvents(Input input) {
+        List<Input.TouchEvent> touchEvents = input.getTouchEvent();
+
+        for (Input.TouchEvent touchEvent : touchEvents) {
+            _playButton.handleEvents(touchEvent);
+
         }
     }
+
+
 }
 
 
