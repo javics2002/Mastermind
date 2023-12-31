@@ -114,6 +114,21 @@ public class GraphicsPC implements Graphics {
     }
 
     @Override
+    public void drawCircleWithBorder(int logicX, int logicY, int radius, int borderWidth, int circleColor, int borderColor) {
+        // Dibuja el borde del círculo
+        setColor(borderColor);
+        int realX = logicToRealX(logicX);
+        int realY = logicToRealY(logicY);
+        int realRadius = scaleToReal(radius + borderWidth);
+
+        _graphics2D.drawOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
+
+        // Dibuja el círculo interior
+        setColor(circleColor);
+        realRadius = scaleToReal(radius);
+        _graphics2D.fillOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
+    }
+    @Override
     public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
         _graphics2D.drawImage(((ImagePC) image).getImage(), logicToRealX(logicX), logicToRealY(logicY),
                 scaleToReal(logicWidth), scaleToReal(logicHeight), null);

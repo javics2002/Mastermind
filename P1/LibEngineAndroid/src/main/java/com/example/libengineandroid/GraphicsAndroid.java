@@ -147,6 +147,21 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
+    public void drawCircleWithBorder(int logicX, int logicY, int radius, int borderWidth, int circleColor, int borderColor) {
+        // Dibuja el borde del círculo
+        setColor(borderColor);
+        int realX = logicToRealX(logicX);
+        int realY = logicToRealY(logicY);
+        int realRadius = scaleToReal(radius + borderWidth);
+
+        _canvas.drawCircle(realX, realY, realRadius, _paint);
+
+        // Dibuja el círculo interior
+        setColor(circleColor);
+        realRadius = scaleToReal(radius);
+        _canvas.drawCircle(realX, realY, realRadius, _paint);
+    }
+    @Override
     public void drawRoundedRect(int logicX, int logicY, int logicWidth, int logicHeight, int color, int arcWidth, int arcHeight) {
         RectF rect = new RectF(logicToRealX(logicX), logicToRealY(logicY),
                 logicToRealX(logicX + logicWidth), logicToRealY(logicY + logicHeight));

@@ -49,6 +49,7 @@ public class ColorButton implements GameObject {
         // también se encarga de quitar los números para volver al modo normal.
         _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.getColor(_colorID - 1));
 
+
         if (_gameAttributes.isEyeOpen) {
             _numberText.render();
         }
