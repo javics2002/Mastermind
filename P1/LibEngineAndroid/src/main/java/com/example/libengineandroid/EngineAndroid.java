@@ -88,7 +88,6 @@ public class EngineAndroid implements Runnable, Engine {
         }
     }
 
-    @Override
     public void resume() {
         // Si no se estaba ejecutando, inicia la ejecución del motor en un nuevo hilo de renderizado
         if (!_running) {

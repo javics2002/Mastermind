@@ -9,9 +9,5 @@ public interface Engine {
 
     Input getInput();
 
-    void resume();
-
-    void pause();
-
     Audio getAudio();
 }

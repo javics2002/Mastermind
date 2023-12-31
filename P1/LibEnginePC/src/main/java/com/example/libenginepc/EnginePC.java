@@ -73,7 +73,7 @@ public class EnginePC implements Runnable, Engine {
     /*
      Inicia un proceso en un hilo separado si la aplicación no está en curso.
     */
-    @Override
+
     public void resume() {
         if (!_running) {
             _running = true;
@@ -85,7 +85,7 @@ public class EnginePC implements Runnable, Engine {
     /*
       Pausa el hilo de la aplicación. Es obligatorio hacer el join() dentro de un catch.
     */
-    @Override
+
     public void pause() {
         if (_running) {
             _running = false;
