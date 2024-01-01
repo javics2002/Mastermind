@@ -1,8 +1,6 @@
 package com.example.aninterface;
 
 public interface Graphics {
-	Font newFont(String fileName, float size);
-
 	Image loadImage(String path);
 
 	void drawImage(Image image, float logicX, float logicY, float logicWidth, float logicHeight, float scale);
@@ -19,17 +17,19 @@ public interface Graphics {
 
 	void drawCircleWithBorder(float logicX, float logicY, float radius, float borderWidth, float scale, int circleColor, int borderColor);
 
-	void drawText(String text, Font font, float logicX, float logicY, float scale, int color);
-
 	void drawCircle(float logicX, float logicY, float radius, float scale, int color);
+
+	Font newFont(String fileName, float size);
+
+	void drawText(String text, Font font, float logicX, float logicY, float scale, int color);
 
 	boolean inBounds(float posX, float posY, int checkX, int checkY, float width, float height, float scale);
 
 	int getWidth();
 
-	int getLogicWidth();
-
 	int getHeight();
+
+	int getLogicWidth();
 
 	int getLogicHeight();
 
@@ -40,6 +40,10 @@ public interface Graphics {
 	void setNewResolution(int w, int h);
 
 	void prepareFrame();
+
+	void save();
+
+	void restore();
 }
 
 

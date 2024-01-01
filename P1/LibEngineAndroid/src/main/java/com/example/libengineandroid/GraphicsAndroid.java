@@ -133,7 +133,7 @@ public class GraphicsAndroid implements Graphics {
 		ImageAndroid imageAndroid = (ImageAndroid) image;
 
 		int width = scaleToReal(logicWidth, scale);
-		int height =  scaleToReal(logicHeight, scale);
+		int height = scaleToReal(logicHeight, scale);
 
 		if (width == 0 || height == 0)
 			return;
@@ -320,5 +320,15 @@ public class GraphicsAndroid implements Graphics {
 				&& checkX <= logicToRealX(posX) + scaleToReal(width, scale)
 				&& checkY >= logicToRealY(posY)
 				&& checkY <= logicToRealY(posY) + scaleToReal(height, scale));
+	}
+
+	@Override
+	public void save() {
+		_canvas.save(); // Guarda el estado actual del lienzo
+	}
+
+	@Override
+	public void restore() {
+		_canvas.restore(); // Restaura el estado guardado del lienzo
 	}
 }
