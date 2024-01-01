@@ -300,4 +300,13 @@ public class GraphicsAndroid implements Graphics {
                 && checkY >= logicToRealY(posY)
                 && checkY <= logicToRealY(posY) + scaleToReal(height));
     }
+    @Override
+    public void save() {
+        _canvas.save(); // Guarda el estado actual del lienzo
+    }
+
+    @Override
+    public void restore() {
+        _canvas.restore(); // Restaura el estado guardado del lienzo
+    }
 }
