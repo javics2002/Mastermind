@@ -132,6 +132,8 @@ public class GameScene implements Scene {
 
     @Override
     public void render(Graphics graphics) {
+        graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
+
         _objectiveText.render();
         _attemptsText.render();
         _quitButton.render();

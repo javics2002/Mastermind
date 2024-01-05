@@ -91,7 +91,9 @@ public class DifficultyScene implements Scene {
     }
 
     @Override
-    public void render(Graphics gr) {
+    public void render(Graphics graphics) {
+        graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
+
         _backButton.render();
         _titleText.render();
         _easyDifficultyButton.render();

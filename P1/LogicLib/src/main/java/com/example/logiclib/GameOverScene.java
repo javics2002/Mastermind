@@ -88,7 +88,9 @@ public class GameOverScene implements Scene {
     public void update(double deltaTime) {}
 
     @Override
-    public void render(Graphics gr) {
+    public void render(Graphics graphics) {
+        graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
+
         _resultText.render();
         _attemptsText.render();
         _attemptsNumberText.render();
