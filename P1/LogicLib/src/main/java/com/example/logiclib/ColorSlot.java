@@ -34,12 +34,15 @@ public class ColorSlot implements GameObject {
     @Override
     public void render() {
         if (hasColor() && _gameAttributes.isEyeOpen) {
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.getColor(_colorID - 1));
+            _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
+                    _width / 2, 1, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
             _numberText.render();
         } else if (hasColor()) {
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.getColor(_colorID - 1));
+            _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
+                    _width / 2, 1, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
         } else { // Gris
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 2, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY));
+            _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
+                    _width / 2, 1, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY), Colors.colorValues.get(Colors.ColorName.BLACK));
             _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 8, Colors.colorValues.get(Colors.ColorName.DARKGRAY));
         }
     }

@@ -115,17 +115,17 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public void drawCircleWithBorder(int logicX, int logicY, int radius, int borderWidth, int circleColor, int borderColor) {
+        final int realX = logicToRealX(logicX);
+        final int realY = logicToRealY(logicY);
+        final int realRadius = scaleToReal(radius);
+        final int realBorderRadius = realRadius + scaleToReal(borderWidth);
+
         // Dibuja el borde del círculo
         setColor(borderColor);
-        int realX = logicToRealX(logicX);
-        int realY = logicToRealY(logicY);
-        int realRadius = scaleToReal(radius + borderWidth);
-
-        _graphics2D.drawOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
+        _graphics2D.fillOval(realX - realBorderRadius, realY - realBorderRadius, 2 * realBorderRadius, 2 * realBorderRadius);
 
         // Dibuja el círculo interior
         setColor(circleColor);
-        realRadius = scaleToReal(radius);
         _graphics2D.fillOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
     }
     @Override

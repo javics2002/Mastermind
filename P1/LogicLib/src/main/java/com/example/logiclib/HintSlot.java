@@ -26,8 +26,8 @@ public class HintSlot implements GameObject {
 
     @Override
     public void render() {
-        _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
-                _width / 2,  Colors.colorValues.get(_colorName));
+        _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
+                _width / 2, 1, Colors.colorValues.get(_colorName), Colors.colorValues.get(Colors.ColorName.BLACK));
     }
 
     @Override
