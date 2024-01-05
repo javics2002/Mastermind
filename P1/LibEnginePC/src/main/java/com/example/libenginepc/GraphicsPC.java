@@ -179,7 +179,7 @@ public class GraphicsPC implements Graphics {
     public void drawRoundedRect(int logicX, int logicY, int logicWidth, int logicHeight, int color, int arcWidth, int arcHeight) {
         setColor(color);
         _graphics2D.fillRoundRect(logicToRealX(logicX), logicToRealY(logicY),
-                scaleToReal(logicWidth), scaleToReal(logicHeight), scaleToReal(arcWidth), scaleToReal(arcHeight));
+                scaleToReal(logicWidth), scaleToReal(logicHeight), scaleToReal(2 * arcWidth), scaleToReal(2 * arcHeight));
     }
 
     // Funciones encargadas de convertir las dimensiones lógicas a dimensiones reales.

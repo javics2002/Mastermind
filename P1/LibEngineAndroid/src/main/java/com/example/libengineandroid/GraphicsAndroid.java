@@ -167,7 +167,7 @@ public class GraphicsAndroid implements Graphics {
                 logicToRealX(logicX + logicWidth), logicToRealY(logicY + logicHeight));
 
         setColor(color);
-        _canvas.drawRoundRect(rect, arcWidth, arcHeight, _paint);
+	    _canvas.drawRoundRect(rect, scaleToReal(arcWidth), scaleToReal(arcHeight), _paint);
     }
 
     public void drawCircle(int logicX, int logicY, int radius, int color) {

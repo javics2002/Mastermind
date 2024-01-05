@@ -85,7 +85,7 @@ public class Button implements GameObject {
     }
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return _graphics.inBounds(_positionX,_positionY,mouseX,mouseY,_width,_height);
+        return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height);
     }
 
     public void callback() {}
