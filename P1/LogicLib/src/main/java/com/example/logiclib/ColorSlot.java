@@ -5,11 +5,7 @@ import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 
-public class ColorSlot implements GameObject {
-    private final Graphics _graphics;
-    private final int _positionX, _positionY;
-    private final int _width, _height;
-    private String _name;
+public class ColorSlot extends GameObject {
     private boolean _hasColor;
     private int _colorID;
     private Font _colorNum;
@@ -17,7 +13,8 @@ public class ColorSlot implements GameObject {
     private GameAttributes _gameAttributes;
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, GameAttributes gameAttributes) {
-        _graphics = engine.getGraphics();
+        super(engine, positionX, positionY, width, height, 1f);
+
         _gameAttributes = gameAttributes;
         _positionX = positionX;
         _positionY = positionY;
@@ -32,16 +29,16 @@ public class ColorSlot implements GameObject {
     @Override
     public void render() {
         if (hasColor() && _gameAttributes.isEyeOpen) {
-            _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
-                    _width / 2, 1, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
+            _graphics.drawCircleWithBorder((int) (_positionX + _width / 2), (int) (_positionY + _height / 2),
+                    (int) (_width * _scale/ 2), 1, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
             _numberText.render();
         } else if (hasColor()) {
-            _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
-                    _width / 2, 1, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
+            _graphics.drawCircleWithBorder((int) (_positionX + _width / 2), (int) (_positionY + _height / 2),
+                    (int) (_width * _scale/ 2), 1, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
         } else { // Gris
-            _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
-                    _width / 2, 1, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY), Colors.colorValues.get(Colors.ColorName.BLACK));
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2, _width / 8, Colors.colorValues.get(Colors.ColorName.DARKGRAY));
+            _graphics.drawCircleWithBorder((int) (_positionX + _width / 2), (int) (_positionY + _height / 2),
+                    (int) (_width * _scale/ 2), 1, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY), Colors.colorValues.get(Colors.ColorName.BLACK));
+            _graphics.drawCircle((int) (_positionX + _width / 2), (int) (_positionY + _height / 2), (int) (_width * _scale / 8), Colors.colorValues.get(Colors.ColorName.DARKGRAY));
         }
     }
 
@@ -59,16 +56,14 @@ public class ColorSlot implements GameObject {
         _hasColor = true;
         _colorID = color;
         String num = String.valueOf(_colorID);
-        int textX = _positionX + _width / 2;
-        int textY = _positionY + _height;
 
         _numberText.setText(num);
-        _numberText.setPos(textX, textY);
+        _numberText.setPosition(_positionX + _width / 2, _positionY + _height);
     }
 
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height);
+        return _graphics.inBounds((int) _positionX, (int) _positionY, mouseX, mouseY, (int) (_width * _scale), (int) (_height * _scale));
     }
     public boolean hasColor() {
         return _hasColor;

@@ -8,27 +8,18 @@ import com.example.aninterface.Sound;
 import com.example.aninterface.Font;
 import com.example.aninterface.Audio;
 
-public class Button implements GameObject {
+public class Button extends GameObject {
     private Image _image;
-    private final Engine _engine;
-    private final Graphics _graphics;
-    private final int _positionX, _positionY;
-    private final int _width, _height;
     private final Sound _clickSound;
     private int _backgroundColor;
     private int _arc;
     private String _text;
     private Font _font;
-    private Audio _audio;
+    private final Audio _audio;
 
     Button(Colors.ColorName backgroundColor, String text, Font font, Engine engine, int positionX, int positionY, int width, int height) {
-        _engine = engine;
-        _graphics = engine.getGraphics();
+        super(engine, positionX, positionY, width, height, 1f);
 
-        _positionX = positionX;
-        _positionY = positionY;
-        _width = width;
-        _height = height;
         _image = null;
 
         _backgroundColor = Colors.colorValues.get(backgroundColor);
@@ -42,15 +33,9 @@ public class Button implements GameObject {
         _clickSound.setVolume(.5f);
     }
     Button(String filename, Engine engine, int positionX, int positionY, int width, int height) {
-        _engine = engine;
-        _graphics = engine.getGraphics();
+        super(engine, positionX, positionY, width, height, 1f);
 
         _image = _graphics.loadImage(filename);
-        _positionX = positionX;
-        _positionY = positionY;
-        _width = width;
-        _height = height;
-
 
         _audio=_engine.getAudio();
         _clickSound = _audio.loadSound("click.wav", false);
@@ -76,16 +61,16 @@ public class Button implements GameObject {
     @Override
     public void render() {
         if (_image != null)
-            _graphics.drawImage(_image, _positionX, _positionY, _width, _height);
+            _graphics.drawImage(_image, (int) _positionX, (int) _positionY, (int) (_width * _scale), (int) (_height * _scale));
         else {
-            _graphics.drawRoundedRect(_positionX, _positionY, _width, _height, _backgroundColor, _arc, _arc);
-            _graphics.drawText(_text, _font, _positionX + _width / 2 - _graphics.getStringWidth(_text, _font) / 2,
-                    _positionY + _height / 2 + _graphics.getStringHeight(_text, _font) / 2, 0);
+            _graphics.drawRoundedRect((int) _positionX, (int) _positionY, (int) _width, (int) _height, _backgroundColor, _arc, _arc);
+            _graphics.drawText(_text, _font, (int) ((_positionX + (int) _width / 2 - _graphics.getStringWidth(_text, _font) / 2) * _scale),
+                    (int) ((_positionY + (int) _height / 2 + _graphics.getStringHeight(_text, _font) / 2) * _scale), 0);
         }
     }
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height);
+        return _graphics.inBounds((int) _positionX, (int) _positionY, mouseX, mouseY, (int) (_width * _scale), (int) (_height * _scale));
     }
 
     public void callback() {}

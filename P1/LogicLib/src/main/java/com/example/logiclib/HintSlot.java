@@ -5,28 +5,19 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 
-public class HintSlot implements GameObject {
-    private Image _image;
-    private final Graphics _graphics;
-    private final int _positionX, _positionY;
-    private final int _width, _height;
+public class HintSlot extends GameObject {
     private Colors.ColorName _colorName;
 
     public HintSlot(Engine engine, int positionX, int positionY, int width, int height) {
-        _graphics = engine.getGraphics();
-
-        _positionX = positionX;
-        _positionY = positionY;
-        _width = width;
-        _height = height;
+        super(engine, positionX, positionY, width, height, 1f);
 
         _colorName = Colors.ColorName.LIGHTGRAY;
     }
 
     @Override
     public void render() {
-        _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
-                _width / 2, 1, Colors.colorValues.get(_colorName), Colors.colorValues.get(Colors.ColorName.BLACK));
+        _graphics.drawCircleWithBorder((int) (_positionX + _width / 2), (int) (_positionY + _height / 2),
+                (int) (_width * _scale / 2), 1, Colors.colorValues.get(_colorName), Colors.colorValues.get(Colors.ColorName.BLACK));
     }
 
     @Override
