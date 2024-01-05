@@ -34,20 +34,18 @@ public class GameScene implements Scene {
         _gameAttributes.resultCombination = new Combination(combinationLength, numberOfColors, repeatedColors);
 
         // Title
-        int verticalMargin = 5;
+        final int verticalMargin = 5;
         Font objetiveFont = graphics.newFont("Comfortaa-Regular.ttf", 24f);
         String objectiveString = "Averigua el código";
-        _objectiveText = new Text(objectiveString, objetiveFont, _engine,
-                (graphics.getLogicWidth() / 2) - (graphics.getStringWidth(objectiveString, objetiveFont) / 2),
-                verticalMargin + graphics.getStringHeight(objectiveString, objetiveFont), 0);
+        _objectiveText = new Text(objectiveString, objetiveFont, _engine, graphics.getLogicWidth() / 2,
+                verticalMargin + 40, 0, true);
 
         // Attempts
         String attemptsString = "Te quedan " + _gameAttributes.attemptsLeft + " intentos.";
         Font attemptsFont = graphics.newFont("Comfortaa-Regular.ttf", 16f);
-        _attemptsText = new Text(attemptsString, attemptsFont, _engine,
-                (graphics.getLogicWidth() / 2) - (graphics.getStringWidth(attemptsString, attemptsFont) / 2),
-                verticalMargin + graphics.getStringHeight(objectiveString, objetiveFont) + graphics.getStringHeight(attemptsString, attemptsFont) + 5,
-                0);
+        _attemptsText = new Text(attemptsString, attemptsFont, _engine, graphics.getLogicWidth() / 2,
+                verticalMargin + 60,
+                0, true);
 
         // Quit button
         int buttonDimension = 50;

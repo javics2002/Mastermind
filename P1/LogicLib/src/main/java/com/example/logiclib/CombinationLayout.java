@@ -34,9 +34,7 @@ public class CombinationLayout implements GameObject {
 
         Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
         _combinationNumber = new Text(Integer.toString(number + 1), numberFont, engine,
-                _lateralMargin + 50 - _graphics.getStringWidth(Integer.toString(number + 1), numberFont) / 2,
-                _positionY + _scale / 2 - _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 2 ,
-                0);
+                _lateralMargin + 50, _positionY + _scale / 2, 0, true);
 
         _colors = new ArrayList<>();
         for (int i = 0; i < combinationLength; i++) {

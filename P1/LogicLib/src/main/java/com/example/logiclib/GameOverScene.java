@@ -45,13 +45,13 @@ public class GameOverScene implements Scene {
         }
 
         _resultText = new Text(resultString, resultFont, _engine,
-                graphics.getLogicWidth() / 2 - graphics.getStringWidth(resultString, resultFont) / 2, 70, 0);
+                graphics.getLogicWidth() / 2, 130, 0, true);
         _attemptsText = new Text(attemptsString, attemptsFont, _engine,
-                graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsString, attemptsFont) / 2, 110, 0);
+                graphics.getLogicWidth() / 2, 170, 0, true);
         _attemptsNumberText = new Text(attemptsNumberString, attemptsNumberFont, _engine,
-                graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsNumberString, attemptsNumberFont) / 2, 160, 0);
+                graphics.getLogicWidth() / 2, 220, 0, true);
         _codeText = new Text(codeString, codeFont, _engine,
-                graphics.getLogicWidth() / 2 - graphics.getStringWidth(codeString, codeFont) / 2, 200, 0);
+                graphics.getLogicWidth() / 2, 260, 0, true);
 
         int scale = 40;
         int padding = 6;
@@ -59,7 +59,7 @@ public class GameOverScene implements Scene {
         for (int i = 0; i < _gameAttributes.combinationLength; i++) {
             ColorSlot cSlotX = new ColorSlot(_engine,
                     (int) ((graphics.getLogicWidth() / 2) + (i - _gameAttributes.combinationLength / 2f) * (scale + padding)),
-                    250, scale, scale, _gameAttributes);
+                    280, scale, scale, _gameAttributes);
             _resultCombination.add(cSlotX);
             cSlotX.setColor(_gameAttributes.resultCombination.getColors()[i] , _gameAttributes.isEyeOpen);
         }

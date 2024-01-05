@@ -27,7 +27,7 @@ public class ColorSlot implements GameObject {
         _height = height;
         _hasColor = false;
         _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
-        _numberText = new Text("", _colorNum, engine, 0, 0, 0);
+        _numberText = new Text("", _colorNum, engine, 0, 0, 0, true);
         _colorID = -1;
     }
 
@@ -61,8 +61,8 @@ public class ColorSlot implements GameObject {
         _hasColor = true;
         _colorID = color;
         String num = String.valueOf(_colorID);
-        int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, _colorNum) / 2;
-        int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, _colorNum) / 2;
+        int textX = _positionX + _width / 2;
+        int textY = _positionY + _height;
 
         _numberText.setText(num);
         _numberText.setPos(textX, textY);
@@ -70,7 +70,7 @@ public class ColorSlot implements GameObject {
 
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return _graphics.inBounds(_positionX,_positionY,mouseX,mouseY,_width,_height);
+        return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height);
     }
     public boolean hasColor() {
         return _hasColor;

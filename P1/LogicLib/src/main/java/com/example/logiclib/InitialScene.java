@@ -20,9 +20,8 @@ public class InitialScene implements Scene {
         Font _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
         String title = "Master Mind";
 
-        int titleWidth = graphics.getStringWidth(title, _titleFont);
         _titleText = new Text(title, _titleFont, _engine,
-                graphics.getLogicWidth() / 2 - titleWidth / 2, 200, 0);
+                graphics.getLogicWidth() / 2, 200, 0, true);
 
         int buttonWidth = 330;
         int buttonHeight = 90;

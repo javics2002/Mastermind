@@ -11,22 +11,29 @@ public class Text implements GameObject {
     private final int _color;
     private final Graphics _graphics;
     private int _posX, _posY;
-    Font _font;
+    private final Font _font;
+    private final boolean _centered;
 
-    Text(String text, Font font, Engine engine, int posX, int posY, int color) {
+    Text(String text, Font font, Engine engine, int posX, int posY, int color, boolean centered) {
         _graphics = engine.getGraphics();
+
+        _centered = centered;
+
+        _text = text;
+        _font = font;
 
         _posX = posX;
         _posY = posY;
         _color = color;
-
-        _text = text;
-        _font = font;
     }
 
     @Override
     public void render() {
-        _graphics.drawText(_text, _font, _posX, _posY, _color);
+        if(_centered)
+            _graphics.drawText(_text, _font, _posX - _graphics.getStringWidth(_text, _font) / 2,
+                    _posY - _graphics.getStringHeight(_text, _font) / 2, _color);
+        else
+            _graphics.drawText(_text, _font, _posX, _posY, _color);
     }
 
     @Override

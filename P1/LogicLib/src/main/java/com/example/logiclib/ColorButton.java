@@ -28,9 +28,9 @@ public class ColorButton implements GameObject {
         String num = String.valueOf(_colorID);
         _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
 
-        int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, _colorNum) / 2;
-        int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, _colorNum) / 2;
-        _numberText = new Text(num, _colorNum, engine, textX, textY, 0);
+        int textX = _positionX + _width / 2;
+        int textY = _positionY + _height;
+        _numberText = new Text(num, _colorNum, engine, textX, textY, 0, true);
     }
 
     @Override
@@ -56,6 +56,6 @@ public class ColorButton implements GameObject {
     }
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return _graphics.inBounds(_positionX,_positionY,mouseX,mouseY,_width,_height);
+        return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height);
     }
 }

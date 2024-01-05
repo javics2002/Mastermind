@@ -38,7 +38,7 @@ public class DifficultyScene implements Scene {
         Font font = graphics.newFont("Comfortaa-Regular.ttf", 24f);
         String question = "¿En qué dificultad quieres jugar?";
         _titleText = new Text(question, font, _engine,
-                graphics.getLogicWidth() / 2 - graphics.getStringWidth(question, font) / 2, graphics.getLogicHeight() / 4, 0);
+                graphics.getLogicWidth() / 2, graphics.getLogicHeight() / 4, 0, true);
 
         // Game buttons
         int gameButtonsWidth = 330;
