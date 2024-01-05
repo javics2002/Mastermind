@@ -4,7 +4,6 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
-import com.example.aninterface.GameObject;
 
 public class Text implements GameObject {
     private String _text;

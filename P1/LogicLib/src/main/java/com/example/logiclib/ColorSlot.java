@@ -3,9 +3,7 @@ package com.example.logiclib;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
-import com.example.aninterface.Image;
 import com.example.aninterface.Input;
-import com.example.aninterface.GameObject;
 
 public class ColorSlot implements GameObject {
     private final Graphics _graphics;
