@@ -36,8 +36,6 @@ public interface Graphics {
     void setNewResolution(int w, int h);
 
     void prepareFrame();
-    void save();
-    void restore();
 }
 
 

@@ -252,11 +252,4 @@ public class GraphicsPC implements Graphics {
                 && checkY >= logicToRealY(posY)
                 && checkY <= logicToRealY(posY) + scaleToReal(height));
     }
-    @Override
-    public void save() {
-    }
-
-    @Override
-    public void restore() {
-    }
 }
