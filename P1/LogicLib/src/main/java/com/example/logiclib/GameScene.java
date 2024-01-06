@@ -16,6 +16,8 @@ public class GameScene implements Scene {
     private final Button _quitButton, _colorblindButton;
     private final List<CombinationLayout> _combinationLayouts;
     private final List<ColorButton> _colorButtons;
+    private Transition _transition;
+    private boolean _gameFinished;
 
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
         _engine = engine;
@@ -32,6 +34,10 @@ public class GameScene implements Scene {
         _gameAttributes.activeLayout = 0;
         _gameAttributes.isEyeOpen = false;
         _gameAttributes.resultCombination = new Combination(combinationLength, numberOfColors, repeatedColors);
+        _gameFinished = false;
+
+        // Transition
+        _transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
 
         // Title
         final int verticalMargin = 5;
@@ -55,7 +61,7 @@ public class GameScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new DifficultyScene(_engine);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
 
@@ -87,11 +93,19 @@ public class GameScene implements Scene {
                     (int) (graphics.getLogicWidth() / 2 + (i - numberOfColors / 2f) * (scale + horizontalPadding)),
                     graphics.getLogicHeight() - 60, scale, scale, i + 1, _gameAttributes));
         }
+
+        _transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
     }
 
 
     @Override
     public void update(double deltaTime) {
+        _transition.update(deltaTime);
+
+        if (_gameFinished){
+            return;
+        }
+
         updateTriesText();
 
         // _combinationLayouts.get(gameAttributes._activeLayout).getCurrentCombination().printCombination();
@@ -100,7 +114,8 @@ public class GameScene implements Scene {
             if (activeLayout.getCurrentCombination().equals(_gameAttributes.resultCombination)) {
                 // USER WON
                 Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
-                _engine.setCurrentScene(gameOverScene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, gameOverScene);
+                _gameFinished = true;
                 return;
             }
 
@@ -114,10 +129,10 @@ public class GameScene implements Scene {
             if (_gameAttributes.attemptsLeft == 0) {
                 // User LOST
                 Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
-                _engine.setCurrentScene(gameOverScene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, gameOverScene);
+                _gameFinished = true;
             }
         }
-
 
         for (CombinationLayout combination : _combinationLayouts) {
             combination.update();
@@ -149,6 +164,7 @@ public class GameScene implements Scene {
             colorButton.render();
         }
 
+        _transition.render();
     }
 
     @Override

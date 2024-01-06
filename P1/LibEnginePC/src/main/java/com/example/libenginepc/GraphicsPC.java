@@ -88,7 +88,17 @@ public class GraphicsPC implements Graphics {
 
     @Override
     public void setColor(int color) {
-        _graphics2D.setColor(new Color(color));
+        int colorRGB = color;
+        colorRGB += 0xFF000000;
+
+        int colorARGB = colorRGB + 0xFF000000;
+        Color test = new Color(colorARGB, true);
+
+        _graphics2D.setColor(test);
+    }
+
+    private int combineAlphaAndColor(int alpha, int colorRGB) {
+        return (alpha << 24) | (colorRGB & 0x00FFFFFF);
     }
 
     public void show() {
@@ -173,6 +183,12 @@ public class GraphicsPC implements Graphics {
     public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
         setColor(color);
         _graphics2D.fillRect(logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth), scaleToReal(logicHeight));
+    }
+
+    @Override
+    public void drawRealRect(int realX, int realY, int realWidth, int realHeight, int color) {
+        setColor(color);
+        _graphics2D.fillRect(realX, realY, realWidth + _frame.getInsets().left, realHeight + _frame.getInsets().top);
     }
 
     @Override

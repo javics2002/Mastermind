@@ -12,6 +12,7 @@ public interface Graphics {
     void clear(int color);
 
     void drawRect(int x, int y, int width, int height, int color);
+    void drawRealRect(int x, int y, int width, int height, int color);
     void drawRoundedRect(int x, int y, int width, int height, int color, int arcWidth, int arcHeight);
 
     void drawCircleWithBorder(int logicX, int logicY, int radius, int borderWidth, int circleColor, int borderColor);

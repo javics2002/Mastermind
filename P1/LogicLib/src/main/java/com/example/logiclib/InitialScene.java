@@ -10,6 +10,7 @@ import java.util.List;
 public class InitialScene implements Scene {
     private final Button _playButton;
     private final Text _titleText;
+    private Transition _transition;
     Engine _engine;
 
     public InitialScene(Engine engine) {
@@ -23,6 +24,8 @@ public class InitialScene implements Scene {
         _titleText = new Text(title, _titleFont, _engine,
                 graphics.getLogicWidth() / 2, 200, 0, true);
 
+        _transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
+
         int buttonWidth = 330;
         int buttonHeight = 90;
 
@@ -32,13 +35,16 @@ public class InitialScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new DifficultyScene(_engine);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
+
+        _transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
     }
 
     @Override
     public void update(double deltaTime) {
+        _transition.update(deltaTime);
     }
 
     @Override
@@ -47,6 +53,7 @@ public class InitialScene implements Scene {
 
         _playButton.render();
         _titleText.render();
+        _transition.render();
     }
 
     public void handleEvents(Input input) {
@@ -54,11 +61,8 @@ public class InitialScene implements Scene {
 
         for (Input.TouchEvent touchEvent : touchEvents) {
             _playButton.handleEvents(touchEvent);
-
         }
     }
-
-
 }
 
 

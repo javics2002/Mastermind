@@ -14,11 +14,8 @@ public class InputHandlerMouse implements MouseListener {
         _eventsMouse = new ArrayList<Input.TouchEvent>();
     }
 
-    public List<Input.TouchEvent> getMouseEvent() {
+    public List<Input.TouchEvent> getMouseEvents() {
         return _eventsMouse;
-    }
-
-    public void addMouseEvent() {
     }
 
     public void clearMouseEvents() {

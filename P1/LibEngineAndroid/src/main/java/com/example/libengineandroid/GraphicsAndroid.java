@@ -61,7 +61,7 @@ public class GraphicsAndroid implements Graphics {
     public void clear(int color) {
         final boolean debug = false;
         if (debug) {
-            _canvas.drawColor(0);
+            _canvas.drawColor(0xFFFFFFFF);
 
             drawRect(0, 0, _logicWidth, _logicHeight, color);
         } else {
@@ -141,6 +141,14 @@ public class GraphicsAndroid implements Graphics {
     public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
         Rect rect = new Rect(logicToRealX(logicX), logicToRealY(logicY),
                 logicToRealX(logicX + logicWidth), logicToRealY(logicY + logicHeight));
+
+        setColor(color);
+        _canvas.drawRect(rect, _paint);
+    }
+
+    @Override
+    public void drawRealRect(int realX, int realY, int realWidth, int realHeight, int color) {
+        Rect rect = new Rect(realX, realY, realWidth, realHeight);
 
         setColor(color);
         _canvas.drawRect(rect, _paint);

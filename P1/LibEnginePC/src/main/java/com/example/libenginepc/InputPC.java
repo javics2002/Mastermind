@@ -17,7 +17,7 @@ public class InputPC implements Input {
 
     @Override
     public List<TouchEvent> getTouchEvent() {
-        return _handler.getMouseEvent();
+        return _handler.getMouseEvents();
     }
 
 

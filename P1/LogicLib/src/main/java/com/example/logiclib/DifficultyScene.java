@@ -13,6 +13,7 @@ public class DifficultyScene implements Scene {
             _difficultDifficultyButton, _impossibleDifficultyButton;
 
     private final Text _titleText;
+    private Transition _transition;
     private final int _padding = 20;
 
     Engine _engine;
@@ -22,6 +23,8 @@ public class DifficultyScene implements Scene {
 
         Graphics graphics = _engine.getGraphics();
 
+        _transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
+
         // Back button
         int backbuttonScale = 40;
         _backButton = new Button("UI/back.png", _engine,
@@ -30,7 +33,7 @@ public class DifficultyScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new InitialScene(_engine);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
 
@@ -54,7 +57,7 @@ public class DifficultyScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine, 6, 4, 4, false);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
         _mediumDifficultyButton = new Button(Colors.ColorName.BACKGROUNDYELLOW, "Medio", buttonFont, _engine,
@@ -63,7 +66,7 @@ public class DifficultyScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine,  8, 4, 6, false);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
         _difficultDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Difícil", buttonFont, _engine,
@@ -72,7 +75,7 @@ public class DifficultyScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine, 10, 5, 8, true);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
         _impossibleDifficultyButton = new Button(Colors.ColorName.BACKGROUNDRED, "Imposible", buttonFont, _engine,
@@ -81,13 +84,16 @@ public class DifficultyScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new GameScene(_engine, 10, 6, 9, true);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
+
+        _transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
     }
 
     @Override
     public void update(double deltaTime) {
+        _transition.update(deltaTime);
     }
 
     @Override
@@ -100,6 +106,7 @@ public class DifficultyScene implements Scene {
         _mediumDifficultyButton.render();
         _difficultDifficultyButton.render();
         _impossibleDifficultyButton.render();
+        _transition.render();
     }
 
     @Override

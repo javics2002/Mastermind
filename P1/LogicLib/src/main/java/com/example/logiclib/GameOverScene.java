@@ -14,6 +14,7 @@ public class GameOverScene implements Scene {
     private final Button _playAgainButton;
     private final Button _chooseDifficultyButton;
     private final List<ColorSlot> _resultCombination;
+    private Transition _transition;
 
     Engine _engine;
     GameAttributes _gameAttributes;
@@ -24,6 +25,9 @@ public class GameOverScene implements Scene {
 
         // Init GameAttributes
         _gameAttributes = gameAttributes;
+
+        // Transition
+        _transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
 
         //Create scene
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
@@ -71,7 +75,7 @@ public class GameOverScene implements Scene {
             public void callback() {
                 Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,  _gameAttributes.combinationLength,
                         _gameAttributes.colorNumber, _gameAttributes.repeatedColors);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
         _chooseDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Elegir dificultad", buttonFont, _engine,
@@ -79,13 +83,17 @@ public class GameOverScene implements Scene {
             @Override
             public void callback() {
                 Scene scene = new DifficultyScene(_engine);
-                _engine.setCurrentScene(scene);
+                _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };
+
+        _transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
     }
 
     @Override
-    public void update(double deltaTime) {}
+    public void update(double deltaTime) {
+        _transition.update(deltaTime);
+    }
 
     @Override
     public void render(Graphics graphics) {
@@ -102,6 +110,7 @@ public class GameOverScene implements Scene {
 
         _playAgainButton.render();
         _chooseDifficultyButton.render();
+        _transition.render();
     }
 
     @Override
