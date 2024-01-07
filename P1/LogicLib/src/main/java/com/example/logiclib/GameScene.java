@@ -139,11 +139,11 @@ public class GameScene implements Scene {
         }
 
         for (CombinationLayout combination : _combinationLayouts) {
-            combination.update();
+            combination.update(deltaTime);
         }
 
         for (ColorButton colorButton : _colorButtons) {
-            colorButton.update();
+            colorButton.update(deltaTime);
         }
     }
 
@@ -151,13 +151,13 @@ public class GameScene implements Scene {
     public void render(Graphics graphics) {
         graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
 
-        _objectiveText.render();
-        _attemptsText.render();
-        _quitButton.render();
-        _colorblindButton.render();
+        _objectiveText.render(graphics);
+        _attemptsText.render(graphics);
+        _quitButton.render(graphics);
+        _colorblindButton.render(graphics);
 
         for (CombinationLayout combination : _combinationLayouts) {
-            combination.render();
+            combination.render(graphics);
         }
 
         final int colorButtonBackgroundHeight = 80;
@@ -165,10 +165,10 @@ public class GameScene implements Scene {
                 graphics.getLogicWidth(), colorButtonBackgroundHeight, 1f, 0xFFFAFAFA);
 
         for (ColorButton colorButton : _colorButtons) {
-            colorButton.render();
+            colorButton.render(graphics);
         }
 
-        _transition.render();
+        _transition.render(graphics);
     }
 
     @Override

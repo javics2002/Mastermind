@@ -55,11 +55,11 @@ public class Button extends GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         if (_image != null)
             _graphics.drawImage(_image, _positionX, _positionY, _width, _height, _scale);
         else {

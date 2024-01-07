@@ -2,6 +2,7 @@ package com.example.logiclib;
 
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
+import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class CombinationLayout extends GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         _graphics.drawRoundedRect(_lateralMargin, _positionY - _height * 1.2f / 2,
                 _graphics.getLogicWidth() - _lateralMargin * 2, _height * 1.2f,
                  20, 20 , _scale, Colors.colorValues.get(Colors.ColorName.COMBINATIONLAYOUT));
@@ -56,21 +57,21 @@ public class CombinationLayout extends GameObject {
         _graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, _positionY - _height / 2,
                 2, _height, _scale, 0);
 
-        _combinationNumber.render();
+        _combinationNumber.render(graphics);
 
         for (ColorSlot color : _colors) {
-            color.render();
+            color.render(graphics);
         }
 
         for (HintSlot hint : _hints) {
-            hint.render();
+            hint.render(graphics);
         }
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
         for (ColorSlot color : _colors) {
-            color.update();
+            color.update(deltaTime);
         }
     }
 

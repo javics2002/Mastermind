@@ -99,18 +99,18 @@ public class GameOverScene implements Scene {
     public void render(Graphics graphics) {
         graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
 
-        _resultText.render();
-        _attemptsText.render();
-        _attemptsNumberText.render();
-        _codeText.render();
+        _resultText.render(graphics);
+        _attemptsText.render(graphics);
+        _attemptsNumberText.render(graphics);
+        _codeText.render(graphics);
 
         for (ColorSlot colorSlot : _resultCombination) {
-            colorSlot.render();
+            colorSlot.render(graphics);
         }
 
-        _playAgainButton.render();
-        _chooseDifficultyButton.render();
-        _transition.render();
+        _playAgainButton.render(graphics);
+        _chooseDifficultyButton.render(graphics);
+        _transition.render(graphics);
     }
 
     @Override

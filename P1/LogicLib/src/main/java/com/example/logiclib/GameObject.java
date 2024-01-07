@@ -22,8 +22,8 @@ public abstract class GameObject {
     }
 
     public abstract boolean handleEvents(Input.TouchEvent e);
-    public abstract void update();
-    public abstract void render();
+    public abstract void update(double deltaTime);
+    public abstract void render(Graphics graphics);
 
     public void setPosition(float newPositionX, float newPositionY){
         _positionX = newPositionX;

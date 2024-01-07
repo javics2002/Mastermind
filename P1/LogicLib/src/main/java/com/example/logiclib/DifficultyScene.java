@@ -100,13 +100,13 @@ public class DifficultyScene implements Scene {
     public void render(Graphics graphics) {
         graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
 
-        _backButton.render();
-        _titleText.render();
-        _easyDifficultyButton.render();
-        _mediumDifficultyButton.render();
-        _difficultDifficultyButton.render();
-        _impossibleDifficultyButton.render();
-        _transition.render();
+        _backButton.render(graphics);
+        _titleText.render(graphics);
+        _easyDifficultyButton.render(graphics);
+        _mediumDifficultyButton.render(graphics);
+        _difficultDifficultyButton.render(graphics);
+        _impossibleDifficultyButton.render(graphics);
+        _transition.render(graphics);
     }
 
     @Override
