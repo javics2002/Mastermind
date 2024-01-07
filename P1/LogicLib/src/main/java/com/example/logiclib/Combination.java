@@ -7,10 +7,12 @@ import java.util.List;
 import java.util.Random;
 
 public class Combination implements Serializable {
-    private final int _length;
-    private final int[] _numbers;
+	private final int _length;
+	private final int[] _numbers;
 
-	enum HintEnum {EMPTY, WHITE, BLACK};
+	enum HintEnum {EMPTY, WHITE, BLACK}
+
+	;
 
 	Combination(int length, int colorNumber, boolean repeatColors) {
 		_length = length;
@@ -40,25 +42,20 @@ public class Combination implements Serializable {
 	Combination(int length) {
 		_length = length;
 		_numbers = new int[_length];
-        
-        for (int i = 0; i < _length; i++) {
+
+		for (int i = 0; i < _length; i++) {
 			_numbers[i] = -1;
 		}
 	}
 
-    Combination(int[] combination) {
-        _length = combination.length;
-        _numbers = new int[_length];
+	Combination(int[] combination) {
+		_length = combination.length;
+		_numbers = new int[_length];
 
-        for (int i = 0; i < _length; i++) {
-            _numbers[i] = combination[i];
-        }
-    }
-
-    public void deleteColor(int index) {
-        _numbers[index] = -1;
-    }
-		
+		for (int i = 0; i < _length; i++) {
+			_numbers[i] = combination[i];
+		}
+	}
 
 	public void deleteColor(int index) {
 		_numbers[index] = -1;

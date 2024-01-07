@@ -6,12 +6,12 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 
 public class Text extends GameObject {
-    private String _text;
-    private final int _color;
-    private Font _font;
-    private final boolean _centered;
+	private String _text;
+	private final int _color;
+	private Font _font;
+	private final boolean _centered;
 
-	Text(String text, Font font, Engine engine, int posX, int posY, int color, boolean centered) {
+	Text(String text, Font font, Engine engine, float posX, float posY, int color, boolean centered) {
 		super(engine, posX, posY, 0, 0, 1f);
 
 		_centered = centered;
@@ -19,7 +19,7 @@ public class Text extends GameObject {
 		_text = text;
 		_font = font;
 
-        _width = _graphics.getStringWidth(_text, _font);
+		_width = _graphics.getStringWidth(_text, _font);
 		_height = _graphics.getStringHeight(_text, _font);
 
 		_color = color;

@@ -92,34 +92,34 @@ public class GraphicsAndroid implements Graphics {
 		_surfaceView.getHolder().unlockCanvasAndPost(_canvas);
 	}
 
-    //Crear imagenes , fuentes..ETC
-    @Override
-    public Image loadImage(String imgName) {
-        if (images.containsKey(imgName)){
-            return images.get(imgName);
-        }
-        //Las imagenes en android son representadas con un bitmap
-        //Con un stream abre la imagen por nombre
-        Bitmap bitmap = null;
-        try {
-            InputStream inputS = _assetManager.open("Sprites/" + imgName);
-            bitmap = BitmapFactory.decodeStream(inputS);
-            inputS.close(); // Cierra el InputStream después de usarlo
-        } catch (final IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-        ImageAndroid img = new ImageAndroid(bitmap);
-        images.put(imgName, img);
+	//Crear imagenes , fuentes..ETC
+	@Override
+	public Image loadImage(String imgName) {
+		if (images.containsKey(imgName)) {
+			return images.get(imgName);
+		}
+		//Las imagenes en android son representadas con un bitmap
+		//Con un stream abre la imagen por nombre
+		Bitmap bitmap = null;
+		try {
+			InputStream inputS = _assetManager.open("Sprites/" + imgName);
+			bitmap = BitmapFactory.decodeStream(inputS);
+			inputS.close(); // Cierra el InputStream después de usarlo
+		} catch (final IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		ImageAndroid img = new ImageAndroid(bitmap);
+		images.put(imgName, img);
 
 		return images.get(imgName);
 	}
 
-    //No podemos hacer carpetas puesto que busca desde la carptea assets solo
-    @Override
-    public Font newFont(String fileName, float size) {
-        //Con el elemento typeface podemos ajustar el tipo de fuente y decirselo al elemento paint para que adquiera esas caracteriticas
-        Typeface tface = Typeface.createFromAsset(_assetManager, "Fonts/" + fileName);
+	//No podemos hacer carpetas puesto que busca desde la carptea assets solo
+	@Override
+	public Font newFont(String fileName, float size) {
+		//Con el elemento typeface podemos ajustar el tipo de fuente y decirselo al elemento paint para que adquiera esas caracteriticas
+		Typeface tface = Typeface.createFromAsset(_assetManager, "Fonts/" + fileName);
 
 		//A parte creamos el objeto fuente y lo devolvemos
 		return new FontAndroid(tface, size);

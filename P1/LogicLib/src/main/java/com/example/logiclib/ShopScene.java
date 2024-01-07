@@ -3,324 +3,321 @@ package com.example.logiclib;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
+import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
-import com.example.aninterface.Image;
 
 public class ShopScene implements Scene {
-    private final Graphics _graphics;
-    private final Engine _engine;
+	private final Graphics _graphics;
+	private final Engine _engine;
 
-    public enum ShopType { BACKGROUNDS, CIRCLES, THEMES }
-    public final ShopType _shopType;
-    private final int _backgroundsNumber, _circlesNumber, _themesNumber;
-    private final Button _backButton,  _prevShopButton, _nextShopButton, _instantMoneyButton;
-    private final Image _coinImage;
-    private final int _coinSize = 20;
-    private final Text _titleText, _moneyText;
+	public enum ShopType {BACKGROUNDS, CIRCLES, THEMES}
 
-    final int _barHeight = 80;
-    final int _padding = 20;
+	public final ShopType _shopType;
+	private final int _backgroundsNumber, _circlesNumber, _themesNumber;
+	private final Button _backButton, _prevShopButton, _nextShopButton, _instantMoneyButton;
+	private final Image _coinImage;
+	private final int _coinSize = 20;
+	private final Text _titleText, _moneyText;
 
-    private CustomBackground[] _backgroundButtons;
-    private CustomCircles[] _circlesButtons;
-    private CustomTheme[] _themeButtons;
+	final int _barHeight = 80;
+	final int _padding = 20;
 
-    private int _backgroundColor;
+	private CustomBackground[] _backgroundButtons;
+	private CustomCircles[] _circlesButtons;
+	private CustomTheme[] _themeButtons;
 
-    public ShopScene(Engine engine, final ShopType shopType) {
-        _engine = engine;
-        _graphics = _engine.getGraphics();
-        _shopType = shopType;
+	private int _backgroundColor;
 
-        // Back button
-        int backbuttonScale = 40;
-        _backButton = new Button("UI/back.png", _engine,
-                _padding, _barHeight / 2 - backbuttonScale / 2,
-                backbuttonScale, backbuttonScale) {
-            @Override
-            public void callback() {
-                Scene scene = new InitialScene(_engine);
-                _engine.setCurrentScene(scene);
-            }
-        };
+	public ShopScene(Engine engine, final ShopType shopType) {
+		_engine = engine;
+		_graphics = _engine.getGraphics();
+		_shopType = shopType;
 
-        if(GameData.Instance().getCurrentTheme() < 0){
-            _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
-        }
-        else{
-            final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
+		// Back button
+		int backbuttonScale = 40;
+		_backButton = new Button("UI/back.png", _engine,
+				_padding, _barHeight / 2 - backbuttonScale / 2,
+				backbuttonScale, backbuttonScale) {
+			@Override
+			public void callback() {
+				Scene scene = new InitialScene(_engine);
+				_engine.setCurrentScene(scene);
+			}
+		};
 
-            _backgroundColor = Colors.parseARGB(theme.backgroundColor);
-        }
+		if (GameData.Instance().getCurrentTheme() < 0) {
+			_backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
+		} else {
+			final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
 
-        // Title
-        Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
-        String shopTitle = "";
-        switch (_shopType){
-            case BACKGROUNDS:
-                shopTitle = "Fondos";
-                break;
-            case CIRCLES:
-                shopTitle = "Fichas";
-                break;
-            case THEMES:
-                shopTitle = "Temas";
-                break;
-            default:
-                break;
-        }
-        int titleWidth = _graphics.getStringWidth(shopTitle, font);
-        _titleText = new Text(shopTitle, font, _engine,
-                _graphics.getLogicWidth() / 2 - titleWidth / 2,
-                _barHeight / 2 + _graphics.getStringHeight(shopTitle, font) / 2, 0);
+			_backgroundColor = Colors.parseARGB(theme.backgroundColor);
+		}
 
-        final int worlds = _engine.filesInFolder("Levels");
-        _prevShopButton = new Button("UI/prevWorld.png", _engine,
-                _graphics.getLogicWidth() / 2 - titleWidth / 2 - _padding - backbuttonScale,
-                _barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
-            @Override
-            public void callback() {
-                Scene scene = new ShopScene(_engine,
-                        ShopType.values()[(shopType.ordinal() + shopType.values().length - 1) % shopType.values().length]);
-                _engine.setCurrentScene(scene);
-            }
-        };
+		// Title
+		Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
+		String shopTitle = "";
+		switch (_shopType) {
+			case BACKGROUNDS:
+				shopTitle = "Fondos";
+				break;
+			case CIRCLES:
+				shopTitle = "Fichas";
+				break;
+			case THEMES:
+				shopTitle = "Temas";
+				break;
+			default:
+				break;
+		}
+		float titleWidth = _graphics.getStringWidth(shopTitle, font);
+		_titleText = new Text(shopTitle, font, _engine,
+				_graphics.getLogicWidth() / 2f - titleWidth / 2f,
+				_barHeight / 2f + _graphics.getStringHeight(shopTitle, font) / 2, 0, true);
 
-        _nextShopButton = new Button("UI/nextWorld.png", _engine,
-                _graphics.getLogicWidth() / 2 + titleWidth / 2 + _padding, _barHeight / 2 - backbuttonScale / 2,
-                backbuttonScale, backbuttonScale) {
-            @Override
-            public void callback() {
-                Scene scene = new ShopScene(_engine, ShopType.values()[(shopType.ordinal() + 1) % shopType.values().length]);
-                _engine.setCurrentScene(scene);
-            }
-        };
+		final int worlds = _engine.filesInFolder("Levels");
+		_prevShopButton = new Button("UI/prevWorld.png", _engine,
+				_graphics.getLogicWidth() / 2 - titleWidth / 2 - _padding - backbuttonScale,
+				_barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
+			@Override
+			public void callback() {
+				Scene scene = new ShopScene(_engine,
+						ShopType.values()[(shopType.ordinal() + shopType.values().length - 1) % shopType.values().length]);
+				_engine.setCurrentScene(scene);
+			}
+		};
 
-        _coinImage = _graphics.loadImage("UI/coin.png");
+		_nextShopButton = new Button("UI/nextWorld.png", _engine,
+				_graphics.getLogicWidth() / 2 + titleWidth / 2 + _padding, _barHeight / 2 - backbuttonScale / 2,
+				backbuttonScale, backbuttonScale) {
+			@Override
+			public void callback() {
+				Scene scene = new ShopScene(_engine, ShopType.values()[(shopType.ordinal() + 1) % shopType.values().length]);
+				_engine.setCurrentScene(scene);
+			}
+		};
 
-        String moneyString = Integer.toString(GameData.Instance().getMoney());
-        _moneyText = new Text(moneyString, font, _engine,
-                _graphics.getLogicWidth() - _graphics.getStringWidth(moneyString, font) - _coinSize - _padding - 5,
-                _barHeight / 2 + _graphics.getStringHeight(moneyString, font) / 2, 0);
+		_coinImage = _graphics.loadImage("UI/coin.png");
 
-        _instantMoneyButton = new Button("UI/pijo.png", _engine,
-                _graphics.getLogicWidth() / 2 + titleWidth / 2 + _padding + backbuttonScale,
-                _barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
-            @Override
-            public void callback() {
-                GameData.Instance().addMoney(100);
+		String moneyString = Integer.toString(GameData.Instance().getMoney());
+		_moneyText = new Text(moneyString, font, _engine,
+				_graphics.getLogicWidth() - _graphics.getStringWidth(moneyString, font) - _coinSize - _padding - 5,
+				_barHeight / 2 + _graphics.getStringHeight(moneyString, font) / 2, 0, true);
 
-                String moneyString = Integer.toString(GameData.Instance().getMoney());
-                Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
+		_instantMoneyButton = new Button("UI/pijo.png", _engine,
+				_graphics.getLogicWidth() / 2 + titleWidth / 2 + _padding + backbuttonScale,
+				_barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
+			@Override
+			public void callback() {
+				GameData.Instance().addMoney(100);
 
-                _moneyText.setText(moneyString);
-                _moneyText.setPos(_graphics.getLogicWidth() - _graphics.getStringWidth(moneyString, font) - _coinSize - _padding - 5,
-                        _barHeight / 2 + _graphics.getStringHeight(moneyString, font) / 2);
-            }
-        };
+				String moneyString = Integer.toString(GameData.Instance().getMoney());
+				Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
 
-        // Product buttons
-        Font buttonFont = _graphics.newFont("Comfortaa-Regular.ttf", 25f);
+				//TODO centrar texto
+				_moneyText.setText(moneyString);
+				_moneyText.setPosition(_graphics.getLogicWidth() - _graphics.getStringWidth(moneyString, font) - _coinSize - _padding - 5,
+						_barHeight / 2f + _graphics.getStringHeight(moneyString, font) / 2);
+			}
+		};
 
-        final int priceGap = 50;
+		// Product buttons
+		Font buttonFont = _graphics.newFont("Comfortaa-Regular.ttf", 25f);
 
-        switch (_shopType){
-            case BACKGROUNDS:
-                _backgroundsNumber = GameData.Instance().getBackgrounds().size();
-                _circlesNumber = 0;
-                _themesNumber = 0;
+		final int priceGap = 50;
 
-                final int backgroundsPerRow = (int) Math.ceil(Math.sqrt((_backgroundsNumber + 1) * 3f / 2f));
-                final int backgroundWidth = (_graphics.getLogicWidth() - (backgroundsPerRow + 1) * _padding) / backgroundsPerRow;
-                final int backgroundHeight = backgroundWidth * 3 / 2;
+		switch (_shopType) {
+			case BACKGROUNDS:
+				_backgroundsNumber = GameData.Instance().getBackgrounds().size();
+				_circlesNumber = 0;
+				_themesNumber = 0;
 
-                _backgroundButtons = new CustomBackground[_backgroundsNumber + 1];
+				final int backgroundsPerRow = (int) Math.ceil(Math.sqrt((_backgroundsNumber + 1) * 3f / 2f));
+				final int backgroundWidth = (_graphics.getLogicWidth() - (backgroundsPerRow + 1) * _padding) / backgroundsPerRow;
+				final int backgroundHeight = backgroundWidth * 3 / 2;
 
-                _backgroundButtons[0] = new CustomBackground(-1 == GameData.Instance().getCurrentBackground(),
-                        -1, 0, buttonFont, "UI/defaultProduct.png", _engine,
-                        _padding,_barHeight + _padding, backgroundWidth, backgroundHeight,
-                        priceGap, _coinImage, _moneyText);
+				_backgroundButtons = new CustomBackground[_backgroundsNumber + 1];
 
-                for(int i = 1; i <= _backgroundsNumber; i++){
-                    int row = i / backgroundsPerRow;
-                    int column = i % backgroundsPerRow;
+				_backgroundButtons[0] = new CustomBackground(-1 == GameData.Instance().getCurrentBackground(),
+						-1, 0, buttonFont, "UI/defaultProduct.png", _engine,
+						_padding, _barHeight + _padding, backgroundWidth, backgroundHeight,
+						priceGap, _coinImage, _moneyText);
 
-                    final Background background = GameData.Instance().getBackgrounds().get(i - 1);
+				for (int i = 1; i <= _backgroundsNumber; i++) {
+					int row = i / backgroundsPerRow;
+					int column = i % backgroundsPerRow;
 
-                    _backgroundButtons[i] = new CustomBackground(i - 1 == GameData.Instance().getCurrentBackground(),
-                            i - 1, background.price, buttonFont, background.image, _engine,
-                            _padding + column * (backgroundWidth + _padding),
-                            _barHeight + _padding + row * (backgroundHeight + _padding + priceGap),
-                            backgroundWidth, backgroundHeight, priceGap, _coinImage, _moneyText);
-                }
-                break;
-            case CIRCLES:
-                _circlesNumber = GameData.Instance().getCircles().size();
-                _backgroundsNumber = 0;
-                _themesNumber = 0;
+					final Background background = GameData.Instance().getBackgrounds().get(i - 1);
 
-                //Tienen que caber en un cuadrado, teniendo el cuenta el boton para quitar skin
-                final int circlesPerRow = (int) Math.ceil(Math.sqrt(_circlesNumber + 1));
-                final int circlesSize = (_graphics.getLogicWidth() - (circlesPerRow + 1) * _padding) / circlesPerRow;
+					_backgroundButtons[i] = new CustomBackground(i - 1 == GameData.Instance().getCurrentBackground(),
+							i - 1, background.price, buttonFont, background.image, _engine,
+							_padding + column * (backgroundWidth + _padding),
+							_barHeight + _padding + row * (backgroundHeight + _padding + priceGap),
+							backgroundWidth, backgroundHeight, priceGap, _coinImage, _moneyText);
+				}
+				break;
+			case CIRCLES:
+				_circlesNumber = GameData.Instance().getCircles().size();
+				_backgroundsNumber = 0;
+				_themesNumber = 0;
 
-                _circlesButtons = new CustomCircles[_circlesNumber + 1];
+				//Tienen que caber en un cuadrado, teniendo el cuenta el boton para quitar skin
+				final int circlesPerRow = (int) Math.ceil(Math.sqrt(_circlesNumber + 1));
+				final int circlesSize = (_graphics.getLogicWidth() - (circlesPerRow + 1) * _padding) / circlesPerRow;
 
-                int[] defaultColors = new int[9];
-                for (int i = 0; i < 9; i++){
-                    defaultColors[i] = Colors.getColor(i);
-                }
-                _circlesButtons[0] = new CustomCircles(defaultColors, -1 == GameData.Instance().getCurrentCircles(),
-                        -1, 0, buttonFont, _engine,
-                        _padding, _barHeight + _padding,
-                        circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
+				_circlesButtons = new CustomCircles[_circlesNumber + 1];
 
-                for(int i = 1; i <= _circlesNumber; i++){
-                    int row = i / circlesPerRow;
-                    int column = i % circlesPerRow;
+				int[] defaultColors = new int[9];
+				for (int i = 0; i < 9; i++) {
+					defaultColors[i] = Colors.getColor(i);
+				}
+				_circlesButtons[0] = new CustomCircles(defaultColors, -1 == GameData.Instance().getCurrentCircles(),
+						-1, 0, buttonFont, _engine,
+						_padding, _barHeight + _padding,
+						circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
 
-                    final Circles circles = GameData.Instance().getCircles().get(i - 1);
+				for (int i = 1; i <= _circlesNumber; i++) {
+					int row = i / circlesPerRow;
+					int column = i % circlesPerRow;
 
-                    if(circles.skin) {
-                        _circlesButtons[i] = new CustomCircles(circles.packPath,
-                                i - 1 == GameData.Instance().getCurrentCircles(),
-                                i - 1, circles.price, buttonFont, _engine,
-                                _padding + column * (circlesSize + _padding),
-                                _barHeight + _padding + row * (circlesSize + _padding + priceGap),
-                                circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
-                    }
-                    else {
-                        _circlesButtons[i] = new CustomCircles(circles.colors, i - 1 == GameData.Instance().getCurrentCircles(),
-                                i - 1, circles.price, buttonFont, _engine,
-                                _padding + column * (circlesSize + _padding),
-                                _barHeight + _padding + row * (circlesSize + _padding + priceGap),
-                                circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
-                    }
-                }
-                break;
-            case THEMES:
-                _themesNumber = GameData.Instance().getThemes().size();
-                _circlesNumber = 0;
-                _backgroundsNumber = 0;
+					final Circles circles = GameData.Instance().getCircles().get(i - 1);
 
-                final int themesPerRow = (int) Math.ceil(Math.sqrt(_themesNumber + 1));
-                final int themesSize = (_graphics.getLogicWidth() - (themesPerRow + 1) * _padding) / themesPerRow;
+					if (circles.skin) {
+						_circlesButtons[i] = new CustomCircles(circles.packPath,
+								i - 1 == GameData.Instance().getCurrentCircles(),
+								i - 1, circles.price, buttonFont, _engine,
+								_padding + column * (circlesSize + _padding),
+								_barHeight + _padding + row * (circlesSize + _padding + priceGap),
+								circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
+					} else {
+						_circlesButtons[i] = new CustomCircles(circles.colors, i - 1 == GameData.Instance().getCurrentCircles(),
+								i - 1, circles.price, buttonFont, _engine,
+								_padding + column * (circlesSize + _padding),
+								_barHeight + _padding + row * (circlesSize + _padding + priceGap),
+								circlesSize, circlesSize, priceGap, _coinImage, _moneyText);
+					}
+				}
+				break;
+			case THEMES:
+				_themesNumber = GameData.Instance().getThemes().size();
+				_circlesNumber = 0;
+				_backgroundsNumber = 0;
 
-                _themeButtons = new CustomTheme[_themesNumber + 1];
+				final int themesPerRow = (int) Math.ceil(Math.sqrt(_themesNumber + 1));
+				final int themesSize = (_graphics.getLogicWidth() - (themesPerRow + 1) * _padding) / themesPerRow;
 
-                _themeButtons[0] = new CustomTheme(-1 == GameData.Instance().getCurrentTheme(),
-                        -1, 0, Colors.ColorName.BACKGROUND, Colors.ColorName.BACKGROUNDBLUE, buttonFont, _engine,
-                        _padding, _barHeight + _padding,
-                        themesSize, themesSize, priceGap, _coinImage, _moneyText);
+				_themeButtons = new CustomTheme[_themesNumber + 1];
 
-                for(int i = 1; i <= _themesNumber; i++){
-                    int row = i / themesPerRow;
-                    int column = i % themesPerRow;
+				_themeButtons[0] = new CustomTheme(-1 == GameData.Instance().getCurrentTheme(),
+						-1, 0, Colors.ColorName.BACKGROUND, Colors.ColorName.BACKGROUNDBLUE, buttonFont, _engine,
+						_padding, _barHeight + _padding,
+						themesSize, themesSize, priceGap, _coinImage, _moneyText);
 
-                    final Theme theme = GameData.Instance().getThemes().get(i - 1);
+				for (int i = 1; i <= _themesNumber; i++) {
+					int row = i / themesPerRow;
+					int column = i % themesPerRow;
 
-                    _themeButtons[i] = new CustomTheme(i - 1 == GameData.Instance().getCurrentTheme(),
-                            i - 1, theme.price, theme.backgroundColor, theme.buttonColor, buttonFont, _engine,
-                            _padding + column * (themesSize + _padding),
-                            _barHeight + _padding + row * (themesSize + _padding + priceGap),
-                            themesSize, themesSize, priceGap, _coinImage, _moneyText);
-                }
-                break;
-            default:
-                _backgroundsNumber = 0;
-                _circlesNumber = 0;
-                _themesNumber = 0;
-                break;
-        }
+					final Theme theme = GameData.Instance().getThemes().get(i - 1);
 
-    }
+					_themeButtons[i] = new CustomTheme(i - 1 == GameData.Instance().getCurrentTheme(),
+							i - 1, theme.price, theme.backgroundColor, theme.buttonColor, buttonFont, _engine,
+							_padding + column * (themesSize + _padding),
+							_barHeight + _padding + row * (themesSize + _padding + priceGap),
+							themesSize, themesSize, priceGap, _coinImage, _moneyText);
+				}
+				break;
+			default:
+				_backgroundsNumber = 0;
+				_circlesNumber = 0;
+				_themesNumber = 0;
+				break;
+		}
 
-    @Override
-    public void update(double deltaTime) {
-        switch (_shopType){
-            case BACKGROUNDS:
-                for(int i = 0; i <= _backgroundsNumber; i++)
-                    _backgroundButtons[i].update(deltaTime);
-                break;
-            case CIRCLES:
-                for(int i = 0; i <= _circlesNumber; i++)
-                    _circlesButtons[i].update(deltaTime);
-                break;
-            case THEMES:
-                for(int i = 0; i <= _themesNumber; i++)
-                    _themeButtons[i].update(deltaTime);
-                break;
-            default:
-                break;
-        }
+	}
 
-        if(GameData.Instance().getCurrentTheme() < 0){
-            _backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
-        }
-        else{
-            final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
+	@Override
+	public void update(double deltaTime) {
+		switch (_shopType) {
+			case BACKGROUNDS:
+				for (int i = 0; i <= _backgroundsNumber; i++)
+					_backgroundButtons[i].update(deltaTime);
+				break;
+			case CIRCLES:
+				for (int i = 0; i <= _circlesNumber; i++)
+					_circlesButtons[i].update(deltaTime);
+				break;
+			case THEMES:
+				for (int i = 0; i <= _themesNumber; i++)
+					_themeButtons[i].update(deltaTime);
+				break;
+			default:
+				break;
+		}
 
-            _backgroundColor = Colors.parseARGB(theme.backgroundColor);
-        }
-    }
+		if (GameData.Instance().getCurrentTheme() < 0) {
+			_backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
+		} else {
+			final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
 
-    @Override
-    public void render(Graphics graphics) {
-        _graphics.clear(_backgroundColor);
+			_backgroundColor = Colors.parseARGB(theme.backgroundColor);
+		}
+	}
 
-        _backButton.render(graphics);
-        _titleText.render(graphics);
-        _prevShopButton.render(graphics);
-        _nextShopButton.render(graphics);
-        _moneyText.render(graphics);
-        _instantMoneyButton.render(graphics);
-        graphics.drawImage(_coinImage, graphics.getLogicWidth() - _padding - _coinSize, _barHeight / 2 - _coinSize / 2,
-                _coinSize, _coinSize);
+	@Override
+	public void render(Graphics graphics) {
+		_graphics.clear(_backgroundColor);
 
-        switch (_shopType){
-            case BACKGROUNDS:
-                for(int i = 0; i <= _backgroundsNumber; i++)
-                    _backgroundButtons[i].render(graphics);
-                break;
-            case CIRCLES:
-                for(int i = 0; i <= _circlesNumber; i++)
-                    _circlesButtons[i].render(graphics);
-                break;
-            case THEMES:
-                for(int i = 0; i <= _themesNumber; i++)
-                    _themeButtons[i].render(graphics);
-                break;
-            default:
-                break;
-        }
-    }
+		_backButton.render(graphics);
+		_titleText.render(graphics);
+		_prevShopButton.render(graphics);
+		_nextShopButton.render(graphics);
+		_moneyText.render(graphics);
+		_instantMoneyButton.render(graphics);
+		graphics.drawImage(_coinImage, graphics.getLogicWidth() - _padding - _coinSize,
+				_barHeight / 2f - _coinSize / 2f, _coinSize, _coinSize, 1f);
 
-    @Override
-    public void handleEvents(Input input) {
-        int numEvents = input.getTouchEvent().size();
-        if (numEvents > 0) {
-            _backButton.handleEvents(input.getTouchEvent().get(0));
-            _prevShopButton.handleEvents(input.getTouchEvent().get(0));
-            _nextShopButton.handleEvents(input.getTouchEvent().get(0));
-            _moneyText.handleEvents(input.getTouchEvent().get(0));
-            _instantMoneyButton.handleEvents(input.getTouchEvent().get(0));
+		switch (_shopType) {
+			case BACKGROUNDS:
+				for (int i = 0; i <= _backgroundsNumber; i++)
+					_backgroundButtons[i].render(graphics);
+				break;
+			case CIRCLES:
+				for (int i = 0; i <= _circlesNumber; i++)
+					_circlesButtons[i].render(graphics);
+				break;
+			case THEMES:
+				for (int i = 0; i <= _themesNumber; i++)
+					_themeButtons[i].render(graphics);
+				break;
+			default:
+				break;
+		}
+	}
 
-            switch (_shopType){
-                case BACKGROUNDS:
-                    for(int i = 0; i <= _backgroundsNumber; i ++)
-                        _backgroundButtons[i].handleEvents(input.getTouchEvent().get(0));
-                    break;
-                case CIRCLES:
-                    for(int i = 0; i <= _circlesNumber; i++)
-                        _circlesButtons[i].handleEvents(input.getTouchEvent().get(0));
-                    break;
-                case THEMES:
-                    for(int i = 0; i <= _themesNumber; i++)
-                        _themeButtons[i].handleEvents(input.getTouchEvent().get(0));
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+	@Override
+	public void handleEvents(Input.TouchEvent event) {
+
+		_backButton.handleEvents(event);
+		_prevShopButton.handleEvents(event);
+		_nextShopButton.handleEvents(event);
+		_moneyText.handleEvents(event);
+		_instantMoneyButton.handleEvents(event);
+
+		switch (_shopType) {
+			case BACKGROUNDS:
+				for (int i = 0; i <= _backgroundsNumber; i++)
+					_backgroundButtons[i].handleEvents(event);
+				break;
+			case CIRCLES:
+				for (int i = 0; i <= _circlesNumber; i++)
+					_circlesButtons[i].handleEvents(event);
+				break;
+			case THEMES:
+				for (int i = 0; i <= _themesNumber; i++)
+					_themeButtons[i].handleEvents(event);
+				break;
+			default:
+				break;
+		}
+	}
 }

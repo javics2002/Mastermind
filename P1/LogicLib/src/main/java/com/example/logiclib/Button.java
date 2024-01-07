@@ -9,41 +9,43 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Sound;
 
 public class Button extends GameObject {
-	private Image _image;
-	private final Sound _clickSound;
-	private int _backgroundColor;
-	private int _arc;
-	private String _text;
-	private Font _font;
-	private final Audio _audio;
+	protected Image _image;
+	protected final Sound _clickSound;
+	protected int _backgroundColor;
+	protected int _arc;
+	protected String _text;
+	protected Font _font;
+	protected final Audio _audio;
 
-	Button(int backgroundColor, String text, Font font, Engine engine, int positionX, int positionY, int width, int height) {
+	Button(int backgroundColor, String text, Font font, Engine engine,
+	       float positionX, float positionY, float width, float height) {
 		super(engine, positionX, positionY, width, height, 1f);
 
 		_image = null;
 
-        _backgroundColor = backgroundColor;
-        _arc = 20;
+		_backgroundColor = backgroundColor;
+		_arc = 20;
 
-        _text = text;
-        _font = font;
+		_text = text;
+		_font = font;
 
-        _clickSound = _engine.getAudio().loadSound("click.wav", false);
-        _clickSound.setVolume(.5f);
-    }
-    Button(String filename, Colors.ColorName backgroundColor, String text, Font font, Engine engine,
-           int positionX, int positionY, int width, int height) {
-        _engine = engine;
-        _graphics = engine.getGraphics();
+		_audio=_engine.getAudio();
+		_clickSound = _audio.loadSound("click.wav", false);
+		_clickSound.setVolume(.5f);
+	}
 
-        _image = _graphics.loadImage(filename);
-        _positionX = positionX;
-        _positionY = positionY;
-        _width = width;
-        _height = height;
+	Button(String filename, Colors.ColorName backgroundColor, String text, Font font, Engine engine,
+	       int positionX, int positionY, int width, int height) {
+		super(engine, positionX, positionY, width, height, 1f);
 
-        _backgroundColor = Colors.colorValues.get(backgroundColor);
-        _arc = 20;
+		_image = _graphics.loadImage(filename);
+		_positionX = positionX;
+		_positionY = positionY;
+		_width = width;
+		_height = height;
+
+		_backgroundColor = Colors.colorValues.get(backgroundColor);
+		_arc = 20;
 
 		_text = text;
 		_font = font;
@@ -53,7 +55,7 @@ public class Button extends GameObject {
 		_clickSound.setVolume(.5f);
 	}
 
-	Button(String filename, Engine engine, int positionX, int positionY, int width, int height) {
+	Button(String filename, Engine engine, float positionX, float positionY, float width, float height) {
 		super(engine, positionX, positionY, width, height, 1f);
 
 		_image = _graphics.loadImage(filename);
@@ -72,9 +74,12 @@ public class Button extends GameObject {
 			return true;
 		}
 
-    @Override
-    public void update(double deltaTime) {
-    }
+		return false;
+	}
+
+	@Override
+	public void update(double deltaTime) {
+	}
 
 	@Override
 	public void render(Graphics graphics) {

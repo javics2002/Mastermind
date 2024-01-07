@@ -9,24 +9,25 @@ public interface Engine {
 
 	Input getInput();
 
-    void resume();
+	void resume();
 
-    void pause();
+	void pause();
 
-    Audio getAudio();
+	Audio getAudio();
 
-    void showAd();
+	void showAd();
 
-    void shareScreenshot(int width, int height);
+	void shareScreenshot(int width, int height);
 
-    <T> T jsonToObject(String fileName, Class<T> classOfT);
+	<T> T jsonToObject(String fileName, Class<T> classOfT);
 
-    String objectToJson(Object object);
+	String objectToJson(Object object);
 
-    int filesInFolder(String folderPath);
+	int filesInFolder(String folderPath);
 
-    String[] getFileNames(String folderPath);
+	String[] getFileNames(String folderPath);
 
-    void loadGameData();
-    void saveGameData();
+	void loadGameData();
+
+	void saveGameData();
 }

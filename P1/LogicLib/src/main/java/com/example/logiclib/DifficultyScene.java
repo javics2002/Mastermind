@@ -47,47 +47,63 @@ public class DifficultyScene implements Scene {
 		int gameButtonsHeight = 90;
 		int startingGameButtonsHeight = graphics.getLogicHeight() / 3;
 		int padding = 20;
-
 		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+		final Scene returnScene = this;
 
-		_easyDifficultyButton = new Button(Colors.ColorName.BACKGROUNDGREEN, "Fácil", buttonFont, _engine,
-				graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight,
-				gameButtonsWidth, gameButtonsHeight) {
+		_easyDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDGREEN),
+				"Fácil", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				startingGameButtonsHeight, gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 6, 4, 4, false);
-				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+				Scene scene = new GameScene(_engine, 6, 6, 4,
+						4, false, returnScene, -1, -1,
+						0, null);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,
+						Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
-		_mediumDifficultyButton = new Button(Colors.ColorName.BACKGROUNDYELLOW, "Medio", buttonFont, _engine,
-				graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight + gameButtonsHeight + padding,
+		_mediumDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDYELLOW),
+				"Medio", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				startingGameButtonsHeight + gameButtonsHeight + padding,
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 8, 4, 6, false);
-				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+				Scene scene = new GameScene(_engine, 8, 8, 4,
+						6, false, returnScene, -1, -1,
+						0, null);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,
+						Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
-		_difficultDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Difícil", buttonFont, _engine,
-				graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight + (gameButtonsHeight + padding) * 2,
+		_difficultDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDORANGE),
+				"Difícil", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				startingGameButtonsHeight + (gameButtonsHeight + padding) * 2,
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 10, 5, 8, true);
-				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+				Scene scene = new GameScene(_engine, 10, 10, 5,
+						8, true, returnScene, -1, -1,
+						0, null);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,
+						Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
-		_impossibleDifficultyButton = new Button(Colors.ColorName.BACKGROUNDRED, "Imposible", buttonFont, _engine,
-				graphics.getLogicWidth() / 2 - gameButtonsWidth / 2, startingGameButtonsHeight + (gameButtonsHeight + padding) * 3,
+		_impossibleDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDRED),
+				"Imposible", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				startingGameButtonsHeight + (gameButtonsHeight + padding) * 3,
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 15, 6, 9, true);
-				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+				Scene scene = new GameScene(_engine, 15, 15, 6,
+						9, true, returnScene, -1, -1,
+						0, null);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,
+						Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
 
-		_transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
+		_transition.PlayTransition(Transition.TransitionType.fadeIn,
+				Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
 	}
 
 	@Override
