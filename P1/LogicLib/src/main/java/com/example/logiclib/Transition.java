@@ -73,7 +73,7 @@ public class Transition {
         }
     }
 
-    public void render() {
+    public void render(Graphics graphics) {
         if (!_isPlaying)
             return;
 

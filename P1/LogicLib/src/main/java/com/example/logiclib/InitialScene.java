@@ -51,9 +51,9 @@ public class InitialScene implements Scene {
     public void render(Graphics graphics) {
         graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
 
-        _playButton.render();
-        _titleText.render();
-        _transition.render();
+        _playButton.render(graphics);
+        _titleText.render(graphics);
+        _transition.render(graphics);
     }
 
     public void handleEvents(Input input) {

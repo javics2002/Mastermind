@@ -26,7 +26,7 @@ public class Text extends GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         if(_centered)
             _graphics.drawText(_text, _font, _positionX - _graphics.getStringWidth(_text, _font) / 2f,
                     _positionY - _graphics.getStringHeight(_text, _font) / 2f, _scale, _color);
@@ -35,7 +35,7 @@ public class Text extends GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
     }
 
     @Override

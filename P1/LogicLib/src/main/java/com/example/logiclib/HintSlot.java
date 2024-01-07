@@ -15,14 +15,14 @@ public class HintSlot extends GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         _graphics.drawCircleWithBorder(_positionX + _width / 2, _positionY + _height / 2,
                 _width / 2, 1, _scale,
                 Colors.colorValues.get(_colorName), Colors.colorValues.get(Colors.ColorName.BLACK));
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
     }
 
     @Override

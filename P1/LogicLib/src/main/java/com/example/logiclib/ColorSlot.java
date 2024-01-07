@@ -10,6 +10,7 @@ public class ColorSlot extends GameObject {
     private int _colorID;
     private final Text _numberText;
     private final GameAttributes _gameAttributes;
+    private final float _appearenceTime = .5f;
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, GameAttributes gameAttributes) {
         super(engine, positionX, positionY, width, height, 1f);
@@ -26,12 +27,12 @@ public class ColorSlot extends GameObject {
     }
 
     @Override
-    public void render() {
+    public void render(Graphics graphics) {
         if (hasColor() && _gameAttributes.isEyeOpen) {
             _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2,
                     _positionY + _height * _scale / 2, _width / 2, 1f, _scale,
                     Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
-            _numberText.render();
+            _numberText.render(graphics);
         } else if (hasColor()) {
             _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2,
                     _positionY + _height * _scale / 2, _width / 2, 1f, _scale,
@@ -46,7 +47,7 @@ public class ColorSlot extends GameObject {
     }
 
     @Override
-    public void update() {
+    public void update(double deltaTime) {
 
     }
 
