@@ -51,12 +51,15 @@ public class ColorSlot extends GameObject {
     @Override
     public void update(double deltaTime) {
         if(_animationTime < _appearenceTime){
-            _scale = lerp(0, 1, _animationTime / _appearenceTime);
+            float newScale = lerp(0, 1, _animationTime / _appearenceTime);
+            _scale = newScale;
+            _numberText.setScale(newScale);
 
             _animationTime += deltaTime;
 
             if(_animationTime >= _appearenceTime) {
                 _scale = 1;
+                _numberText.setScale(1);
             }
         }
     }

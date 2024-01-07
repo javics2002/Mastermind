@@ -196,11 +196,15 @@ public class GraphicsAndroid implements Graphics {
     public void drawText(String text, Font font, float logicX, float logicY, float scale, int color) {
         setColor(color);
 
+        float stringWidth = getStringWidth(text, font);
+        float stringHeight = getStringHeight(text, font);
+
         _paint.setTypeface(((FontAndroid) font).getFont());
         _paint.setTextSize(font.getFontSize() * _scaleFactor * scale);
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
-        _canvas.drawText(text, logicToRealX(logicX), logicToRealY(logicY), _paint);
+        _canvas.drawText(text, logicToRealX(logicX + (1 - scale) * stringWidth / 2),
+                logicToRealY(logicY - (1 - scale) * stringHeight), _paint);
     }
 
     // Para el cambio de tamaño a una imagen (bitmap)

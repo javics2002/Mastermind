@@ -120,7 +120,8 @@ public class GraphicsPC implements Graphics {
         setColor(color);
         _graphics2D.setFont(((FontPC) font).getFont().deriveFont(font.getFontSize() * _scaleFactor * scale));
 
-        _graphics2D.drawString(text, logicToRealX(logicX), logicToRealY(logicY));
+        _graphics2D.drawString(text, logicToRealX(logicX + (1 - scale) * getStringWidth(text, font) / 2),
+                logicToRealY(logicY - (1 - scale) * getStringHeight(text, font) / 2));
     }
 
     @Override

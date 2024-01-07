@@ -22,7 +22,7 @@ public class MasterMindDesktop {
         final JFrame frame = new JFrame("MasterMind");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        boolean fullscreen = false;
+        boolean fullscreen = true;
 
         if (fullscreen)
             frame.setUndecorated(true);
