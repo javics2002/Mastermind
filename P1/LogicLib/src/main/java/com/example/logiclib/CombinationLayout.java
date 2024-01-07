@@ -99,6 +99,10 @@ public class CombinationLayout extends GameObject {
         }
     }
 
+    public void animateSlot(int index){
+        _colors.get(index).animate();
+    }
+
     // Devuelve true si el array de colores está lleno (Cuando el jugador completa una combinación)
     public boolean isFull() {
         for (int i = 0; i < _colors.size(); i++) {

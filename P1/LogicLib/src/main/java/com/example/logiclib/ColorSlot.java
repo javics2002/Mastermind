@@ -10,7 +10,8 @@ public class ColorSlot extends GameObject {
     private int _colorID;
     private final Text _numberText;
     private final GameAttributes _gameAttributes;
-    private final float _appearenceTime = .5f;
+    private final float _appearenceTime = .3f;
+    private float _animationTime = 0;
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, GameAttributes gameAttributes) {
         super(engine, positionX, positionY, width, height, 1f);
@@ -24,6 +25,8 @@ public class ColorSlot extends GameObject {
         Font _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
         _numberText = new Text("", _colorNum, engine, 0, 0, 0, true);
         _colorID = -1;
+
+        _animationTime = _appearenceTime;
     }
 
     @Override
@@ -48,7 +51,15 @@ public class ColorSlot extends GameObject {
 
     @Override
     public void update(double deltaTime) {
+        if(_animationTime < _appearenceTime){
+            _scale = lerp(0, 1, _animationTime / _appearenceTime);
 
+            _animationTime += deltaTime;
+
+            if(_animationTime >= _appearenceTime) {
+                _scale = 1;
+            }
+        }
     }
 
     @Override
@@ -65,6 +76,10 @@ public class ColorSlot extends GameObject {
         _numberText.setPosition(_positionX + _width / 2, _positionY + _height);
     }
 
+    public void animate(){
+        _animationTime = 0;
+    }
+
 
     public boolean inBounds(int mouseX, int mouseY) {
         return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height, _scale);
@@ -75,6 +90,10 @@ public class ColorSlot extends GameObject {
 
     public void deleteColor() {
         _hasColor = false;
+    }
+
+    public float lerp(float a, float b, float t) {
+        return a + t * (b - a);
     }
 }
 

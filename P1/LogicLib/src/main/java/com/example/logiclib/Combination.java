@@ -50,13 +50,14 @@ public class Combination {
     }
 
     // Coloca el color en el primer hueco libre de la combinación
-    public void setNextColor(int colorID) {
+    public int setNextColor(int colorID) {
         for (int i = 0; i < _numbers.length; i++) {
             if (_numbers[i] == -1) {
                 _numbers[i] = colorID;
-                break;
+                return i;
             }
         }
+        return -1;
     }
 
     public void printCombination() {

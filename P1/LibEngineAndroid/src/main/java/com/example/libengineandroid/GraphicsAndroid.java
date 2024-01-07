@@ -159,8 +159,8 @@ public class GraphicsAndroid implements Graphics {
     public void drawCircleWithBorder(float logicX, float logicY, float radius, float borderWidth, float scale, int circleColor, int borderColor) {
         // Dibuja el borde del círculo
         setColor(borderColor);
-        int realX = logicToRealX(logicX);
-        int realY = logicToRealY(logicY);
+        int realX = logicToRealX(logicX + (1 - scale) * radius);
+        int realY = logicToRealY(logicY + (1 - scale) * radius);
         final int realRadius = scaleToReal(radius, scale);
         final int realBorderRadius = realRadius + scaleToReal(borderWidth, scale);
 
@@ -184,8 +184,8 @@ public class GraphicsAndroid implements Graphics {
 
     @Override
     public void drawCircle(float logicX, float logicY, float radius, float scale, int color) {
-        int realX = logicToRealX(logicX);
-        int realY = logicToRealY(logicY);
+        int realX = logicToRealX(logicX + (1 - scale) * radius);
+        int realY = logicToRealY(logicY + (1 - scale) * radius);
         int realRadius = scaleToReal(radius, scale);
 
         setColor(color);
