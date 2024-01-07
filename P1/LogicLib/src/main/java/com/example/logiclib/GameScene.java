@@ -173,6 +173,10 @@ public class GameScene implements Scene {
 
     @Override
     public void handleEvents(Input input) {
+        if (_gameFinished){
+            return;
+        }
+
         List<Input.TouchEvent> touchEvents = input.getTouchEvent();
 
         for (Input.TouchEvent touchEvent : touchEvents) {

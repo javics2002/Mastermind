@@ -17,9 +17,5 @@ public interface Input {
     }
 
     List<TouchEvent> getTouchEvent();
-
-
-    // TODO: make clear events in interface
-
-    // TODO: CHECK RELEASE IN INPUT
+    void clearEvents();
 }

@@ -17,8 +17,6 @@ public class EnginePC implements Runnable, Engine {
     private AudioPC _audio;
 
 
-
-
     public EnginePC(JFrame myView,float aspectRatio , int logicHeight) {
         int _logicWidth = (int) (logicHeight * aspectRatio);
         _graphics = new GraphicsPC(myView, _logicWidth, logicHeight);
