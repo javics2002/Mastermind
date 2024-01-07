@@ -9,13 +9,17 @@ import java.util.List;
 
 public class CombinationLayout extends GameObject {
     private final Text _combinationNumber;
-    private final Combination _currentCombination;
     private final List<ColorSlot> _colors;
     private final List<HintSlot> _hints;
     private final int _lateralMargin;
+    private final Combination _associatedCombination;
 
-    public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY, int height, GameAttributes gameAttributes) {
+    public CombinationLayout(Engine engine, int number, int combinationLength,
+                             int positionX, int positionY, int height,
+                             GameAttributes gameAttributes, Combination associatedCombination) {
         super(engine, positionX, positionY, engine.getGraphics().getLogicWidth(), height, 1f);
+
+        _associatedCombination = associatedCombination;
 
         _lateralMargin = 5;
         _width -= - 2 * _lateralMargin;
@@ -40,8 +44,6 @@ public class CombinationLayout extends GameObject {
                     (int) (i < combinationLength / 2f ? _positionY - _height / 2 : _positionY) + (int) (_height * .2f / 4),
                     (int) (_height * .8f * _scale / 2), (int) (_height * .8f * _scale / 2)));
         }
-
-        _currentCombination = new Combination(combinationLength);
     }
 
     @Override
@@ -73,29 +75,25 @@ public class CombinationLayout extends GameObject {
     }
 
     @Override
-    public boolean handleEvents(Input.TouchEvent e) {
+    public boolean handleEvents(Input.TouchEvent event) {
         for (int i = 0; i < _colors.size(); i++) {
             ColorSlot color = _colors.get(i);
 
-            if (color.handleEvents(e)) {
-                _currentCombination.deleteColor(i);
-                color.deleteColor();
+            if (color.handleEvents(event)) {
+                _associatedCombination.deleteColor(i);
                 return true;
             }
         }
         return false;
     }
 
-    public void setNextColor(int colorID, boolean isEyeOpen) {
-        // Coloca la imagen en el primer hueco del array
+    public void updateCombination(boolean isEyeOpen){
         for (int i = 0; i < _colors.size(); i++) {
-            if (!_colors.get(i).hasColor()) {
-                // Image
-                _colors.get(i).setColor(colorID, isEyeOpen);
-
-                // Combination
-                _currentCombination.setNextColor(colorID);
-                break;
+            if (_associatedCombination.getColors()[i] == -1) {
+                _colors.get(i).deleteColor();
+            }
+            else {
+                _colors.get(i).setColor(_associatedCombination.getColors()[i], isEyeOpen);
             }
         }
     }
@@ -108,10 +106,6 @@ public class CombinationLayout extends GameObject {
             }
         }
         return true;
-    }
-
-    public Combination getCurrentCombination() {
-        return _currentCombination;
     }
 
     // Usando el array de las pistas, coloca la respectiva imagen, ya sea la pista negra o blanca

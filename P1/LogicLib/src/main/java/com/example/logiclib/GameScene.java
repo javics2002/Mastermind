@@ -15,8 +15,9 @@ public class GameScene implements Scene {
     private final Text _objectiveText, _attemptsText;
     private final Button _quitButton, _colorblindButton;
     private final List<CombinationLayout> _combinationLayouts;
+    private final List<Combination> _combinations;
     private final List<ColorButton> _colorButtons;
-    private Transition _transition;
+    private final Transition _transition;
     private boolean _gameFinished;
 
     public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
@@ -76,13 +77,16 @@ public class GameScene implements Scene {
             }
         };
 
-        // Combination
+        // Combinations
         int initialHeight = 100;
         int verticalPadding = 15, scale = 40;
+        _combinations = new ArrayList<>();
         _combinationLayouts = new ArrayList<>();
         for (int i = 0; i < tryNumber; i++) {
+            _combinations.add(new Combination(combinationLength));
             _combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
-                    graphics.getLogicWidth() / 2, initialHeight + (verticalPadding + scale) * i, scale, _gameAttributes));
+                    graphics.getLogicWidth() / 2, initialHeight + (verticalPadding + scale) * i,
+                    scale, _gameAttributes, _combinations.get(i)));
         }
 
         // Color buttons
@@ -111,7 +115,7 @@ public class GameScene implements Scene {
         // _combinationLayouts.get(gameAttributes._activeLayout).getCurrentCombination().printCombination();
         CombinationLayout activeLayout = _combinationLayouts.get(_gameAttributes.activeLayout);
         if (activeLayout.isFull()) {
-            if (activeLayout.getCurrentCombination().equals(_gameAttributes.resultCombination)) {
+            if (_combinations.get(_gameAttributes.activeLayout).equals(_gameAttributes.resultCombination)) {
                 // USER WON
                 Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
                 _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, gameOverScene);
@@ -120,7 +124,7 @@ public class GameScene implements Scene {
             }
 
             // Hints
-            Combination.HintEnum[] hints = activeLayout.getCurrentCombination().getHint(_gameAttributes.resultCombination);
+            Combination.HintEnum[] hints = _combinations.get(_gameAttributes.activeLayout).getHint(_gameAttributes.resultCombination);
             activeLayout.setHints(hints);
 
             _gameAttributes.attemptsLeft--;
@@ -177,12 +181,15 @@ public class GameScene implements Scene {
 
             // Detectar click en colores ya colocados
             // Sirve para borrarlos
-            _combinationLayouts.get(_gameAttributes.activeLayout).handleEvents(touchEvent);
+            if (_combinationLayouts.get(_gameAttributes.activeLayout).handleEvents(touchEvent)){
+                _combinationLayouts.get(_gameAttributes.activeLayout).updateCombination(_gameAttributes.isEyeOpen);
+            }
 
             // Cuando detecta un click en un color, se coloca en el primer hueco posible.
             for (ColorButton colorButton : _colorButtons) {
                 if (colorButton.handleEvents(touchEvent)) {
-                    _combinationLayouts.get(_gameAttributes.activeLayout).setNextColor(colorButton._colorID, _gameAttributes.isEyeOpen);
+                    _combinations.get(_gameAttributes.activeLayout).setNextColor(colorButton._colorID);
+                    _combinationLayouts.get(_gameAttributes.activeLayout).updateCombination(_gameAttributes.isEyeOpen);
                     break;
                 }
             }

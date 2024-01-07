@@ -71,6 +71,7 @@ public class ColorSlot extends GameObject {
     public boolean hasColor() {
         return _hasColor;
     }
+
     public void deleteColor() {
         _hasColor = false;
     }
