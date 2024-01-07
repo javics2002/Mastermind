@@ -14,8 +14,8 @@ public class InitialScene implements Scene {
     private final Text _titleText;
     private final int _backgroundColor;
 
-    public InitialScene(Engine engine) {
-        _engine = engine;
+	public InitialScene(Engine engine) {
+		_engine = engine;
 
         final Graphics graphics = _engine.getGraphics();
 
@@ -31,12 +31,11 @@ public class InitialScene implements Scene {
             buttonColor = Colors.parseARGB(theme.buttonColor);
         }
 
-        Font _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
-        String title = "Master Mind";
+		Font _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
+		String title = "Master Mind";
 
-        int titleWidth = graphics.getStringWidth(title, _titleFont);
-        _titleText = new Text(title, _titleFont, _engine,
-                graphics.getLogicWidth() / 2 - titleWidth / 2, 200, 0);
+		_titleText = new Text(title, _titleFont, _engine,
+				graphics.getLogicWidth() / 2, 200, 0, true);
 
         final int buttonWidth = 330;
         final int buttonHeight = 90;
@@ -87,9 +86,15 @@ public class InitialScene implements Scene {
         };
     }
 
-    @Override
-    public void update(double deltaTime) {
-    }
+		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+		_playButton = new Button(Colors.ColorName.BACKGROUNDBLUE, "Jugar", buttonFont, _engine,
+				graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight) {
+			@Override
+			public void callback() {
+				Scene scene = new DifficultyScene(_engine);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+			}
+		};
 
     @Override
     public void render(Graphics graphics) {

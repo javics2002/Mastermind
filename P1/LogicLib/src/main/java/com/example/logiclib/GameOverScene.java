@@ -21,9 +21,10 @@ public class GameOverScene implements Scene {
     private Text _moneyText;
     private Button _adButton;
     private final int _coinSize = 40;
+    private Transition _transition;
 
-    Engine _engine;
-    GameAttributes _gameAttributes;
+	Engine _engine;
+	GameAttributes _gameAttributes;
 
     private final int _backgroundColor;
 
@@ -31,8 +32,8 @@ public class GameOverScene implements Scene {
         _engine = engine;
         final Graphics graphics = _engine.getGraphics();
 
-        // Init GameAttributes
-        _gameAttributes = gameAttributes;
+		// Init GameAttributes
+		_gameAttributes = gameAttributes;
 
         int buttonColor = Colors.colorValues.get(Colors.ColorName.BACKGROUNDORANGE);
 
@@ -45,6 +46,9 @@ public class GameOverScene implements Scene {
             _backgroundColor = Colors.parseARGB(theme.backgroundColor);
             buttonColor = Colors.parseARGB(theme.buttonColor);
         }
+
+        // Transition
+		_transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
 
         // Escena
         Font resultFont = graphics.newFont("Comfortaa-Regular.ttf", 40f),
@@ -211,10 +215,28 @@ public class GameOverScene implements Scene {
                 }
             }
         };
+
+        _transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
     }
 
-    @Override
-    public void update(double deltaTime) {}
+		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
+		_playAgainButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Volver a jugar", buttonFont, _engine,
+				graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50) {
+			@Override
+			public void callback() {
+				Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+						_gameAttributes.colorNumber, _gameAttributes.repeatedColors);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+			}
+		};
+		_chooseDifficultyButton = new Button(Colors.ColorName.BACKGROUNDORANGE, "Elegir dificultad", buttonFont, _engine,
+				graphics.getLogicWidth() / 2 - 400 / 2, 550, 400, 50) {
+			@Override
+			public void callback() {
+				Scene scene = new DifficultyScene(_engine);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+			}
+		};
 
     @Override
     public void render(Graphics graphics) {
@@ -253,23 +275,33 @@ public class GameOverScene implements Scene {
 
         _playAgainButton.render(graphics);
         _menuButton.render(graphics);
+
+        _transition.render(graphics);
     }
 
-    @Override
-    public void handleEvents(Input input) {
-        if (input.getTouchEvent().size() > 0) {
-            _playAgainButton.handleEvents(input.getTouchEvent().get(0));
-            _menuButton.handleEvents(input.getTouchEvent().get(0));
+@Override
+	public void handleEvents() {
+		
+	}
 
-            if(_adButton!=null){
-                _adButton.handleEvents(input.getTouchEvent().get(0));
-            }
-            if (_shareButton != null) {
-                _shareButton.handleEvents(input.getTouchEvent().get(0));
-            }
+    @Override
+    public void handleEvents(Input.TouchEvent event) {
+        _playAgainButton.handleEvents(event);
+		_menuButton.handleEvents(event);
+
+        if(_adButton!=null){
+            _adButton.handleEvents(event);
+        }
+        if (_shareButton != null) {
+            _shareButton.handleEvents(event);
         }
     }
     public GameAttributes getGameAttributtes(){
         return _gameAttributes;
     }
+
+    @Override
+	public void update(double deltaTime) {
+		_transition.update(deltaTime);
+	}
 }

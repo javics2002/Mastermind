@@ -2,29 +2,22 @@ package com.example.logiclib;
 
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
-import com.example.aninterface.GameObject;
 import com.example.aninterface.Graphics;
-import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 
-public class ColorButton implements GameObject {
+public class ColorButton extends GameObject {
     private final Graphics _graphics;
-    private final int _positionX, _positionY;
-    private final int _width, _height;
     public int _colorID;
     private final Text _numberText;
     private final GameAttributes _gameAttributes;
     private final Image _icon;
     private final int _color;
 
-    ColorButton(Engine engine, int positionX, int positionY, int width, int height, int colorID, GameAttributes gameAttributes) {
-        _graphics = engine.getGraphics();
-        _gameAttributes = gameAttributes;
+	ColorButton(Engine engine, int positionX, int positionY, int width, int height, int colorID, GameAttributes gameAttributes) {
+		super(engine, positionX, positionY, width, height, 1f);
+        
+		_gameAttributes = gameAttributes;
 
-        _positionX = positionX;
-        _positionY = positionY;
-        _width = width;
-        _height = height;
         _colorID = colorID;
         String num = String.valueOf(_colorID);
 
@@ -59,10 +52,10 @@ public class ColorButton implements GameObject {
         }
     }
 
-    @Override
-    public boolean handleEvents(Input.TouchEvent e) {
-        return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
-    }
+	@Override
+	public boolean handleEvents(Input.TouchEvent e) {
+		return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
+	}
 
     @Override
     public void update(double deltaTime) {
@@ -76,17 +69,14 @@ public class ColorButton implements GameObject {
         if(_icon != null)
             _graphics.drawImage(_icon, _positionX, _positionY, _width, _height);
         else
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
-                    _width / 2, _color);
+            _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2, _positionY + _height * _scale / 2,
+				_width / 2, 1f, _scale, _color, Colors.colorValues.get(Colors.ColorName.BLACK));
 
         if (_gameAttributes.isEyeOpen)
             _numberText.render(graphics);
     }
 
-    public boolean inBounds(int mX, int mY) {
-        return (mX >= (_graphics.logicToRealX(_positionX))
-                && mX <= _graphics.logicToRealX(_positionX) + _graphics.scaleToReal(_width)
-                && mY >= _graphics.logicToRealY(_positionY)
-                && mY <= _graphics.logicToRealY(_positionY) + _graphics.scaleToReal(_height));
-    }
+	public boolean inBounds(int mouseX, int mouseY) {
+		return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height, _scale);
+	}
 }

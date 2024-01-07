@@ -63,10 +63,7 @@ public class EngineAndroid implements Runnable, Engine {
 
 
     // Constructor
-    public EngineAndroid(SurfaceView myView,Activity actividad) {
-        float aspectRatio = 2f / 3f;
-        int height = 720;
-        this.activity = actividad;
+    public EngineAndroid(SurfaceView myView, float aspectRatio, int logicHeight) {
         _surfaceView = myView;
         _input = new InputAndroid();
 
@@ -80,77 +77,75 @@ public class EngineAndroid implements Runnable, Engine {
         _gson= new Gson();
     }
 
-    @Override
-    public void run() {
-        // Espera a que el motor esté en ejecución y el ancho de la superficie sea válido
-        while (_running && _surfaceView.getWidth() == 0) ;
+	@Override
+	public void run() {
+		// Espera a que el motor esté en ejecución y el ancho de la superficie sea válido
+		while (_running && _surfaceView.getWidth() == 0) ;
 
-        long lastFrameTime = System.nanoTime();
+		long lastFrameTime = System.nanoTime();
 
-        // Bucle principal del motor
-        while (_running) {
-            long currTime = System.nanoTime();
-            long nanoElTime = currTime - lastFrameTime;
-            lastFrameTime = currTime;
+		// Bucle principal del motor
+		while (_running) {
+			long currTime = System.nanoTime();
+			long nanoElTime = currTime - lastFrameTime;
+			lastFrameTime = currTime;
 
-            // Procesa eventos de entrada
-            handleEvents();
+			// Procesa eventos de entrada
+			handleEvents();
 
-            // Actualiza la lógica del juego
-            double elapsedTime = (double) nanoElTime / 1.0E9;
-            update(elapsedTime);
+			// Actualiza la lógica del juego
+			double elapsedTime = (double) nanoElTime / 1.0E9;
+			update(elapsedTime);
 
-            // Renderiza el frame cuando los gráficos estén listos
-            while (!_graphics.isValid()) ;
-            _graphics.lockCanvas();
-            _graphics.prepareFrame();
-            render();
-            _graphics.unlockCanvas();
-        }
-    }
+			// Renderiza el frame cuando los gráficos estén listos
+			while (!_graphics.isValid()) ;
+			_graphics.lockCanvas();
+			_graphics.prepareFrame();
+			render();
+			_graphics.unlockCanvas();
+		}
+	}
 
     // Método para renderizar la escena actual
     protected void render() {
         _currentScene.render(_graphics);
     }
 
-    // Método para pausar la ejecución del motor
-    public void pause() {
-        if (_running) {
-            _running = false;
-            while (true) {
-                try {
-                    // Detiene el hilo de renderizado
-                    _renderThread.join();
-                    _renderThread = null;
-                    break;
-                }
-                catch (InterruptedException ignored) {
-                }
-            }
-        }
-    }
+	// Método para pausar la ejecución del motor
+	public void pause() {
+		if (_running) {
+			_running = false;
+			while (true) {
+				try {
+					// Detiene el hilo de renderizado
+					_renderThread.join();
+					_renderThread = null;
+					break;
+				} catch (InterruptedException ignored) {
+				}
+			}
+		}
+	}
 
-    @Override
-    public void resume() {
-        // Si no se estaba ejecutando, inicia la ejecución del motor en un nuevo hilo de renderizado
-        if (!_running) {
-            _running = true;
-            _renderThread = new Thread(this);
-            _renderThread.start();
-        }
-    }
+	public void resume() {
+		// Si no se estaba ejecutando, inicia la ejecución del motor en un nuevo hilo de renderizado
+		if (!_running) {
+			_running = true;
+			_renderThread = new Thread(this);
+			_renderThread.start();
+		}
+	}
 
-    // Maneja eventos de entrada
-    protected void handleEvents() {
-        _currentScene.handleEvents(_input);
-        _input.clearEvents();
-    }
+	// Maneja eventos de entrada
+	protected void handleEvents() {
+		if (_input.getTouchEvents().size() > 0) {
+			for (Input.TouchEvent event : _input.getTouchEvents()) {
+				_currentScene.handleEvents(event);
+			}
 
-    // Actualiza la lógica del juego
-    protected void update(double deltaTime) {
-        _currentScene.update(deltaTime);
-    }
+			_input.clearEvents();
+		}
+	}
 
     @Override
     public  void showAd(){
@@ -302,21 +297,25 @@ public class EngineAndroid implements Runnable, Engine {
     public Input getInput() {
         return _input;
     }
+	// Actualiza la lógica del juego
+	protected void update(double deltaTime) {
+		_currentScene.update(deltaTime);
+	}
 
-    @Override
-    public void setCurrentScene(Scene currentScene) {
-        _currentScene = currentScene;
-    }
+	@Override
+	public Input getInput() {
+		return _input;
+	}
 
-    @Override
-    public Scene getScene() {
-        return _currentScene;
-    }
+	@Override
+	public void setCurrentScene(Scene currentScene) {
+		_currentScene = currentScene;
+	}
 
-    @Override
-    public Graphics getGraphics() {
-        return _graphics;
-    }
+	@Override
+	public Scene getScene() {
+		return _currentScene;
+	}
 
     @Override
     public Audio getAudio() {
@@ -726,4 +725,8 @@ public class EngineAndroid implements Runnable, Engine {
     }
 
     private native String hashJson(String fileContent);
+	@Override
+	public Graphics getGraphics() {
+		return _graphics;
+	}
 }

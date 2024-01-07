@@ -4,40 +4,32 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
-import com.example.aninterface.GameObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CombinationLayout implements GameObject {
+public class CombinationLayout extends GameObject {
     private final Text _combinationNumber;
-    private final Combination _currentCombination;
+    private final Combination _associatedCombination;
     private final List<ColorSlot> _colors;
     private final List<HintSlot> _hints;
-    private final Graphics _graphics;
-    private final int _positionX;
-    private int _positionY;
     private final int _scale;
     private final int _lateralMargin;
 
-    private  GameAttributes _gameAttributes;
+	private GameAttributes _gameAttributes;
 
-    public CombinationLayout(Engine engine, int number, int combinationLength, int positionX, int positionY, int scale, GameAttributes gameAttributes) {
-        _graphics = engine.getGraphics();
-        _gameAttributes = gameAttributes;
+	public CombinationLayout(Engine engine, int number, int combinationLength,
+	                         int positionX, int positionY, int height,
+	                         GameAttributes gameAttributes, Combination associatedCombination) {
+		super(engine, positionX, positionY, engine.getGraphics().getLogicWidth(), height, 1f);
 
-        _positionX = positionX;
-        _positionY = positionY;
+		_associatedCombination = associatedCombination;
+		_gameAttributes = gameAttributes;
 
-        _scale = scale;
-        _lateralMargin = 5;
-        int padding = 6;
+		_lateralMargin = 5;
+		_width -= -2 * _lateralMargin;
 
-        Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
-        _combinationNumber = new Text(Integer.toString(number + 1), numberFont, engine,
-                _lateralMargin + 50 - _graphics.getStringWidth(Integer.toString(number + 1), numberFont) / 2,
-                _positionY + _scale / 2 - _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 2 ,
-                0);
+		int padding = 6;
 
         _currentCombination = new Combination(combinationLength);
 
@@ -94,20 +86,23 @@ public class CombinationLayout implements GameObject {
 
     @Override
     public void render(Graphics graphics) {
-        _graphics.drawRoundedRect(_lateralMargin, (int) (_positionY - _scale * 1.2f / 2),
-                _graphics.getLogicWidth() - _lateralMargin * 2, (int) (_scale * 1.2f),
-                Colors.colorValues.get(Colors.ColorName.TRASPARENTBACKGROUND), 20, 20);
+        _graphics.drawRoundedRect(_lateralMargin, _positionY - _height * 1.2f / 2,
+				_graphics.getLogicWidth() - _lateralMargin * 2, _height * 1.2f,
+				20, 20, _scale, Colors.colorValues.get(Colors.ColorName.COMBINATIONLAYOUT));
 
-        _graphics.drawRect(_lateralMargin + 80, _positionY - _scale / 2, 2, _scale, 0);
-        _graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, _positionY - _scale/2, 2, _scale, 0);
+		_graphics.drawRect(_lateralMargin + 80, _positionY - _height / 2, 2, _height, _scale, 0);
+		_graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, _positionY - _height / 2,
+				2, _height, _scale, 0);
 
-        _combinationNumber.render(graphics);
+		_combinationNumber.render(graphics);
 
-        for (ColorSlot color : _colors)
-            color.render(graphics);
+		for (ColorSlot color : _colors) {
+			color.render(graphics);
+		}
 
-        for (HintSlot hint : _hints)
-            hint.render(graphics);
+		for (HintSlot hint : _hints) {
+			hint.render(graphics);
+		}
     }
 
     @Override
@@ -117,47 +112,54 @@ public class CombinationLayout implements GameObject {
         }
     }
 
-    @Override
-    public boolean handleEvents(Input.TouchEvent e) {
-        for (int i = 0; i < _colors.size(); i++) {
-            ColorSlot color = _colors.get(i);
+	@Override
+	public boolean handleEvents(Input.TouchEvent event) {
+		for (int i = 0; i < _colors.size(); i++) {
+			ColorSlot color = _colors.get(i);
 
-            if (color.handleEvents(e)) {
-                _currentCombination.deleteColor(i);
-                color.deleteColor();
-                return true;
-            }
-        }
-        return false;
-    }
+			if (color.handleEvents(event)) {
+				_associatedCombination.deleteColor(i);
+				return true;
+			}
+		}
+		return false;
+	}
 
-    public void setNextColor(int colorID, boolean isEyeOpen) {
-        // Coloca la imagen en el primer hueco del array
-        for (int i = 0; i < _colors.size(); i++) {
-            if (!_colors.get(i).hasColor()) {
-                // Image
-                _colors.get(i).setColor(colorID, isEyeOpen);
+	public void updateCombination(boolean isEyeOpen) {
+		for (int i = 0; i < _colors.size(); i++) {
+			if (_associatedCombination.getColors()[i] == -1) {
+				_colors.get(i).deleteColor();
+			} else {
+				_colors.get(i).setColor(_associatedCombination.getColors()[i], isEyeOpen);
+			}
+		}
+	}
 
-                // Combination
-                _currentCombination.setNextColor(colorID);
-                break;
-            }
-        }
-    }
+	public void animateSlot(int index) {
+		if(index != -1)
+			_colors.get(index).animate();
+	}
 
-    // Devuelve true si el array de colores está lleno (Cuando el jugador completa una combinación)
-    public boolean isFull() {
-        for (int i = 0; i < _colors.size(); i++) {
-            if (!_colors.get(i).hasColor()) {
-                return false;
-            }
-        }
-        return true;
-    }
+	// Devuelve true si el array de colores está lleno (Cuando el jugador completa una combinación)
+	public boolean isFull() {
+		for (int i = 0; i < _colors.size(); i++) {
+			if (!_colors.get(i).hasColor()) {
+				return false;
+			}
+		}
+		return true;
+	}
 
-    public Combination getCurrentCombination() {
-        return _currentCombination;
-    }
+	// Usando el array de las pistas, coloca la respectiva imagen, ya sea la pista negra o blanca
+	public void setHints(Combination.HintEnum[] predictionHints) {
+		for (int i = 0; i < predictionHints.length; i++) {
+			if (predictionHints[i] == Combination.HintEnum.BLACK) {
+				_hints.get(i).setColor(Colors.ColorName.BLACK);
+			} else if (predictionHints[i] == Combination.HintEnum.WHITE) {
+				_hints.get(i).setColor(Colors.ColorName.WHITE);
+			}
+		}
+	}
 
     // Usando el array de las pistas, coloca la respectiva imagen, ya sea la pista negra o blanca
     public void setHints(Combination.HintEnum[] predictionHints) {
@@ -173,16 +175,17 @@ public class CombinationLayout implements GameObject {
     public void setPositionY(int posY){
         _positionY = posY;
 
-        _combinationNumber.setPos(_combinationNumber.getPosX(),
-                _positionY + _scale / 2 - _graphics.getStringHeight(_combinationNumber.getText(),
-                        _combinationNumber.getFont()) / 2 );
+		_combinationNumber.setPosition(_combinationNumber.getPositionX(),
+				_positionY + _height / 2);
 
-        for (ColorSlot color : _colors)
-            color.setPositionY(_positionY - _scale / 2);
+		for (ColorSlot color : _colors) {
+			color.setPosition(color.getPositionX(), _positionY - _height / 2);
+			color.setTextPositionY(posY);
+		}
 
-        for (int i = 0; i < _gameAttributes.combinationLength; i++) {
-            _hints.get(i).setPositionY((i < _gameAttributes.combinationLength / 2f ?
-                    _positionY - _scale / 2 : _positionY) + (int) (_scale * .2f / 4));
-        }
+		for (int i = 0; i < _gameAttributes.combinationLength; i++) {
+			_hints.get(i).setPosition(_hints.get(i).getPositionX(), (i < _gameAttributes.combinationLength / 2f ?
+					_positionY - _height / 2 : _positionY) + _height * 0.2f / 4);
+		}
     }
 }

@@ -1,43 +1,45 @@
 package com.example.aninterface;
 
 public interface Graphics {
-    Font newFont(String fileName, float size);
+	Font newFont(String fileName, float size);
 
-    Image loadImage(String path);
+	Image loadImage(String path);
 
-    void drawImage(Image image, int x, int y, int w, int h);
+	void drawImage(Image image, float logicX, float logicY, float logicWidth, float logicHeight, float scale);
 
-    void setColor(int color);
+	void setColor(int color);
 
-    void clear(int color);
+	void clear(int color);
 
-    void drawRect(int x, int y, int width, int height, int color);
-    void drawRoundedRect(int x, int y, int width, int height, int color, int arcWidth, int arcHeight);
+	void drawRect(float logicX, float logicY, float logicWidth, float logicHeight, float scale, int color);
 
-    void drawText(String text, Font font, int x, int y, int color);
-    void drawCircle(int logicX, int logicY, int radius, int color);
+	void drawRealRect(int realX, int realY, int realWidth, int realHeight, int color);
 
-    int logicToRealX(int x);
+	void drawRoundedRect(float logicX, float logicY, float logicWidth, float logicHeight, float arcWidth, float arcHeight, float scale, int color);
 
-    int logicToRealY(int y);
+	void drawCircleWithBorder(float logicX, float logicY, float radius, float borderWidth, float scale, int circleColor, int borderColor);
 
-    int scaleToReal(int realScale);
+	void drawText(String text, Font font, float logicX, float logicY, float scale, int color);
 
-    int getWidth();
+	void drawCircle(float logicX, float logicY, float radius, float scale, int color);
 
-    int getLogicWidth();
+	boolean inBounds(float posX, float posY, int checkX, int checkY, float width, float height, float scale);
 
-    int getHeight();
+	int getWidth();
 
-    int getLogicHeight();
+	int getLogicWidth();
 
-    int getStringWidth(String text, Font font);
+	int getHeight();
 
-    int getStringHeight(String text, Font font);
+	int getLogicHeight();
 
-    void setNewResolution(int w, int h);
+	float getStringWidth(String text, Font font);
 
-    void prepareFrame();
+	float getStringHeight(String text, Font font);
+
+	void setNewResolution(int w, int h);
+
+	void prepareFrame();
 }
 
 

@@ -4,61 +4,54 @@ import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
-import com.example.aninterface.GameObject;
 
-public class Text implements GameObject {
+public class Text extends GameObject {
     private String _text;
     private final int _color;
-    private final Graphics _graphics;
-    private int _posX, _posY;
     private Font _font;
+    private final boolean _centered;
 
-    Text(String text, Font font, Engine engine, int posX, int posY, int color) {
-        _graphics = engine.getGraphics();
+	Text(String text, Font font, Engine engine, int posX, int posY, int color, boolean centered) {
+		super(engine, posX, posY, 0, 0, 1f);
 
-        _posX = posX;
-        _posY = posY;
-        _color = color;
+		_centered = centered;
 
-        _text = text;
-        _font = font;
-    }
+		_text = text;
+		_font = font;
 
-    @Override
-    public void render(Graphics graphics) {
-        _graphics.drawText(_text, _font, _posX, _posY, _color);
-    }
+        _width = _graphics.getStringWidth(_text, _font);
+		_height = _graphics.getStringHeight(_text, _font);
 
-    @Override
-    public void update(double deltaTime) {
-    }
+		_color = color;
+	}
 
-    @Override
-    public boolean handleEvents(Input.TouchEvent e) {
-        return false;
-    }
+	@Override
+	public void render(Graphics graphics) {
+		if (_centered)
+			_graphics.drawText(_text, _font, _positionX - _graphics.getStringWidth(_text, _font) / 2f,
+					_positionY - _graphics.getStringHeight(_text, _font) / 2f, _scale, _color);
+		else
+			_graphics.drawText(_text, _font, _positionX, _positionY, _scale, _color);
+	}
 
-    public void setText(String newText) {
-        _text = newText;
-    }
+	@Override
+	public void update(double deltaTime) {
+	}
 
-    public void setPos(int posX, int posY) {
-        _posX = posX;
-        _posY = posY;
-    }
+	@Override
+	public boolean handleEvents(Input.TouchEvent e) {
+		return false;
+	}
 
-    public String getText(){
-        return _text;
-    }
-    public Font getFont(){
-        return _font;
-    }
+	public void setText(String newText) {
+		_text = newText;
+	}
 
-    public int getPosX(){
-        return _posX;
-    }
+	public String getText() {
+		return _text;
+	}
 
-    public int getPosY(){
-        return _posY;
-    }
+	public Font getFont() {
+		return _font;
+	}
 }

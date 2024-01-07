@@ -3,15 +3,9 @@ package com.example.logiclib;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
-import com.example.aninterface.Image;
 import com.example.aninterface.Input;
-import com.example.aninterface.GameObject;
 
-public class ColorSlot implements GameObject {
-    private final Graphics _graphics;
-    private final Engine _engine;
-    private int _positionX, _positionY;
-    private final int _width, _height;
+public class ColorSlot extends GameObject {
     private String _name;
     private boolean _hasColor;
     private int _colorID;
@@ -20,15 +14,13 @@ public class ColorSlot implements GameObject {
     private GameAttributes _gameAttributes;
     private Image _icon;
     private int _color;
+    private final float _appearenceTime = .3f;
+	private float _animationTime = 0;
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, GameAttributes gameAttributes) {
-        _engine = engine;
-        _graphics = engine.getGraphics();
+        super(engine, positionX, positionY, width, height, 1f);
+
         _gameAttributes = gameAttributes;
-        _positionX = positionX;
-        _positionY = positionY;
-        _width = width;
-        _height = height;
         _hasColor = false;
         _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
         _numberText = new Text("", _colorNum, engine, 0, 0, 0);
@@ -36,13 +28,9 @@ public class ColorSlot implements GameObject {
     }
 
     public ColorSlot(Engine engine, int positionX, int positionY, int width, int height, int colorID, GameAttributes gameAttributes) {
-        _engine = engine;
-        _graphics = engine.getGraphics();
+        super(engine, positionX, positionY, width, height, 1f);
+        
         _gameAttributes = gameAttributes;
-        _positionX = positionX;
-        _positionY = positionY;
-        _width = width;
-        _height = height;
         _hasColor = colorID != -1 ? true : false;
         _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
 
@@ -68,37 +56,37 @@ public class ColorSlot implements GameObject {
     public void render(Graphics graphics) {
         if (hasColor()) {
             if(_icon != null)
-                _graphics.drawImage(_icon, _positionX, _positionY, _width, _height);
+                _graphics.drawImage(_icon, _positionX, _positionY, _width, _height, _scale);
             else
-                _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
-                        _width / 2, _color);
+                _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2,
+					_positionY + _height * _scale / 2, _width / 2, 1f, _scale,
+					_color, Colors.colorValues.get(Colors.ColorName.BLACK));
 
             if(_gameAttributes.isEyeOpen)
                 _numberText.render(graphics);
         } else { // Gris
+            _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2,
+					_positionY + _height * _scale / 2, _width / 2, 1f, _scale,
+					Colors.colorValues.get(Colors.ColorName.LIGHTGRAY), Colors.colorValues.get(Colors.ColorName.BLACK));
             _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
-                    _width / 2, Colors.colorValues.get(Colors.ColorName.LIGHTGRAY));
-            _graphics.drawCircle(_positionX + _width / 2, _positionY + _height / 2,
-                    _width / 8, Colors.colorValues.get(Colors.ColorName.DARKGRAY));
+                    _width / 8, _scale, Colors.colorValues.get(Colors.ColorName.DARKGRAY));
         }
     }
 
-    @Override
-    public void update(double deltaTime) {
+	@Override
+	public void update(double deltaTime) {
+		if (_animationTime < _appearenceTime) {
+			float newScale = lerp(0, 1, _animationTime / _appearenceTime);
+			_scale = newScale;
+			_numberText.setScale(newScale);
 
-    }
+            _animationTime += deltaTime;
 
-    @Override
-    public boolean handleEvents(Input.TouchEvent e) {
-        return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
-    }
-
-    public void setColor(int color, boolean isEyeOpen) {
-        _hasColor = true;
-        _colorID = color;
-        String num = String.valueOf(_colorID);
-        int textX = _positionX + _width / 2 - _graphics.getStringWidth(num, _colorNum) / 2;
-        int textY = _positionY + _height / 2 + _graphics.getStringHeight(num, _colorNum) / 2;
+			if (_animationTime >= _appearenceTime) {
+				_scale = 1;
+				_numberText.setScale(1);
+			}
+		}
 
         _numberText.setText(num);
         _numberText.setPos(textX, textY);
@@ -128,24 +116,43 @@ public class ColorSlot implements GameObject {
         }
     }
 
+	@Override
+	public boolean handleEvents(Input.TouchEvent e) {
+		return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
+	}
 
-    private boolean inBounds(int mX, int mY) {
-        return (mX >= (_graphics.logicToRealX(_positionX))
-                && mX <= _graphics.logicToRealX(_positionX) + _graphics.scaleToReal(_width)
-                && mY >= _graphics.logicToRealY(_positionY)
-                && mY <= _graphics.logicToRealY(_positionY) + _graphics.scaleToReal(_height));
-    }
+	public void setColor(int color, boolean isEyeOpen) {
+		_hasColor = true;
+		_colorID = color;
+		String num = String.valueOf(_colorID);
 
-    public boolean hasColor() {
-        return _hasColor;
-    }
-    public void deleteColor() {
-        _hasColor = false;
-    }
+		_numberText.setText(num);
+		_numberText.setPosition(_positionX + _width / 2, _positionY + _height);
+	}
 
-    public void setPositionY(int posY){
-        _positionY = posY;
-    }
+	public void animate() {
+		_animationTime = 0;
+	}
+
+	public boolean inBounds(int mouseX, int mouseY) {
+		return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height, _scale);
+	}
+
+	public boolean hasColor() {
+		return _hasColor;
+	}
+
+	public void deleteColor() {
+		_hasColor = false;
+	}
+
+	public float lerp(float a, float b, float t) {
+		return a + t * (b - a);
+	}
+
+	public void setTextPositionY(int posY) {
+		_numberText.setPosition(_numberText.getPositionX(), posY + _height / 2);
+	}
 }
 
 

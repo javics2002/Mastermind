@@ -35,10 +35,12 @@ public class MainActivity extends AppCompatActivity  {
     private EngineAndroid _engineAndroid;
     private AdView mAdView;
     private SensorManagerAndroid sensorManager;
+    private final float _aspectRatio = 2f / 3f;
+	private final int _logicHeight = 720;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
         SurfaceView sf = new SurfaceView(this);
         _engineAndroid = new EngineAndroid(sf,this);
