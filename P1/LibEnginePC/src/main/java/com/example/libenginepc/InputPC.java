@@ -5,21 +5,21 @@ import com.example.aninterface.Input;
 import java.util.List;
 
 public class InputPC implements Input {
-    private final InputHandlerMouse _handler;
+	private final InputHandlerMouse _handler;
 
-    InputPC() {
-        _handler = new InputHandlerMouse();
-    }
+	InputPC() {
+		_handler = new InputHandlerMouse();
+	}
 
-    public InputHandlerMouse getHandlerInput() {
-        return _handler;
-    }
+	public InputHandlerMouse getHandlerInput() {
+		return _handler;
+	}
 
-    public List<TouchEvent> getMouseEvents() {
-        return _handler.getMouseEvents();
-    }
+	public List<TouchEvent> getMouseEvents() {
+		return _handler.getMouseEvents();
+	}
 
-    public void clearEvents() {
-        _handler.clearMouseEvents();
-    }
+	public void clearEvents() {
+		_handler.clearMouseEvents();
+	}
 }

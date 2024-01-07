@@ -1,13 +1,13 @@
 package com.example.aninterface;
 
 public interface Engine {
-    Graphics getGraphics();
+	Graphics getGraphics();
 
-    void setCurrentScene(Scene _currentScene);
+	void setCurrentScene(Scene _currentScene);
 
-    Scene getScene();
+	Scene getScene();
 
-    Input getInput();
+	Input getInput();
 
-    Audio getAudio();
+	Audio getAudio();
 }

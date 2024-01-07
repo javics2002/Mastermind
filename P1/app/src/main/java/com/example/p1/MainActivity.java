@@ -10,35 +10,35 @@ import com.example.libengineandroid.EngineAndroid;
 import com.example.logiclib.InitialScene;
 
 public class MainActivity extends AppCompatActivity {
-    private EngineAndroid _engineAndroid;
-    private final float _aspectRatio = 2f / 3f;
-    private final int _logicHeight = 720;
+	private EngineAndroid _engineAndroid;
+	private final float _aspectRatio = 2f / 3f;
+	private final int _logicHeight = 720;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-        SurfaceView surfaceView = new SurfaceView(this);
-        surfaceView.getLayoutParams();
+		SurfaceView surfaceView = new SurfaceView(this);
+		surfaceView.getLayoutParams();
 
-        setContentView(surfaceView);
+		setContentView(surfaceView);
 
-        _engineAndroid = new EngineAndroid(surfaceView,_aspectRatio,_logicHeight);
+		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight);
 
-        Scene firstScene = new InitialScene(_engineAndroid);
-        _engineAndroid.setCurrentScene(firstScene);
-        _engineAndroid.resume();
-    }
+		Scene firstScene = new InitialScene(_engineAndroid);
+		_engineAndroid.setCurrentScene(firstScene);
+		_engineAndroid.resume();
+	}
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        _engineAndroid.pause();
-    }
+	@Override
+	protected void onPause() {
+		super.onPause();
+		_engineAndroid.pause();
+	}
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        _engineAndroid.resume();
-    }
+	@Override
+	protected void onResume() {
+		super.onResume();
+		_engineAndroid.resume();
+	}
 }

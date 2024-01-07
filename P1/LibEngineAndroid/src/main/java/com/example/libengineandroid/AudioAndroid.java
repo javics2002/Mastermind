@@ -13,57 +13,57 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AudioAndroid implements Audio {
-    private Context _context;
-    private Map<String, SoundAndroid> _soundMap;
-    private SoundPool _soundPool;
-    private MediaPlayer _mediaPlayer;
+	private Context _context;
+	private Map<String, SoundAndroid> _soundMap;
+	private SoundPool _soundPool;
+	private MediaPlayer _mediaPlayer;
 
-    public AudioAndroid(Context context) {
-        _context = context;
-        _soundMap = new HashMap<>();
-        _soundPool = new SoundPool.Builder().setMaxStreams(10).build();
-        _mediaPlayer = new MediaPlayer();
-        _mediaPlayer.reset();
-    }
+	public AudioAndroid(Context context) {
+		_context = context;
+		_soundMap = new HashMap<>();
+		_soundPool = new SoundPool.Builder().setMaxStreams(10).build();
+		_mediaPlayer = new MediaPlayer();
+		_mediaPlayer.reset();
+	}
 
-    @Override
-    public Sound loadSound(String file, boolean loop) {
-        if (isLoaded(file))
-            return getSound(file);
+	@Override
+	public Sound loadSound(String file, boolean loop) {
+		if (isLoaded(file))
+			return getSound(file);
 
-        try {
-            AssetFileDescriptor assetFileDescriptor = _context.getAssets().openFd(file);
+		try {
+			AssetFileDescriptor assetFileDescriptor = _context.getAssets().openFd(file);
 
-            SoundAndroid sound = new SoundAndroid(_soundPool.load(assetFileDescriptor, 1), loop, _soundPool);
-            _soundMap.put(file, sound);
-            return sound;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+			SoundAndroid sound = new SoundAndroid(_soundPool.load(assetFileDescriptor, 1), loop, _soundPool);
+			_soundMap.put(file, sound);
+			return sound;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
-    @Override
-    public Sound getSound(String file) {
-        return _soundMap.get(file);
-    }
+	@Override
+	public Sound getSound(String file) {
+		return _soundMap.get(file);
+	}
 
-    @Override
-    public boolean isLoaded(String file) {
-        return _soundMap.containsKey(file);
-    }
+	@Override
+	public boolean isLoaded(String file) {
+		return _soundMap.containsKey(file);
+	}
 
-    @Override
-    public void playSound(Sound sound) {
-        if (sound != null) {
-            sound.play();
-        }
-    }
+	@Override
+	public void playSound(Sound sound) {
+		if (sound != null) {
+			sound.play();
+		}
+	}
 
-    @Override
-    public void stopSound(Sound sound) {
-        if (sound != null) {
-            sound.stop();
-        }
-    }
+	@Override
+	public void stopSound(Sound sound) {
+		if (sound != null) {
+			sound.stop();
+		}
+	}
 }
