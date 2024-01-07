@@ -25,7 +25,7 @@ public class TouchHandlerAndroid implements View.OnTouchListener {
         return true; // Indicar que el evento táctil ha sido manejado
     }
 
-    public ArrayList<Input.TouchEvent> getTouchEvent() {
+    public ArrayList<Input.TouchEvent> getTouchEvents() {
         return eventos; // Obtener la lista de eventos táctiles
     }
 

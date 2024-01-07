@@ -56,12 +56,8 @@ public class InitialScene implements Scene {
         _transition.render();
     }
 
-    public void handleEvents(Input input) {
-        List<Input.TouchEvent> touchEvents = input.getTouchEvent();
-
-        for (Input.TouchEvent touchEvent : touchEvents) {
-            _playButton.handleEvents(touchEvent);
-        }
+    public void handleEvents(Input.TouchEvent event) {
+        _playButton.handleEvents(event);
     }
 }
 

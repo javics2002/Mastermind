@@ -96,8 +96,13 @@ public class EngineAndroid implements Runnable, Engine {
 
     // Maneja eventos de entrada
     protected void handleEvents() {
-        _currentScene.handleEvents(_input);
-        _input.clearEvents();
+        if (_input.getTouchEvents().size() > 0) {
+            for (Input.TouchEvent event : _input.getTouchEvents()){
+                _currentScene.handleEvents(event);
+            }
+
+            _input.clearEvents();
+        }
     }
 
     // Actualiza la lógica del juego

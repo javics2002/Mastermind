@@ -26,8 +26,12 @@ public class EnginePC implements Runnable, Engine {
     }
 
     protected void handleEvents() {
-        if (_input.getTouchEvent().size() > 0) {
-            _currentScene.handleEvents(_input);
+        if (_input.getMouseEvents().size() > 0) {
+
+            for (Input.TouchEvent event : _input.getMouseEvents()){
+                _currentScene.handleEvents(event);
+            }
+
             _input.clearEvents();
         }
     }

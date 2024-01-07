@@ -15,12 +15,10 @@ public class InputPC implements Input {
         return _handler;
     }
 
-    @Override
-    public List<TouchEvent> getTouchEvent() {
+    public List<TouchEvent> getMouseEvents() {
         return _handler.getMouseEvents();
     }
 
-    @Override
     public void clearEvents() {
         _handler.clearMouseEvents();
     }

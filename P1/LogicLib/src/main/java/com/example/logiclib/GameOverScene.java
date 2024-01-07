@@ -114,14 +114,9 @@ public class GameOverScene implements Scene {
     }
 
     @Override
-    public void handleEvents(Input input) {
-        List<Input.TouchEvent> touchEvents = input.getTouchEvent();
-
-        for (Input.TouchEvent touchEvent : touchEvents) {
-            _playAgainButton.handleEvents(touchEvent);
-            _chooseDifficultyButton.handleEvents(touchEvent);
-            // Puedes agregar más llamadas a handleEvents aquí según sea necesario.
-        }
+    public void handleEvents(Input.TouchEvent event) {
+        _playAgainButton.handleEvents(event);
+        _chooseDifficultyButton.handleEvents(event);
     }
 
 }

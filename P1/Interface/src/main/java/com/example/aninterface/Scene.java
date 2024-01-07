@@ -1,7 +1,7 @@
 package com.example.aninterface;
 
 public interface Scene {
-    void handleEvents(Input input);
+    void handleEvents(Input.TouchEvent event);
 
     void update(double deltaTime);
 

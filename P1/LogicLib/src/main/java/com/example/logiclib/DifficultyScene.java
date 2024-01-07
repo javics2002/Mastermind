@@ -110,17 +110,12 @@ public class DifficultyScene implements Scene {
     }
 
     @Override
-    public void handleEvents(Input input) {
-        List<Input.TouchEvent> touchEvents = input.getTouchEvent();
-
-        for (Input.TouchEvent touchEvent : touchEvents) {
-            _backButton.handleEvents(touchEvent);
-            _easyDifficultyButton.handleEvents(touchEvent);
-            _mediumDifficultyButton.handleEvents(touchEvent);
-            _difficultDifficultyButton.handleEvents(touchEvent);
-            _impossibleDifficultyButton.handleEvents(touchEvent);
-            // Puedes agregar más llamadas a handleEvents aquí según sea necesario.
-        }
+    public void handleEvents(Input.TouchEvent event) {
+        _backButton.handleEvents(event);
+        _easyDifficultyButton.handleEvents(event);
+        _mediumDifficultyButton.handleEvents(event);
+        _difficultDifficultyButton.handleEvents(event);
+        _impossibleDifficultyButton.handleEvents(event);
     }
 
 }

@@ -172,30 +172,26 @@ public class GameScene implements Scene {
     }
 
     @Override
-    public void handleEvents(Input input) {
+    public void handleEvents(Input.TouchEvent event) {
         if (_gameFinished){
             return;
         }
 
-        List<Input.TouchEvent> touchEvents = input.getTouchEvent();
+        _colorblindButton.handleEvents(event);
+        _quitButton.handleEvents(event);
 
-        for (Input.TouchEvent touchEvent : touchEvents) {
-            _colorblindButton.handleEvents(touchEvent);
-            _quitButton.handleEvents(touchEvent);
+        // Detectar click en colores ya colocados
+        // Sirve para borrarlos
+        if (_combinationLayouts.get(_gameAttributes.activeLayout).handleEvents(event)){
+            _combinationLayouts.get(_gameAttributes.activeLayout).updateCombination(_gameAttributes.isEyeOpen);
+        }
 
-            // Detectar click en colores ya colocados
-            // Sirve para borrarlos
-            if (_combinationLayouts.get(_gameAttributes.activeLayout).handleEvents(touchEvent)){
+        // Cuando detecta un click en un color, se coloca en el primer hueco posible.
+        for (ColorButton colorButton : _colorButtons) {
+            if (colorButton.handleEvents(event)) {
+                _combinations.get(_gameAttributes.activeLayout).setNextColor(colorButton._colorID);
                 _combinationLayouts.get(_gameAttributes.activeLayout).updateCombination(_gameAttributes.isEyeOpen);
-            }
-
-            // Cuando detecta un click en un color, se coloca en el primer hueco posible.
-            for (ColorButton colorButton : _colorButtons) {
-                if (colorButton.handleEvents(touchEvent)) {
-                    _combinations.get(_gameAttributes.activeLayout).setNextColor(colorButton._colorID);
-                    _combinationLayouts.get(_gameAttributes.activeLayout).updateCombination(_gameAttributes.isEyeOpen);
-                    break;
-                }
+                break;
             }
         }
     }

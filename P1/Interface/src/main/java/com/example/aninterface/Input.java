@@ -1,7 +1,5 @@
 package com.example.aninterface;
 
-import java.util.List;
-
 public interface Input {
     enum InputType {PRESSED, RELEASED, MOVE}
 
@@ -15,7 +13,4 @@ public interface Input {
             type = type_;
         }
     }
-
-    List<TouchEvent> getTouchEvent();
-    void clearEvents();
 }
