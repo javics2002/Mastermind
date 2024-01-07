@@ -5,8 +5,12 @@ import com.example.libenginepc.EnginePC;
 import com.example.logiclib.InitialScene;
 
 import javax.swing.JFrame;
+
+import java.awt.Frame;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 public class MasterMindDesktop {
     static GraphicsDevice device = GraphicsEnvironment
@@ -26,12 +30,30 @@ public class MasterMindDesktop {
             frame.setLocation(300, 20);
 
         frame.setVisible(true);
-        EnginePC engine = new EnginePC(frame,_aspectRatio,_logicHeight);
+
+        final EnginePC engine = new EnginePC(frame,_aspectRatio,_logicHeight);
 
         Scene firstScene = new InitialScene(engine);
         engine.setCurrentScene(firstScene);
 
         engine.resume();
         device.setFullScreenWindow(fullscreen ? frame : null);
+
+        frame.addWindowStateListener(new WindowStateListener() {
+            public void windowStateChanged(WindowEvent event) {
+                frame__windowStateChanged(event, engine);
+            }
+        });
+    }
+
+    public static void frame__windowStateChanged(WindowEvent event, EnginePC engine){
+        // minimized
+        if ((event.getNewState() & Frame.ICONIFIED) == Frame.ICONIFIED){
+            engine.pause();
+        }
+        // maximized
+        else {
+            engine.resume();
+        }
     }
 }

@@ -23,6 +23,7 @@ public class EnginePC implements Runnable, Engine {
         _input = new InputPC();
         _audio = new AudioPC();
         myView.addMouseListener(_input.getHandlerInput());
+        _renderThread = null;
     }
 
     protected void handleEvents() {
@@ -53,7 +54,7 @@ public class EnginePC implements Runnable, Engine {
 
         long lastFrameTime = System.nanoTime();
 
-        while (_currentScene != null) {
+        while (_currentScene != null && _running) {
             long currentTime = System.nanoTime();
             long nanoElapsedTime = currentTime - lastFrameTime;
             lastFrameTime = currentTime;
@@ -78,23 +79,20 @@ public class EnginePC implements Runnable, Engine {
     public void resume() {
         if (!_running) {
             _running = true;
-            _renderThread = new Thread(this);
-            _renderThread.start();
+
+            if (_renderThread == null){
+                _renderThread = new Thread(this);
+                _renderThread.start();
+            }
         }
     }
 
     /*
       Pausa el hilo de la aplicación. Es obligatorio hacer el join() dentro de un catch.
     */
-
     public void pause() {
         if (_running) {
             _running = false;
-            try {
-                _renderThread.join();
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
             _renderThread = null;
         }
     }
