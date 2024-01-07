@@ -83,7 +83,7 @@ public class DifficultyScene implements Scene {
                 gameButtonsWidth, gameButtonsHeight) {
             @Override
             public void callback() {
-                Scene scene = new GameScene(_engine, 10, 6, 9, true);
+                Scene scene = new GameScene(_engine, 15, 6, 9, true);
                 _transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
             }
         };

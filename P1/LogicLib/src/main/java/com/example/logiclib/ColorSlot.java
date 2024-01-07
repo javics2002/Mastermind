@@ -31,16 +31,15 @@ public class ColorSlot extends GameObject {
 
     @Override
     public void render(Graphics graphics) {
-        if (hasColor() && _gameAttributes.isEyeOpen) {
+        if (hasColor()){
             _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2,
                     _positionY + _height * _scale / 2, _width / 2, 1f, _scale,
                     Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
-            _numberText.render(graphics);
-        } else if (hasColor()) {
-            _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2,
-                    _positionY + _height * _scale / 2, _width / 2, 1f, _scale,
-                    Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
-        } else { // Gris
+
+            if (_gameAttributes.isEyeOpen)
+                _numberText.render(graphics);
+        }
+        else { // Gris
             _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2,
                     _positionY + _height * _scale / 2, _width / 2, 1f, _scale,
                     Colors.colorValues.get(Colors.ColorName.LIGHTGRAY), Colors.colorValues.get(Colors.ColorName.BLACK));
@@ -79,8 +78,7 @@ public class ColorSlot extends GameObject {
     public void animate(){
         _animationTime = 0;
     }
-
-
+    
     public boolean inBounds(int mouseX, int mouseY) {
         return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height, _scale);
     }
@@ -94,6 +92,10 @@ public class ColorSlot extends GameObject {
 
     public float lerp(float a, float b, float t) {
         return a + t * (b - a);
+    }
+
+    public void setTextPositionY(int posY) {
+        _numberText.setPosition(_numberText.getPositionX(), posY + _height / 2);
     }
 }
 

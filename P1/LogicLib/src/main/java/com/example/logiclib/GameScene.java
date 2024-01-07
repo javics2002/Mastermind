@@ -19,6 +19,7 @@ public class GameScene implements Scene {
 	private final List<ColorButton> _colorButtons;
 	private final Transition _transition;
 	private boolean _gameFinished;
+	private final int _visibleLayouts = 10;
 
 	public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
 		_engine = engine;
@@ -111,6 +112,14 @@ public class GameScene implements Scene {
 
 		updateTriesText();
 
+		int firstCombination = _gameAttributes.activeLayout - _visibleLayouts + 1;
+		if (firstCombination < 0)
+			firstCombination = 0;
+
+		for (int i = firstCombination; i < _combinationLayouts.size() && i < firstCombination + _visibleLayouts; i++) {
+			_combinationLayouts.get(i).setPositionY(100 + 55 * (i - firstCombination));
+		}
+
 		// _combinationLayouts.get(gameAttributes._activeLayout).getCurrentCombination().printCombination();
 		CombinationLayout activeLayout = _combinationLayouts.get(_gameAttributes.activeLayout);
 		if (activeLayout.isFull()) {
@@ -155,8 +164,12 @@ public class GameScene implements Scene {
 		_quitButton.render(graphics);
 		_colorblindButton.render(graphics);
 
-		for (CombinationLayout combination : _combinationLayouts) {
-			combination.render(graphics);
+		int firstCombination = _gameAttributes.activeLayout - _visibleLayouts + 1;
+		if (firstCombination < 0)
+			firstCombination = 0;
+
+		for (int i = firstCombination; i < _combinationLayouts.size() && i < firstCombination + _visibleLayouts; i++) {
+			_combinationLayouts.get(i).render(graphics);
 		}
 
 		final int colorButtonBackgroundHeight = 80;

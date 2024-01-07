@@ -21,9 +21,9 @@ public class ColorButton extends GameObject {
         _height = height;
         _colorID = colorID;
         String num = String.valueOf(_colorID);
-        Font _colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
+        Font colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
 
-        _numberText = new Text(num, _colorNum, engine, (int) (_positionX + _width / 2),
+        _numberText = new Text(num, colorNum, engine, (int) (_positionX + _width / 2),
                 (int) (_positionY + _height), 0, true);
     }
 

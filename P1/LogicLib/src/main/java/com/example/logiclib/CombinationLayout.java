@@ -15,12 +15,15 @@ public class CombinationLayout extends GameObject {
     private final int _lateralMargin;
     private final Combination _associatedCombination;
 
+    private GameAttributes _gameAttributes;
+
     public CombinationLayout(Engine engine, int number, int combinationLength,
                              int positionX, int positionY, int height,
                              GameAttributes gameAttributes, Combination associatedCombination) {
         super(engine, positionX, positionY, engine.getGraphics().getLogicWidth(), height, 1f);
 
         _associatedCombination = associatedCombination;
+        _gameAttributes = gameAttributes;
 
         _lateralMargin = 5;
         _width -= - 2 * _lateralMargin;
@@ -121,6 +124,23 @@ public class CombinationLayout extends GameObject {
             } else if (predictionHints[i] == Combination.HintEnum.WHITE) {
                 _hints.get(i).setColor(Colors.ColorName.WHITE);
             }
+        }
+    }
+
+    public void setPositionY(int posY){
+        _positionY = posY;
+
+        _combinationNumber.setPosition(_combinationNumber.getPositionX(),
+                _positionY + _height / 2);
+
+        for (ColorSlot color : _colors){
+            color.setPosition(color.getPositionX(), _positionY - _height / 2);
+            color.setTextPositionY(posY);
+        }
+
+        for (int i = 0; i < _gameAttributes.combinationLength; i++) {
+            _hints.get(i).setPosition(_hints.get(i).getPositionX(), (i < _gameAttributes.combinationLength / 2f ?
+                    _positionY - _height / 2 : _positionY) + _height * 0.2f / 4);
         }
     }
 }

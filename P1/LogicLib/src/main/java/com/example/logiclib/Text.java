@@ -46,4 +46,11 @@ public class Text extends GameObject {
     public void setText(String newText) {
         _text = newText;
     }
+
+    public String getText(){
+        return _text;
+    }
+    public Font getFont(){
+        return _font;
+    }
 }

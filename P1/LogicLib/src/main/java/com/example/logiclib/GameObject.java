@@ -30,6 +30,14 @@ public abstract class GameObject {
         _positionY = newPositionY;
     }
 
+    public float getPositionX() {
+        return _positionX;
+    }
+
+    public float getPositionY() {
+        return _positionY;
+    }
+
     public void setScale(float newScale){
         _scale = newScale;
     }
