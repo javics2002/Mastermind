@@ -37,7 +37,7 @@ public class GraphicsPC implements Graphics {
     private int _borderWidth, _borderHeight;
     private float _scaleFactor;
 
-    private HashMap<String, Image> images;
+    private final HashMap<String, Image> images;
 
     GraphicsPC(JFrame myView, int logicWidth, int logicHeight) {
         _frame = myView;
@@ -66,7 +66,7 @@ public class GraphicsPC implements Graphics {
             _graphics2D.setColor(Color.black);
             _graphics2D.fillRect(0, 0, _frame.getWidth(), _frame.getHeight());
 
-            drawRect(0, 0, _logicWidth, _logicHeight, color);
+            drawRect(0, 0, _logicWidth, _logicHeight, 1f, color);
         } else {
             _graphics2D.setColor(new Color(color));
             _graphics2D.fillRect(0, 0, _frame.getWidth(), _frame.getHeight());
@@ -116,19 +116,19 @@ public class GraphicsPC implements Graphics {
     }
 
     @Override
-    public void drawText(String text, Font font, int logicX, int logicY, int color) {
+    public void drawText(String text, Font font, float logicX, float logicY, float scale, int color) {
         setColor(color);
-        _graphics2D.setFont(((FontPC) font).getFont().deriveFont(font.getFontSize() * _scaleFactor));
+        _graphics2D.setFont(((FontPC) font).getFont().deriveFont(font.getFontSize() * _scaleFactor * scale));
 
         _graphics2D.drawString(text, logicToRealX(logicX), logicToRealY(logicY));
     }
 
     @Override
-    public void drawCircleWithBorder(int logicX, int logicY, int radius, int borderWidth, int circleColor, int borderColor) {
+    public void drawCircleWithBorder(float logicX, float logicY, float radius, float borderWidth, float scale, int circleColor, int borderColor) {
         final int realX = logicToRealX(logicX);
         final int realY = logicToRealY(logicY);
-        final int realRadius = scaleToReal(radius);
-        final int realBorderRadius = realRadius + scaleToReal(borderWidth);
+        final int realRadius = scaleToReal(radius, scale);
+        final int realBorderRadius = realRadius + scaleToReal(borderWidth, scale);
 
         // Dibuja el borde del círculo
         setColor(borderColor);
@@ -139,16 +139,16 @@ public class GraphicsPC implements Graphics {
         _graphics2D.fillOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
     }
     @Override
-    public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
+    public void drawImage(Image image, float logicX, float logicY, float logicWidth, float logicHeight, float scale) {
         _graphics2D.drawImage(((ImagePC) image).getImage(), logicToRealX(logicX), logicToRealY(logicY),
-                scaleToReal(logicWidth), scaleToReal(logicHeight), null);
+                scaleToReal(logicWidth, scale), scaleToReal(logicHeight, scale), null);
     }
     @Override
-    public void drawCircle(int logicX, int logicY, int radius, int color) {
+    public void drawCircle(float logicX, float logicY, float radius, float scale, int color) {
         setColor(color);
         int realX = logicToRealX(logicX);
         int realY = logicToRealY(logicY);
-        int realRadius = scaleToReal(radius);
+        int realRadius = scaleToReal(radius, scale);
 
         _graphics2D.fillOval(realX - realRadius, realY - realRadius, 2 * realRadius, 2 * realRadius);
     }
@@ -169,20 +169,20 @@ public class GraphicsPC implements Graphics {
     }
 
     @Override
-    public int getStringWidth(String text, Font font) {
-        return (int) _graphics2D.getFontMetrics(((FontPC) font).getFont()).getStringBounds(text, _graphics2D).getWidth();
+    public float getStringWidth(String text, Font font) {
+        return (float) _graphics2D.getFontMetrics(((FontPC) font).getFont()).getStringBounds(text, _graphics2D).getWidth();
     }
 
     @Override
-    public int getStringHeight(String text, Font font) {
-        return (int) _graphics2D.getFontMetrics(((FontPC)font).getFont()).getAscent() -
+    public float getStringHeight(String text, Font font) {
+        return _graphics2D.getFontMetrics(((FontPC)font).getFont()).getAscent() -
                 _graphics2D.getFontMetrics(((FontPC)font).getFont()).getDescent();
     }
 
     @Override
-    public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
+    public void drawRect(float logicX, float logicY, float logicWidth, float logicHeight, float scale, int color) {
         setColor(color);
-        _graphics2D.fillRect(logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth), scaleToReal(logicHeight));
+        _graphics2D.fillRect(logicToRealX(logicX), logicToRealY(logicY), scaleToReal(logicWidth, scale), scaleToReal(logicHeight, scale));
     }
 
     @Override
@@ -192,21 +192,23 @@ public class GraphicsPC implements Graphics {
     }
 
     @Override
-    public void drawRoundedRect(int logicX, int logicY, int logicWidth, int logicHeight, int color, int arcWidth, int arcHeight) {
+    public void drawRoundedRect(float logicX, float logicY, float logicWidth, float logicHeight,
+                                float arcWidth, float arcHeight, float scale, int color) {
         setColor(color);
         _graphics2D.fillRoundRect(logicToRealX(logicX), logicToRealY(logicY),
-                scaleToReal(logicWidth), scaleToReal(logicHeight), scaleToReal(2 * arcWidth), scaleToReal(2 * arcHeight));
+                scaleToReal(logicWidth, scale), scaleToReal(logicHeight, scale),
+                scaleToReal(2 * arcWidth, scale), scaleToReal(2 * arcHeight, scale));
     }
 
     // Funciones encargadas de convertir las dimensiones lógicas a dimensiones reales.
     // Tienen en cuenta los insets para realizar el calculo.
 
-    public int logicToRealX(int logicX) {
+    public int logicToRealX(float logicX) {
         return (int) (logicX * _scaleFactor + _leftInset + _borderWidth);
     }
 
 
-    public int logicToRealY(int logicY) {
+    public int logicToRealY(float logicY) {
         return (int) (logicY * _scaleFactor + _topInset + _borderHeight);
     }
 
@@ -214,8 +216,8 @@ public class GraphicsPC implements Graphics {
     // no podemos tener en cuenta el offset dos veces seguidas (Por ejemplo, al crear un rectángulo,
     // se tiene en cuenta el offset en las coordenadas x,y, pero no en el ancho/alto del rectángulo)
 
-    public int scaleToReal(int realScale) {
-        return (int) (realScale * _scaleFactor);
+    public int scaleToReal(float realScale, float specificScale) {
+        return (int) (realScale * _scaleFactor * specificScale);
     }
 
     @Override
@@ -261,11 +263,11 @@ public class GraphicsPC implements Graphics {
         }
     }
     @Override
-    public boolean inBounds(int posX, int posY, int checkX, int checkY,int width, int height)
+    public boolean inBounds(float posX, float posY, int checkX, int checkY, float width, float height, float scale)
     {
         return(checkX >=logicToRealX(posX)
-                && checkX <= logicToRealX(posX) + scaleToReal(width)
+                && checkX <= logicToRealX(posX) + scaleToReal(width, scale)
                 && checkY >= logicToRealY(posY)
-                && checkY <= logicToRealY(posY) + scaleToReal(height));
+                && checkY <= logicToRealY(posY) + scaleToReal(height, scale));
     }
 }

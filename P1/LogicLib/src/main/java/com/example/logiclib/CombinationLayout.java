@@ -46,13 +46,13 @@ public class CombinationLayout extends GameObject {
 
     @Override
     public void render() {
-        _graphics.drawRoundedRect(_lateralMargin, (int) (_positionY - _height * 1.2f / 2),
-                (int) ((_graphics.getLogicWidth() - _lateralMargin * 2) * _scale), (int) (_height * 1.2f * _scale),
-                0xFFf8f4ed, (int) (20 * _scale), (int) (20 * _scale));
+        _graphics.drawRoundedRect(_lateralMargin, _positionY - _height * 1.2f / 2,
+                _graphics.getLogicWidth() - _lateralMargin * 2, _height * 1.2f,
+                 20, 20 , _scale, Colors.colorValues.get(Colors.ColorName.COMBINATIONLAYOUT));
 
-        _graphics.drawRect(_lateralMargin + 80, (int) (_positionY - _height / 2), (int) (2 * _scale), (int) (_height * _scale), 0);
-        _graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, (int) (_positionY - _height / 2),
-                (int) (2 * _scale), (int) (_height * _scale), 0);
+        _graphics.drawRect(_lateralMargin + 80, _positionY - _height / 2, 2, _height, _scale, 0);
+        _graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, _positionY - _height / 2,
+                2, _height, _scale, 0);
 
         _combinationNumber.render();
 

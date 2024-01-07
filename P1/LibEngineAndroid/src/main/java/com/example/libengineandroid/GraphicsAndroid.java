@@ -29,14 +29,14 @@ public class GraphicsAndroid implements Graphics {
     // Medidas de bordes
     private int _borderWidth, _borderHeight;
 
-    //Surfaces , Manager y uso de clase Paint para el color
+    //Surfaces, Manager y uso de clase Paint para el color
     private final SurfaceView _surfaceView;
     private final Paint _paint;
     private Canvas _canvas;
     private final SurfaceHolder _holder;
     private final AssetManager _assetManager;
 
-    private HashMap<String, Image> images;
+    private final HashMap<String, Image> images;
 
     GraphicsAndroid(SurfaceView myView, AssetManager mgr, int logicWidth, int logicHeight) {
         _surfaceView = myView;
@@ -63,7 +63,7 @@ public class GraphicsAndroid implements Graphics {
         if (debug) {
             _canvas.drawColor(0xFFFFFFFF);
 
-            drawRect(0, 0, _logicWidth, _logicHeight, color);
+            drawRect(0, 0, _logicWidth, _logicHeight, 1f, color);
         } else {
             setColor(color);
             _canvas.drawColor(_paint.getColor());
@@ -130,17 +130,18 @@ public class GraphicsAndroid implements Graphics {
 
     // Para dibujar seguimos el siguiente esquema
     @Override
-    public void drawImage(Image image, int logicX, int logicY, int logicWidth, int logicHeight) {
+    public void drawImage(Image image, float logicX, float logicY, float logicWidth, float logicHeight, float scale) {
         ImageAndroid a = (ImageAndroid) image;
-        Bitmap aux = getResizedBitmap(a.getImage(), scaleToReal(logicWidth), scaleToReal(logicHeight));
+        Bitmap aux = getResizedBitmap(a.getImage(), scaleToReal(logicWidth, scale), scaleToReal(logicHeight, scale));
         if (aux != null)
             _canvas.drawBitmap(aux, logicToRealX(logicX), logicToRealY(logicY), _paint);
     }
 
     @Override
-    public void drawRect(int logicX, int logicY, int logicWidth, int logicHeight, int color) {
+    public void drawRect(float logicX, float logicY, float logicWidth, float logicHeight, float scale, int color) {
         Rect rect = new Rect(logicToRealX(logicX), logicToRealY(logicY),
-                logicToRealX(logicX + logicWidth), logicToRealY(logicY + logicHeight));
+                logicToRealX(logicX) + scaleToReal(logicWidth, scale),
+                logicToRealY(logicY) + scaleToReal(logicHeight, scale));
 
         setColor(color);
         _canvas.drawRect(rect, _paint);
@@ -155,44 +156,48 @@ public class GraphicsAndroid implements Graphics {
     }
 
     @Override
-    public void drawCircleWithBorder(int logicX, int logicY, int radius, int borderWidth, int circleColor, int borderColor) {
+    public void drawCircleWithBorder(float logicX, float logicY, float radius, float borderWidth, float scale, int circleColor, int borderColor) {
         // Dibuja el borde del círculo
         setColor(borderColor);
         int realX = logicToRealX(logicX);
         int realY = logicToRealY(logicY);
-        int realRadius = scaleToReal(radius + borderWidth);
+        final int realRadius = scaleToReal(radius, scale);
+        final int realBorderRadius = realRadius + scaleToReal(borderWidth, scale);
 
-        _canvas.drawCircle(realX, realY, realRadius, _paint);
+        // Dibuja el borde del círculo
+        _canvas.drawCircle(realX, realY, realBorderRadius, _paint);
 
         // Dibuja el círculo interior
         setColor(circleColor);
-        realRadius = scaleToReal(radius);
         _canvas.drawCircle(realX, realY, realRadius, _paint);
     }
     @Override
-    public void drawRoundedRect(int logicX, int logicY, int logicWidth, int logicHeight, int color, int arcWidth, int arcHeight) {
+    public void drawRoundedRect(float logicX, float logicY, float logicWidth, float logicHeight,
+                                float arcWidth, float arcHeight, float scale, int color) {
         RectF rect = new RectF(logicToRealX(logicX), logicToRealY(logicY),
-                logicToRealX(logicX + logicWidth), logicToRealY(logicY + logicHeight));
+                logicToRealX(logicX) + scaleToReal(logicWidth, scale),
+                logicToRealY(logicY) + scaleToReal(logicHeight, scale));
 
         setColor(color);
-	    _canvas.drawRoundRect(rect, scaleToReal(arcWidth), scaleToReal(arcHeight), _paint);
+	    _canvas.drawRoundRect(rect, scaleToReal(arcWidth, scale), scaleToReal(arcHeight, scale), _paint);
     }
 
-    public void drawCircle(int logicX, int logicY, int radius, int color) {
+    @Override
+    public void drawCircle(float logicX, float logicY, float radius, float scale, int color) {
         int realX = logicToRealX(logicX);
         int realY = logicToRealY(logicY);
-        int realRadius = scaleToReal(radius);
+        int realRadius = scaleToReal(radius, scale);
 
         setColor(color);
         _canvas.drawCircle(realX, realY, realRadius, _paint);
     }
 
     @Override
-    public void drawText(String text, Font font, int logicX, int logicY, int color) {
+    public void drawText(String text, Font font, float logicX, float logicY, float scale, int color) {
         setColor(color);
 
         _paint.setTypeface(((FontAndroid) font).getFont());
-        _paint.setTextSize(font.getFontSize() * _scaleFactor);
+        _paint.setTextSize(font.getFontSize() * _scaleFactor * scale);
 
         // Calcula las coordenadas de dibujo ajustadas según el tamaño de la fuente escalado
         _canvas.drawText(text, logicToRealX(logicX), logicToRealY(logicY), _paint);
@@ -222,20 +227,18 @@ public class GraphicsAndroid implements Graphics {
 
     }
 
-
-
-    public int logicToRealX(int logicX) {
+    public int logicToRealX(float logicX) {
         return (int) (logicX * _scaleFactor + _borderWidth);
     }
 
 
-    public int logicToRealY(int logicY) {
+    public int logicToRealY(float logicY) {
         return (int) (logicY * _scaleFactor + _borderHeight);
     }
 
 
-    public int scaleToReal(int realScale) {
-        return (int) (realScale * _scaleFactor);
+    public int scaleToReal(float realScale, float specificScale) {
+        return (int) (realScale * _scaleFactor * specificScale);
     }
 
     // Con este metodo nos aseguramos que el surfaceView (obtenido a partir del holder) este disponible para usarse y renderizar
@@ -246,19 +249,19 @@ public class GraphicsAndroid implements Graphics {
     //Para ver el tamaño del string trazamos un rectangulo que cubra el texto  asi vemos su alto
     //Pra ver el ancho de una cadena simplmente pasamos la longitud de la cadena y el propio paint nos lo calcula
     @Override
-    public int getStringWidth(String text, Font font) {
+    public float getStringWidth(String text, Font font) {
         _paint.setTypeface(((FontAndroid) font).getFont());
         _paint.setTextSize(font.getFontSize());
-        return (int) _paint.measureText(text, 0, text.length());
+        return _paint.measureText(text, 0, text.length());
     }
 
     @Override
-    public int getStringHeight(String text, Font font) {
-        Rect bordes = new Rect();
+    public float getStringHeight(String text, Font font) {
+        Rect borders = new Rect();
         _paint.setTextSize(font.getFontSize());
         _paint.setTypeface(((FontAndroid) font).getFont());
-        _paint.getTextBounds(text, 0, text.length(), bordes);
-        return bordes.height();
+        _paint.getTextBounds(text, 0, text.length(), borders);
+        return borders.height();
     }
 
     @Override
@@ -301,11 +304,11 @@ public class GraphicsAndroid implements Graphics {
         }
     }
     @Override
-    public boolean inBounds(int posX, int posY, int checkX, int checkY,int width, int height)
+    public boolean inBounds(float posX, float posY, int checkX, int checkY, float width, float height, float scale)
     {
         return(checkX >=logicToRealX(posX)
-                && checkX <= logicToRealX(posX) + scaleToReal(width)
+                && checkX <= logicToRealX(posX) + scaleToReal(width, scale)
                 && checkY >= logicToRealY(posY)
-                && checkY <= logicToRealY(posY) + scaleToReal(height));
+                && checkY <= logicToRealY(posY) + scaleToReal(height, scale));
     }
 }

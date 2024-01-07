@@ -28,10 +28,10 @@ public class Text extends GameObject {
     @Override
     public void render() {
         if(_centered)
-            _graphics.drawText(_text, _font, (int) (_positionX - _graphics.getStringWidth(_text, _font) / 2),
-                    (int) (_positionY - _graphics.getStringHeight(_text, _font) / 2), _color);
+            _graphics.drawText(_text, _font, _positionX - _graphics.getStringWidth(_text, _font) / 2f,
+                    _positionY - _graphics.getStringHeight(_text, _font) / 2f, _scale, _color);
         else
-            _graphics.drawText(_text, _font, (int) _positionX, (int) _positionY, _color);
+            _graphics.drawText(_text, _font, _positionX, _positionY, _scale, _color);
     }
 
     @Override

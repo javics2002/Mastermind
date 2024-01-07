@@ -61,16 +61,16 @@ public class Button extends GameObject {
     @Override
     public void render() {
         if (_image != null)
-            _graphics.drawImage(_image, (int) _positionX, (int) _positionY, (int) (_width * _scale), (int) (_height * _scale));
+            _graphics.drawImage(_image, _positionX, _positionY, _width, _height, _scale);
         else {
-            _graphics.drawRoundedRect((int) _positionX, (int) _positionY, (int) _width, (int) _height, _backgroundColor, _arc, _arc);
-            _graphics.drawText(_text, _font, (int) ((_positionX + (int) _width / 2 - _graphics.getStringWidth(_text, _font) / 2) * _scale),
-                    (int) ((_positionY + (int) _height / 2 + _graphics.getStringHeight(_text, _font) / 2) * _scale), 0);
+            _graphics.drawRoundedRect(_positionX, _positionY, _width, _height, _arc, _arc, _scale, _backgroundColor);
+            _graphics.drawText(_text, _font, _positionX + (int) _width / 2 - _graphics.getStringWidth(_text, _font) / 2,
+                    _positionY + (int) _height / 2 + _graphics.getStringHeight(_text, _font) / 2, _scale, 0);
         }
     }
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return _graphics.inBounds((int) _positionX, (int) _positionY, mouseX, mouseY, (int) (_width * _scale), (int) (_height * _scale));
+        return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height, _scale);
     }
 
     public void callback() {}

@@ -3,7 +3,7 @@ import java.util.HashMap;
 
 public class Colors {
     public enum ColorName { RED, ORANGE, YELLOW, GREEN, CYAN, BLUE, MAGENTA, PINK, PURPLE,
-        DARKGRAY, LIGHTGRAY, WHITE, BLACK, BACKGROUND,
+        DARKGRAY, LIGHTGRAY, WHITE, BLACK, COMBINATIONLAYOUT, BACKGROUND,
         BACKGROUNDRED, BACKGROUNDORANGE, BACKGROUNDYELLOW, BACKGROUNDGREEN, BACKGROUNDBLUE}
     public static HashMap<ColorName, Integer> colorValues;
     static{
@@ -21,6 +21,7 @@ public class Colors {
         colorValues.put(ColorName.LIGHTGRAY, 0xFF9A9A9A);
         colorValues.put(ColorName.WHITE, 0xFFFFFFFF);
         colorValues.put(ColorName.BLACK, 0xFF000000);
+        colorValues.put(ColorName.COMBINATIONLAYOUT, 0xFFF8F4ED);
         colorValues.put(ColorName.BACKGROUND, 0xFFE7D6BD);
         colorValues.put(ColorName.BACKGROUNDRED, 0xFFF76E6E);
         colorValues.put(ColorName.BACKGROUNDORANGE, 0xFFEB9A53);

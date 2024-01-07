@@ -158,7 +158,7 @@ public class GameScene implements Scene {
 
         final int colorButtonBackgroundHeight = 80;
         graphics.drawRect(0, graphics.getLogicHeight() - colorButtonBackgroundHeight,
-                graphics.getLogicWidth(), colorButtonBackgroundHeight, 0xFFFAFAFA);
+                graphics.getLogicWidth(), colorButtonBackgroundHeight, 1f, 0xFFFAFAFA);
 
         for (ColorButton colorButton : _colorButtons) {
             colorButton.render();

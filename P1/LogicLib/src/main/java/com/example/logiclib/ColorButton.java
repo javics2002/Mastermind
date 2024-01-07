@@ -41,8 +41,8 @@ public class ColorButton extends GameObject {
         // Cuando el botón del OJO se pulsa, este condicional se encarga de cambiar todos los colores
         // a sus respectivas imagenes para daltónicos. Además, si el modo daltónico está activado,
         // también se encarga de quitar los números para volver al modo normal.
-        _graphics.drawCircleWithBorder((int) (_positionX + _width / 2), (int) (_positionY + _height / 2),
-                (int) (_width * _scale / 2), 1, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
+        _graphics.drawCircleWithBorder(_positionX + _width * _scale / 2, _positionY + _height * _scale / 2,
+                _width / 2, 1f, _scale, Colors.getColor(_colorID - 1), Colors.colorValues.get(Colors.ColorName.BLACK));
 
         if (_gameAttributes.isEyeOpen) {
             _numberText.render();
@@ -50,6 +50,6 @@ public class ColorButton extends GameObject {
     }
 
     public boolean inBounds(int mouseX, int mouseY) {
-        return _graphics.inBounds((int) _positionX, (int) _positionY, mouseX, mouseY, (int) (_width * _scale), (int) (_height * _scale));
+        return _graphics.inBounds(_positionX, _positionY, mouseX, mouseY, _width, _height, _scale);
     }
 }
