@@ -79,6 +79,9 @@ public class MainActivity extends AppCompatActivity {
 		createNotificationsChannel();
 
 		sensorManager = new SensorManagerAndroid(this, _engineAndroid);
+
+
+
 	}
 
 	@Override
