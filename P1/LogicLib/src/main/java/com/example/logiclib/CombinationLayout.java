@@ -18,7 +18,7 @@ public class CombinationLayout extends GameObject {
 	private GameAttributes _gameAttributes;
 
 	public CombinationLayout(Engine engine, int number, int combinationLength,
-	                         int positionX, int positionY, int height,
+	                         float positionX, float positionY, float height,
 	                         GameAttributes gameAttributes, Combination associatedCombination) {
 		super(engine, positionX, positionY, engine.getGraphics().getLogicWidth(), height, 1f);
 
@@ -52,8 +52,8 @@ public class CombinationLayout extends GameObject {
 		}
 	}
 
-	public CombinationLayout(Engine engine, int number, int combinationLength, int positionX,
-	                         int positionY, int height, int[] colors, GameAttributes gameAttributes,
+	public CombinationLayout(Engine engine, int number, int combinationLength, float positionX,
+	                         float positionY, float height, int[] colors, GameAttributes gameAttributes,
 	                         Combination associatedCombination) {
 		super(engine, positionX, positionY, engine.getGraphics().getLogicWidth(), height, 1f);
 

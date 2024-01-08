@@ -10,9 +10,7 @@ public class Combination implements Serializable {
 	private final int _length;
 	private final int[] _numbers;
 
-	enum HintEnum {EMPTY, WHITE, BLACK}
-
-	;
+	enum HintEnum {EMPTY, WHITE, BLACK};
 
 	Combination(int length, int colorNumber, boolean repeatColors) {
 		_length = length;

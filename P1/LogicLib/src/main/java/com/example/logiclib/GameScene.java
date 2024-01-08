@@ -92,17 +92,14 @@ public class GameScene implements Scene {
 		int verticalMargin = 5;
 		Font objetiveFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
 		String objectiveString = "Averigua el código";
-		_objectiveText = new Text(objectiveString, objetiveFont, _engine,
-				(_graphics.getLogicWidth() / 2f) - (_graphics.getStringWidth(objectiveString, objetiveFont) / 2),
-				verticalMargin + _graphics.getStringHeight(objectiveString, objetiveFont), 0, true);
+		_objectiveText = new Text(objectiveString, objetiveFont, _engine, _graphics.getLogicWidth() / 2f,
+				verticalMargin + 40, 0, true);
 
 		// Intentos
 		String attemptsString = "Te quedan " + _gameAttributes.attemptsLeft + " intentos.";
 		Font attemptsFont = _graphics.newFont("Comfortaa-Regular.ttf", 16f);
-		_attemptsText = new Text(attemptsString, attemptsFont, _engine,
-				(_graphics.getLogicWidth() / 2f) - (_graphics.getStringWidth(attemptsString, attemptsFont) / 2),
-				verticalMargin + _graphics.getStringHeight(objectiveString, objetiveFont)
-						+ _graphics.getStringHeight(attemptsString, attemptsFont) + 5, 0, true);
+		_attemptsText = new Text(attemptsString, attemptsFont, _engine, _graphics.getLogicWidth() / 2f,
+				verticalMargin + 60, 0, true);
 
 		// Boton de salir
 		int buttonDimension = 50;
@@ -135,34 +132,25 @@ public class GameScene implements Scene {
 			}
 		};
 
-		// Combinacion
-		// Combinations
+		// Combinación
 		int initialHeight = 100;
 		int verticalPadding = 15, scale = 40;
 		_combinations = new ArrayList<>();
 		_combinationLayouts = new ArrayList<>();
 		int cont = 0;
 
-		// for (int i = 0; i < tryNumber; i++) {
-		// 	_combinations.add(new Combination(combinationLength));
-		// 	_combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
-		// 			graphics.getLogicWidth() / 2, initialHeight + (verticalPadding + scale) * i,
-		// 			scale, _gameAttributes, _combinations.get(i)));
-		// }
-
 		for (int i = 0; i < GameData.Instance().getCurrentLevelData().combinations.size(); i++) {
-			_combinations.add(new Combination(combinationLength));
-			CombinationLayout newCombinationLayout = new CombinationLayout(_engine, i, combinationLength,
-					_graphics.getLogicWidth() / 2, initialHeight + (verticalPadding + scale) * i,
+			Combination newCombination = new Combination(combinationLength);
+			_combinations.add(newCombination);
+			_combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
+					_graphics.getLogicWidth() / 2f, initialHeight + (verticalPadding + scale) * i,
 					scale, GameData.Instance().getCurrentLevelData().combinations.get(i).getColors(),
-					_gameAttributes, _combinations.get(i));
+					_gameAttributes, newCombination));
 
-			//TODO
 			// Actualizar pistas
-//			Combination.HintEnum[] hints = _combinations.get(i).getHint(_gameAttributes.resultCombination);
-//			_combinations.get(i).setHint(hints);
+			Combination.HintEnum[] hints = _combinations.get(i).getHint(_gameAttributes.resultCombination);
+			_combinationLayouts.get(i).setHints(hints);
 
-			_combinationLayouts.add(newCombinationLayout);
 			cont++;
 		}
 
@@ -170,7 +158,7 @@ public class GameScene implements Scene {
 			Combination newCombination = new Combination(combinationLength);
 			_combinations.add(newCombination);
 			_combinationLayouts.add(new CombinationLayout(_engine, cont, combinationLength,
-					_graphics.getLogicWidth() / 2, initialHeight + (verticalPadding + scale) * cont,
+					_graphics.getLogicWidth() / 2f, initialHeight + (verticalPadding + scale) * cont,
 					scale, GameData.Instance().getCurrentLevelData().currentCombination.getColors(),
 					_gameAttributes, newCombination));
 			cont++;
@@ -180,7 +168,7 @@ public class GameScene implements Scene {
 			Combination newCombination = new Combination(combinationLength);
 			_combinations.add(newCombination);
 			_combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
-					_graphics.getLogicWidth() / 2, initialHeight + (verticalPadding + scale) * i,
+					_graphics.getLogicWidth() / 2f, initialHeight + (verticalPadding + scale) * i,
 					scale, _gameAttributes, newCombination));
 		}
 
@@ -207,9 +195,13 @@ public class GameScene implements Scene {
 
 	@Override
 	public void update(double deltaTime) {
-		updateTriesText();
-
 		_transition.update(deltaTime);
+
+		if (_gameFinished) {
+			return;
+		}
+
+		updateTriesText();
 
 		CombinationLayout activeLayout = _combinationLayouts.get(_gameAttributes.activeLayout);
 		GameData.Instance().getCurrentLevelData().currentCombination = _combinations.get(_gameAttributes.activeLayout);
@@ -219,24 +211,28 @@ public class GameScene implements Scene {
 			if (_combinations.get(_gameAttributes.activeLayout).equals(_gameAttributes.resultCombination)) {
 				// USER WON
 				Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
-				_engine.setCurrentScene(gameOverScene);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE),
+						0.2f, gameOverScene);
+				_gameFinished = true;
 				return;
 			}
 
-			if (_gameFinished) {
-				return;
-			}
-
-			updateTriesText();
+			Combination.HintEnum[] hints = _combinations.get(_gameAttributes.activeLayout).getHint(_gameAttributes.resultCombination);
+			activeLayout.setHints(hints);
 
 			GameData.Instance().getCurrentLevelData().combinations.add(_combinations.get(_gameAttributes.activeLayout));
+
+			_gameAttributes.attemptsLeft--;
+			_gameAttributes.activeLayout++;
 
 			if (_gameAttributes.attemptsLeft == 0) {
 				// User LOST
 				GameData.Instance().getCurrentLevelData().currentCombination = new Combination(_gameAttributes.combinationLength);
 
 				Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
-				_engine.setCurrentScene(gameOverScene);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE),
+						0.2f, gameOverScene);
+				_gameFinished = true;
 			}
 		}
 

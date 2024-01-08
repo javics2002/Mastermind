@@ -80,12 +80,12 @@ public class GameOverScene implements Scene {
 			}
 
 			_codeText = new Text(codeString, codeFont, _engine,
-					graphics.getLogicWidth() / 2 - graphics.getStringWidth(codeString, codeFont) / 2, 200, 0, true);
+					graphics.getLogicWidth() / 2f, 200, 0, true);
 
 			_adButton = null;
 
 			_shareButton = new Button(buttonColor, "Compartir", buttonFont, _engine,
-					graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2 + 30,
+					graphics.getLogicWidth() / 2f, graphics.getLogicHeight() / 2f + 30,
 					buttonWidth, buttonHeight) {
 				@Override
 				public void callback() {
@@ -96,7 +96,7 @@ public class GameOverScene implements Scene {
 			// Si te encuentras en una partida rapida
 			if (_gameAttributes.selectedWorld == -1) {
 				_playAgainButton = new Button(buttonColor, "Volver a Jugar", buttonFont, _engine,
-						graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50) {
+						graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
 					@Override
 					public void callback() {
 						GameData.Instance().resetCurrentLevelData();
@@ -112,7 +112,7 @@ public class GameOverScene implements Scene {
 			// Si te encuentras en un nivel de un mundo
 			else {
 				_playAgainButton = new Button(buttonColor, "Siguiente Nivel", buttonFont, _engine,
-						graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50) {
+						graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
 					@Override
 					public void callback() {
 						GameData.Instance().resetCurrentLevelData();
@@ -145,8 +145,8 @@ public class GameOverScene implements Scene {
 					String moneyString = "+" + _gameAttributes.reward + " - Total: " + Integer.toString(GameData.Instance().getMoney());
 
 					_moneyText = new Text(moneyString, resultFont, _engine,
-							graphics.getLogicWidth() / 2 - (_coinSize + graphics.getStringWidth(moneyString, resultFont)) / 2 + _coinSize,
-							graphics.getLogicHeight() / 2 + graphics.getStringHeight(moneyString, resultFont) / 2 - 30, 0, true);
+							graphics.getLogicWidth() / 2f - (_coinSize + graphics.getStringWidth(moneyString, resultFont)) / 2 + _coinSize,
+							graphics.getLogicHeight() / 2f - 30, 0, true);
 				}
 			}
 
@@ -164,7 +164,7 @@ public class GameOverScene implements Scene {
 			attemptsNumberString = "";
 
 			_adButton = new Button(buttonColor, "+2 Intentos", buttonFont, _engine,
-					graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 3,
+					graphics.getLogicWidth() / 2f - buttonWidth / 2f, graphics.getLogicHeight() / 3f,
 					buttonWidth, buttonHeight) {
 				@Override
 				public void callback() {
@@ -173,7 +173,7 @@ public class GameOverScene implements Scene {
 			};
 
 			_playAgainButton = new Button(buttonColor, "Volver a Intentar", buttonFont, _engine,
-					graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 200, 400, 50) {
+					graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
 				@Override
 				public void callback() {
 					GameData.Instance().resetCurrentLevelData();
@@ -189,17 +189,14 @@ public class GameOverScene implements Scene {
 		}
 
 		_resultText = new Text(resultString, resultFont, _engine,
-				graphics.getLogicWidth() / 2 - graphics.getStringWidth(resultString, resultFont) / 2,
-				70, 0, true);
+				graphics.getLogicWidth() / 2f, 70, 0, true);
 		_attemptsText = new Text(attemptsString, attemptsFont, _engine,
-				graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsString, attemptsFont) / 2,
-				110, 0, true);
+				graphics.getLogicWidth() / 2f, 110, 0, true);
 		_attemptsNumberText = new Text(attemptsNumberString, attemptsNumberFont, _engine,
-				graphics.getLogicWidth() / 2 - graphics.getStringWidth(attemptsNumberString, attemptsNumberFont) / 2,
-				160, 0, true);
+				graphics.getLogicWidth() / 2f, 160, 0, true);
 
 		_menuButton = new Button(buttonColor, "Volver al Menú", buttonFont, _engine,
-				graphics.getLogicWidth() / 2 - 400 / 2, graphics.getLogicHeight() - 100, 400, 50) {
+				graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 100, 400, 50) {
 			@Override
 			public void callback() {
 				GameData.Instance().resetCurrentLevelData();

@@ -26,6 +26,9 @@ public class ColorSlot extends GameObject {
 		_colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
 		_numberText = new Text("", _colorNum, engine, 0, 0, 0, true);
 		_colorID = -1;
+
+		_animationTime = _appearenceTime;
+
 	}
 
 	public ColorSlot(Engine engine, float positionX, float positionY, float width, float height, int colorID, GameAttributes gameAttributes) {
@@ -34,6 +37,8 @@ public class ColorSlot extends GameObject {
 		_gameAttributes = gameAttributes;
 		_hasColor = colorID != -1 ? true : false;
 		_colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
+
+		_animationTime = _appearenceTime;
 
 		//TODO quitar string width y height
 		String number = String.valueOf(colorID);
@@ -88,6 +93,17 @@ public class ColorSlot extends GameObject {
 				_numberText.setScale(1);
 			}
 		}
+	}
+
+	@Override
+	public boolean handleEvents(Input.TouchEvent e) {
+		return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
+	}
+
+	public void setColor(int color, boolean isEyeOpen) {
+		_hasColor = true;
+		_colorID = color;
+		String num = String.valueOf(_colorID);
 
 		//TODO quitar string width y height
 		String number = String.valueOf(_colorID);
@@ -117,20 +133,6 @@ public class ColorSlot extends GameObject {
 					+ "/icon" + _colorID + ".png");
 			_color = Colors.getColor(_colorID - 1);
 		}
-	}
-
-	@Override
-	public boolean handleEvents(Input.TouchEvent e) {
-		return e.type == Input.InputType.PRESSED && inBounds(e.x, e.y);
-	}
-
-	public void setColor(int color, boolean isEyeOpen) {
-		_hasColor = true;
-		_colorID = color;
-		String num = String.valueOf(_colorID);
-
-		_numberText.setText(num);
-		_numberText.setPosition(_positionX + _width / 2, _positionY + _height);
 	}
 
 	public void animate() {
