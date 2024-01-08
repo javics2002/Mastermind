@@ -57,10 +57,10 @@ public class EngineAndroid implements Runnable, Engine {
 	private final Gson _gson;
 
 	// Constructor
-	public EngineAndroid(SurfaceView myView, float aspectRatio, int logicHeight) {
+	public EngineAndroid(SurfaceView myView, float aspectRatio, int logicHeight,Activity mainActivity) {
 		_surfaceView = myView;
 		_input = new InputAndroid();
-
+		activity=mainActivity;
 		//Cracion del anuncio recompensado
 		createRewardedAd();
 		AssetManager _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista

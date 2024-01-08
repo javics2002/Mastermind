@@ -44,9 +44,9 @@ public class MainActivity extends AppCompatActivity {
 		SurfaceView surfaceView = new SurfaceView(this);
 		surfaceView.getLayoutParams();
 
-		setContentView(surfaceView);
+		//setContentView(surfaceView);
 
-		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight);
+		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight,this);
 
 		GameData.Init();
 		// Sobreescribir datos de guardado
