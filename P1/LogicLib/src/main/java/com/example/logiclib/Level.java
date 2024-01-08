@@ -25,7 +25,7 @@ public class Level extends Button {
 	@Override
 	public boolean handleEvents(Input.TouchEvent event) {
 		if (_locked && event.type == Input.InputType.PRESSED && inBounds(event.x, event.y)) {
-			_lockedSound.play();
+			_engine.getAudio().playSound(_lockedSound);
 			return true;
 		}
 

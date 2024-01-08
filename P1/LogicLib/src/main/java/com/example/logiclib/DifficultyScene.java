@@ -17,6 +17,8 @@ public class DifficultyScene implements Scene {
 
 	Engine _engine;
 
+	private final int _backgroundColor;
+
 	public DifficultyScene(Engine engine) {
 		_engine = engine;
 
@@ -24,15 +26,24 @@ public class DifficultyScene implements Scene {
 
 		_transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
 
+		if (GameData.Instance().getCurrentTheme() < 0) {
+			_backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
+		} else {
+			final Theme theme = GameData.Instance().getThemes().get(GameData.Instance().getCurrentTheme());
+
+			_backgroundColor = Colors.parseARGB(theme.backgroundColor);
+		}
+
 		// Back button
 		int backbuttonScale = 40;
 		_backButton = new Button("UI/back.png", _engine,
-				backbuttonScale / 2, backbuttonScale / 2,
+				backbuttonScale / 2f, backbuttonScale / 2f,
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
 				Scene scene = new InitialScene(_engine);
-				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE),
+						0.2f, scene);
 			}
 		};
 
@@ -40,7 +51,7 @@ public class DifficultyScene implements Scene {
 		Font font = graphics.newFont("Comfortaa-Regular.ttf", 24f);
 		String question = "¿En qué dificultad quieres jugar?";
 		_titleText = new Text(question, font, _engine,
-				graphics.getLogicWidth() / 2, graphics.getLogicHeight() / 4, 0, true);
+				graphics.getLogicWidth() / 2f, graphics.getLogicHeight() / 4f, 0, true);
 
 		// Game buttons
 		int gameButtonsWidth = 330;
@@ -51,7 +62,7 @@ public class DifficultyScene implements Scene {
 		final Scene returnScene = this;
 
 		_easyDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDGREEN),
-				"Fácil", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				"Fácil", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
 				startingGameButtonsHeight, gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
@@ -63,7 +74,7 @@ public class DifficultyScene implements Scene {
 			}
 		};
 		_mediumDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDYELLOW),
-				"Medio", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				"Medio", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
 				startingGameButtonsHeight + gameButtonsHeight + padding,
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
@@ -76,7 +87,7 @@ public class DifficultyScene implements Scene {
 			}
 		};
 		_difficultDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDORANGE),
-				"Difícil", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				"Difícil", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
 				startingGameButtonsHeight + (gameButtonsHeight + padding) * 2,
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
@@ -89,7 +100,7 @@ public class DifficultyScene implements Scene {
 			}
 		};
 		_impossibleDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDRED),
-				"Imposible", buttonFont, _engine, graphics.getLogicWidth() / 2 - gameButtonsWidth / 2,
+				"Imposible", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
 				startingGameButtonsHeight + (gameButtonsHeight + padding) * 3,
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
@@ -113,7 +124,7 @@ public class DifficultyScene implements Scene {
 
 	@Override
 	public void render(Graphics graphics) {
-		graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
+		graphics.clear(_backgroundColor);
 
 		_backButton.render(graphics);
 		_titleText.render(graphics);

@@ -89,21 +89,21 @@ public class GameScene implements Scene {
 		}
 
 		// Titulo
+		int buttonDimension = 50;
+		int horizontalMargin = 5;
 		int verticalMargin = 5;
 		Font objetiveFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
 		String objectiveString = "Averigua el código";
 		_objectiveText = new Text(objectiveString, objetiveFont, _engine, _graphics.getLogicWidth() / 2f,
-				verticalMargin + 40, 0, true);
+				verticalMargin + buttonDimension / 4f, 0, true);
 
 		// Intentos
 		String attemptsString = "Te quedan " + _gameAttributes.attemptsLeft + " intentos.";
 		Font attemptsFont = _graphics.newFont("Comfortaa-Regular.ttf", 16f);
 		_attemptsText = new Text(attemptsString, attemptsFont, _engine, _graphics.getLogicWidth() / 2f,
-				verticalMargin + 60, 0, true);
+				verticalMargin + 3 * buttonDimension / 4f, 0, true);
 
 		// Boton de salir
-		int buttonDimension = 50;
-		int horizontalMargin = 5;
 		_quitButton = new Button("UI/close.png", _engine,
 				horizontalMargin, verticalMargin, buttonDimension, buttonDimension) {
 			@Override
@@ -140,36 +140,44 @@ public class GameScene implements Scene {
 		int cont = 0;
 
 		for (int i = 0; i < GameData.Instance().getCurrentLevelData().combinations.size(); i++) {
-			Combination newCombination = new Combination(combinationLength);
+			Combination newCombination = new Combination(GameData.Instance().getCurrentLevelData().combinations.get(i).getColors());
 			_combinations.add(newCombination);
 			_combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
 					_graphics.getLogicWidth() / 2f, initialHeight + (verticalPadding + scale) * i,
-					scale, GameData.Instance().getCurrentLevelData().combinations.get(i).getColors(),
-					_gameAttributes, newCombination));
+					scale, _gameAttributes, newCombination));
 
 			// Actualizar pistas
 			Combination.HintEnum[] hints = _combinations.get(i).getHint(_gameAttributes.resultCombination);
 			_combinationLayouts.get(i).setHints(hints);
 
+			_combinationLayouts.get(i).updateCombination(_gameAttributes.isEyeOpen);
+
 			cont++;
 		}
 
 		if (GameData.Instance().getCurrentLevelData().currentCombination != null) {
-			Combination newCombination = new Combination(combinationLength);
+			Combination newCombination = new Combination(GameData.Instance().getCurrentLevelData().currentCombination.getColors());
 			_combinations.add(newCombination);
-			_combinationLayouts.add(new CombinationLayout(_engine, cont, combinationLength,
+			CombinationLayout newCombinationLayout = new CombinationLayout(_engine, cont, combinationLength,
 					_graphics.getLogicWidth() / 2f, initialHeight + (verticalPadding + scale) * cont,
-					scale, GameData.Instance().getCurrentLevelData().currentCombination.getColors(),
-					_gameAttributes, newCombination));
+					scale, _gameAttributes, newCombination);
+			_combinationLayouts.add(newCombinationLayout);
+
+			newCombinationLayout.updateCombination(_gameAttributes.isEyeOpen);
+
 			cont++;
 		}
 
 		for (int i = cont; i < tryNumber; i++) {
 			Combination newCombination = new Combination(combinationLength);
 			_combinations.add(newCombination);
-			_combinationLayouts.add(new CombinationLayout(_engine, i, combinationLength,
+
+			CombinationLayout newCombinationLayout =new CombinationLayout(_engine, i, combinationLength,
 					_graphics.getLogicWidth() / 2f, initialHeight + (verticalPadding + scale) * i,
-					scale, _gameAttributes, newCombination));
+					scale, _gameAttributes, newCombination);
+			_combinationLayouts.add(newCombinationLayout);
+
+			newCombinationLayout.updateCombination(_gameAttributes.isEyeOpen);
 		}
 
 		// Botones de colores

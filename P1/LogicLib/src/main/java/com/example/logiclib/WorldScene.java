@@ -14,7 +14,7 @@ public class WorldScene implements Scene {
 	private final Button _backButton, _prevWorldButton, _nextWorldButton, _unlockNextLevelButton;
 	private final Level[] _levelButtons;
 	final int _numLevels;
-	private WorldData _worldData;
+	private final WorldData _worldData;
 	private final Image _backgroundImage;
 	private final Text _titleText;
 	private final int _backgroundColor;
@@ -35,7 +35,7 @@ public class WorldScene implements Scene {
 		final int padding = 20;
 		int backbuttonScale = 40;
 		_backButton = new Button("UI/back.png", _engine,
-				padding, _barHeight / 2 - backbuttonScale / 2,
+				padding, _barHeight / 2f - backbuttonScale / 2f,
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
@@ -48,16 +48,15 @@ public class WorldScene implements Scene {
 		Font font = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
 		String worldTitle = GameData.Instance().getWorldDataByIndex(worldId).getWorldName();
 		float titleWidth = _graphics.getStringWidth(worldTitle, font);
-		_titleText = new Text(worldTitle, font, _engine,
-				_graphics.getLogicWidth() / 2f - titleWidth / 2,
-				_barHeight / 2f + _graphics.getStringHeight(worldTitle, font) / 2, 0, true);
+		_titleText = new Text(worldTitle, font, _engine, _graphics.getLogicWidth() / 2f,
+				_barHeight / 2f, 0, true);
 
 		// Mundos
 		final int numberOfWorlds = GameData.Instance().numberOfWorlds();
 
 		_prevWorldButton = new Button("UI/prevWorld.png", _engine,
-				_graphics.getLogicWidth() / 2 - titleWidth / 2 - padding - backbuttonScale,
-				_barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
+				_graphics.getLogicWidth() / 2f - titleWidth / 2 - padding - backbuttonScale,
+				_barHeight / 2f - backbuttonScale / 2f, backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
 				int prevWorldId = (worldId - 1) % numberOfWorlds;
@@ -70,7 +69,7 @@ public class WorldScene implements Scene {
 		};
 
 		_nextWorldButton = new Button("UI/nextWorld.png", _engine,
-				_graphics.getLogicWidth() / 2 + titleWidth / 2 + padding, _barHeight / 2 - backbuttonScale / 2,
+				_graphics.getLogicWidth() / 2f + titleWidth / 2 + padding, _barHeight / 2f - backbuttonScale / 2f,
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
@@ -122,7 +121,7 @@ public class WorldScene implements Scene {
 		}
 
 		_unlockNextLevelButton = new Button("UI/nerd.png", _engine,
-				_graphics.getLogicWidth() - padding - backbuttonScale, _barHeight / 2 - backbuttonScale / 2,
+				_graphics.getLogicWidth() - padding - backbuttonScale, _barHeight / 2f - backbuttonScale / 2f,
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
@@ -164,14 +163,14 @@ public class WorldScene implements Scene {
 
 	@Override
 	public void handleEvents(Input.TouchEvent event) {
-			_backButton.handleEvents(event);
-			_prevWorldButton.handleEvents(event);
-			_nextWorldButton.handleEvents(event);
-			_unlockNextLevelButton.handleEvents(event);
+		_backButton.handleEvents(event);
+		_prevWorldButton.handleEvents(event);
+		_nextWorldButton.handleEvents(event);
+		_unlockNextLevelButton.handleEvents(event);
 
-			for (int i = 0; i < _numLevels; i++) {
-				_levelButtons[i].handleEvents(event);
-			}
+		for (int i = 0; i < _numLevels; i++) {
+			_levelButtons[i].handleEvents(event);
+		}
 	}
 }
 

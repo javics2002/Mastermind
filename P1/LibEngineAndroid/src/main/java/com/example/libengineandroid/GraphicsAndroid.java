@@ -140,7 +140,8 @@ public class GraphicsAndroid implements Graphics {
 
 		Bitmap bitmap = getResizedBitmap(imageAndroid.getImage(), width, height);
 		if (bitmap != null)
-			_canvas.drawBitmap(bitmap, logicToRealX(logicX), logicToRealY(logicY), _paint);
+			_canvas.drawBitmap(bitmap, logicToRealX(logicX + (1 - scale) * logicWidth / 2),
+					logicToRealY(logicY + (1 - scale) * logicHeight / 2), _paint);
 	}
 
 	@Override

@@ -37,7 +37,7 @@ public class ShopScene implements Scene {
 		// Back button
 		int backbuttonScale = 40;
 		_backButton = new Button("UI/back.png", _engine,
-				_padding, _barHeight / 2 - backbuttonScale / 2,
+				_padding, _barHeight / 2f - backbuttonScale / 2f,
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
@@ -72,27 +72,26 @@ public class ShopScene implements Scene {
 		}
 		float titleWidth = _graphics.getStringWidth(shopTitle, font);
 		_titleText = new Text(shopTitle, font, _engine,
-				_graphics.getLogicWidth() / 2f - titleWidth / 2f,
-				_barHeight / 2f + _graphics.getStringHeight(shopTitle, font) / 2, 0, true);
+				_graphics.getLogicWidth() / 2f, _barHeight / 2f, 0, true);
 
 		final int worlds = _engine.filesInFolder("Levels");
 		_prevShopButton = new Button("UI/prevWorld.png", _engine,
-				_graphics.getLogicWidth() / 2 - titleWidth / 2 - _padding - backbuttonScale,
-				_barHeight / 2 - backbuttonScale / 2, backbuttonScale, backbuttonScale) {
+				_graphics.getLogicWidth() / 2f - titleWidth / 2 - _padding - backbuttonScale,
+				_barHeight / 2f - backbuttonScale / 2f, backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
 				Scene scene = new ShopScene(_engine,
-						ShopType.values()[(shopType.ordinal() + shopType.values().length - 1) % shopType.values().length]);
+						ShopType.values()[(shopType.ordinal() + ShopType.values().length - 1) % ShopType.values().length]);
 				_engine.setCurrentScene(scene);
 			}
 		};
 
 		_nextShopButton = new Button("UI/nextWorld.png", _engine,
-				_graphics.getLogicWidth() / 2 + titleWidth / 2 + _padding, _barHeight / 2 - backbuttonScale / 2,
+				_graphics.getLogicWidth() / 2f + titleWidth / 2 + _padding, _barHeight / 2f - backbuttonScale / 2f,
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
-				Scene scene = new ShopScene(_engine, ShopType.values()[(shopType.ordinal() + 1) % shopType.values().length]);
+				Scene scene = new ShopScene(_engine, ShopType.values()[(shopType.ordinal() + 1) % ShopType.values().length]);
 				_engine.setCurrentScene(scene);
 			}
 		};
@@ -102,7 +101,7 @@ public class ShopScene implements Scene {
 		String moneyString = Integer.toString(GameData.Instance().getMoney());
 		_moneyText = new Text(moneyString, font, _engine,
 				_graphics.getLogicWidth() - _graphics.getStringWidth(moneyString, font) - _coinSize - _padding - 5,
-				_barHeight / 2 + _graphics.getStringHeight(moneyString, font) / 2, 0, true);
+				_barHeight / 2f + _graphics.getStringHeight(moneyString, font) / 2, 0, true);
 
 		_instantMoneyButton = new Button("UI/pijo.png", _engine,
 				_graphics.getLogicWidth() / 2 + titleWidth / 2 + _padding + backbuttonScale,
@@ -116,7 +115,8 @@ public class ShopScene implements Scene {
 
 				//TODO centrar texto
 				_moneyText.setText(moneyString);
-				_moneyText.setPosition(_graphics.getLogicWidth() - _graphics.getStringWidth(moneyString, font) - _coinSize - _padding - 5,
+				_moneyText.setPosition(
+						_graphics.getLogicWidth() - _graphics.getStringWidth(moneyString, font) - _coinSize - _padding - 5,
 						_barHeight / 2f + _graphics.getStringHeight(moneyString, font) / 2);
 			}
 		};

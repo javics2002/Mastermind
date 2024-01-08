@@ -29,7 +29,7 @@ public class Text extends GameObject {
 	public void render(Graphics graphics) {
 		if (_centered)
 			_graphics.drawText(_text, _font, _positionX - _graphics.getStringWidth(_text, _font) / 2f,
-					_positionY - _graphics.getStringHeight(_text, _font) / 2f, _scale, _color);
+					_positionY + _graphics.getStringHeight(_text, _font) / 2f, _scale, _color);
 		else
 			_graphics.drawText(_text, _font, _positionX, _positionY, _scale, _color);
 	}

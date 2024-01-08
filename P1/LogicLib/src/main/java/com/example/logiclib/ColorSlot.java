@@ -24,28 +24,23 @@ public class ColorSlot extends GameObject {
 		_gameAttributes = gameAttributes;
 		_hasColor = false;
 		_colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
-		_numberText = new Text("", _colorNum, engine, 0, 0, 0, true);
+		_numberText = new Text("", _colorNum, engine, _positionX + width / 2f, _positionY, 0, true);
 		_colorID = -1;
 
 		_animationTime = _appearenceTime;
-
 	}
 
 	public ColorSlot(Engine engine, float positionX, float positionY, float width, float height, int colorID, GameAttributes gameAttributes) {
 		super(engine, positionX, positionY, width, height, 1f);
 
 		_gameAttributes = gameAttributes;
-		_hasColor = colorID != -1 ? true : false;
+		_hasColor = colorID != -1;
 		_colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
 
 		_animationTime = _appearenceTime;
 
-		//TODO quitar string width y height
-		String number = String.valueOf(colorID);
-		float textX = _positionX + _width / 2 - _graphics.getStringWidth(number, _colorNum) / 2;
-		float textY = _positionY + _height / 2 + _graphics.getStringHeight(number, _colorNum) / 2;
-
-		_numberText = new Text(Integer.toString(colorID), _colorNum, engine, textX, textY, 0, true);
+		_numberText = new Text(Integer.toString(colorID), _colorNum, engine,
+				_positionX + width / 2f, _positionY, 0, true);
 		_colorID = colorID;
 
 		if (_gameAttributes.selectedWorld == -1 && _hasColor) {
@@ -103,15 +98,10 @@ public class ColorSlot extends GameObject {
 	public void setColor(int color, boolean isEyeOpen) {
 		_hasColor = true;
 		_colorID = color;
-		String num = String.valueOf(_colorID);
 
-		//TODO quitar string width y height
 		String number = String.valueOf(_colorID);
-		float textX = _positionX + _width / 2 - _graphics.getStringWidth(number, _colorNum) / 2;
-		float textY = _positionY + _height / 2 + _graphics.getStringHeight(number, _colorNum) / 2;
 
 		_numberText.setText(number);
-		_numberText.setPosition(textX, textY);
 
 		if (_gameAttributes.selectedWorld == -1) {
 			if (GameData.Instance().getCurrentCircles() < 0) {
@@ -156,7 +146,7 @@ public class ColorSlot extends GameObject {
 	}
 
 	public void setTextPositionY(int posY) {
-		_numberText.setPosition(_numberText.getPositionX(), posY + _height / 2);
+		_numberText.setPosition(_numberText.getPositionX(), posY);
 	}
 }
 

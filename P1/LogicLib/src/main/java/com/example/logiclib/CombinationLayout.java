@@ -32,9 +32,7 @@ public class CombinationLayout extends GameObject {
 
 		Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
 		_combinationNumber = new Text(Integer.toString(number + 1), numberFont, engine,
-				_lateralMargin + 50 - _graphics.getStringWidth(Integer.toString(number + 1), numberFont) / 2,
-				_positionY + _height / 2 - _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 2,
-				0, true);
+				_lateralMargin + 50, _positionY, 0, true);
 
 		_colors = new ArrayList<>();
 		for (int i = 0; i < combinationLength; i++) {
@@ -49,39 +47,6 @@ public class CombinationLayout extends GameObject {
 					- combinationLength / 4f) * _height / 2 + i % ((combinationLength + 1) / 2) * _lateralMargin / 2),
 					(i < combinationLength / 2f ? _positionY - _height / 2 : _positionY) + _height * .2f / 4,
 					(int) (_height * .8f / 2), (int) (_height * .8f / 2)));
-		}
-	}
-
-	public CombinationLayout(Engine engine, int number, int combinationLength, float positionX,
-	                         float positionY, float height, int[] colors, GameAttributes gameAttributes,
-	                         Combination associatedCombination) {
-		super(engine, positionX, positionY, engine.getGraphics().getLogicWidth(), height, 1f);
-
-		_associatedCombination = associatedCombination;
-		_gameAttributes = gameAttributes;
-
-		_lateralMargin = 5;
-		int padding = 6;
-
-		Font numberFont = _graphics.newFont("Comfortaa-Regular.ttf", 24f);
-		_combinationNumber = new Text(Integer.toString(number + 1), numberFont, engine,
-				_lateralMargin + 50 - _graphics.getStringWidth(Integer.toString(number + 1), numberFont) / 2,
-				_positionY + _height / 2 - _graphics.getStringHeight(Integer.toString(number + 1), numberFont) / 2,
-				0, true);
-
-		_colors = new ArrayList<>();
-		for (int i = 0; i < combinationLength; i++) {
-			_colors.add(new ColorSlot(engine,
-					(int) (_positionX + (i - combinationLength / 2f) * (_scale + padding)),
-					_positionY - _scale / 2, _scale, _scale, associatedCombination.getColors()[i], _gameAttributes));
-		}
-
-		_hints = new ArrayList<>();
-		for (int i = 0; i < combinationLength; i++) {
-			_hints.add(new HintSlot(engine, (int) (_graphics.getLogicWidth() - 50 - _lateralMargin + (i % ((combinationLength + 1) / 2)
-					- combinationLength / 4f) * _scale / 2 + i % ((combinationLength + 1) / 2) * _lateralMargin / 2),
-					(i < combinationLength / 2f ? _positionY - _scale / 2 : _positionY) + (int) (_scale * .2f / 4),
-					(int) (_scale * .8f / 2), (int) (_scale * .8f / 2)));
 		}
 	}
 
@@ -165,8 +130,7 @@ public class CombinationLayout extends GameObject {
 	public void setPositionY(int posY) {
 		_positionY = posY;
 
-		_combinationNumber.setPosition(_combinationNumber.getPositionX(),
-				_positionY + _height / 2);
+		_combinationNumber.setPosition(_combinationNumber.getPositionX(), _positionY);
 
 		for (ColorSlot color : _colors) {
 			color.setPosition(color.getPositionX(), _positionY - _height / 2);

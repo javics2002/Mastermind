@@ -75,11 +75,11 @@ public class CustomTheme extends Button {
 	@Override
 	public void callback() {
 		if (GameData.Instance().hasTheme(_index)) {
-			_clickSound.play();
+			_engine.getAudio().playSound(_clickSound);
 
 			GameData.Instance().setTheme(_index);
 		} else if (GameData.Instance().purchaseTheme(_index, _price)) {
-			_purchaseSound.play();
+			_engine.getAudio().playSound(_purchaseSound);
 
 			_moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
 			_adquired = true;

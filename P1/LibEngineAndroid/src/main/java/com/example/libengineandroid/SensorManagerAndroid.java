@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
+import com.example.aninterface.Audio;
 import com.example.aninterface.Engine;
 import com.example.aninterface.Sound;
 
@@ -20,6 +21,8 @@ public class SensorManagerAndroid implements SensorEventListener {
 	private final int _cmDistance = 5;
 	private Sound _shakeSound;
 
+	Audio _audio;
+
 	// Constructor
 	public SensorManagerAndroid(Context context, Engine engine) {
 		// Inicialización del SensorManager y sensores
@@ -32,7 +35,8 @@ public class SensorManagerAndroid implements SensorEventListener {
 		_senSensorManager.registerListener(this, _senProximity, SensorManager.SENSOR_DELAY_NORMAL);
 
 		// Inicialización del sonido asociado al "shake"
-		_shakeSound = engine.getAudio().loadSound("shake.wav", false);
+		_audio = engine.getAudio();
+		_shakeSound = _audio.loadSound("shake.wav", false);
 		_shakeSound.setVolume(.5f);
 	}
 
@@ -55,7 +59,7 @@ public class SensorManagerAndroid implements SensorEventListener {
 				// Cálculo de la velocidad de cambio y reproducción del sonido si supera el umbral
 				float speed = Math.abs(x + y + z - _lastX - _lastY - _lastZ) / diffTime * 10000;
 				if (speed > SHAKE_THRESHOLD) {
-					_shakeSound.play();
+					_audio.playSound(_shakeSound);
 				}
 
 				_lastX = x;
@@ -70,7 +74,7 @@ public class SensorManagerAndroid implements SensorEventListener {
 
 			// Reproducción del sonido si la distancia es menor que el umbral definido
 			if (distance < _cmDistance) {
-				_shakeSound.play();
+				_audio.playSound(_shakeSound);
 			}
 		}
 	}

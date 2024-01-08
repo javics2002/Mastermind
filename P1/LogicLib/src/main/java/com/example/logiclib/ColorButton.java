@@ -22,11 +22,8 @@ public class ColorButton extends GameObject {
 		String num = String.valueOf(_colorID);
 
 		final Font colorNum = _graphics.newFont("Comfortaa-Regular.ttf", 24);
-
-		//TODO quitar string width y height
-		float textX = _positionX + _width / 2 - _graphics.getStringWidth(num, colorNum) / 2;
-		float textY = _positionY + _height / 2 + _graphics.getStringHeight(num, colorNum) / 2;
-		_numberText = new Text(num, colorNum, engine, textX, textY, 0, true);
+		_numberText = new Text(num, colorNum, engine, _positionX + _width / 2,
+				_positionY + _height / 2f, 0, true);
 
 		if (_gameAttributes.selectedWorld == -1) {
 			if (GameData.Instance().getCurrentCircles() < 0) {

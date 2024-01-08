@@ -85,7 +85,7 @@ public class GameOverScene implements Scene {
 			_adButton = null;
 
 			_shareButton = new Button(buttonColor, "Compartir", buttonFont, _engine,
-					graphics.getLogicWidth() / 2f, graphics.getLogicHeight() / 2f + 30,
+					graphics.getLogicWidth() / 2f - buttonWidth / 2f, graphics.getLogicHeight() / 2f + 30,
 					buttonWidth, buttonHeight) {
 				@Override
 				public void callback() {

@@ -33,7 +33,7 @@ public class InitialScene implements Scene {
 		String title = "Master Mind";
 
 		_titleText = new Text(title, _titleFont, _engine,
-				graphics.getLogicWidth() / 2, 200, 0, true);
+				graphics.getLogicWidth() / 2f, 200, 0, true);
 
 		final int buttonWidth = 330;
 		final int buttonHeight = 90;
@@ -44,17 +44,16 @@ public class InitialScene implements Scene {
 
 		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
 		_quickGameButton = new Button(buttonColor, "Partida rápida", buttonFont, _engine,
-				graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY, buttonWidth, buttonHeight) {
+				graphics.getLogicWidth() / 2f - buttonWidth / 2f, quickGameButtonPositionY, buttonWidth, buttonHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 8, 8, 4, 6,
-						false, returnScene, -1, -1, 0, null);
+				Scene scene = new DifficultyScene(_engine);
 				_engine.setCurrentScene(scene);
 			}
 		};
 
 		_worldsButton = new Button(buttonColor, "Explorar mundos", buttonFont, _engine,
-				graphics.getLogicWidth() / 2 - buttonWidth / 2, quickGameButtonPositionY + buttonHeight + paddingY,
+				graphics.getLogicWidth() / 2f - buttonWidth / 2f, quickGameButtonPositionY + buttonHeight + paddingY,
 				buttonWidth, buttonHeight) {
 			@Override
 			public void callback() {
