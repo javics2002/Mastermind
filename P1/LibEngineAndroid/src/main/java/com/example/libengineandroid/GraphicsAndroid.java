@@ -62,11 +62,11 @@ public class GraphicsAndroid implements Graphics {
 	@Override
 	public void clear(int color) {
 		final boolean debug = false;
-		if (debug) {
-			_canvas.drawColor(0xFFFFFFFF);
 
+		if (debug && _canvas != null) {
+			_canvas.drawColor(0xFFFFFFFF);
 			drawRect(0, 0, _logicWidth, _logicHeight, 1f, color);
-		} else {
+		} else if (_canvas != null && _paint != null) {
 			setColor(color);
 			_canvas.drawColor(_paint.getColor());
 		}
