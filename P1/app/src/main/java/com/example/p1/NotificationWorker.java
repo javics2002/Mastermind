@@ -28,12 +28,15 @@ public class NotificationWorker extends Worker {
 	}
 
 	@RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-	@SuppressLint("MissingPermission")
+	@SuppressLint({"SuspiciousIndentation", "MissingPermission"})
+	//El primero tiene que ver con la indentacion texto
+	//El segundo es para que asuma que tengo los permisos puesto que los compruebo previamente en la
+	//Act principal
 	@NonNull
 	@Override
 	public Result doWork() {
 
-		if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+
 			//Añade el extra recompensa (monedas) cuando pulsas sobre la notificacion llevandote a la actividad principal
 			Intent intent = new Intent(context, MainActivity.class);
 			intent.putExtra("reward", true);
@@ -51,9 +54,7 @@ public class NotificationWorker extends Worker {
 			NotificationManagerCompat managerCompat = NotificationManagerCompat.from(context);
 			managerCompat.notify(1, builder.build());
 			return Result.success();
-		} else
-			ActivityCompat.requestPermissions((MainActivity) context, new String[]{Manifest.permission.POST_NOTIFICATIONS}, 0);
-		    return Result.success();
+
 
 	}
 }

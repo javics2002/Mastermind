@@ -10,11 +10,22 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.aninterface.Scene;
 import com.example.libengineandroid.EngineAndroid;
@@ -36,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
 	private SensorManagerAndroid sensorManager;
 	private final float _aspectRatio = 2f / 3f;
 	private final int _logicHeight = 720;
+	private static final int REQUEST_CODE_PERMISSION = 123;
+	private boolean notifications=false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -93,8 +106,9 @@ public class MainActivity extends AppCompatActivity {
 		if (bundle != null && bundle.getBoolean("reward")) {
 			GameData.Instance().addMoney(20);
 		}
-
 		WorkManager.getInstance(this).cancelAllWork();
+		requestPermissionLauncher.launch(
+				Manifest.permission.POST_NOTIFICATIONS);
 	}
 
 	@Override
@@ -112,7 +126,12 @@ public class MainActivity extends AppCompatActivity {
 		sensorManager.registerListener();
 
 	}
-
+	private ActivityResultLauncher<String> requestPermissionLauncher =
+			registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
+				if (isGranted) {
+					notifications=true;
+				}
+			});
 	@Override
 	protected void onStop() {
 		super.onStop();
@@ -160,26 +179,31 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void createOneTimeNotification() {
-		WorkRequest workRequest =
-				new OneTimeWorkRequest.Builder(NotificationWorker.class)
-						// Configuracion adicional
-						.setInitialDelay(10, TimeUnit.SECONDS)
-						.build();
+		if(notifications) {
+			WorkRequest workRequest =
+					new OneTimeWorkRequest.Builder(NotificationWorker.class)
+							// Configuracion adicional
+							.setInitialDelay(10, TimeUnit.SECONDS)
+							.build();
 
-		WorkManager.getInstance(this).enqueue(workRequest);
+			WorkManager.getInstance(this).enqueue(workRequest);
+		}
 	}
 
 	private void createPeriodicNotification() {
-		PeriodicWorkRequest workRequestPeriodic =
-				new PeriodicWorkRequest.Builder(NotificationWorker.class,
-						15, TimeUnit.MINUTES,
-						5, TimeUnit.MINUTES)
-						.build();
+		if(notifications) {
+			PeriodicWorkRequest workRequestPeriodic =
+					new PeriodicWorkRequest.Builder(NotificationWorker.class,
+							15, TimeUnit.MINUTES,
+							5, TimeUnit.MINUTES)
+							.build();
 
-		WorkManager.getInstance(this).enqueue(workRequestPeriodic);
+			WorkManager.getInstance(this).enqueue(workRequestPeriodic);
+		}
 	}
 
-	private void createNotificationsChannel() {
+
+		private void createNotificationsChannel() {
 		NotificationChannel channel = null;
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			channel = new NotificationChannel("game_channel", "GameChannel", NotificationManager.IMPORTANCE_DEFAULT);
