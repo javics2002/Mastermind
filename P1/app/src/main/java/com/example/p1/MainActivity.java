@@ -63,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
 		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight,this,mAdView);
 
 		GameData.Init();
-		// Sobreescribir datos de guardado
+		// Cargar los datos de guardado
 		_engineAndroid.loadGameData();
-		_engineAndroid.saveGameData();
+
 
 		Scene firstScene = new InitialScene(_engineAndroid);
 
@@ -95,9 +95,6 @@ public class MainActivity extends AppCompatActivity {
 		createNotificationsChannel();
 
 		sensorManager = new SensorManagerAndroid(this, _engineAndroid);
-
-
-
 	}
 
 	@Override

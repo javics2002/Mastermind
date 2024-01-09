@@ -113,7 +113,8 @@ public class GameOverScene implements Scene {
 								_gameAttributes.colorNumber, _gameAttributes.repeatedColors,
 								_gameAttributes.returnScene, _gameAttributes.selectedWorld,
 								_gameAttributes.selectedLevelID, _gameAttributes.reward, null);
-						_engine.setCurrentScene(scene);
+						_transition.PlayTransition(Transition.TransitionType.fadeOut,
+								Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 					}
 				};
 			}
@@ -141,7 +142,8 @@ public class GameOverScene implements Scene {
 							Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
 									level.repeat, _gameAttributes.returnScene, _gameAttributes.selectedWorld,
 									nextLevelID, level.reward, null);
-							_engine.setCurrentScene(scene);
+							_transition.PlayTransition(Transition.TransitionType.fadeOut,
+									Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 						}
 					};
 				}
@@ -193,7 +195,8 @@ public class GameOverScene implements Scene {
 							_gameAttributes.colorNumber, _gameAttributes.repeatedColors,
 							_gameAttributes.returnScene, _gameAttributes.selectedWorld,
 							_gameAttributes.selectedLevelID, _gameAttributes.reward, null);
-					_engine.setCurrentScene(scene);
+					_transition.PlayTransition(Transition.TransitionType.fadeOut,
+							Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 				}
 			};
 		}
@@ -215,10 +218,12 @@ public class GameOverScene implements Scene {
 
 				if (_gameAttributes.selectedWorld == -1) {
 					Scene scene = new InitialScene(_engine);
-					_engine.setCurrentScene(scene);
+					_transition.PlayTransition(Transition.TransitionType.fadeOut,
+							Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 				} else {
-					WorldScene scene = new WorldScene(_engine, _gameAttributes.selectedWorld);
-					_engine.setCurrentScene(scene);
+					WorldScene scene = new WorldScene(_engine, _gameAttributes.selectedWorld, true);
+					_transition.PlayTransition(Transition.TransitionType.fadeOut,
+							Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 				}
 			}
 		};
@@ -267,7 +272,6 @@ public class GameOverScene implements Scene {
 		}
 
 		_menuButton.render(graphics);
-
 		_transition.render(graphics);
 	}
 
@@ -306,7 +310,8 @@ public class GameOverScene implements Scene {
 
 			Scene scene = new GameScene(_engine, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
 					data.repeat, _gameAttributes.returnScene, data.worldID, data.levelID, data.reward, data.resultCombination);
-			_engine.setCurrentScene(scene);
+			_transition.PlayTransition(Transition.TransitionType.fadeOut,
+					Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 		}
 	}
 }

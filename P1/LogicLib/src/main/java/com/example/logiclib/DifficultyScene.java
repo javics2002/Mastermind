@@ -23,6 +23,7 @@ public class DifficultyScene implements Scene {
 
 		Graphics graphics = _engine.getGraphics();
 
+		// Transition
 		_transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
 
 		if (GameData.Instance().getCurrentTheme() < 0) {

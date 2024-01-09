@@ -12,6 +12,7 @@ public class InitialScene implements Scene {
 	private final Button _quickGameButton, _worldsButton, _customizeButton, _eraseProgressButton;
 	private final Text _titleText;
 	private final int _backgroundColor;
+	private Transition _transition;
 
 	public InitialScene(Engine engine) {
 		_engine = engine;
@@ -29,6 +30,9 @@ public class InitialScene implements Scene {
 			buttonColor = Colors.parseARGB(theme.buttonColor);
 		}
 
+		// Transition
+		_transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
+
 		Font _titleFont = graphics.newFont("Comfortaa-Regular.ttf", 48f);
 		String title = "Master Mind";
 
@@ -41,8 +45,6 @@ public class InitialScene implements Scene {
 		final int quickGameButtonPositionY = graphics.getLogicHeight() / 2;
 		final int paddingY = 30;
 
-		final Scene returnScene = this;
-
 		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
 		_quickGameButton = new Button(buttonColor, "Partida rápida", buttonFont, _engine,
 				graphics.getLogicWidth() / 2f - buttonWidth / 2f, quickGameButtonPositionY,
@@ -51,7 +53,7 @@ public class InitialScene implements Scene {
 			public void callback() {
 				_engine.appeareanceBanner(false);
 				Scene scene = new DifficultyScene(_engine);
-				_engine.setCurrentScene(scene);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,  Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
 
@@ -62,8 +64,8 @@ public class InitialScene implements Scene {
 			@Override
 			public void callback() {
 				_engine.appeareanceBanner(false);
-				Scene scene = new WorldScene(_engine, 0);
-				_engine.setCurrentScene(scene);
+				Scene scene = new WorldScene(_engine, 0, true);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,  Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
 
@@ -73,8 +75,8 @@ public class InitialScene implements Scene {
 			@Override
 			public void callback() {
 				_engine.appeareanceBanner(false);
-				Scene scene = new ShopScene(_engine, ShopScene.ShopType.BACKGROUNDS);
-				_engine.setCurrentScene(scene);
+				Scene scene = new ShopScene(_engine, ShopScene.ShopType.BACKGROUNDS, true);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
 
@@ -87,6 +89,8 @@ public class InitialScene implements Scene {
 				GameData.Instance().reset();
 			}
 		};
+
+		_transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
 	}
 
 	@Override
@@ -99,6 +103,7 @@ public class InitialScene implements Scene {
 		_customizeButton.render(graphics);
 
 		_eraseProgressButton.render(graphics);
+		_transition.render(graphics);
 	}
 
 	@Override
@@ -112,10 +117,10 @@ public class InitialScene implements Scene {
 
 	@Override
 	public void update(double deltaTime) {
+		_transition.update(deltaTime);
 	}
 	@Override
 	public void recieveADMSG() {
-
 	}
 }
 

@@ -1,15 +1,7 @@
 package com.example.libengineandroid;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
-import com.example.aninterface.Scene;
-import com.example.logiclib.GameAttributes;
-import com.example.logiclib.GameData;
-import com.example.logiclib.GameOverScene;
-import com.example.logiclib.GameScene;
-import com.example.logiclib.LevelData;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
@@ -20,7 +12,6 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 public class AndroidRewardedAd {
 
 	private RewardedAd rewardedAd;
-	private int _rewardedAttemps = 2;
 	private final OnUserEarnedRewardListener _rewardCallback;
 	private final EngineAndroid _engine;
 	private final AdRequest _adRequest;

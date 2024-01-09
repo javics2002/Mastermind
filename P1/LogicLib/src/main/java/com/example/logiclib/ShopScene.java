@@ -26,13 +26,16 @@ public class ShopScene implements Scene {
 	private CustomBackground[] _backgroundButtons;
 	private CustomCircles[] _circlesButtons;
 	private CustomTheme[] _themeButtons;
-
 	private int _backgroundColor;
+	private Transition _transition;
 
-	public ShopScene(Engine engine, final ShopType shopType) {
+	public ShopScene(Engine engine, final ShopType shopType, boolean playInitialFadeIn) {
 		_engine = engine;
 		_graphics = _engine.getGraphics();
 		_shopType = shopType;
+
+		// Transition
+		_transition = new Transition(_engine, _graphics.getWidth(), _graphics.getHeight());
 
 		// Back button
 		int backbuttonScale = 40;
@@ -43,7 +46,8 @@ public class ShopScene implements Scene {
 			public void callback() {
 				_engine.appeareanceBanner(true);
 				Scene scene = new InitialScene(_engine);
-				_engine.setCurrentScene(scene);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,
+						Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
 
@@ -82,7 +86,7 @@ public class ShopScene implements Scene {
 			@Override
 			public void callback() {
 				Scene scene = new ShopScene(_engine,
-						ShopType.values()[(shopType.ordinal() + ShopType.values().length - 1) % ShopType.values().length]);
+						ShopType.values()[(shopType.ordinal() + ShopType.values().length - 1) % ShopType.values().length], false);
 				_engine.setCurrentScene(scene);
 			}
 		};
@@ -92,7 +96,7 @@ public class ShopScene implements Scene {
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
-				Scene scene = new ShopScene(_engine, ShopType.values()[(shopType.ordinal() + 1) % ShopType.values().length]);
+				Scene scene = new ShopScene(_engine, ShopType.values()[(shopType.ordinal() + 1) % ShopType.values().length], false);
 				_engine.setCurrentScene(scene);
 			}
 		};
@@ -233,10 +237,15 @@ public class ShopScene implements Scene {
 				break;
 		}
 
+		if (playInitialFadeIn){
+			_transition.PlayTransition(Transition.TransitionType.fadeIn,
+					Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
+		}
 	}
 
 	@Override
 	public void update(double deltaTime) {
+		_transition.update(deltaTime);
 		switch (_shopType) {
 			case BACKGROUNDS:
 				for (int i = 0; i <= _backgroundsNumber; i++)
@@ -292,11 +301,12 @@ public class ShopScene implements Scene {
 			default:
 				break;
 		}
+
+		_transition.render(graphics);
 	}
 
 	@Override
 	public void handleEvents(Input.TouchEvent event) {
-
 		_backButton.handleEvents(event);
 		_prevShopButton.handleEvents(event);
 		_nextShopButton.handleEvents(event);

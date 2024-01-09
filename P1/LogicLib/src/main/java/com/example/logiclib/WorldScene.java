@@ -19,10 +19,14 @@ public class WorldScene implements Scene {
 	private final Text _titleText;
 	private final int _backgroundColor;
 	final int _barHeight = 80;
+	private Transition _transition;
 
-	public WorldScene(Engine engine, final int worldId) {
+	public WorldScene(Engine engine, final int worldId, boolean playInitialFadeIn) {
 		_engine = engine;
 		_graphics = _engine.getGraphics();
+
+		// Transition
+		_transition = new Transition(_engine, _graphics.getWidth(), _graphics.getHeight());
 
 		if (GameData.Instance().getCurrentTheme() < 0) {
 			_backgroundColor = Colors.colorValues.get(Colors.ColorName.BACKGROUND);
@@ -41,7 +45,8 @@ public class WorldScene implements Scene {
 			public void callback() {
 				_engine.appeareanceBanner(true);
 				Scene scene = new InitialScene(_engine);
-				_engine.setCurrentScene(scene);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut,
+						Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
 
@@ -64,7 +69,7 @@ public class WorldScene implements Scene {
 				if (prevWorldId < 0)
 					prevWorldId += numberOfWorlds;
 
-				Scene scene = new WorldScene(_engine, prevWorldId);
+				Scene scene = new WorldScene(_engine, prevWorldId, false);
 				_engine.setCurrentScene(scene);
 			}
 		};
@@ -78,7 +83,7 @@ public class WorldScene implements Scene {
 				if (nextWorldId >= numberOfWorlds) {
 					nextWorldId = 0;
 				}
-				Scene scene = new WorldScene(_engine, nextWorldId);
+				Scene scene = new WorldScene(_engine, nextWorldId, false);
 				_engine.setCurrentScene(scene);
 			}
 		};
@@ -117,7 +122,8 @@ public class WorldScene implements Scene {
 				public void callback() {
 					Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
 							level.repeat, returnScene, worldId, level.levelID, level.reward, null);
-					_engine.setCurrentScene(scene);
+					_transition.PlayTransition(Transition.TransitionType.fadeOut,
+							Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 				}
 			};
 		}
@@ -139,10 +145,16 @@ public class WorldScene implements Scene {
 
 		_backgroundImage =
 				_graphics.loadImage(GameData.Instance().getWorldDataByIndex(worldId).getWorldName() + "/background.png");
+
+		if (playInitialFadeIn) {
+			_transition.PlayTransition(Transition.TransitionType.fadeIn,
+					Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
+		}
 	}
 
 	@Override
 	public void update(double deltaTime) {
+		_transition.update(deltaTime);
 	}
 
 	@Override
@@ -161,6 +173,8 @@ public class WorldScene implements Scene {
 		for (int i = 0; i < _numLevels; i++) {
 			_levelButtons[i].render(graphics);
 		}
+
+		_transition.render(graphics);
 	}
 
 	@Override

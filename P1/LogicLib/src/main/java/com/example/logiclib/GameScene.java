@@ -113,11 +113,15 @@ public class GameScene implements Scene {
 
 				if (_gameAttributes.selectedWorld == -1) {
 					Scene scene = new InitialScene(_engine);
-					_engine.setCurrentScene(scene);
+					_transition.PlayTransition(Transition.TransitionType.fadeOut,
+							Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 				} else {
-					WorldScene scene = new WorldScene(_engine, _gameAttributes.selectedWorld);
-					_engine.setCurrentScene(scene);
+					WorldScene scene = new WorldScene(_engine, _gameAttributes.selectedWorld, true);
+					_transition.PlayTransition(Transition.TransitionType.fadeOut,
+							Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 				}
+
+				_gameFinished = true;
 			}
 		};
 
@@ -199,6 +203,9 @@ public class GameScene implements Scene {
 		} else {
 			_backgroundImage = null;
 		}
+
+		_transition.PlayTransition(Transition.TransitionType.fadeIn,
+				Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
 	}
 
 	@Override
@@ -282,6 +289,8 @@ public class GameScene implements Scene {
 
 		for (ColorButton colorButton : _colorButtons)
 			colorButton.render(graphics);
+
+		_transition.render(graphics);
 	}
 
 	@Override
