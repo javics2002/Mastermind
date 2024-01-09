@@ -110,6 +110,10 @@ public class InitialScene implements Scene {
 	@Override
 	public void update(double deltaTime) {
 	}
+	@Override
+	public void recieveADMSG() {
+
+	}
 }
 
 

@@ -23,7 +23,8 @@ public class GameOverScene implements Scene {
 	private final Transition _transition;
 
 	Engine _engine;
-	GameAttributes _gameAttributes;
+		GameAttributes _gameAttributes;
+	 private int _rewardedAttemps=2;
 
 	private final int _backgroundColor;
 
@@ -281,5 +282,20 @@ public class GameOverScene implements Scene {
 	@Override
 	public void update(double deltaTime) {
 		_transition.update(deltaTime);
+	}
+
+	@Override
+	public void recieveADMSG() {
+
+		if (GameData.Instance().getCurrentLevelData() != null) {
+			LevelData data = GameData.Instance().getCurrentLevelData();
+
+			data.leftAttemptsNumber = _rewardedAttemps;
+			data.attempts += _rewardedAttemps;
+
+			Scene scene = new GameScene(_engine, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
+					data.repeat, _gameAttributes.returnScene, data.worldID, data.levelID, data.reward, data.resultCombination);
+			_engine.setCurrentScene(scene);
+		}
 	}
 }

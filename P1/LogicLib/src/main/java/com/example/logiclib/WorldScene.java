@@ -174,6 +174,11 @@ public class WorldScene implements Scene {
 			_levelButtons[i].handleEvents(event);
 		}
 	}
+	@Override
+	public void recieveADMSG() {
+
+
+	}
 }
 
 

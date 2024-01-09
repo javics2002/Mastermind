@@ -321,4 +321,8 @@ public class ShopScene implements Scene {
 				break;
 		}
 	}
+	@Override
+	public void recieveADMSG() {
+
+	}
 }

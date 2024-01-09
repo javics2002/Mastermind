@@ -320,4 +320,8 @@ public class GameScene implements Scene {
 
 		_attemptsText.setText(attemptsString);
 	}
+	@Override
+	public void recieveADMSG() {
+
+	}
 }

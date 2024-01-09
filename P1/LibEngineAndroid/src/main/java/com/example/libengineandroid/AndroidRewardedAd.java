@@ -70,24 +70,9 @@ public class AndroidRewardedAd {
 									@Override
 									public void onAdDismissedFullScreenContent() {
 										// Este método se llama cuando el usuario cierra el anuncio
-										if (_engine.getScene() instanceof GameOverScene) {
-											GameOverScene gameOverScene = (GameOverScene) _engine.getScene();
-											GameAttributes _gameAttributes = gameOverScene.getGameAttributtes();
-
-											if (GameData.Instance().getCurrentLevelData() != null) {
-												LevelData data = GameData.Instance().getCurrentLevelData();
-
-												data.leftAttemptsNumber = _rewardedAttemps;
-												data.attempts += _rewardedAttemps;
-
-												Scene scene = new GameScene(_engine, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
-														data.repeat, _gameAttributes.returnScene, data.worldID, data.levelID, data.reward, data.resultCombination);
-												_engine.setCurrentScene(scene);
-											} else
-												Log.d("AD", "GAME ATTRIBUTES INITIALISATION ERROR IN REWARDED AD CALLBACK");
-										} else
-											Log.d("AD", "CASTING SCENE ERROR IN REWARDED AD CALLBACK");
+										_engine.getScene().recieveADMSG();
 									}
+
 								});
 							}
 						});

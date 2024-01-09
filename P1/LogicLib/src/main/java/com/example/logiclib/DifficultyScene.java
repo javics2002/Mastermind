@@ -144,6 +144,10 @@ public class DifficultyScene implements Scene {
 		_difficultDifficultyButton.handleEvents(event);
 		_impossibleDifficultyButton.handleEvents(event);
 	}
+	@Override
+	public void recieveADMSG() {
+
+	}
 
 }
 
