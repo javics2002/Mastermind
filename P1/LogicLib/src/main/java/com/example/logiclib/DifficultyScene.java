@@ -13,7 +13,6 @@ public class DifficultyScene implements Scene {
 
 	private final Text _titleText;
 	private Transition _transition;
-	private final int _padding = 20;
 
 	Engine _engine;
 
@@ -57,6 +56,7 @@ public class DifficultyScene implements Scene {
 		// Game buttons
 		int gameButtonsWidth = 330;
 		int gameButtonsHeight = 90;
+		float gameButtonsArc = 20;
 		int startingGameButtonsHeight = graphics.getLogicHeight() / 3;
 		int padding = 20;
 		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
@@ -64,7 +64,7 @@ public class DifficultyScene implements Scene {
 
 		_easyDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDGREEN),
 				"Fácil", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
-				startingGameButtonsHeight, gameButtonsWidth, gameButtonsHeight) {
+				startingGameButtonsHeight, gameButtonsWidth, gameButtonsHeight, gameButtonsArc) {
 			@Override
 			public void callback() {
 				Scene scene = new GameScene(_engine, 6, 6, 4,
@@ -77,7 +77,7 @@ public class DifficultyScene implements Scene {
 		_mediumDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDYELLOW),
 				"Medio", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
 				startingGameButtonsHeight + gameButtonsHeight + padding,
-				gameButtonsWidth, gameButtonsHeight) {
+				gameButtonsWidth, gameButtonsHeight, gameButtonsArc) {
 			@Override
 			public void callback() {
 				Scene scene = new GameScene(_engine, 8, 8, 4,
@@ -90,7 +90,7 @@ public class DifficultyScene implements Scene {
 		_difficultDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDORANGE),
 				"Difícil", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
 				startingGameButtonsHeight + (gameButtonsHeight + padding) * 2,
-				gameButtonsWidth, gameButtonsHeight) {
+				gameButtonsWidth, gameButtonsHeight, gameButtonsArc) {
 			@Override
 			public void callback() {
 				Scene scene = new GameScene(_engine, 10, 10, 5,
@@ -103,7 +103,7 @@ public class DifficultyScene implements Scene {
 		_impossibleDifficultyButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDRED),
 				"Imposible", buttonFont, _engine, graphics.getLogicWidth() / 2f - gameButtonsWidth / 2f,
 				startingGameButtonsHeight + (gameButtonsHeight + padding) * 3,
-				gameButtonsWidth, gameButtonsHeight) {
+				gameButtonsWidth, gameButtonsHeight, gameButtonsArc) {
 			@Override
 			public void callback() {
 				Scene scene = new GameScene(_engine, 15, 15, 6,
@@ -144,11 +144,11 @@ public class DifficultyScene implements Scene {
 		_difficultDifficultyButton.handleEvents(event);
 		_impossibleDifficultyButton.handleEvents(event);
 	}
+
 	@Override
 	public void recieveADMSG() {
 
 	}
-
 }
 
 

@@ -15,10 +15,11 @@ public class CustomBackground extends Button {
 	private final Image _coin;
 	private final Text _moneyText;
 
-	CustomBackground(boolean selected, int index, int price, Font font, String filename, Engine engine,
-	                 int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
-		super(filename, selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK, Integer.toString(price), font,
-				engine, positionX, positionY, width, height);
+	CustomBackground(boolean selected, int index, int price, Font font, String filename,
+	                 Engine engine, float positionX, float positionY, float width, float height,
+	                 float arc, int priceGap, Image coin, Text moneyText) {
+		super(filename, selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK,
+				Integer.toString(price), font, engine, positionX, positionY, width, height, arc);
 
 		_index = index;
 		_price = price;

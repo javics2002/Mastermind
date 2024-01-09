@@ -37,6 +37,7 @@ public class InitialScene implements Scene {
 
 		final int buttonWidth = 330;
 		final int buttonHeight = 90;
+		final float buttonArc = 20;
 		final int quickGameButtonPositionY = graphics.getLogicHeight() / 2;
 		final int paddingY = 30;
 
@@ -44,7 +45,8 @@ public class InitialScene implements Scene {
 
 		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
 		_quickGameButton = new Button(buttonColor, "Partida rápida", buttonFont, _engine,
-				graphics.getLogicWidth() / 2f - buttonWidth / 2f, quickGameButtonPositionY, buttonWidth, buttonHeight) {
+				graphics.getLogicWidth() / 2f - buttonWidth / 2f, quickGameButtonPositionY,
+				buttonWidth, buttonHeight, buttonArc) {
 			@Override
 			public void callback() {
 				_engine.appeareanceBanner(false);
@@ -54,8 +56,9 @@ public class InitialScene implements Scene {
 		};
 
 		_worldsButton = new Button(buttonColor, "Explorar mundos", buttonFont, _engine,
-				graphics.getLogicWidth() / 2f - buttonWidth / 2f, quickGameButtonPositionY + buttonHeight + paddingY,
-				buttonWidth, buttonHeight) {
+				graphics.getLogicWidth() / 2f - buttonWidth / 2f,
+				quickGameButtonPositionY + buttonHeight + paddingY,
+				buttonWidth, buttonHeight, buttonArc) {
 			@Override
 			public void callback() {
 				_engine.appeareanceBanner(false);
@@ -75,10 +78,10 @@ public class InitialScene implements Scene {
 			}
 		};
 
-		Font eraseButtonFont = graphics.newFont("Comfortaa-Regular.ttf", 15f);
+		Font eraseButtonFont = graphics.newFont("Comfortaa-Regular.ttf", 12f);
 		_eraseProgressButton = new Button(Colors.colorValues.get(Colors.ColorName.BACKGROUNDRED),
 				"Borrar progreso", eraseButtonFont, _engine, 10, 10,
-				graphics.getStringWidth("Borrar progreso", eraseButtonFont) + 10, 50) {
+				graphics.getStringWidth("Borrar progreso", eraseButtonFont) + 20, 50, 10) {
 			@Override
 			public void callback() {
 				GameData.Instance().reset();

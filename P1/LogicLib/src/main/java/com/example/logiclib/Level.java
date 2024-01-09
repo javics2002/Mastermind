@@ -13,7 +13,7 @@ public class Level extends Button {
 	Level(boolean locked, boolean completed, String text, Font font,
 	      Engine engine, int positionX, int positionY, int width, int height) {
 		super("UI/lock.png", completed ? Colors.ColorName.LEVELCOMPLETED : Colors.ColorName.LEVELUNCOMPLETED,
-				text, font, engine, positionX, positionY, width, height);
+				text, font, engine, positionX, positionY, width, height, 20);
 
 		_locked = locked;
 		_completed = completed;

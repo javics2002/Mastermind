@@ -14,8 +14,9 @@ public class CombinationLayout extends GameObject {
 	private final List<ColorSlot> _colors;
 	private final List<HintSlot> _hints;
 	private final int _lateralMargin;
+	private final float _arc = 15;
 
-	private GameAttributes _gameAttributes;
+	private final GameAttributes _gameAttributes;
 
 	public CombinationLayout(Engine engine, int number, int combinationLength,
 	                         float positionX, float positionY, float height,
@@ -54,7 +55,7 @@ public class CombinationLayout extends GameObject {
 	public void render(Graphics graphics) {
 		_graphics.drawRoundedRect(_lateralMargin, _positionY - _height * 1.2f / 2,
 				_graphics.getLogicWidth() - _lateralMargin * 2, _height * 1.2f,
-				20, 20, _scale, Colors.colorValues.get(Colors.ColorName.COMBINATIONLAYOUT));
+				_arc, _arc, _scale, Colors.colorValues.get(Colors.ColorName.COMBINATIONLAYOUT));
 
 		_graphics.drawRect(_lateralMargin + 80, _positionY - _height / 2, 2, _height, _scale, 0);
 		_graphics.drawRect(_graphics.getLogicWidth() - _lateralMargin - 90, _positionY - _height / 2,

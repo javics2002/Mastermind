@@ -56,8 +56,12 @@ public class GameOverScene implements Scene {
 				codeFont = graphics.newFont("Comfortaa-Regular.ttf", 18f);
 		String resultString, attemptsString, attemptsNumberString, codeString = "Código:";
 
-		final int buttonWidth = 430;
-		final int buttonHeight = 90;
+		final int primaryButtonWidth = 430;
+		final int primaryButtonHeight = 90;
+		final float primaryButtonArc = 20;
+		final int secondaryButtonWidth = 400;
+		final int secondaryButtonHeight = 50;
+		final float secondaryButtonArc = 10;
 		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
 
 		_resultCombination = new ArrayList<>();
@@ -85,8 +89,9 @@ public class GameOverScene implements Scene {
 			_adButton = null;
 
 			_shareButton = new Button(buttonColor, "Compartir", buttonFont, _engine,
-					graphics.getLogicWidth() / 2f - buttonWidth / 2f, graphics.getLogicHeight() / 2f + 30,
-					buttonWidth, buttonHeight) {
+					graphics.getLogicWidth() / 2f - primaryButtonWidth / 2f,
+					graphics.getLogicHeight() / 2f + 30,
+					primaryButtonWidth, primaryButtonHeight, primaryButtonArc) {
 				@Override
 				public void callback() {
 					_engine.shareScreenshot(graphics.getWidth(), graphics.getHeight());
@@ -96,15 +101,18 @@ public class GameOverScene implements Scene {
 			// Si te encuentras en una partida rapida
 			if (_gameAttributes.selectedWorld == -1) {
 				_playAgainButton = new Button(buttonColor, "Volver a Jugar", buttonFont, _engine,
-						graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
+						graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200,
+						secondaryButtonWidth, secondaryButtonHeight, secondaryButtonArc) {
 					@Override
 					public void callback() {
 						GameData.Instance().resetCurrentLevelData();
 						_engine.saveGameData();
 
-						Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
-								_gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.returnScene,
-								_gameAttributes.selectedWorld, _gameAttributes.selectedLevelID, _gameAttributes.reward, null);
+						Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,
+								_gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+								_gameAttributes.colorNumber, _gameAttributes.repeatedColors,
+								_gameAttributes.returnScene, _gameAttributes.selectedWorld,
+								_gameAttributes.selectedLevelID, _gameAttributes.reward, null);
 						_engine.setCurrentScene(scene);
 					}
 				};
@@ -116,7 +124,8 @@ public class GameOverScene implements Scene {
 
 				if (nextLevelID < data.getLevelNumber()) {
 					_playAgainButton = new Button(buttonColor, "Siguiente Nivel", buttonFont, _engine,
-							graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
+							graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200,
+							secondaryButtonWidth, secondaryButtonHeight, secondaryButtonArc) {
 						@Override
 						public void callback() {
 							GameData.Instance().resetCurrentLevelData();
@@ -163,8 +172,8 @@ public class GameOverScene implements Scene {
 			attemptsNumberString = "";
 
 			_adButton = new Button(buttonColor, "+2 Intentos", buttonFont, _engine,
-					graphics.getLogicWidth() / 2f - buttonWidth / 2f, graphics.getLogicHeight() / 3f,
-					buttonWidth, buttonHeight) {
+					graphics.getLogicWidth() / 2f - primaryButtonWidth / 2f, graphics.getLogicHeight() / 3f,
+					primaryButtonWidth, primaryButtonHeight, primaryButtonArc) {
 				@Override
 				public void callback() {
 					_engine.showAd();
@@ -172,14 +181,16 @@ public class GameOverScene implements Scene {
 			};
 
 			_playAgainButton = new Button(buttonColor, "Volver a Intentar", buttonFont, _engine,
-					graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
+					graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200,
+					secondaryButtonWidth, secondaryButtonHeight, secondaryButtonArc) {
 				@Override
 				public void callback() {
 					GameData.Instance().resetCurrentLevelData();
 					_engine.saveGameData();
 
-					Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.attemptsNumber,
-							_gameAttributes.combinationLength, _gameAttributes.colorNumber, _gameAttributes.repeatedColors,
+					Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,
+							_gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+							_gameAttributes.colorNumber, _gameAttributes.repeatedColors,
 							_gameAttributes.returnScene, _gameAttributes.selectedWorld,
 							_gameAttributes.selectedLevelID, _gameAttributes.reward, null);
 					_engine.setCurrentScene(scene);
@@ -195,7 +206,8 @@ public class GameOverScene implements Scene {
 				graphics.getLogicWidth() / 2f, 160, 0, true);
 
 		_menuButton = new Button(buttonColor, "Volver al Menú", buttonFont, _engine,
-				graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 100, 400, 50) {
+				graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 100,
+				secondaryButtonWidth, secondaryButtonHeight, secondaryButtonArc) {
 			@Override
 			public void callback() {
 				GameData.Instance().resetCurrentLevelData();
@@ -286,7 +298,6 @@ public class GameOverScene implements Scene {
 
 	@Override
 	public void recieveADMSG() {
-
 		if (GameData.Instance().getCurrentLevelData() != null) {
 			LevelData data = GameData.Instance().getCurrentLevelData();
 

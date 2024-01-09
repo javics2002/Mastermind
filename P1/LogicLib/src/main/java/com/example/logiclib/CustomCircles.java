@@ -22,10 +22,11 @@ public class CustomCircles extends Button {
 	private final Image[] _circleImages;
 
 	//Color constructor
-	CustomCircles(String[] colors, boolean selected, int index, int price, Font font, Engine engine,
-	              int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
-		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK), Integer.toString(price), font,
-				engine, positionX, positionY, width, height);
+	CustomCircles(String[] colors, boolean selected, int index, int price, Font font,
+	              Engine engine, float positionX, float positionY, float width, float height,
+	              float arc, int priceGap, Image coin, Text moneyText) {
+		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK),
+				Integer.toString(price), font, engine, positionX, positionY, width, height, arc);
 
 		_skin = false;
 		_colors = new int[colors.length];
@@ -44,14 +45,17 @@ public class CustomCircles extends Button {
 		_purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
 		_purchaseSound.setVolume(.5f);
 
+		_arc = 10;
+
 		_coin = coin;
 		_moneyText = moneyText;
 	}
 
-	CustomCircles(int[] colors, boolean selected, int index, int price, Font font, Engine engine,
-	              int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
-		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK), Integer.toString(price), font,
-				engine, positionX, positionY, width, height);
+	CustomCircles(int[] colors, boolean selected, int index, int price, Font font,
+	              Engine engine, float positionX, float positionY, float width, float height,
+	              float arc, int priceGap, Image coin, Text moneyText) {
+		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK),
+				Integer.toString(price), font, engine, positionX, positionY, width, height, arc);
 
 		_skin = false;
 		_colors = new int[colors.length];
@@ -70,15 +74,18 @@ public class CustomCircles extends Button {
 		_purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
 		_purchaseSound.setVolume(.5f);
 
+		_arc = 10;
+
 		_coin = coin;
 		_moneyText = moneyText;
 	}
 
 	//Skin constructor
-	CustomCircles(String packPath, boolean selected, int index, int price, Font font, Engine engine,
-	              int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
-		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK), Integer.toString(price), font,
-				engine, positionX, positionY, width, height);
+	CustomCircles(String packPath, boolean selected, int index, int price, Font font,
+	              Engine engine, float positionX, float positionY, float width, float height,
+	              float arc, int priceGap, Image coin, Text moneyText) {
+		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK),
+				Integer.toString(price), font, engine, positionX, positionY, width, height, arc);
 
 		_skin = true;
 		_colors = null;
@@ -97,6 +104,8 @@ public class CustomCircles extends Button {
 
 		_purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
 		_purchaseSound.setVolume(.5f);
+
+		_arc = 10;
 
 		_coin = coin;
 		_moneyText = moneyText;
@@ -140,7 +149,7 @@ public class CustomCircles extends Button {
 	public void render(Graphics graphics) {
 		_graphics.drawRoundedRect(_positionX - borderWidth, _positionY - borderWidth,
 				_width + 2 * borderWidth, _height + 2 * borderWidth,
-				_arc, _arc, _scale,
+				_arc + borderWidth, _arc + borderWidth, _scale,
 				Colors.colorValues.get(_selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK));
 		_graphics.drawRoundedRect(_positionX, _positionY, _width, _height,
 				_arc, _arc, _scale, Colors.colorValues.get(Colors.ColorName.BACKGROUNDORANGE));

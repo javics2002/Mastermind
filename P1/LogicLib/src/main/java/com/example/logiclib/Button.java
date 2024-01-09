@@ -12,19 +12,20 @@ public class Button extends GameObject {
 	protected Image _image;
 	protected final Sound _clickSound;
 	protected int _backgroundColor;
-	protected int _arc;
+	protected float _arc;
 	protected String _text;
 	protected Font _font;
 	protected final Audio _audio;
 
 	Button(int backgroundColor, String text, Font font, Engine engine,
-	       float positionX, float positionY, float width, float height) {
+	       float positionX, float positionY, float width, float height, float arc) {
 		super(engine, positionX, positionY, width, height, 1f);
 
 		_image = null;
 
+		_arc = arc;
+
 		_backgroundColor = backgroundColor;
-		_arc = 20;
 
 		_text = text;
 		_font = font;
@@ -35,7 +36,7 @@ public class Button extends GameObject {
 	}
 
 	Button(String filename, Colors.ColorName backgroundColor, String text, Font font, Engine engine,
-	       int positionX, int positionY, int width, int height) {
+	       float positionX, float positionY, float width, float height, float arc) {
 		super(engine, positionX, positionY, width, height, 1f);
 
 		_image = _graphics.loadImage(filename);
@@ -43,9 +44,9 @@ public class Button extends GameObject {
 		_positionY = positionY;
 		_width = width;
 		_height = height;
+		_arc = arc;
 
 		_backgroundColor = Colors.colorValues.get(backgroundColor);
-		_arc = 20;
 
 		_text = text;
 		_font = font;
@@ -87,8 +88,8 @@ public class Button extends GameObject {
 			_graphics.drawImage(_image, _positionX, _positionY, _width, _height, _scale);
 		else {
 			_graphics.drawRoundedRect(_positionX, _positionY, _width, _height, _arc, _arc, _scale, _backgroundColor);
-			_graphics.drawText(_text, _font, _positionX + (int) _width / 2 - _graphics.getStringWidth(_text, _font) / 2,
-					_positionY + (int) _height / 2 + _graphics.getStringHeight(_text, _font) / 2, _scale, 0);
+			_graphics.drawText(_text, _font, _positionX + (int) _width / 2f - _graphics.getStringWidth(_text, _font) / 2,
+					_positionY + (int) _height / 2f + _graphics.getStringHeight(_text, _font) / 2, _scale, 0);
 		}
 	}
 

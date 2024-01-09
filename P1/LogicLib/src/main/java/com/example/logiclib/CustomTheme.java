@@ -18,10 +18,11 @@ public class CustomTheme extends Button {
 	private final Text _moneyText;
 	private final int _backgroundColor, _buttonColor;
 
-	CustomTheme(boolean selected, int index, int price, String backgroundColor, String buttonColor, Font font, Engine engine,
-	            int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
-		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK), Integer.toString(price), font,
-				engine, positionX, positionY, width, height);
+	CustomTheme(boolean selected, int index, int price, String backgroundColor, String buttonColor,
+	            Font font, Engine engine, float positionX, float positionY, float width, float height,
+	            float arc, int priceGap, Image coin, Text moneyText) {
+		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK),
+				Integer.toString(price), font, engine, positionX, positionY, width, height, arc);
 
 		_index = index;
 		_price = price;
@@ -35,15 +36,17 @@ public class CustomTheme extends Button {
 		_purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
 		_purchaseSound.setVolume(.5f);
 
+		_arc = 10;
+
 		_coin = coin;
 		_moneyText = moneyText;
 	}
 
 	CustomTheme(boolean selected, int index, int price, Colors.ColorName backgroundColor,
-	            Colors.ColorName buttonColor, Font font, Engine engine,
-	            int positionX, int positionY, int width, int height, int priceGap, Image coin, Text moneyText) {
-		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK), Integer.toString(price), font,
-				engine, positionX, positionY, width, height);
+	            Colors.ColorName buttonColor, Font font, Engine engine, float positionX, float positionY,
+	            float width, float height, float arc, int priceGap, Image coin, Text moneyText) {
+		super(Colors.colorValues.get(selected ? Colors.ColorName.GREEN : Colors.ColorName.BLACK),
+				Integer.toString(price), font, engine, positionX, positionY, width, height, arc);
 
 		_index = index;
 		_price = price;
@@ -56,6 +59,8 @@ public class CustomTheme extends Button {
 
 		_purchaseSound = _engine.getAudio().loadSound("buy.mp3", false);
 		_purchaseSound.setVolume(.5f);
+
+		_arc = 10;
 
 		_coin = coin;
 		_moneyText = moneyText;
