@@ -11,16 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameOverScene implements Scene {
-	private Text _resultText, _attemptsText, _attemptsNumberText, _codeText;
-	private Button _playAgainButton;
-	private Button _menuButton;
-	private Button _shareButton;
-	private List<ColorSlot> _resultCombination;
+	private final Text _resultText, _attemptsText, _attemptsNumberText;
+	private Text _codeText;
+	private Button _playAgainButton, _shareButton;
+	private final Button _menuButton;
+	private final List<ColorSlot> _resultCombination;
 	private Image _coinImage;
 	private Text _moneyText;
-	private Button _adButton;
+	private final Button _adButton;
 	private final int _coinSize = 40;
-	private Transition _transition;
+	private final Transition _transition;
 
 	Engine _engine;
 	GameAttributes _gameAttributes;
@@ -57,7 +57,6 @@ public class GameOverScene implements Scene {
 
 		final int buttonWidth = 430;
 		final int buttonHeight = 90;
-		final int posY = graphics.getLogicHeight() / 2;
 		Font buttonFont = graphics.newFont("Comfortaa-Regular.ttf", 35f);
 
 		_resultCombination = new ArrayList<>();
@@ -111,32 +110,31 @@ public class GameOverScene implements Scene {
 			}
 			// Si te encuentras en un nivel de un mundo
 			else {
-				_playAgainButton = new Button(buttonColor, "Siguiente Nivel", buttonFont, _engine,
-						graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
-					@Override
-					public void callback() {
-						GameData.Instance().resetCurrentLevelData();
-						_engine.saveGameData();
+				final int nextLevelID = _gameAttributes.selectedLevelID + 1;
+				final WorldData data = GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld);
 
-						int levelID = _gameAttributes.selectedLevelID + 1;
-						final WorldData data = GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld);
+				if (nextLevelID < data.getLevelNumber()) {
+					_playAgainButton = new Button(buttonColor, "Siguiente Nivel", buttonFont, _engine,
+							graphics.getLogicWidth() / 2f - 400 / 2f, graphics.getLogicHeight() - 200, 400, 50) {
+						@Override
+						public void callback() {
+							GameData.Instance().resetCurrentLevelData();
+							_engine.saveGameData();
 
-						if (levelID >= data.getLevelNumber()) {
-							levelID = _gameAttributes.selectedLevelID;
+							String levelNumber = nextLevelID >= 9 ? Integer.toString(nextLevelID + 1)
+									: "0" + Integer.toString(nextLevelID + 1);
+							String levelPath = "Levels/" + data.getWorldName() + "/level_"
+									+ levelNumber + ".json";
+
+							LevelData level = _engine.jsonToObject(levelPath, LevelData.class);
+
+							Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
+									level.repeat, _gameAttributes.returnScene, _gameAttributes.selectedWorld,
+									nextLevelID, level.reward, null);
+							_engine.setCurrentScene(scene);
 						}
-
-						String levelNumber = levelID >= 9 ? Integer.toString(levelID + 1) : "0" + Integer.toString(levelID + 1);
-						String levelPath = "Levels/" + data.getWorldName() + "/level_"
-								+ levelNumber + ".json";
-
-						LevelData level = _engine.jsonToObject(levelPath, LevelData.class);
-
-						Scene scene = new GameScene(_engine, level.attempts, level.attempts, level.codeSize, level.codeOpt,
-								level.repeat, _gameAttributes.returnScene, _gameAttributes.selectedWorld,
-								levelID, _gameAttributes.reward, null);
-						_engine.setCurrentScene(scene);
-					}
-				};
+					};
+				}
 
 				if (GameData.Instance().getWorldDataByIndex(_gameAttributes.selectedWorld).getLastLevelUnlocked() <= _gameAttributes.selectedLevelID) {
 					_coinImage = graphics.loadImage("UI/coin.png");
@@ -145,7 +143,7 @@ public class GameOverScene implements Scene {
 					String moneyString = "+" + _gameAttributes.reward + " - Total: " + Integer.toString(GameData.Instance().getMoney());
 
 					_moneyText = new Text(moneyString, resultFont, _engine,
-							graphics.getLogicWidth() / 2f - (_coinSize + graphics.getStringWidth(moneyString, resultFont)) / 2 + _coinSize,
+							graphics.getLogicWidth() / 2f + _coinSize / 2f,
 							graphics.getLogicHeight() / 2f - 30, 0, true);
 				}
 			}
@@ -251,7 +249,10 @@ public class GameOverScene implements Scene {
 			_moneyText.render(graphics);
 		}
 
-		_playAgainButton.render(graphics);
+		if (_playAgainButton != null) {
+			_playAgainButton.render(graphics);
+		}
+
 		_menuButton.render(graphics);
 
 		_transition.render(graphics);
@@ -259,7 +260,10 @@ public class GameOverScene implements Scene {
 
 	@Override
 	public void handleEvents(Input.TouchEvent event) {
-		_playAgainButton.handleEvents(event);
+		if(_playAgainButton != null){
+			_playAgainButton.handleEvents(event);
+		}
+
 		_menuButton.handleEvents(event);
 
 		if (_adButton != null) {

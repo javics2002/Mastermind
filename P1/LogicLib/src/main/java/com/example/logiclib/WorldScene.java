@@ -105,6 +105,7 @@ public class WorldScene implements Scene {
 			String levelNumber = i >= 9 ? Integer.toString(i + 1) : "0" + Integer.toString(i + 1);
 			final LevelData level = _engine.jsonToObject("Levels/" + _worldData.getWorldName() + "/level_"
 					+ levelNumber + ".json", LevelData.class);
+			level.levelID = i;
 
 			_levelButtons[i] = new Level(i > lastLevelUnlocked, i < lastLevelUnlocked,
 					Integer.toString(i + 1), buttonFont, _engine,
