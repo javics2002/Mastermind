@@ -4,9 +4,9 @@ import java.io.Serializable;
 
 public class Background implements Serializable {
 	public String name;
-	String image;
-	int price;
-	boolean acquired = false;
+	public String image;
+	public int price;
+	public boolean acquired = false;
 
 	@Override
 	public String toString() {

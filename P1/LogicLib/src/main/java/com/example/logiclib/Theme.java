@@ -4,10 +4,10 @@ import java.io.Serializable;
 
 public class Theme implements Serializable {
 	public String name;
-	String backgroundColor;
-	String buttonColor;
-	int price;
-	boolean acquired = false;
+	public String backgroundColor;
+	public String buttonColor;
+	public int price;
+	public boolean acquired = false;
 
 	@Override
 	public String toString() {

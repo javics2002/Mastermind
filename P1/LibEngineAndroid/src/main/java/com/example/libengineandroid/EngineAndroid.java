@@ -487,13 +487,17 @@ public class EngineAndroid implements Runnable, Engine {
 				boolean loadedBackground = false;
 
 				for (int j = 0; j < numberOfBackgrounds; j++) {
-					Background background = GameData.Instance().getBackgrounds().get(j);
-					String backgroundName = background.name;
+					Background savedBackground = GameData.Instance().getBackgrounds().get(j);
 
-					if (backgroundName.equals(backgroundsFolderNames[i])) {
+					if (savedBackground.name.equals(backgroundsFolderNames[i])) {
 						// Background exists in save file
 						loadedBackground = true;
 						loadedBackgroundSaveData[j] = true;
+
+						// Update background
+						final Background backgroundAsset = jsonToObject("Shop/Backgrounds/" + backgroundsFolderNames[i], Background.class);
+						savedBackground.image = backgroundAsset.image;
+						savedBackground.price = backgroundAsset.price;
 
 						break;
 					}
@@ -528,13 +532,21 @@ public class EngineAndroid implements Runnable, Engine {
 				boolean loadedCircles = false;
 
 				for (int j = 0; j < numberOfCircles; j++) {
-					Circles circles = GameData.Instance().getCircles().get(j);
-					String circlesName = circles.name;
+					Circles savedCircles = GameData.Instance().getCircles().get(j);
 
-					if (circlesName.equals(circlesFolderNames[i])) {
+					if (savedCircles.name.equals(circlesFolderNames[i])) {
 						// Circles exist in save file
 						loadedCircles = true;
 						loadedCirclesSaveData[j] = true;
+
+						//Update circles
+						final Circles circlesAsset = jsonToObject("Shop/Circles/" + circlesFolderNames[i], Circles.class);
+						savedCircles.skin = circlesAsset.skin;
+						if(savedCircles.skin)
+							savedCircles.packPath = circlesAsset.packPath;
+						else
+							savedCircles.colors = circlesAsset.colors.clone();
+						savedCircles.price = circlesAsset.price;
 
 						break;
 					}
@@ -569,13 +581,18 @@ public class EngineAndroid implements Runnable, Engine {
 				boolean loadedTheme = false;
 
 				for (int j = 0; j < numberOfThemes; j++) {
-					Theme theme = GameData.Instance().getThemes().get(j);
-					String themeName = theme.name;
+					Theme savedTheme = GameData.Instance().getThemes().get(j);
 
-					if (themeName.equals(themesFolderNames[i])) {
+					if (savedTheme.name.equals(themesFolderNames[i])) {
 						// Theme exists in save file
 						loadedTheme = true;
 						loadedThemesSaveData[j] = true;
+
+						//Update theme
+						final Theme themeAsset = jsonToObject("Shop/Themes/" + themesFolderNames[i], Theme.class);
+						savedTheme.backgroundColor = themeAsset.backgroundColor;
+						savedTheme.buttonColor = themeAsset.buttonColor;
+						savedTheme.price = themeAsset.price;
 
 						break;
 					}

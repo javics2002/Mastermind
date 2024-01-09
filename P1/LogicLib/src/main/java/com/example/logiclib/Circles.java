@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public class Circles implements Serializable {
 	public String name;
-	boolean skin; // True si los circulos son imágenes, false si son colores
-	String packPath = "";
-	String[] colors = null;
-	int price;
-	boolean acquired = false;
+	public boolean skin; // True si los circulos son imágenes, false si son colores
+	public String packPath = "";
+	public String[] colors = null;
+	public int price;
+	public boolean acquired = false;
 
 	@Override
 	public String toString() {
