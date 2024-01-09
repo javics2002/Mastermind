@@ -41,6 +41,7 @@ public class DifficultyScene implements Scene {
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
+				_engine.appeareanceBanner(true);
 				Scene scene = new InitialScene(_engine);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE),
 						0.2f, scene);

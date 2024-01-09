@@ -59,7 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
 		//setContentView(surfaceView);
 
-		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight,this);
+		mAdView = new AdView(this);
+		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight,this,mAdView);
 
 		GameData.Init();
 		// Sobreescribir datos de guardado
@@ -70,10 +71,12 @@ public class MainActivity extends AppCompatActivity {
 
 		if (GameData.Instance().getCurrentLevelData() != null) {
 			LevelData data = GameData.Instance().getCurrentLevelData();
+			mAdView.setVisibility(View.GONE);
 			Scene scene = new GameScene(_engineAndroid, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
 					data.repeat, firstScene, data.worldID, data.levelID, data.reward, data.resultCombination);
 			_engineAndroid.setCurrentScene(scene);
 		} else {
+
 			_engineAndroid.setCurrentScene(firstScene);
 			_engineAndroid.resume();
 		}
@@ -153,11 +156,11 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	protected void initialisedownBanner() {
-		mAdView = new AdView(this);
 		mAdView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-		mAdView.setAdSize(AdSize.BANNER);
+		mAdView.setAdSize(new AdSize(200, 50));
 		mAdView.setEnabled(true);
 		mAdView.setVisibility(View.VISIBLE);
+
 
 		RelativeLayout.LayoutParams adParams;
 		if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {

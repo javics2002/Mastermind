@@ -30,4 +30,5 @@ public interface Engine {
 	void loadGameData();
 
 	void saveGameData();
+	void appeareanceBanner(boolean hasTo);
 }

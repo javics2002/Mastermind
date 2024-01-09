@@ -11,7 +11,8 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
+import android.view.View;
+import com.google.android.gms.ads.AdView;
 import com.example.aninterface.Font;
 import com.example.aninterface.Graphics;
 import com.example.aninterface.Image;
@@ -37,12 +38,14 @@ public class GraphicsAndroid implements Graphics {
 
 	private final HashMap<String, Image> images;
 
+
 	GraphicsAndroid(SurfaceView myView, AssetManager mgr, int logicWidth, int logicHeight) {
 		_surfaceView = myView;
 		_assetManager = mgr;
 
 		_logicWidth = logicWidth;
 		_logicHeight = logicHeight;
+
 
 		//Creamos los nuevos elementos y obtenemos el holder
 		_holder = _surfaceView.getHolder();

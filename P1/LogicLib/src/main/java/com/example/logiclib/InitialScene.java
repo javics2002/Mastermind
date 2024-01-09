@@ -47,6 +47,7 @@ public class InitialScene implements Scene {
 				graphics.getLogicWidth() / 2f - buttonWidth / 2f, quickGameButtonPositionY, buttonWidth, buttonHeight) {
 			@Override
 			public void callback() {
+				_engine.appeareanceBanner(false);
 				Scene scene = new DifficultyScene(_engine);
 				_engine.setCurrentScene(scene);
 			}
@@ -57,6 +58,7 @@ public class InitialScene implements Scene {
 				buttonWidth, buttonHeight) {
 			@Override
 			public void callback() {
+				_engine.appeareanceBanner(false);
 				Scene scene = new WorldScene(_engine, 0);
 				_engine.setCurrentScene(scene);
 			}
@@ -67,6 +69,7 @@ public class InitialScene implements Scene {
 				50, 50) {
 			@Override
 			public void callback() {
+				_engine.appeareanceBanner(false);
 				Scene scene = new ShopScene(_engine, ShopScene.ShopType.BACKGROUNDS);
 				_engine.setCurrentScene(scene);
 			}

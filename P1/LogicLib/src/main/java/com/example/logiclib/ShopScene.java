@@ -41,6 +41,7 @@ public class ShopScene implements Scene {
 				backbuttonScale, backbuttonScale) {
 			@Override
 			public void callback() {
+				_engine.appeareanceBanner(true);
 				Scene scene = new InitialScene(_engine);
 				_engine.setCurrentScene(scene);
 			}

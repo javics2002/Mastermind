@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.PixelCopy;
 import android.view.SurfaceView;
 import android.view.View;
+import com.google.android.gms.ads.AdView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
@@ -31,6 +33,7 @@ import com.example.logiclib.WorldData;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.gson.Gson;
+
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -55,12 +58,14 @@ public class EngineAndroid implements Runnable, Engine {
 	private Activity activity;
 	private AndroidRewardedAd _rewardedAd;
 	private final Gson _gson;
+	private AdView mAdview;
 
 	// Constructor
-	public EngineAndroid(SurfaceView myView, float aspectRatio, int logicHeight,Activity mainActivity) {
+	public EngineAndroid(SurfaceView myView, float aspectRatio, int logicHeight,Activity mainActivity,AdView mad) {
 		_surfaceView = myView;
 		_input = new InputAndroid();
 		activity=mainActivity;
+		mAdview=mad;
 		//Cracion del anuncio recompensado
 		createRewardedAd();
 		AssetManager _assetManager = myView.getContext().getAssets(); // Obtiene el administrador de activos del contexto de la vista
@@ -719,4 +724,18 @@ public class EngineAndroid implements Runnable, Engine {
 	public Graphics getGraphics() {
 		return _graphics;
 	}
+	@Override
+	public void appeareanceBanner(final boolean hasTo) {
+		activity.runOnUiThread(new Runnable() {
+			@Override
+			public void run() {
+				if (hasTo) {
+					mAdview.setVisibility(View.VISIBLE);
+				} else {
+					mAdview.setVisibility(View.GONE);
+				}
+			}
+		});
+	}
+
 }
