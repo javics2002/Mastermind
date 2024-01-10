@@ -1,0 +1,5 @@
+Lista de cambios: Se han realizado todas las correcciones que especificaste en la entrega de la practica 2.
+El siguimiento de cada cambio/clase/metodo modificado se puede ver a través de las issues de github:
+https://github.com/javics2002/VDM/issues
+
+UML: https://app.moqups.com/D8ersGczN1hWw9ZYvLenHHeTFLY1dDpg/share#

@@ -1,5 +1,8 @@
 package com.example.aninterface;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 public interface Engine {
 	Graphics getGraphics();
 
@@ -27,8 +30,9 @@ public interface Engine {
 
 	String[] getFileNames(String folderPath);
 
-	void loadGameData();
-
-	void saveGameData();
+	ObjectInputStream openSaveFileForReading(String fileName);
+	ObjectOutputStream openSaveFileForWriting(String fileName);
+	void closeSaveFile();
 	void appeareanceBanner(boolean hasTo);
+	String hashJson(String fileContent);
 }

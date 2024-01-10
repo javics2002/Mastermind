@@ -7,6 +7,9 @@ import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Sound;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 public class CustomBackground extends Button {
 	private boolean _selected, _adquired;
 	private final int _index, _price;
@@ -57,7 +60,8 @@ public class CustomBackground extends Button {
 			_moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
 			_adquired = true;
 
-			_engine.saveGameData();
+			// Guardar datos
+			GameData.Instance().saveGameData(_engine);
 
 			GameData.Instance().setBackground(_index);
 		}

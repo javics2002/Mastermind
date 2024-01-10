@@ -18,14 +18,6 @@ import androidx.work.PeriodicWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 import android.Manifest;
-import android.content.pm.PackageManager;
-import android.os.Build;
-import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import com.example.aninterface.Scene;
 import com.example.libengineandroid.EngineAndroid;
@@ -39,6 +31,8 @@ import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -63,9 +57,7 @@ public class MainActivity extends AppCompatActivity {
 		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight,this,mAdView);
 
 		GameData.Init();
-		// Cargar los datos de guardado
-		_engineAndroid.loadGameData();
-
+		GameData.Instance().loadGameData(_engineAndroid);
 
 		Scene firstScene = new InitialScene(_engineAndroid);
 
@@ -114,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onPause() {
 		super.onPause();
-		_engineAndroid.saveGameData();
+		// Guardar datos
+		GameData.Instance().saveGameData(_engineAndroid);
 		_engineAndroid.pause();
 		sensorManager.unregisterListener();
 	}

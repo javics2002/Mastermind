@@ -7,6 +7,7 @@ import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -110,7 +111,8 @@ public class GameOverScene implements Scene {
 					@Override
 					public void callback() {
 						GameData.Instance().resetCurrentLevelData();
-						_engine.saveGameData();
+						// Guardar datos
+						GameData.Instance().saveGameData(_engine);
 
 						Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,
 								_gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
@@ -134,7 +136,8 @@ public class GameOverScene implements Scene {
 						@Override
 						public void callback() {
 							GameData.Instance().resetCurrentLevelData();
-							_engine.saveGameData();
+							// Guardar datos
+							GameData.Instance().saveGameData(_engine);
 
 							String levelNumber = nextLevelID >= 9 ? Integer.toString(nextLevelID + 1)
 									: "0" + Integer.toString(nextLevelID + 1);
@@ -192,7 +195,8 @@ public class GameOverScene implements Scene {
 				@Override
 				public void callback() {
 					GameData.Instance().resetCurrentLevelData();
-					_engine.saveGameData();
+					// Guardar datos
+					GameData.Instance().saveGameData(_engine);
 
 					Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber,
 							_gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
@@ -218,7 +222,8 @@ public class GameOverScene implements Scene {
 			@Override
 			public void callback() {
 				GameData.Instance().resetCurrentLevelData();
-				_engine.saveGameData();
+				// Guardar datos
+				GameData.Instance().saveGameData(_engine);
 
 				if (_gameAttributes.selectedWorld == -1) {
 					Scene scene = new InitialScene(_engine);

@@ -7,6 +7,7 @@ import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,7 +110,8 @@ public class GameScene implements Scene {
 			@Override
 			public void callback() {
 				GameData.Instance().resetCurrentLevelData();
-				_engine.saveGameData();
+				// Guardar datos
+				GameData.Instance().saveGameData(_engine);
 
 				if (_gameAttributes.selectedWorld == -1) {
 					Scene scene = new InitialScene(_engine);
@@ -315,7 +317,8 @@ public class GameScene implements Scene {
 				_combinationLayouts.get(_gameAttributes.activeLayout).updateCombination(_gameAttributes.isEyeOpen);
 				_combinationLayouts.get(_gameAttributes.activeLayout).animateSlot(index);
 
-				_engine.saveGameData();
+				// Guardar datos
+				GameData.Instance().saveGameData(_engine);
 				break;
 			}
 		}

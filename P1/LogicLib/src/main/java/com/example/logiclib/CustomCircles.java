@@ -7,6 +7,8 @@ import com.example.aninterface.Image;
 import com.example.aninterface.Input;
 import com.example.aninterface.Sound;
 
+import java.io.ObjectOutputStream;
+
 public class CustomCircles extends Button {
 	private final int borderWidth = 5, _textCoinSeparation = 10, _coinSize = 20, _numberOfCircles = 4;
 
@@ -134,7 +136,8 @@ public class CustomCircles extends Button {
 			_moneyText.setText(Integer.toString(GameData.Instance().getMoney()));
 			_adquired = true;
 
-			_engine.saveGameData();
+			// Guardar datos
+			GameData.Instance().saveGameData(_engine);
 
 			GameData.Instance().setCircles(_index);
 		}
