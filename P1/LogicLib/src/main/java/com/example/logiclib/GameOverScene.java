@@ -21,16 +21,20 @@ public class GameOverScene implements Scene {
 	private final Button _adButton;
 	private final int _coinSize = 40;
 	private final Transition _transition;
+	private final LevelData _currentLevelData;
 
 	Engine _engine;
-		GameAttributes _gameAttributes;
-	 private int _rewardedAttemps=2;
+	GameAttributes _gameAttributes;
+	private int _rewardedAttemps = 2;
 
 	private final int _backgroundColor;
 
 	public GameOverScene(Engine engine, final GameAttributes gameAttributes) {
 		_engine = engine;
 		final Graphics graphics = _engine.getGraphics();
+
+		_currentLevelData = GameData.Instance().getCurrentLevelData();
+		GameData.Instance().resetCurrentLevelData();
 
 		// Init GameAttributes
 		_gameAttributes = gameAttributes;
@@ -277,7 +281,7 @@ public class GameOverScene implements Scene {
 
 	@Override
 	public void handleEvents(Input.TouchEvent event) {
-		if(_playAgainButton != null){
+		if (_playAgainButton != null) {
 			_playAgainButton.handleEvents(event);
 		}
 
@@ -291,10 +295,6 @@ public class GameOverScene implements Scene {
 		}
 	}
 
-	public GameAttributes getGameAttributtes() {
-		return _gameAttributes;
-	}
-
 	@Override
 	public void update(double deltaTime) {
 		_transition.update(deltaTime);
@@ -302,14 +302,16 @@ public class GameOverScene implements Scene {
 
 	@Override
 	public void recieveADMSG() {
-		if (GameData.Instance().getCurrentLevelData() != null) {
-			LevelData data = GameData.Instance().getCurrentLevelData();
+		if (_currentLevelData != null) {
+			_currentLevelData.leftAttemptsNumber = _rewardedAttemps;
+			_currentLevelData.attempts += _rewardedAttemps;
 
-			data.leftAttemptsNumber = _rewardedAttemps;
-			data.attempts += _rewardedAttemps;
+			GameData.Instance().setCurrentLevelData(_currentLevelData);
 
-			Scene scene = new GameScene(_engine, data.attempts, data.leftAttemptsNumber, data.codeSize, data.codeOpt,
-					data.repeat, _gameAttributes.returnScene, data.worldID, data.levelID, data.reward, data.resultCombination);
+			Scene scene = new GameScene(_engine, _currentLevelData.attempts, _currentLevelData.leftAttemptsNumber,
+					_currentLevelData.codeSize, _currentLevelData.codeOpt,
+					_currentLevelData.repeat, _gameAttributes.returnScene, _currentLevelData.worldID,
+					_currentLevelData.levelID, _currentLevelData.reward, _currentLevelData.resultCombination);
 			_transition.PlayTransition(Transition.TransitionType.fadeOut,
 					Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 		}
