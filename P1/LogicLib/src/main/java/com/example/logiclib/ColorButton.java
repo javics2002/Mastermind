@@ -37,7 +37,7 @@ public class ColorButton extends GameObject {
 					_color = Colors.getColor(_colorID - 1);
 				} else {
 					_icon = null;
-					_color = Colors.parseARGB(circles.colors[colorID]);
+					_color = Colors.parseARGB(circles.colors[colorID - 1]);
 				}
 			}
 		} else {
