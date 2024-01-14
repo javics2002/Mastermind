@@ -19,9 +19,12 @@ public class GameOverScene implements Scene {
 	Engine _engine;
 	GameAttributes _gameAttributes;
 
-	public GameOverScene(Engine engine, GameAttributes gameAttributes) {
+	public GameOverScene(Engine engine, final GameAttributes gameAttributes) {
 		_engine = engine;
 		Graphics graphics = _engine.getGraphics();
+
+
+		GameData.Instance().saveGameData(engine);
 
 		// Init GameAttributes
 		_gameAttributes = gameAttributes;
@@ -73,8 +76,11 @@ public class GameOverScene implements Scene {
 				graphics.getLogicWidth() / 2 - 400 / 2, 450, 400, 50) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
-						_gameAttributes.colorNumber, _gameAttributes.repeatedColors);
+				Scene scene = _gameAttributes.multiplayer ?
+						new SolutionScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+								_gameAttributes.colorNumber, _gameAttributes.repeatedColors)
+				: new GameScene(_engine, _gameAttributes.attemptsNumber, _gameAttributes.combinationLength,
+						_gameAttributes.colorNumber, _gameAttributes.repeatedColors, _gameAttributes.multiplayer, null, gameAttributes.difficultyIndex);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
@@ -82,7 +88,7 @@ public class GameOverScene implements Scene {
 				graphics.getLogicWidth() / 2 - 400 / 2, 550, 400, 50) {
 			@Override
 			public void callback() {
-				Scene scene = new DifficultyScene(_engine);
+				Scene scene = new DifficultyScene(_engine, _gameAttributes.multiplayer);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};

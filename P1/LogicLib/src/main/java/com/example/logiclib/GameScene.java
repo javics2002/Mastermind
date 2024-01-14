@@ -14,6 +14,7 @@ public class GameScene implements Scene {
 	private final GameAttributes _gameAttributes;
 	private final Text _objectiveText, _attemptsText;
 	private final Button _quitButton, _colorblindButton;
+	private final NButton _cheatButton;
 	private final List<CombinationLayout> _combinationLayouts;
 	private final List<Combination> _combinations;
 	private final List<ColorButton> _colorButtons;
@@ -21,7 +22,8 @@ public class GameScene implements Scene {
 	private boolean _gameFinished;
 	private final int _visibleLayouts = 10;
 
-	public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors) {
+	public GameScene(Engine engine, int tryNumber, int combinationLength, int numberOfColors, boolean repeatedColors,
+					 boolean multiplayer, Combination cResult, int difficultyIndex) {
 		_engine = engine;
 		Graphics graphics = _engine.getGraphics();
 
@@ -36,7 +38,13 @@ public class GameScene implements Scene {
 		_gameAttributes.activeLayout = 0;
 		_gameAttributes.isEyeOpen = false;
 		_gameAttributes.resultCombination = new Combination(combinationLength, numberOfColors, repeatedColors);
+		_gameAttributes.multiplayer = multiplayer;
+		_gameAttributes.difficultyIndex = difficultyIndex;
 		_gameFinished = false;
+
+		if (cResult == null)
+			_gameAttributes.resultCombination = new Combination(combinationLength, numberOfColors, repeatedColors);
+		else _gameAttributes.resultCombination = cResult;
 
 		// Transition
 		_transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
@@ -62,7 +70,7 @@ public class GameScene implements Scene {
 				horizontalMargin, verticalMargin, buttonDimension, buttonDimension) {
 			@Override
 			public void callback() {
-				Scene scene = new DifficultyScene(_engine);
+				Scene scene = new DifficultyScene(_engine, _gameAttributes.multiplayer);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
@@ -75,6 +83,25 @@ public class GameScene implements Scene {
 			public void callback() {
 				_gameAttributes.isEyeOpen = !_gameAttributes.isEyeOpen;
 				_colorblindButton.setImage(_gameAttributes.isEyeOpen ? "UI/eyeOpened.png" : "UI/eyeClosed.png");
+			}
+		};
+
+		_cheatButton = new NButton(5, _engine,
+				graphics.getLogicWidth() - 2 * buttonDimension - horizontalMargin, verticalMargin,
+				buttonDimension, buttonDimension ){
+			@Override
+			public void callback() {
+				//CHEAT WIN
+				_combinationLayouts.get(_gameAttributes.activeLayout).updateAssociatedCombination(_gameAttributes.resultCombination);
+				_combinationLayouts.get(_gameAttributes.activeLayout).updateCombination(_gameAttributes.isEyeOpen);
+
+				if(!_gameAttributes.multiplayer){
+					GameData.Instance().winLevel(_gameAttributes.difficultyIndex);
+				}
+
+				Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, gameOverScene);
+				_gameFinished = true;
 			}
 		};
 
@@ -125,6 +152,10 @@ public class GameScene implements Scene {
 		if (activeLayout.isFull()) {
 			if (_combinations.get(_gameAttributes.activeLayout).equals(_gameAttributes.resultCombination)) {
 				// USER WON
+				if(!_gameAttributes.multiplayer){
+					GameData.Instance().winLevel(_gameAttributes.difficultyIndex);
+				}
+
 				Scene gameOverScene = new GameOverScene(_engine, _gameAttributes);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, gameOverScene);
 				_gameFinished = true;
@@ -191,6 +222,7 @@ public class GameScene implements Scene {
 
 		_colorblindButton.handleEvents(event);
 		_quitButton.handleEvents(event);
+		_cheatButton.handleEvents(event);
 
 		// Detectar click en colores ya colocados
 		// Sirve para borrarlos

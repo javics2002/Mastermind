@@ -7,6 +7,8 @@ public class GameAttributes {
 	public int activeLayout;
 	public boolean isEyeOpen;
 	public Combination resultCombination;
+	public boolean multiplayer;
+	public int difficultyIndex;
 
 	public GameAttributes() {
 	}

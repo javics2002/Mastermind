@@ -6,6 +6,8 @@ import com.example.aninterface.Graphics;
 import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
+import java.util.ArrayList;
+
 public class DifficultyScene implements Scene {
 	private final Button _backButton;
 	private final Button _easyDifficultyButton, _mediumDifficultyButton,
@@ -15,14 +17,20 @@ public class DifficultyScene implements Scene {
 	private Transition _transition;
 	private final int _padding = 20;
 
+	private ArrayList<Text> _completedMarkers;
+
 	Engine _engine;
 
-	public DifficultyScene(Engine engine) {
+	final boolean _multiplayer;
+
+	public DifficultyScene(Engine engine, final boolean multiplayer) {
 		_engine = engine;
 
 		Graphics graphics = _engine.getGraphics();
 
 		_transition = new Transition(_engine, graphics.getWidth(), graphics.getHeight());
+
+		_multiplayer = multiplayer;
 
 		// Back button
 		int backbuttonScale = 40;
@@ -55,7 +63,8 @@ public class DifficultyScene implements Scene {
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 6, 4, 4, false);
+				Scene scene = _multiplayer ? new SolutionScene(_engine, 6, 4, 4, false)
+						: new GameScene(_engine, 6, 4, 4, false, _multiplayer, null, 0);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
@@ -64,7 +73,8 @@ public class DifficultyScene implements Scene {
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 8, 4, 6, false);
+				Scene scene = _multiplayer ? new SolutionScene(_engine, 8, 4, 6, false)
+						: new GameScene(_engine, 8, 4, 6, false, _multiplayer, null, 1);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
@@ -73,7 +83,8 @@ public class DifficultyScene implements Scene {
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 10, 5, 8, true);
+				Scene scene = _multiplayer ? new SolutionScene(_engine, 10, 5, 8, true)
+						: new GameScene(_engine, 10, 5, 8, true, _multiplayer, null, 2);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
@@ -82,10 +93,22 @@ public class DifficultyScene implements Scene {
 				gameButtonsWidth, gameButtonsHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new GameScene(_engine, 15, 6, 9, true);
+				Scene scene = _multiplayer ? new SolutionScene(_engine, 15, 6, 9, true)
+						: new GameScene(_engine, 15, 6, 9, true, _multiplayer, null, 3);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
+
+		//Marcador de veces completado
+		if(!_multiplayer){
+			_completedMarkers = new ArrayList<>();
+			for(int i = 0; i < 4; i++){
+				_completedMarkers.add(new Text(GameData.Instance().getNumberOfCompletions(i).toString(), buttonFont, _engine,
+						graphics.getLogicWidth() / 2 + gameButtonsWidth / 2 + 30,
+						startingGameButtonsHeight + 3 * gameButtonsHeight / 4 + (gameButtonsHeight + padding) * i,
+						Colors.colorValues.get(Colors.ColorName.BLACK), true));
+			}
+		}
 
 		_transition.PlayTransition(Transition.TransitionType.fadeIn, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, null);
 	}
@@ -97,7 +120,7 @@ public class DifficultyScene implements Scene {
 
 	@Override
 	public void render(Graphics graphics) {
-		graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
+		graphics.clear(Colors.colorValues.get(_multiplayer ? Colors.ColorName.LIGHTRED : Colors.ColorName.BACKGROUND));
 
 		_backButton.render(graphics);
 		_titleText.render(graphics);
@@ -106,6 +129,12 @@ public class DifficultyScene implements Scene {
 		_difficultDifficultyButton.render(graphics);
 		_impossibleDifficultyButton.render(graphics);
 		_transition.render(graphics);
+
+		if(!_multiplayer){
+			for(int i = 0; i < 4; i++) {
+				_completedMarkers.get(i).render(graphics);
+			}
+		}
 	}
 
 	@Override

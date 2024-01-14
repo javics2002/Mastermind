@@ -13,7 +13,7 @@ public class CombinationLayout extends GameObject {
 	private final List<ColorSlot> _colors;
 	private final List<HintSlot> _hints;
 	private final int _lateralMargin;
-	private final Combination _associatedCombination;
+	private Combination _associatedCombination;
 
 	private GameAttributes _gameAttributes;
 
@@ -99,6 +99,20 @@ public class CombinationLayout extends GameObject {
 				_colors.get(i).setColor(_associatedCombination.getColors()[i], isEyeOpen);
 			}
 		}
+	}
+
+	public void updateCombination(Combination combination, boolean isEyeOpen) {
+		for (int i = 0; i < _colors.size(); i++) {
+			if (combination.getColors()[i] == -1) {
+				_colors.get(i).deleteColor();
+			} else {
+				_colors.get(i).setColor(combination.getColors()[i], isEyeOpen);
+			}
+		}
+	}
+
+	public void updateAssociatedCombination(Combination newCombination){
+		_associatedCombination = newCombination;
 	}
 
 	public void animateSlot(int index) {

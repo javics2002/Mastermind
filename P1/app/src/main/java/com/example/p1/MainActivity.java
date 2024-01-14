@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.aninterface.Scene;
 import com.example.libengineandroid.EngineAndroid;
+import com.example.logiclib.GameData;
 import com.example.logiclib.InitialScene;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,7 +24,10 @@ public class MainActivity extends AppCompatActivity {
 
 		setContentView(surfaceView);
 
-		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight);
+		_engineAndroid = new EngineAndroid(surfaceView, _aspectRatio, _logicHeight, this);
+
+		GameData.Init();
+		GameData.Instance().loadGameData(_engineAndroid);
 
 		Scene firstScene = new InitialScene(_engineAndroid);
 		_engineAndroid.setCurrentScene(firstScene);
@@ -40,5 +44,11 @@ public class MainActivity extends AppCompatActivity {
 	protected void onResume() {
 		super.onResume();
 		_engineAndroid.resume();
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		GameData.Release();
 	}
 }

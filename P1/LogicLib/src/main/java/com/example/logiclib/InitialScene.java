@@ -7,7 +7,7 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Scene;
 
 public class InitialScene implements Scene {
-	private final Button _playButton;
+	private final Button _playButton, _multiplayerButton;
 	private final Text _titleText;
 	private Transition _transition;
 	Engine _engine;
@@ -33,7 +33,16 @@ public class InitialScene implements Scene {
 				graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2, buttonWidth, buttonHeight) {
 			@Override
 			public void callback() {
-				Scene scene = new DifficultyScene(_engine);
+				Scene scene = new DifficultyScene(_engine, false);
+				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
+			}
+		};
+
+		_multiplayerButton = new Button(Colors.ColorName.BACKGROUNDRED, "Multijugador", buttonFont, _engine,
+				graphics.getLogicWidth() / 2 - buttonWidth / 2, graphics.getLogicHeight() / 2 + buttonHeight + 30, buttonWidth, buttonHeight) {
+			@Override
+			public void callback() {
+				Scene scene = new DifficultyScene(_engine, true);
 				_transition.PlayTransition(Transition.TransitionType.fadeOut, Colors.colorValues.get(Colors.ColorName.WHITE), 0.2f, scene);
 			}
 		};
@@ -51,12 +60,14 @@ public class InitialScene implements Scene {
 		graphics.clear(Colors.colorValues.get(Colors.ColorName.BACKGROUND));
 
 		_playButton.render(graphics);
+		_multiplayerButton.render(graphics);
 		_titleText.render(graphics);
 		_transition.render(graphics);
 	}
 
 	public void handleEvents(Input.TouchEvent event) {
 		_playButton.handleEvents(event);
+		_multiplayerButton.handleEvents(event);
 	}
 }
 

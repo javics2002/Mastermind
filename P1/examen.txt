@@ -1,0 +1,23 @@
+1. Se ha creado la clase NButton
+Se ha añadido una nueva constructora a la clase Button.
+Las variables de Button ahora son protected.
+Se ha creado el metodo updateAssociatedCombination de CombinationLayout.
+Se ha creado un NButton en GameScene.
+
+2. Se ha creado la clase GameData
+Se ha añadido un array _completedMarkers en DifficultyScene
+Se ha añadido DifficultyIndex a GameAttributes
+Se ha modificado GameScene para que actualice GameData al ganar.
+Se han creado los métodos siguientes métodos en Engine (PC y Android):
+	ObjectInputStream openSaveFileForReading(String fileName);
+	ObjectOutputStream openSaveFileForWriting(String fileName);
+	void closeSaveFile();
+
+3. Se ha creado la clase SolutionScene
+Se ha añadido el booleano multiplayer a GameAtrributes y a difficultyScene para ir a SolutionScene 
+y cambiar el color de fondo si es true.
+Se ha creado un nuevo boton en InitialScene.
+Los botones para volver a escenas anteriores usan GameAttributes para mantenerse
+en el modo que toca.
+
+

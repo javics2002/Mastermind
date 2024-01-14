@@ -2,6 +2,7 @@ package com.example.desktop;
 
 import com.example.aninterface.Scene;
 import com.example.libenginepc.EnginePC;
+import com.example.logiclib.GameData;
 import com.example.logiclib.InitialScene;
 
 import java.awt.Frame;
@@ -32,6 +33,9 @@ public class MasterMindDesktop {
 		frame.setVisible(true);
 
 		final EnginePC engine = new EnginePC(frame, _aspectRatio, _logicHeight);
+
+		GameData.Init();
+		GameData.Instance().loadGameData(engine);
 
 		Scene firstScene = new InitialScene(engine);
 		engine.setCurrentScene(firstScene);

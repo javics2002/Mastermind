@@ -9,13 +9,13 @@ import com.example.aninterface.Input;
 import com.example.aninterface.Sound;
 
 public class Button extends GameObject {
-	private Image _image;
-	private final Sound _clickSound;
-	private int _backgroundColor;
-	private int _arc;
-	private String _text;
-	private Font _font;
-	private final Audio _audio;
+	protected Image _image;
+	protected final Sound _clickSound;
+	protected int _backgroundColor;
+	protected int _arc;
+	protected String _text;
+	protected Font _font;
+	protected final Audio _audio;
 
 	Button(Colors.ColorName backgroundColor, String text, Font font, Engine engine, int positionX, int positionY, int width, int height) {
 		super(engine, positionX, positionY, width, height, 1f);
@@ -37,6 +37,16 @@ public class Button extends GameObject {
 		super(engine, positionX, positionY, width, height, 1f);
 
 		_image = _graphics.loadImage(filename);
+
+		_audio = _engine.getAudio();
+		_clickSound = _audio.loadSound("click.wav", false);
+		_clickSound.setVolume(.5f);
+	}
+
+	Button(Engine engine, int positionX, int positionY, int width, int height) {
+		super(engine, positionX, positionY, width, height, 1f);
+
+		_image = null;
 
 		_audio = _engine.getAudio();
 		_clickSound = _audio.loadSound("click.wav", false);
